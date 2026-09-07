@@ -1,0 +1,12 @@
+{
+  "projectId": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID",
+  "appId": "REPLACE_WITH_YOUR_FIREBASE_APP_ID",
+  "apiKey": "REPLACE_WITH_YOUR_FIREBASE_WEB_API_KEY",
+  "authDomain": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID.firebasestorage.app",
+  "messagingSenderId": "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
+  "measurementId": "",
+  "oAuthClientId": "REPLACE_WITH_YOUR_OAUTH_CLIENT_ID",
+  "recaptchaSiteKey": ""
+}

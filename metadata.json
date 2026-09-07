@@ -1,0 +1,6 @@
+{
+  "name": "Sa and Sha",
+  "description": "Ladies apparel brand specialising in women's dresses, tops, and ethnic wear.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

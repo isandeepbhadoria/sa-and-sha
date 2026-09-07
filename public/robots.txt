@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /admin
+Disallow: /wishlist
+
+Sitemap: https://www.saandsha.com/sitemap.xml

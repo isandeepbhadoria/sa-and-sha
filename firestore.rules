@@ -1,0 +1,170 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global helpers
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email == "shop@saandsha.com";
+    }
+
+    function isValidProduct(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200
+          && data.category is string && data.category in ['dresses', 'tops', 'bottoms', 'kurtas', 'sarees', 'co-ord sets', 'jackets', 'accessories']
+          && data.subCategory is string && data.subCategory.size() > 0 && data.subCategory.size() <= 100
+          && data.price is number && data.price >= 0
+          && data.fabric is string && data.fabric.size() <= 200
+          && data.fit is string && data.fit in ['Slim', 'Regular', 'Relaxed']
+          && data.color is string && data.color.size() <= 50
+          && data.colorHex is string && data.colorHex.size() <= 20
+          && data.pattern is string && data.pattern in ['Solid', 'Striped', 'Printed', 'Checked']
+          && data.description is string && data.description.size() <= 2000;
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
+      allow update: if isAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
+      allow delete: if isAdmin() && isValidId(productId);
+    }
+
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      // Unauthenticated clients cannot read, create, update, or delete orders.
+      // Only authenticated shop@saandsha.com admin has client-side access.
+      allow read, write: if isAdmin();
+    }
+
+    match /return_requests/{requestId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /enquiries/{enquiryId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /contact_messages/{messageId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /customer_profiles/{profileId} {
+      allow read, write: if isAdmin();
+
+      match /{subcollection=**} {
+        allow read, write: if isAdmin();
+      }
+    }
+
+    match /customer_auth_identities/{identityId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /customer_identity_conflicts/{conflictId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /customer_identity_audit/{auditId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /customer_sessions/{sessionId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /customer_security_events/{eventId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /customer_segments/{segmentId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /customer_consent_events/{eventId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /admin_audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /gst_cache/{gstin} {
+      allow read, write: if isAdmin();
+    }
+
+    match /notification_queue/{jobId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /notification_dead_letter/{deadLetterId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /notification_retry_audit/{auditId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /notification_worker_status/{workerId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /gst_invoices/{invoiceId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /gst_credit_notes/{creditNoteId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /counters/{counterId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /system_tax_config/{configId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /product_tax_master/{taxRecordId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /shipping_tax_config/{configId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /invoice_number_config/{configId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /credit_note_number_config/{configId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /tax_master_audit/{auditId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /homepage_media/{mediaId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(mediaId);
+    }
+  }
+}

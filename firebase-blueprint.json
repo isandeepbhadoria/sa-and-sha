@@ -1,0 +1,660 @@
+{
+  "entities": {
+    "order": {
+      "title": "Order",
+      "description": "An order placed on Sa and Sha",
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customer_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "customer_email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "customer_phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string"
+        },
+        "grand_total": {
+          "type": "number"
+        }
+      },
+      "required": ["order_id", "customer_name", "customer_email", "customer_phone", "grand_total"]
+    },
+    "return_request": {
+      "title": "Return Request",
+      "description": "A return or exchange request submitted by a Sa and Sha customer",
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "order_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customer_email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "customer_phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "request_type": {
+          "type": "string",
+          "enum": ["return", "exchange", "mixed"]
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": ["request_id", "order_id", "customer_email", "request_type", "status"]
+    },
+    "product": {
+      "title": "Product",
+      "description": "A linen clothing product for Sa and Sha",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "enum": ["shirts", "pants", "polos", "kurtas", "co-ord sets", "jackets", "accessories"]
+        },
+        "subCategory": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "price": {
+          "type": "number"
+        },
+        "compareAtPrice": {
+          "type": "number"
+        },
+        "fabric": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "fit": {
+          "type": "string",
+          "enum": ["Slim", "Regular", "Relaxed"]
+        },
+        "color": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "colorHex": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "sizes": {
+          "type": "array"
+        },
+        "collar": {
+          "type": "string",
+          "enum": ["Spread", "Cutaway", "Mandarin", "Polo Collar"]
+        },
+        "sleeve": {
+          "type": "string",
+          "enum": ["Full Sleeve", "Half Sleeve"]
+        },
+        "pattern": {
+          "type": "string",
+          "enum": ["Solid", "Striped", "Printed", "Checked"]
+        },
+        "images": {
+          "type": "array"
+        },
+        "rating": {
+          "type": "number"
+        },
+        "reviewCount": {
+          "type": "number"
+        },
+        "bestseller": {
+          "type": "boolean"
+        },
+        "newArrival": {
+          "type": "boolean"
+        },
+        "dateAdded": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "details": {
+          "type": "array"
+        },
+        "careInstructions": {
+          "type": "array"
+        },
+        "sku": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "published"]
+        }
+      },
+      "required": ["name", "category", "subCategory", "price", "fabric", "fit", "color", "colorHex", "sizes", "pattern", "images", "description", "details", "careInstructions"]
+    },
+    "enquiry": {
+      "title": "Customer Enquiry",
+      "description": "A customer support enquiry for Sa and Sha",
+      "type": "object",
+      "properties": {
+        "enquiry_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customer_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customer_email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "customer_phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "order_id": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "enquiry_type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NEW", "IN_PROGRESS", "AWAITING_CUSTOMER", "RESOLVED", "CLOSED"]
+        }
+      },
+      "required": ["enquiry_id", "customer_name", "customer_email", "customer_phone", "enquiry_type", "message", "status"]
+    },
+    "customer_profile": {
+      "title": "Customer Profile",
+      "description": "Server-managed verified customer default profile and address",
+      "type": "object",
+      "properties": {
+        "normalized_phone": { "type": "string" },
+        "full_name": { "type": "string" },
+        "email": { "type": "string" },
+        "default_address": {
+          "type": "object",
+          "properties": {
+            "address_line_1": { "type": "string" },
+            "address_line_2": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "postal_code": { "type": "string" },
+            "country": { "type": "string" }
+          },
+          "required": ["address_line_1", "city", "state", "postal_code"]
+        },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "last_order_at": { "type": "string" }
+      },
+      "required": ["normalized_phone", "full_name", "default_address"]
+    },
+    "gst_cache": {
+      "title": "GST Cache",
+      "description": "Cached verified business entity info from GSTIN API",
+      "type": "object",
+      "properties": {
+        "gstin": { "type": "string" },
+        "legal_name": { "type": "string" },
+        "trade_name": { "type": "string" },
+        "status": { "type": "string" },
+        "taxpayer_type": { "type": "string" },
+        "business_constitution": { "type": "string" },
+        "registration_date": { "type": "string" },
+        "address": { "type": "string" },
+        "pincode": { "type": "string" },
+        "state_code": { "type": "string" },
+        "block_status": { "type": "string" },
+        "verified_at": { "type": "string" },
+        "expires_at": { "type": "string" }
+      },
+      "required": ["gstin", "legal_name", "status", "verified_at", "expires_at"]
+    },
+    "notification_queue_job": {
+      "title": "Notification Queue Job",
+      "description": "An immutable background notification dispatch job in notification_queue collection",
+      "type": "object",
+      "properties": {
+        "job_id": { "type": "string" },
+        "event_id": { "type": "string" },
+        "event_name": { "type": "string" },
+        "order_id": { "type": "string" },
+        "customer_id": { "type": "string" },
+        "customer_email": { "type": "string" },
+        "customer_phone": { "type": "string" },
+        "channel": { "type": "string", "enum": ["email", "whatsapp", "sms"] },
+        "provider": { "type": "string" },
+        "priority": { "type": "number" },
+        "status": { "type": "string", "enum": ["queued", "processing", "completed", "failed", "cancelled"] },
+        "payload": { "type": "object" },
+        "template_id": { "type": "string" },
+        "attempts": { "type": "number" },
+        "max_attempts": { "type": "number" },
+        "created_at": { "type": "string" },
+        "scheduled_at": { "type": "string" },
+        "started_at": { "type": "string" },
+        "completed_at": { "type": "string" },
+        "failed_at": { "type": "string" },
+        "last_error": { "type": "string" },
+        "provider_response": { "type": "object" },
+        "worker_id": { "type": "string" },
+        "locked": { "type": "boolean" },
+        "locked_at": { "type": "string" },
+        "created_by": { "type": "string" }
+      },
+      "required": ["job_id", "event_id", "channel", "priority", "status", "created_at"]
+    },
+    "notification_worker_status": {
+      "title": "Notification Worker Status",
+      "description": "Heartbeat and health metrics for background notification worker instances",
+      "type": "object",
+      "properties": {
+        "worker_id": { "type": "string" },
+        "hostname": { "type": "string" },
+        "status": { "type": "string", "enum": ["online", "offline", "idle", "processing"] },
+        "started_at": { "type": "string" },
+        "last_heartbeat": { "type": "string" },
+        "jobs_processed": { "type": "number" },
+        "jobs_failed": { "type": "number" },
+        "version": { "type": "string" }
+      },
+      "required": ["worker_id", "status", "last_heartbeat"]
+    },
+    "notification_retry_audit": {
+      "title": "Notification Retry Audit Log",
+      "description": "Immutable audit logs for admin manual retry, requeue, and cancel operations",
+      "type": "object",
+      "properties": {
+        "audit_id": { "type": "string" },
+        "action": { "type": "string", "enum": ["retry_single", "retry_bulk", "cancel_single", "cancel_bulk", "requeue_single", "requeue_bulk"] },
+        "admin_email": { "type": "string" },
+        "target_type": { "type": "string", "enum": ["job", "dead_letter"] },
+        "target_ids": { "type": "array" },
+        "successful_ids": { "type": "array" },
+        "skipped_ids": { "type": "array" },
+        "failed_ids": { "type": "array" },
+        "reason": { "type": "string" },
+        "created_at": { "type": "string" },
+        "request_id": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "required": ["audit_id", "action", "admin_email", "target_type", "created_at", "request_id"]
+    },
+    "customer_auth_identity": {
+      "title": "Customer Auth Identity",
+      "description": "Verified third-party authentication identities linked to customer profiles",
+      "type": "object",
+      "properties": {
+        "identity_id": { "type": "string" },
+        "provider": { "type": "string", "enum": ["google", "mobile_otp"] },
+        "provider_uid_hash": { "type": "string" },
+        "email": { "type": "string" },
+        "email_lower": { "type": "string" },
+        "email_verified": { "type": "boolean" },
+        "customer_profile_id": { "type": "string" },
+        "customer_id": { "type": "string" },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "last_authenticated_at": { "type": "string" }
+      },
+      "required": ["identity_id", "provider", "provider_uid_hash", "customer_profile_id", "created_at"]
+    },
+    "customer_identity_conflict": {
+      "title": "Customer Identity Conflict",
+      "description": "Account linking conflict records generated during Google login when multiple customer profiles match",
+      "type": "object",
+      "properties": {
+        "conflict_id": { "type": "string" },
+        "provider": { "type": "string", "enum": ["google", "mobile_otp"] },
+        "provider_uid_hash": { "type": "string" },
+        "verified_email": { "type": "string" },
+        "matched_profile_ids": { "type": "array" },
+        "matched_customer_ids": { "type": "array" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "under_review", "approved", "rejected", "resolved", "cancelled"] },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "resolved_at": { "type": "string" },
+        "resolved_by": { "type": "string" },
+        "resolution_action": { "type": "string" },
+        "canonical_profile_id": { "type": "string" },
+        "notes": { "type": "string" },
+        "risk_flags": { "type": "array" },
+        "source": { "type": "string" }
+      },
+      "required": ["conflict_id", "provider", "provider_uid_hash", "verified_email", "status", "created_at"]
+    },
+    "customer_identity_audit": {
+      "title": "Customer Identity Audit",
+      "description": "Immutable audit log of admin identity management operations and profile merges",
+      "type": "object",
+      "properties": {
+        "audit_id": { "type": "string" },
+        "action": { "type": "string" },
+        "conflict_id": { "type": "string" },
+        "provider": { "type": "string" },
+        "canonical_profile_id": { "type": "string" },
+        "affected_profile_ids": { "type": "array" },
+        "admin_email": { "type": "string" },
+        "reason": { "type": "string" },
+        "outcome": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["audit_id", "action", "provider", "admin_email", "outcome", "created_at"]
+    },
+    "customer_session": {
+      "title": "Customer Session",
+      "description": "Server-side session management record for Mobile OTP and Google authenticated customers",
+      "type": "object",
+      "properties": {
+        "session_id": { "type": "string" },
+        "session_token_hash": { "type": "string" },
+        "customer_profile_id": { "type": "string" },
+        "customer_id": { "type": "string" },
+        "auth_method": { "type": "string", "enum": ["mobile_otp", "google"] },
+        "status": { "type": "string", "enum": ["active", "revoked", "expired"] },
+        "created_at": { "type": "string" },
+        "last_activity_at": { "type": "string" },
+        "expires_at": { "type": "string" },
+        "idle_expires_at": { "type": "string" },
+        "device_name": { "type": "string" },
+        "browser": { "type": "string" },
+        "operating_system": { "type": "string" },
+        "ip_masked": { "type": "string" },
+        "ip_hash": { "type": "string" }
+      },
+      "required": ["session_id", "session_token_hash", "customer_profile_id", "auth_method", "status", "created_at", "expires_at", "idle_expires_at"]
+    },
+    "customer_security_event": {
+      "title": "Customer Security Event",
+      "description": "Immutable security log of authentication, session creation, revocation, rotation, and risk detection events",
+      "type": "object",
+      "properties": {
+        "event_id": { "type": "string" },
+        "customer_profile_id": { "type": "string" },
+        "customer_id": { "type": "string" },
+        "event_type": { "type": "string" },
+        "session_id": { "type": "string" },
+        "auth_method": { "type": "string" },
+        "device_name": { "type": "string" },
+        "browser": { "type": "string" },
+        "operating_system": { "type": "string" },
+        "device_type": { "type": "string" },
+        "ip_masked": { "type": "string" },
+        "ip_hash": { "type": "string" },
+        "approximate_location": { "type": "string" },
+        "created_at": { "type": "string" },
+        "outcome": { "type": "string" },
+        "reason": { "type": "string" },
+        "risk_level": { "type": "string" },
+        "risk_flags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "request_id": { "type": "string" }
+      },
+      "required": ["event_id", "customer_profile_id", "event_type", "created_at", "outcome"]
+    },
+    "gst_invoice": {
+      "title": "GST Invoice",
+      "description": "Immutable GST tax invoice snapshot for orders",
+      "type": "object",
+      "properties": {
+        "invoice_id": { "type": "string" },
+        "invoice_number": { "type": "string" },
+        "invoice_type": { "type": "string" },
+        "order_id": { "type": "string" },
+        "financial_year": { "type": "string" },
+        "grand_total": { "type": "number" },
+        "gst_customer_type": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["invoice_id", "invoice_number", "order_id", "grand_total", "created_at"]
+    },
+    "counter": {
+      "title": "Counter",
+      "description": "Transaction-safe counter for sequential numbers",
+      "type": "object",
+      "properties": {
+        "financial_year": { "type": "string" },
+        "current_sequence": { "type": "number" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["financial_year", "current_sequence", "updated_at"]
+    },
+    "seller_gst_config": {
+      "title": "Seller GST Config",
+      "description": "Master GST registration and address configuration for the seller entity",
+      "type": "object",
+      "properties": {
+        "legal_name": { "type": "string" },
+        "trade_name": { "type": "string" },
+        "gstin": { "type": "string" },
+        "pan": { "type": "string" },
+        "address_line_1": { "type": "string" },
+        "address_line_2": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "state_code": { "type": "string" },
+        "pincode": { "type": "string" },
+        "country": { "type": "string" },
+        "invoice_prefix": { "type": "string" },
+        "is_active": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["DRAFT", "ACTIVE"] },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["legal_name", "gstin", "state_code", "pincode", "invoice_prefix", "status"]
+    },
+    "product_tax_record": {
+      "title": "Product Tax Master Record",
+      "description": "Firestore-backed HSN code and GST rate master entry for SKUs or products",
+      "type": "object",
+      "properties": {
+        "tax_record_id": { "type": "string" },
+        "product_id": { "type": "string" },
+        "sku": { "type": "string" },
+        "hsn_code": { "type": "string" },
+        "gst_rate": { "type": "number" },
+        "tax_category": { "type": "string" },
+        "effective_from": { "type": "string" },
+        "effective_to": { "type": "string" },
+        "tax_config_version": { "type": "string" },
+        "status": { "type": "string", "enum": ["ACTIVE", "INACTIVE", "SUPERSEDED"] },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["tax_record_id", "hsn_code", "gst_rate", "effective_from", "status"]
+    },
+    "shipping_tax_config": {
+      "title": "Shipping Tax Config",
+      "description": "GST rate and HSN/SAC configuration for order shipping and freight charges",
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "hsn_or_sac_code": { "type": "string" },
+        "gst_rate": { "type": "number" },
+        "tax_category": { "type": "string" },
+        "effective_from": { "type": "string" },
+        "status": { "type": "string", "enum": ["DRAFT", "ACTIVE"] },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["enabled", "hsn_or_sac_code", "gst_rate", "status"]
+    },
+    "invoice_number_config": {
+      "title": "Invoice Numbering Config",
+      "description": "Configuration for invoice prefix, separator, financial year formatting, and sequence padding",
+      "type": "object",
+      "properties": {
+        "prefix": { "type": "string" },
+        "separator": { "type": "string" },
+        "financial_year_format": { "type": "string" },
+        "sequence_padding": { "type": "number" },
+        "reset_policy": { "type": "string" },
+        "is_active": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["DRAFT", "ACTIVE"] },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["prefix", "separator", "sequence_padding", "status"]
+    },
+    "tax_master_audit": {
+      "title": "Tax Master Audit Log",
+      "description": "Immutable audit log of modifications made to GST master configurations",
+      "type": "object",
+      "properties": {
+        "audit_id": { "type": "string" },
+        "action": { "type": "string" },
+        "entity_type": { "type": "string" },
+        "entity_id": { "type": "string" },
+        "admin_id": { "type": "string" },
+        "reason": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["audit_id", "action", "entity_type", "created_at"]
+    },
+    "homepage_media_document": {
+      "title": "Homepage Media Document",
+      "description": "CMS configurations for hero slider, Best of Instagram, and Insta Reels",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "updated_by": { "type": "string" }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "homepage_media/{mediaId}": {
+      "schema": "homepage_media_document",
+      "description": "Store homepage hero slider, Best of Instagram, and Insta Reels CMS configurations"
+    },
+    "system_tax_config/{configId}": {
+      "schema": "seller_gst_config",
+      "description": "Store master seller GST configuration document"
+    },
+    "product_tax_master/{taxRecordId}": {
+      "schema": "product_tax_record",
+      "description": "Store HSN and GST rate mappings for SKUs and products"
+    },
+    "shipping_tax_config/{configId}": {
+      "schema": "shipping_tax_config",
+      "description": "Store shipping and delivery tax configurations"
+    },
+    "invoice_number_config/{configId}": {
+      "schema": "invoice_number_config",
+      "description": "Store invoice numbering format configurations"
+    },
+    "tax_master_audit/{auditId}": {
+      "schema": "tax_master_audit",
+      "description": "Store immutable audit entries for tax master changes"
+    },
+    "gst_invoices/{invoiceId}": {
+      "schema": "gst_invoice",
+      "description": "Store immutable GST tax invoice snapshots"
+    },
+    "counters/{counterId}": {
+      "schema": "counter",
+      "description": "Store transaction-safe sequential counters"
+    },
+    "customer_sessions/{sessionId}": {
+      "schema": "customer_session",
+      "description": "Store customer server-side active, revoked, and expired sessions"
+    },
+    "customer_security_events/{eventId}": {
+      "schema": "customer_security_event",
+      "description": "Store immutable audit log of customer session and security events"
+    },
+    "customer_identity_conflicts/{conflictId}": {
+      "schema": "customer_identity_conflict",
+      "description": "Store account-linking conflict records for admin review"
+    },
+    "customer_identity_audit/{auditId}": {
+      "schema": "customer_identity_audit",
+      "description": "Store immutable audit entries for admin identity operations"
+    },
+    "customer_auth_identities/{identityId}": {
+      "schema": "customer_auth_identity",
+      "description": "Store verified third-party customer auth identities (e.g. Google Sign-In)"
+    },
+    "notification_retry_audit/{auditId}": {
+      "schema": "notification_retry_audit",
+      "description": "Store immutable audit records for manual notification retries and requeues"
+    },
+    "notification_worker_status/{workerId}": {
+      "schema": "notification_worker_status",
+      "description": "Store background notification dispatch worker health heartbeats"
+    },
+    "notification_queue/{jobId}": {
+      "schema": "notification_queue_job",
+      "description": "Store background transactional notification queue jobs"
+    },
+    "gst_cache/{gstin}": {
+      "schema": "gst_cache",
+      "description": "Cache for verified business GST details"
+    },
+    "enquiries/{enquiryId}": {
+      "schema": "enquiry",
+      "description": "Store customer support enquiries"
+    },
+    "return_requests/{requestId}": {
+      "schema": "return_request",
+      "description": "Store customer return and exchange requests"
+    },
+    "orders/{orderId}": {
+      "schema": "order",
+      "description": "Store customer orders"
+    },
+    "products/{productId}": {
+      "schema": "product",
+      "description": "Store products"
+    },
+    "customer_profiles/{profileId}": {
+      "schema": "customer_profile",
+      "description": "Store verified customer default delivery addresses and profile details"
+    }
+  }
+}
