@@ -139,7 +139,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ initialConfig }) => {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className="relative w-full overflow-hidden bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#B85C38]
+      className="relative w-full overflow-hidden bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#B08D57]
                  h-[420px] min-[400px]:h-[440px] sm:h-[480px] md:h-[500px] lg:h-[540px] xl:h-[550px] min-[1400px]:h-[570px] 2xl:h-[600px] max-h-[600px]
                  flex items-center justify-center select-none"
     >
@@ -170,7 +170,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ initialConfig }) => {
       {/* Editorial Slide Content Overlay */}
       <div className="relative z-20 max-w-5xl mx-auto px-6 text-center text-white py-8 sm:py-10 md:py-12">
         {currentItem.subheading && (
-          <span className="text-xs sm:text-sm font-sans font-bold tracking-[0.25em] text-[#C9B79C] uppercase block mb-3 drop-shadow-sm">
+          <span className="text-xs sm:text-sm font-sans font-bold tracking-[0.25em] text-[#E5D2BC] uppercase block mb-3 drop-shadow-sm">
             {currentItem.subheading}
           </span>
         )}
@@ -185,7 +185,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ initialConfig }) => {
           <div className="mt-6 flex justify-center">
             <button
               onClick={() => handleCtaClick(currentItem.redirectUrl)}
-              className="px-8 py-3.5 bg-[#B85C38] hover:bg-[#A04E2E] text-white font-sans text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2 group cursor-pointer rounded-sm"
+              className="px-8 py-3.5 bg-[#B08D57] hover:bg-[#A04E2E] text-white font-sans text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2 group cursor-pointer rounded-sm"
               id={`hero-cta-btn-${currentSlide}`}
             >
               <span>{currentItem.ctaLabel}</span>
@@ -203,7 +203,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ initialConfig }) => {
             onClick={prevSlide}
             aria-label="Previous Hero Slide"
             id="hero-slider-prev-btn"
-            className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/30 hover:bg-black/60 text-white/90 hover:text-white transition-all backdrop-blur-xs border border-white/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#B85C38]"
+            className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/30 hover:bg-black/60 text-white/90 hover:text-white transition-all backdrop-blur-xs border border-white/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#B08D57]"
           >
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
@@ -213,7 +213,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ initialConfig }) => {
             onClick={nextSlide}
             aria-label="Next Hero Slide"
             id="hero-slider-next-btn"
-            className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/30 hover:bg-black/60 text-white/90 hover:text-white transition-all backdrop-blur-xs border border-white/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#B85C38]"
+            className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/30 hover:bg-black/60 text-white/90 hover:text-white transition-all backdrop-blur-xs border border-white/20 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#B08D57]"
           >
             <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>

@@ -127,7 +127,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
             <div className="p-3 bg-stone-50 border-b border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-stone-700">Status:</span>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-[#B85C38] text-white">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-[#B08D57] text-white">
                   {detailData.status?.replace("_", " ")}
                 </span>
               </div>
@@ -176,7 +176,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
               <button
                 onClick={() => setActiveSubTab("evidence")}
                 className={`py-3 px-4 font-bold uppercase tracking-wider border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
-                  activeSubTab === "evidence" ? "border-[#B85C38] text-[#B85C38]" : "border-transparent text-stone-500 hover:text-stone-900"
+                  activeSubTab === "evidence" ? "border-[#B08D57] text-[#B08D57]" : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
                 <Camera className="w-4 h-4" />
@@ -186,7 +186,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
               <button
                 onClick={() => setActiveSubTab("previews")}
                 className={`py-3 px-4 font-bold uppercase tracking-wider border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
-                  activeSubTab === "previews" ? "border-[#B85C38] text-[#B85C38]" : "border-transparent text-stone-500 hover:text-stone-900"
+                  activeSubTab === "previews" ? "border-[#B08D57] text-[#B08D57]" : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
                 <DollarSign className="w-4 h-4" />
@@ -196,7 +196,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
               <button
                 onClick={() => setActiveSubTab("context")}
                 className={`py-3 px-4 font-bold uppercase tracking-wider border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
-                  activeSubTab === "context" ? "border-[#B85C38] text-[#B85C38]" : "border-transparent text-stone-500 hover:text-stone-900"
+                  activeSubTab === "context" ? "border-[#B08D57] text-[#B08D57]" : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
                 <User className="w-4 h-4" />
@@ -206,7 +206,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
               <button
                 onClick={() => setActiveSubTab("timeline")}
                 className={`py-3 px-4 font-bold uppercase tracking-wider border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
-                  activeSubTab === "timeline" ? "border-[#B85C38] text-[#B85C38]" : "border-transparent text-stone-500 hover:text-stone-900"
+                  activeSubTab === "timeline" ? "border-[#B08D57] text-[#B08D57]" : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
                 <Clock className="w-4 h-4" />
@@ -216,7 +216,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
               <button
                 onClick={() => setActiveSubTab("notes")}
                 className={`py-3 px-4 font-bold uppercase tracking-wider border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
-                  activeSubTab === "notes" ? "border-[#B85C38] text-[#B85C38]" : "border-transparent text-stone-500 hover:text-stone-900"
+                  activeSubTab === "notes" ? "border-[#B08D57] text-[#B08D57]" : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
                 <MessageSquare className="w-4 h-4" />
@@ -249,7 +249,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
                   {/* Customer Context */}
                   <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-3">
                     <h4 className="font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-stone-200 pb-2">
-                      <User className="w-4 h-4 text-[#B85C38]" />
+                      <User className="w-4 h-4 text-[#B08D57]" />
                       Customer Intelligence Summary
                     </h4>
                     <div className="grid grid-cols-2 gap-3 text-stone-700">
@@ -279,7 +279,7 @@ export const RmaDetailDrawer: React.FC<RmaDetailDrawerProps> = ({
                   {/* Order Context */}
                   <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-3">
                     <h4 className="font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-stone-200 pb-2">
-                      <ShoppingBag className="w-4 h-4 text-[#B85C38]" />
+                      <ShoppingBag className="w-4 h-4 text-[#B08D57]" />
                       Immutable Order Snapshot
                     </h4>
                     <div className="grid grid-cols-2 gap-3 text-stone-700">

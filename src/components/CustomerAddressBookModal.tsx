@@ -180,7 +180,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
   };
 
   const getLabelIcon = (label: string) => {
-    if (label === 'Home') return <Home className="w-3.5 h-3.5 text-[#B85C38]" />;
+    if (label === 'Home') return <Home className="w-3.5 h-3.5 text-[#B08D57]" />;
     if (label === 'Work') return <Briefcase className="w-3.5 h-3.5 text-[#1E3A8A]" />;
     return <Tag className="w-3.5 h-3.5 text-gray-600" />;
   };
@@ -192,8 +192,8 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-[#FAF7F2]">
           <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-[#B85C38]" />
-            <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+            <MapPin className="w-5 h-5 text-[#B08D57]" />
+            <h3 className="font-serif text-lg font-bold text-[#2A211C]">
               {isEditing ? (editingAddressId ? 'Edit Delivery Address' : 'Add New Delivery Address') : 'Saved Address Book'}
             </h3>
           </div>
@@ -229,7 +229,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                         onClick={() => setForm(f => ({ ...f, label: lbl }))}
                         className={`px-3 py-1.5 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-all ${
                           form.label === lbl
-                            ? 'border-[#B85C38] bg-[#B85C38]/10 text-[#B85C38] font-bold'
+                            ? 'border-[#B08D57] bg-[#B08D57]/10 text-[#B08D57] font-bold'
                             : 'border-gray-200 text-gray-700 hover:bg-gray-50'
                         }`}
                       >
@@ -375,7 +375,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                     id="modal_is_default"
                     checked={form.is_default}
                     onChange={e => setForm(f => ({ ...f, is_default: e.target.checked }))}
-                    className="w-4 h-4 accent-[#B85C38] rounded cursor-pointer"
+                    className="w-4 h-4 accent-[#B08D57] rounded cursor-pointer"
                   />
                   <label htmlFor="modal_is_default" className="text-xs text-gray-700 font-medium cursor-pointer">
                     Set as default delivery address
@@ -396,7 +396,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                 <button
                   type="submit"
                   disabled={loadingId === 'save'}
-                  className="px-5 py-2 bg-[#B85C38] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] transition-colors flex items-center gap-2"
+                  className="px-5 py-2 bg-[#B08D57] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] transition-colors flex items-center gap-2"
                 >
                   {loadingId === 'save' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Save Address</span>
@@ -412,7 +412,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                 <button
                   type="button"
                   onClick={handleOpenAddForm}
-                  className="px-3 py-1.5 bg-[#B85C38] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] transition-colors flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-[#B08D57] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] transition-colors flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add New Address</span>
@@ -421,13 +421,13 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
 
               {addresses.length === 0 ? (
                 <div className="text-center py-8 px-4 bg-amber-50/50 rounded-xl border border-dashed border-amber-200">
-                  <MapPin className="w-8 h-8 text-[#B85C38] mx-auto mb-2 opacity-60" />
-                  <p className="text-xs font-bold text-[#1F1B16]">No Saved Addresses</p>
+                  <MapPin className="w-8 h-8 text-[#B08D57] mx-auto mb-2 opacity-60" />
+                  <p className="text-xs font-bold text-[#2A211C]">No Saved Addresses</p>
                   <p className="text-[11px] text-gray-500 mt-1">Add your primary delivery address to your address book for faster checkout.</p>
                   <button
                     type="button"
                     onClick={handleOpenAddForm}
-                    className="mt-3 px-4 py-1.5 bg-[#B85C38] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E]"
+                    className="mt-3 px-4 py-1.5 bg-[#B08D57] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E]"
                   >
                     + Add First Address
                   </button>
@@ -443,7 +443,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                         key={addr.id}
                         className={`p-4 rounded-xl border transition-all relative flex flex-col justify-between gap-3 ${
                           isSelected
-                            ? 'border-[#B85C38] bg-[#FAF7F2] ring-2 ring-[#B85C38]/20 shadow-sm'
+                            ? 'border-[#B08D57] bg-[#FAF7F2] ring-2 ring-[#B08D57]/20 shadow-sm'
                             : 'border-gray-200 hover:border-amber-300 bg-white'
                         }`}
                       >
@@ -469,14 +469,14 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                             )}
                           </div>
 
-                          <p className="font-bold text-xs text-[#1F1B16]">{addr.recipient_name} • <span className="font-mono text-gray-600">{addr.phone}</span></p>
+                          <p className="font-bold text-xs text-[#2A211C]">{addr.recipient_name} • <span className="font-mono text-gray-600">{addr.phone}</span></p>
                           <p className="text-xs text-gray-700 mt-1 leading-relaxed">
                             {addr.address_line_1}
                             {addr.address_line_2 ? `, ${addr.address_line_2}` : ''}
                             {addr.landmark ? ` (Landmark: ${addr.landmark})` : ''}
                           </p>
                           <p className="text-xs text-gray-600 font-medium">
-                            {addr.city}, {addr.state} - <span className="font-mono font-bold text-[#1F1B16]">{addr.postal_code}</span>, {addr.country}
+                            {addr.city}, {addr.state} - <span className="font-mono font-bold text-[#2A211C]">{addr.postal_code}</span>, {addr.country}
                           </p>
                         </div>
 
@@ -488,7 +488,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                               onSelectAddress(addr);
                               onClose();
                             }}
-                            className="px-3 py-1 bg-[#1F1B16] text-white rounded text-[11px] font-bold hover:bg-[#38322B] transition-colors"
+                            className="px-3 py-1 bg-[#2A211C] text-white rounded text-[11px] font-bold hover:bg-[#38322B] transition-colors"
                           >
                             Use This Address
                           </button>
@@ -508,7 +508,7 @@ export const CustomerAddressBookModal: React.FC<CustomerAddressBookModalProps> =
                             <button
                               type="button"
                               onClick={() => handleOpenEditForm(addr)}
-                              className="text-[11px] text-gray-600 font-medium hover:text-[#B85C38] flex items-center gap-1"
+                              className="text-[11px] text-gray-600 font-medium hover:text-[#B08D57] flex items-center gap-1"
                             >
                               <Edit2 className="w-3 h-3" />
                               Edit

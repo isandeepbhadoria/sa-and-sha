@@ -158,23 +158,23 @@ export const ContactSupportPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F1E8] text-[#1F1B16] font-sans pt-6 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FBF6EE] text-[#2A211C] font-sans pt-6 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center space-x-2 text-xs text-stone-500 font-sans uppercase tracking-wider">
-          <Link to="/" className="hover:text-[#B85C38] transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#B08D57] transition-colors">Home</Link>
           <span>/</span>
-          <span className="text-[#1F1B16] font-semibold">Contact Support</span>
+          <span className="text-[#2A211C] font-semibold">Contact Support</span>
         </nav>
 
         {/* Page Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E4D8C3]/50 border border-[#C9B79C]/30 text-xs font-sans font-bold tracking-widest text-[#B85C38] uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4E6D7]/50 border border-[#E5D2BC]/30 text-xs font-sans font-bold tracking-widest text-[#B08D57] uppercase">
             <Sparkles className="w-3.5 h-3.5" />
             Sa and Sha Concierge
           </div>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#1F1B16] tracking-tight">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#2A211C] tracking-tight">
             How May We Assist You?
           </h1>
           <p className="font-sans text-sm sm:text-base text-stone-600 leading-relaxed">
@@ -186,50 +186,50 @@ export const ContactSupportPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link 
             to="/track-order" 
-            className="group p-5 bg-white rounded-xl border border-[#C9B79C]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
+            className="group p-5 bg-white rounded-xl border border-[#E5D2BC]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38]">
+              <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57]">
                 <Package className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-[#1F1B16] text-sm group-hover:text-[#B85C38] transition-colors">Track Your Order</h3>
+                <h3 className="font-serif font-bold text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors">Track Your Order</h3>
                 <p className="text-xs text-stone-500">Live courier status & 6-step timeline</p>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B85C38] transition-colors" />
+            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B08D57] transition-colors" />
           </Link>
 
           <Link 
             to="/returns-exchanges" 
-            className="group p-5 bg-white rounded-xl border border-[#C9B79C]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
+            className="group p-5 bg-white rounded-xl border border-[#E5D2BC]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38]">
+              <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57]">
                 <RotateCcw className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-[#1F1B16] text-sm group-hover:text-[#B85C38] transition-colors">Returns & Free Exchange</h3>
+                <h3 className="font-serif font-bold text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors">Returns & Free Exchange</h3>
                 <p className="text-xs text-stone-500">Submit requests & doorstep pickups</p>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B85C38] transition-colors" />
+            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B08D57] transition-colors" />
           </Link>
 
           <Link 
             to="/faq" 
-            className="group p-5 bg-white rounded-xl border border-[#C9B79C]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
+            className="group p-5 bg-white rounded-xl border border-[#E5D2BC]/30 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38]">
+              <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57]">
                 <Ruler className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-[#1F1B16] text-sm group-hover:text-[#B85C38] transition-colors">Size & Fabric Care Guide</h3>
+                <h3 className="font-serif font-bold text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors">Size & Fabric Care Guide</h3>
                 <p className="text-xs text-stone-500">Washing, pressing & fitting details</p>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B85C38] transition-colors" />
+            <ExternalLink className="w-4 h-4 text-stone-400 group-hover:text-[#B08D57] transition-colors" />
           </Link>
         </div>
 
@@ -240,22 +240,22 @@ export const ContactSupportPage: React.FC = () => {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Contact Details Card */}
-            <div className="bg-white rounded-2xl border border-[#C9B79C]/30 p-6 shadow-sm space-y-6">
-              <h2 className="font-serif text-xl font-bold text-[#1F1B16] border-b border-[#C9B79C]/20 pb-3 flex items-center justify-between">
+            <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 p-6 shadow-sm space-y-6">
+              <h2 className="font-serif text-xl font-bold text-[#2A211C] border-b border-[#E5D2BC]/20 pb-3 flex items-center justify-between">
                 <span>Official Contact Details</span>
-                <ShieldCheck className="w-5 h-5 text-[#B85C38]" />
+                <ShieldCheck className="w-5 h-5 text-[#B08D57]" />
               </h2>
 
               {/* Email */}
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38] shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57] shrink-0">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-sans font-bold text-stone-500 uppercase tracking-wider">Email Support</div>
                   <a 
                     href="mailto:shop@saandsha.com" 
-                    className="font-serif font-bold text-[#1F1B16] text-base hover:text-[#B85C38] transition-colors block mt-0.5"
+                    className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block mt-0.5"
                   >
                     shop@saandsha.com
                   </a>
@@ -265,7 +265,7 @@ export const ContactSupportPage: React.FC = () => {
 
               {/* Phone Numbers */}
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38] shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57] shrink-0">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
@@ -273,13 +273,13 @@ export const ContactSupportPage: React.FC = () => {
                   <div className="space-y-1 mt-1">
                     <a 
                       href="tel:+917688886661" 
-                      className="font-serif font-bold text-[#1F1B16] text-base hover:text-[#B85C38] transition-colors block"
+                      className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block"
                     >
                       +91 7688886661
                     </a>
                     <a 
                       href="tel:+917688886662" 
-                      className="font-serif font-bold text-[#1F1B16] text-base hover:text-[#B85C38] transition-colors block"
+                      className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block"
                     >
                       +91 7688886662
                     </a>
@@ -290,12 +290,12 @@ export const ContactSupportPage: React.FC = () => {
 
               {/* Operating Hours */}
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38] shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57] shrink-0">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-sans font-bold text-stone-500 uppercase tracking-wider">Business Hours</div>
-                  <div className="font-sans font-medium text-[#1F1B16] text-sm mt-0.5">
+                  <div className="font-sans font-medium text-[#2A211C] text-sm mt-0.5">
                     Monday to Saturday: 10:00 AM – 7:00 PM IST
                   </div>
                   <div className="text-xs text-stone-500 mt-0.5">Sunday: Closed (Online enquiries remain active)</div>
@@ -303,13 +303,13 @@ export const ContactSupportPage: React.FC = () => {
               </div>
 
               {/* Head Office Address */}
-              <div className="flex items-start gap-4 pt-2 border-t border-[#C9B79C]/20">
-                <div className="w-10 h-10 rounded-full bg-[#F5F1E8] border border-[#C9B79C]/30 flex items-center justify-center text-[#B85C38] shrink-0">
+              <div className="flex items-start gap-4 pt-2 border-t border-[#E5D2BC]/20">
+                <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57] shrink-0">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
                   <div className="text-xs font-sans font-bold text-stone-500 uppercase tracking-wider">Head Office & Fulfillment Facility</div>
-                  <div className="font-serif font-bold text-[#1F1B16] text-sm">
+                  <div className="font-serif font-bold text-[#2A211C] text-sm">
                     Sa and Sha Head Office
                   </div>
                   <p className="text-xs text-stone-600 leading-relaxed">
@@ -319,9 +319,9 @@ export const ContactSupportPage: React.FC = () => {
               </div>
 
               {/* Legal Trademark Notice */}
-              <div className="p-3.5 bg-[#F5F1E8]/60 rounded-xl border border-[#C9B79C]/30 text-xs text-stone-600 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold text-[#1F1B16] uppercase tracking-wider text-[10px]">
-                  <Building2 className="w-3.5 h-3.5 text-[#B85C38]" />
+              <div className="p-3.5 bg-[#FBF6EE]/60 rounded-xl border border-[#E5D2BC]/30 text-xs text-stone-600 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-[#2A211C] uppercase tracking-wider text-[10px]">
+                  <Building2 className="w-3.5 h-3.5 text-[#B08D57]" />
                   Legal Company Information
                 </div>
                 <p className="text-[11px] leading-relaxed">
@@ -332,17 +332,17 @@ export const ContactSupportPage: React.FC = () => {
             </div>
 
             {/* Google Maps Location Box */}
-            <div className="bg-white rounded-2xl border border-[#C9B79C]/30 overflow-hidden shadow-sm space-y-3 p-4">
+            <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 overflow-hidden shadow-sm space-y-3 p-4">
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#B85C38]" />
-                  <span className="font-serif font-bold text-sm text-[#1F1B16]">Jaipur Head Office Location</span>
+                  <MapPin className="w-4 h-4 text-[#B08D57]" />
+                  <span className="font-serif font-bold text-sm text-[#2A211C]">Jaipur Head Office Location</span>
                 </div>
                 <a
                   href="https://maps.google.com/maps?q=26.794677132093124,75.85846163777299"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-[#B85C38] font-bold hover:underline"
+                  className="inline-flex items-center gap-1 text-xs text-[#B08D57] font-bold hover:underline"
                 >
                   Open in Maps
                   <ExternalLink className="w-3 h-3" />
@@ -350,7 +350,7 @@ export const ContactSupportPage: React.FC = () => {
               </div>
 
               {/* Responsive Google Maps Embed */}
-              <div className="w-full h-64 rounded-xl overflow-hidden border border-[#C9B79C]/30 relative bg-[#E4D8C3]/20">
+              <div className="w-full h-64 rounded-xl overflow-hidden border border-[#E5D2BC]/30 relative bg-[#F4E6D7]/20">
                 <iframe
                   title="Sa and Sha Jaipur Head Office Map"
                   src="https://maps.google.com/maps?q=26.794677132093124,75.85846163777299&z=15&output=embed"
@@ -375,7 +375,7 @@ export const ContactSupportPage: React.FC = () => {
             
             {submittedData ? (
               /* Success Confirmation View */
-              <div className="bg-white rounded-2xl border border-[#C9B79C]/30 p-8 shadow-sm space-y-6 text-center animate-fadeIn">
+              <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 p-8 shadow-sm space-y-6 text-center animate-fadeIn">
                 <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
                   <CheckCircle2 className="w-9 h-9" />
                 </div>
@@ -384,35 +384,35 @@ export const ContactSupportPage: React.FC = () => {
                   <span className="text-xs font-sans font-bold tracking-widest text-emerald-700 uppercase bg-emerald-100/60 px-3 py-1 rounded-full">
                     Enquiry Received
                   </span>
-                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F1B16]">
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A211C]">
                     Thank You, {submittedData.fullName}!
                   </h2>
                   <p className="text-stone-600 text-sm max-w-md mx-auto">
-                    Your enquiry has been successfully logged. A confirmation email has been dispatched to <strong className="text-[#1F1B16]">{submittedData.email}</strong>.
+                    Your enquiry has been successfully logged. A confirmation email has been dispatched to <strong className="text-[#2A211C]">{submittedData.email}</strong>.
                   </p>
                 </div>
 
                 {/* Ticket Details */}
-                <div className="bg-[#F5F1E8]/50 rounded-xl p-5 border border-[#C9B79C]/30 text-left space-y-3 max-w-lg mx-auto text-xs sm:text-sm">
-                  <div className="flex justify-between items-center border-b border-[#C9B79C]/20 pb-2">
+                <div className="bg-[#FBF6EE]/50 rounded-xl p-5 border border-[#E5D2BC]/30 text-left space-y-3 max-w-lg mx-auto text-xs sm:text-sm">
+                  <div className="flex justify-between items-center border-b border-[#E5D2BC]/20 pb-2">
                     <span className="text-stone-500 font-medium">Reference Ticket ID:</span>
-                    <span className="font-serif font-bold text-[#B85C38] text-base">{submittedData.enquiryId}</span>
+                    <span className="font-serif font-bold text-[#B08D57] text-base">{submittedData.enquiryId}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-stone-500">Category:</span>
-                    <span className="font-semibold text-[#1F1B16]">{submittedData.enquiryType}</span>
+                    <span className="font-semibold text-[#2A211C]">{submittedData.enquiryType}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-stone-500">Mobile Number:</span>
-                    <span className="font-semibold text-[#1F1B16]">{submittedData.mobile}</span>
+                    <span className="font-semibold text-[#2A211C]">{submittedData.mobile}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-stone-500">Submitted On:</span>
                     <span className="text-stone-700">{submittedData.timestamp}</span>
                   </div>
-                  <div className="pt-2 border-t border-[#C9B79C]/20">
+                  <div className="pt-2 border-t border-[#E5D2BC]/20">
                     <span className="text-stone-500 block mb-1">Your Message:</span>
-                    <div className="p-3 bg-white rounded-lg border border-[#C9B79C]/20 text-stone-700 text-xs italic whitespace-pre-wrap">
+                    <div className="p-3 bg-white rounded-lg border border-[#E5D2BC]/20 text-stone-700 text-xs italic whitespace-pre-wrap">
                       "{submittedData.message}"
                     </div>
                   </div>
@@ -428,13 +428,13 @@ export const ContactSupportPage: React.FC = () => {
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
                   <button
                     onClick={handleResetForm}
-                    className="w-full sm:w-auto px-6 py-3 bg-[#1F1B16] hover:bg-[#332C23] text-[#F5F1E8] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors shadow"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#2A211C] hover:bg-[#332C23] text-[#FBF6EE] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors shadow"
                   >
                     Submit Another Enquiry
                   </button>
                   <Link
                     to="/track-order"
-                    className="w-full sm:w-auto px-6 py-3 bg-[#E4D8C3]/50 hover:bg-[#E4D8C3] text-[#1F1B16] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors border border-[#C9B79C]/40 text-center"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#F4E6D7]/50 hover:bg-[#F4E6D7] text-[#2A211C] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors border border-[#E5D2BC]/40 text-center"
                   >
                     Track Existing Order
                   </Link>
@@ -442,9 +442,9 @@ export const ContactSupportPage: React.FC = () => {
               </div>
             ) : (
               /* Contact Support Form View */
-              <div className="bg-white rounded-2xl border border-[#C9B79C]/30 p-6 sm:p-8 shadow-sm space-y-6">
-                <div className="border-b border-[#C9B79C]/20 pb-4">
-                  <h2 className="font-serif text-2xl font-bold text-[#1F1B16]">
+              <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 p-6 sm:p-8 shadow-sm space-y-6">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
+                  <h2 className="font-serif text-2xl font-bold text-[#2A211C]">
                     Send Us a Message
                   </h2>
                   <p className="text-xs text-stone-500 mt-1">
@@ -475,7 +475,7 @@ export const ContactSupportPage: React.FC = () => {
                   {/* Name and Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16] mb-1.5">
+                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C] mb-1.5">
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -484,15 +484,15 @@ export const ContactSupportPage: React.FC = () => {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         placeholder="e.g. Vikramaditya Singh"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#F5F1E8]/10 text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors ${
-                          errors.fullName ? 'border-red-500 bg-red-50/10' : 'border-[#C9B79C]/40'
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors ${
+                          errors.fullName ? 'border-red-500 bg-red-50/10' : 'border-[#E5D2BC]/40'
                         }`}
                       />
                       {errors.fullName && <p className="text-red-500 text-[11px] mt-1">{errors.fullName}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16] mb-1.5">
+                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C] mb-1.5">
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -501,8 +501,8 @@ export const ContactSupportPage: React.FC = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="e.g. vikram@example.com"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#F5F1E8]/10 text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors ${
-                          errors.email ? 'border-red-500 bg-red-50/10' : 'border-[#C9B79C]/40'
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors ${
+                          errors.email ? 'border-red-500 bg-red-50/10' : 'border-[#E5D2BC]/40'
                         }`}
                       />
                       {errors.email && <p className="text-red-500 text-[11px] mt-1">{errors.email}</p>}
@@ -512,7 +512,7 @@ export const ContactSupportPage: React.FC = () => {
                   {/* Mobile & Order ID */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16] mb-1.5">
+                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C] mb-1.5">
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -521,15 +521,15 @@ export const ContactSupportPage: React.FC = () => {
                         value={formData.mobile}
                         onChange={handleInputChange}
                         placeholder="e.g. +91 9876543210"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#F5F1E8]/10 text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors ${
-                          errors.mobile ? 'border-red-500 bg-red-50/10' : 'border-[#C9B79C]/40'
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors ${
+                          errors.mobile ? 'border-red-500 bg-red-50/10' : 'border-[#E5D2BC]/40'
                         }`}
                       />
                       {errors.mobile && <p className="text-red-500 text-[11px] mt-1">{errors.mobile}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16] mb-1.5">
+                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C] mb-1.5">
                         Order ID <span className="text-stone-400 font-normal lowercase">(optional)</span>
                       </label>
                       <input
@@ -538,21 +538,21 @@ export const ContactSupportPage: React.FC = () => {
                         value={formData.orderId}
                         onChange={handleInputChange}
                         placeholder="e.g. KL102548"
-                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#C9B79C]/40 bg-[#F5F1E8]/10 text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors"
+                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E5D2BC]/40 bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Category Dropdown */}
                   <div>
-                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16] mb-1.5">
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C] mb-1.5">
                       Enquiry Category <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="enquiryType"
                       value={formData.enquiryType}
                       onChange={handleInputChange}
-                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#C9B79C]/40 bg-white text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors"
+                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E5D2BC]/40 bg-white text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors"
                     >
                       <option value="Order Related">Order Related (Tracking / Delay / Status)</option>
                       <option value="Shipping & Delivery">Shipping & Delivery Enquiries</option>
@@ -570,7 +570,7 @@ export const ContactSupportPage: React.FC = () => {
                   {/* Message Field */}
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16]">
+                      <label className="block text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C]">
                         Detailed Message <span className="text-red-500">*</span>
                       </label>
                       <span className="text-[11px] text-stone-400">
@@ -583,16 +583,16 @@ export const ContactSupportPage: React.FC = () => {
                       value={formData.message}
                       onChange={handleInputChange}
                       placeholder="Please describe your query or requirement in detail so our concierges can assist you accurately..."
-                      className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#F5F1E8]/10 text-[#1F1B16] focus:outline-none focus:border-[#1F1B16] transition-colors resize-y ${
-                        errors.message ? 'border-red-500 bg-red-50/10' : 'border-[#C9B79C]/40'
+                      className={`w-full px-3.5 py-2.5 text-sm rounded-lg border bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors resize-y ${
+                        errors.message ? 'border-red-500 bg-red-50/10' : 'border-[#E5D2BC]/40'
                       }`}
                     ></textarea>
                     {errors.message && <p className="text-red-500 text-[11px] mt-1">{errors.message}</p>}
                   </div>
 
                   {/* Privacy & Anti-Spam Guarantee */}
-                  <div className="p-3 bg-[#F5F1E8]/40 rounded-lg border border-[#C9B79C]/20 text-[11px] text-stone-500 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-[#B85C38] shrink-0" />
+                  <div className="p-3 bg-[#FBF6EE]/40 rounded-lg border border-[#E5D2BC]/20 text-[11px] text-stone-500 flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-[#B08D57] shrink-0" />
                     <span>
                       Your privacy is protected. Submissions are processed securely according to Sa and Sha customer service standards.
                     </span>
@@ -602,11 +602,11 @@ export const ContactSupportPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full py-3.5 px-6 bg-[#1F1B16] hover:bg-[#332C23] text-[#F5F1E8] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full py-3.5 px-6 bg-[#2A211C] hover:bg-[#332C23] text-[#FBF6EE] font-sans font-bold text-xs uppercase tracking-widest rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {submitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-[#F5F1E8] border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-[#FBF6EE] border-t-transparent rounded-full animate-spin"></div>
                         <span>Sending Message...</span>
                       </>
                     ) : (

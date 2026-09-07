@@ -14,27 +14,23 @@ describe('PHASE 10.5D.3A.14 — Navigation UI Redesign Verification', () => {
   const homePageFile = fs.readFileSync(path.resolve(__dirname, '../../pages/HomePage.tsx'), 'utf-8');
   const collectionPageFile = fs.readFileSync(path.resolve(__dirname, '../../pages/CollectionPage.tsx'), 'utf-8');
 
-  it('1. Header Desktop Mega Menu exposes canonical Shop by Collection and Shop by Product dimensions', () => {
+  it('1. Header Desktop Mega Menu exposes canonical Shop by Category dimensions', () => {
     // Check Mega Menu headings
-    expect(headerFile).toContain('Shop by Collection');
-    expect(headerFile).toContain('Shop by Product');
+    expect(headerFile).toContain('Shop by Category');
+    expect(headerFile).toContain('Quick Links');
 
-    // Check Collections links in Header
-    expect(headerFile).toContain('/shop/collection/pure-linen');
-    expect(headerFile).toContain('/shop/collection/linen-cotton-blend');
-    expect(headerFile).toContain('/shop/collection/pure-cotton');
-    expect(headerFile).toContain('/shop/collection/chinos');
-
-    // Check Product links in Header
-    expect(headerFile).toContain('/shop/product/shirts');
-    expect(headerFile).toContain('/shop/product/shirts/full-sleeve');
-    expect(headerFile).toContain('/shop/product/shirts/half-sleeve');
-    expect(headerFile).toContain('/shop/product/trousers');
-    expect(headerFile).toContain('/shop/product/shorts');
-    expect(headerFile).toContain('/shop/product/pyjamas');
-    expect(headerFile).toContain('/shop/product/kurtas');
+    // Check category links in Header
+    expect(headerFile).toContain('/shop/product/dresses');
+    expect(headerFile).toContain('/shop/product/tops-shirts');
+    expect(headerFile).toContain('/shop/product/tops-shirts/tops');
+    expect(headerFile).toContain('/shop/product/tops-shirts/shirts');
+    expect(headerFile).toContain('/shop/product/shorts-skirts');
+    expect(headerFile).toContain('/shop/product/shorts-skirts/shorts');
+    expect(headerFile).toContain('/shop/product/shorts-skirts/skirts');
     expect(headerFile).toContain('/shop/product/co-ord-sets');
-    expect(headerFile).toContain('/shop/product/chinos');
+    expect(headerFile).toContain('/shop/product/trousers');
+    expect(headerFile).toContain('/shop/product/jackets');
+    expect(headerFile).toContain('/shop/product/bags-pouches');
   });
 
   it('2. Header Mobile Drawer contains accordions for Shop by Collection and Shop by Product', () => {
@@ -44,40 +40,34 @@ describe('PHASE 10.5D.3A.14 — Navigation UI Redesign Verification', () => {
     expect(headerFile).toContain('mobile-nav-products-toggle');
   });
 
-  it('3. Pure Cotton and future product types include Coming Soon indicators', () => {
+  it('3. Category tiles include Coming Soon indicators until real inventory is loaded', () => {
     // Coming soon badge in header
     expect(headerFile).toContain('Coming Soon');
 
     // Coming soon in HomePage
     expect(homePageFile).toContain('Coming Soon');
-    expect(homePageFile).toContain('/shop/collection/pure-cotton');
-    expect(homePageFile).toContain('/shop/product/shorts');
-    expect(homePageFile).toContain('/shop/product/pyjamas');
-    expect(homePageFile).toContain('/shop/product/kurtas');
+    expect(homePageFile).toContain('/shop/product/dresses');
+    expect(homePageFile).toContain('/shop/product/tops-shirts');
+    expect(homePageFile).toContain('/shop/product/shorts-skirts');
     expect(homePageFile).toContain('/shop/product/co-ord-sets');
   });
 
-  it('4. Footer features Collections and Products columns with canonical routes', () => {
-    expect(footerFile).toContain('Collections');
-    expect(footerFile).toContain('Products');
+  it('4. Footer features Categories and More columns with canonical routes', () => {
+    expect(footerFile).toContain('Categories');
+    expect(footerFile).toContain('More');
 
-    expect(footerFile).toContain('/shop/collection/pure-linen');
-    expect(footerFile).toContain('/shop/collection/linen-cotton-blend');
-    expect(footerFile).toContain('/shop/collection/pure-cotton');
-    expect(footerFile).toContain('/shop/collection/chinos');
-
-    expect(footerFile).toContain('/shop/product/shirts');
-    expect(footerFile).toContain('/shop/product/trousers');
-    expect(footerFile).toContain('/shop/product/shorts');
-    expect(footerFile).toContain('/shop/product/pyjamas');
-    expect(footerFile).toContain('/shop/product/kurtas');
+    expect(footerFile).toContain('/shop/product/dresses');
+    expect(footerFile).toContain('/shop/product/tops-shirts');
+    expect(footerFile).toContain('/shop/product/shorts-skirts');
     expect(footerFile).toContain('/shop/product/co-ord-sets');
-    expect(footerFile).toContain('/shop/product/chinos');
+
+    expect(footerFile).toContain('/shop/product/trousers');
+    expect(footerFile).toContain('/shop/product/jackets');
+    expect(footerFile).toContain('/shop/product/bags-pouches');
   });
 
-  it('5. Homepage presents Shop by Collection and Shop by Product', () => {
-    expect(homePageFile).toContain('Shop by Collection');
-    expect(homePageFile).toContain('Shop by Product');
+  it('5. Homepage presents Shop by Category', () => {
+    expect(homePageFile).toContain('Shop by Category');
   });
 
   it('6. Forbids Polos from active customer navigation and ensures decommission policy holds', () => {

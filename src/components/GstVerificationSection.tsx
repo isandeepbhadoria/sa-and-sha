@@ -40,9 +40,9 @@ export const GstVerificationSection: React.FC<GstVerificationSectionProps> = ({
 }) => {
   const isCheckoutTheme = theme === 'checkout';
 
-  const containerBorder = isCheckoutTheme ? 'border-[#C9B79C]/20' : 'border-stone-200';
-  const labelColor = isCheckoutTheme ? 'text-[#1F1B16]/70' : 'text-stone-700';
-  const buttonBg = isCheckoutTheme ? 'bg-[#1F1B16] hover:bg-[#B85C38]' : 'bg-stone-900 hover:bg-stone-800';
+  const containerBorder = isCheckoutTheme ? 'border-[#E5D2BC]/20' : 'border-stone-200';
+  const labelColor = isCheckoutTheme ? 'text-[#2A211C]/70' : 'text-stone-700';
+  const buttonBg = isCheckoutTheme ? 'bg-[#2A211C] hover:bg-[#B08D57]' : 'bg-stone-900 hover:bg-stone-800';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 15);
@@ -60,7 +60,7 @@ export const GstVerificationSection: React.FC<GstVerificationSectionProps> = ({
     <div className={`pt-3 border-t ${containerBorder} flex flex-col gap-2.5`}>
       <div className="flex items-center justify-between">
         <label className={`font-bold uppercase tracking-wider text-[10px] ${labelColor} flex items-center gap-1.5`}>
-          <Building2 className="w-3.5 h-3.5 text-[#B85C38]" />
+          <Building2 className="w-3.5 h-3.5 text-[#B08D57]" />
           <span>{label}</span>
         </label>
         {verificationState === 'verified' && (
@@ -104,7 +104,7 @@ export const GstVerificationSection: React.FC<GstVerificationSectionProps> = ({
       </div>
 
       {verificationState === 'verifying' && (
-        <p className="text-[11px] text-[#B85C38] flex items-center gap-1.5 animate-pulse">
+        <p className="text-[11px] text-[#B08D57] flex items-center gap-1.5 animate-pulse">
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
           <span>Fetching verified business information from GSTIN Portal...</span>
         </p>

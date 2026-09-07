@@ -604,7 +604,7 @@ export const Msg91OtpVerification: React.FC<Msg91OtpVerificationProps> = ({
                 disabled={!isValidTarget || isSending || resendTimer > 0}
                 className={`px-3.5 py-2 rounded text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                   isValidTarget && !isSending && resendTimer === 0
-                    ? 'bg-[#1F1B16] hover:bg-[#B85C38] text-white shadow-sm cursor-pointer'
+                    ? 'bg-[#2A211C] hover:bg-[#B08D57] text-white shadow-sm cursor-pointer'
                     : 'bg-stone-200 text-stone-400 cursor-not-allowed'
                 }`}
               >
@@ -624,9 +624,9 @@ export const Msg91OtpVerification: React.FC<Msg91OtpVerificationProps> = ({
               </button>
             </div>
           ) : (
-            <div className="p-3 bg-stone-50 border border-[#C9B79C]/30 rounded-md space-y-3 text-xs">
+            <div className="p-3 bg-stone-50 border border-[#E5D2BC]/30 rounded-md space-y-3 text-xs">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-[#1F1B16] tracking-wider uppercase text-[11px]">
+                <span className="font-bold text-[#2A211C] tracking-wider uppercase text-[11px]">
                   OTP VERIFICATION CODE
                 </span>
                 <span className="text-[11px] text-stone-500">
@@ -651,7 +651,7 @@ export const Msg91OtpVerification: React.FC<Msg91OtpVerificationProps> = ({
                     onKeyDown={(e) => handleOtpInputKeyDown(index, e)}
                     onPaste={handleOtpInputPaste}
                     disabled={isVerifying}
-                    className="w-11 h-12 text-center text-lg font-bold font-mono border rounded-md border-[#C9B79C]/60 focus:border-[#1F1B16] focus:ring-1 focus:ring-[#1F1B16] focus:outline-none bg-white text-[#1F1B16] shadow-xs transition-all disabled:bg-stone-100"
+                    className="w-11 h-12 text-center text-lg font-bold font-mono border rounded-md border-[#E5D2BC]/60 focus:border-[#2A211C] focus:ring-1 focus:ring-[#2A211C] focus:outline-none bg-white text-[#2A211C] shadow-xs transition-all disabled:bg-stone-100"
                   />
                 ))}
               </div>
@@ -661,14 +661,14 @@ export const Msg91OtpVerification: React.FC<Msg91OtpVerificationProps> = ({
                 <div className="text-[11px] text-stone-500">
                   {resendTimer > 0 ? (
                     <span className="font-medium text-stone-600">
-                      Resend OTP in <strong className="font-mono text-[#1F1B16]">{resendTimer}s</strong>
+                      Resend OTP in <strong className="font-mono text-[#2A211C]">{resendTimer}s</strong>
                     </span>
                   ) : (
                     <button
                       type="button"
                       onClick={handleResendOtp}
                       disabled={isResending || isVerifying}
-                      className="text-[#B85C38] hover:text-[#1F1B16] font-semibold underline disabled:opacity-50 cursor-pointer"
+                      className="text-[#B08D57] hover:text-[#2A211C] font-semibold underline disabled:opacity-50 cursor-pointer"
                     >
                       {isResending ? 'Sending...' : 'Didn’t receive OTP? Resend OTP'}
                     </button>
@@ -679,7 +679,7 @@ export const Msg91OtpVerification: React.FC<Msg91OtpVerificationProps> = ({
                   type="button"
                   onClick={() => handleVerifyOtp()}
                   disabled={otpDigits.join('').length !== 4 || isVerifying}
-                  className="px-4 py-1.5 bg-[#1F1B16] hover:bg-[#B85C38] text-white font-bold rounded text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-1.5 bg-[#2A211C] hover:bg-[#B08D57] text-white font-bold rounded text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
                 >
                   {isVerifying ? (
                     <>

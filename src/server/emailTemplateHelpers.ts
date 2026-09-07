@@ -121,29 +121,29 @@ function wrapSaAndShaEmailHtml(title: string, contentHtml: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
   <style>
-    body { margin: 0; padding: 0; background-color: #F9F6F0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1F1B16; -webkit-font-smoothing: antialiased; }
+    body { margin: 0; padding: 0; background-color: #F9F6F0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #2A211C; -webkit-font-smoothing: antialiased; }
     .container { max-width: 600px; margin: 30px auto; background-color: #FFFFFF; border-radius: 12px; border: 1px solid #E6DEC8; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-    .header { background-color: #1F1B16; padding: 32px 24px; text-align: center; }
+    .header { background-color: #2A211C; padding: 32px 24px; text-align: center; }
     .header h1 { color: #F9F6F0; margin: 0; font-size: 24px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
-    .header p { color: #C9B79C; margin: 6px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; }
+    .header p { color: #E5D2BC; margin: 6px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; }
     .content { padding: 36px 32px; }
-    .badge { display: inline-block; background-color: #F4EBE1; color: #B85C38; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; border-radius: 20px; margin-bottom: 20px; }
-    .title { font-size: 22px; font-weight: 600; color: #1F1B16; margin: 0 0 16px 0; line-height: 1.3; }
+    .badge { display: inline-block; background-color: #F4EBE1; color: #B08D57; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; border-radius: 20px; margin-bottom: 20px; }
+    .title { font-size: 22px; font-weight: 600; color: #2A211C; margin: 0 0 16px 0; line-height: 1.3; }
     .body-text { font-size: 15px; line-height: 1.6; color: #4A443C; margin: 0 0 24px 0; }
     .card { background-color: #FAF8F5; border: 1px solid #EFEAE1; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
     .card-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #4A443C; }
-    .card-row strong { color: #1F1B16; }
+    .card-row strong { color: #2A211C; }
     .button-container { text-align: center; margin: 32px 0; }
-    .btn { display: inline-block; background-color: #B85C38; color: #FFFFFF !important; text-decoration: none; font-size: 14px; font-weight: 600; padding: 14px 28px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    .btn { display: inline-block; background-color: #B08D57; color: #FFFFFF !important; text-decoration: none; font-size: 14px; font-weight: 600; padding: 14px 28px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; }
     .footer { background-color: #FAF8F5; border-top: 1px solid #EFEAE1; padding: 24px 32px; text-align: center; font-size: 12px; color: #8C8275; line-height: 1.5; }
-    .footer a { color: #B85C38; text-decoration: none; }
+    .footer a { color: #B08D57; text-decoration: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>SA AND SHA</h1>
-      <p>Pure Linen &amp; Timeless Living</p>
+      <p>Everyday Elegance</p>
     </div>
     <div class="content">
       ${contentHtml}
@@ -180,10 +180,10 @@ export function getDefaultTemplatesList(): EmailTemplate[] {
       html: wrapSaAndShaEmailHtml('Welcome to Sa and Sha', `
         <span class="badge">Welcome Gift</span>
         <h2 class="title">Hello {{customer_name}},</h2>
-        <p class="body-text">Thank you for joining the {{company_name}} family. We are thrilled to share our handcrafted pure linen collection with you.</p>
+        <p class="body-text">Thank you for joining the {{company_name}} family. We are thrilled to share our latest collection with you.</p>
         <div class="card">
           <p style="margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; color: #8C8275; letter-spacing: 1px;">Exclusive Welcome Voucher</p>
-          <p style="margin: 0; font-size: 22px; font-weight: 700; color: #B85C38;">Use Code: {{coupon_code}}</p>
+          <p style="margin: 0; font-size: 22px; font-weight: 700; color: #B08D57;">Use Code: {{coupon_code}}</p>
           <p style="margin: 6px 0 0 0; font-size: 13px; color: #4A443C;">Enjoy {{discount}} off on your first order with us.</p>
         </div>
         <div class="button-container">
@@ -218,14 +218,14 @@ The {{company_name}} Team`
       html: wrapSaAndShaEmailHtml('Order Confirmed', `
         <span class="badge">Order Confirmed</span>
         <h2 class="title">Thank you for your order, {{first_name}}!</h2>
-        <p class="body-text">We have received your order <strong>#{{order_id}}</strong> placed on {{order_date}}. Our artisans are preparing your linens with care.</p>
+        <p class="body-text">We have received your order <strong>#{{order_id}}</strong> placed on {{order_date}}. Our team is preparing it with care.</p>
         <div class="card">
           <div class="card-row"><span>Order Reference:</span> <strong>#{{order_id}}</strong></div>
           <div class="card-row"><span>Order Date:</span> <strong>{{order_date}}</strong></div>
           <div class="card-row"><span>Payment Method:</span> <strong>{{payment_method}}</strong></div>
           <div class="card-row"><span>Expected Delivery:</span> <strong>{{expected_delivery}}</strong></div>
           <div class="card-row" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #EFEAE1; font-size: 16px;">
-            <span>Total Amount:</span> <strong style="color: #B85C38;">{{order_total}}</strong>
+            <span>Total Amount:</span> <strong style="color: #B08D57;">{{order_total}}</strong>
           </div>
         </div>
         <div class="button-container">
@@ -413,7 +413,7 @@ Thank you,
       html: wrapSaAndShaEmailHtml('Order Delivered', `
         <span class="badge" style="background-color: #D1FAE5; color: #065F46;">Delivered</span>
         <h2 class="title">Enjoy Your Sa and Sha!</h2>
-        <p class="body-text">Dear {{first_name}}, order <strong>#{{order_id}}</strong> has been delivered. We hope you love the crisp comfort of your pure linen piece.</p>
+        <p class="body-text">Dear {{first_name}}, order <strong>#{{order_id}}</strong> has been delivered. We hope you love it as much as we loved putting it together for you.</p>
         <p class="body-text">If you have any feedback or questions, reach out to us at {{support_email}}.</p>
       `),
       plain_text: `Dear {{first_name}},

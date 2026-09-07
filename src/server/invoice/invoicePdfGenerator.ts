@@ -104,7 +104,7 @@ export async function generateGstInvoicePdfBuffer(invoice: GstInvoice): Promise<
 
       // --- HEADER SECTION ---
       doc.fillColor(PRIMARY).fontSize(18).font('Helvetica-Bold').text('SA AND SHA', 30, y);
-      doc.fillColor(MUTED).fontSize(8).font('Helvetica').text('Handcrafted Pure Linen Wear', 30, y + 22);
+      doc.fillColor(MUTED).fontSize(8).font('Helvetica').text('Ladies Apparel', 30, y + 22);
 
       // Tax Invoice Title Box on Top Right
       doc.fillColor(PRIMARY).fontSize(16).font('Helvetica-Bold').text('TAX INVOICE', 380, y, { align: 'right' });
@@ -234,7 +234,7 @@ export async function generateGstInvoicePdfBuffer(invoice: GstInvoice): Promise<
           y = renderTableHeader(y);
         }
 
-        const itemName = item.product_name || 'Linen Garment';
+        const itemName = item.product_name || 'Garment';
         const skuStr = item.sku ? `SKU: ${item.sku}` : '';
         const variantStr = item.variant ? `(${item.variant})` : '';
         const fullDesc = `${itemName} ${variantStr}`.trim();
@@ -414,7 +414,7 @@ export async function generateGstInvoicePdfBuffer(invoice: GstInvoice): Promise<
 export async function streamGstInvoicePdfResponse(invoice: GstInvoice, res: any): Promise<void> {
   const pdfBuffer = await generateGstInvoicePdfBuffer(invoice);
   const invNumberClean = (invoice.invoice_number || 'invoice').replace(/[\/\\]/g, '-');
-  const filename = `Kora-Linen-Tax-Invoice-${invNumberClean}.pdf`;
+  const filename = `Sa-and-Sha-Tax-Invoice-${invNumberClean}.pdf`;
 
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `inline; filename="${filename}"`);

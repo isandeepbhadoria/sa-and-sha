@@ -54,7 +54,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl space-y-4 p-6 border border-stone-200">
         <div className="flex items-center justify-between border-b border-stone-200 pb-3">
-          <div className="flex items-center gap-2 text-[#B85C38] font-bold text-sm">
+          <div className="flex items-center gap-2 text-[#B08D57] font-bold text-sm">
             <Truck className="w-5 h-5" />
             <span>Schedule Reverse Pickup ({rmaNumber})</span>
           </div>
@@ -69,7 +69,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
             <select
               value={courier}
               onChange={(e) => setCourier(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
             >
               {COURIER_PARTNERS.map((c, i) => (
                 <option key={i} value={c}>
@@ -86,7 +86,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
                 type="date"
                 value={pickupDate}
                 onChange={(e) => setPickupDate(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
               />
             </div>
             <div>
@@ -94,7 +94,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
               <select
                 value={timeWindow}
                 onChange={(e) => setTimeWindow(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
               >
                 <option value="09:00 AM - 01:00 PM">Morning (09 AM - 01 PM)</option>
                 <option value="01:00 PM - 06:00 PM">Afternoon (01 PM - 06 PM)</option>
@@ -110,7 +110,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
               placeholder="e.g. RAWB-982132"
               value={awbNumber}
               onChange={(e) => setAwbNumber(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
@@ -121,7 +121,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
               placeholder="Instructions for courier driver..."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 text-stone-800 focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
@@ -136,7 +136,7 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 font-bold text-white bg-[#B85C38] hover:bg-[#a04e2e] rounded-lg shadow-sm transition disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2 font-bold text-white bg-[#B08D57] hover:bg-[#a04e2e] rounded-lg shadow-sm transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Scheduling..." : "Schedule Pickup"}
             </button>

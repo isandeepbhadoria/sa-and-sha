@@ -51,7 +51,7 @@ export const RmaApprovalModal: React.FC<RmaApprovalModalProps> = ({
             <select
               value={selectedResolution}
               onChange={(e) => setSelectedResolution(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
             >
               <option value="refund_source">Refund to Original Payment Source</option>
               <option value="store_credit">Issue Store Credit / Gift Voucher</option>
@@ -64,7 +64,7 @@ export const RmaApprovalModal: React.FC<RmaApprovalModalProps> = ({
             <select
               value={pickupFeePolicy}
               onChange={(e) => setPickupFeePolicy(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
             >
               <option value="standard_100">Deduct Standard ₹100 Reverse Pickup Fee</option>
               <option value="waived">Waive Pickup Fee (Defective / Wrong Item Sent)</option>
@@ -78,7 +78,7 @@ export const RmaApprovalModal: React.FC<RmaApprovalModalProps> = ({
               placeholder="Provide internal instructions or notes for approval..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 text-stone-800 focus:outline-none focus:border-[#B85C38]"
+              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 text-stone-800 focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 

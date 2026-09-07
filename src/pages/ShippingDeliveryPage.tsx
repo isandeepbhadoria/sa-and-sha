@@ -41,21 +41,21 @@ export const ShippingDeliveryPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-4xl mx-auto px-4 md:px-6 py-10 md:py-16 space-y-10 text-[#1F1B16]" id="shipping-delivery-page">
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-10 md:py-16 space-y-10 text-[#2A211C]" id="shipping-delivery-page">
       
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="text-xs font-sans text-stone-500 flex items-center gap-2">
-        <Link to="/" className="hover:text-[#B85C38] transition-colors">Home</Link>
+        <Link to="/" className="hover:text-[#B08D57] transition-colors">Home</Link>
         <ChevronRight className="w-3 h-3 text-stone-400" />
-        <span className="text-[#1F1B16] font-medium">Shipping & Delivery</span>
+        <span className="text-[#2A211C] font-medium">Shipping & Delivery</span>
       </nav>
 
       {/* Hero / Page Header */}
-      <div className="text-center space-y-3 border-b border-[#C9B79C]/30 pb-8">
-        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B85C38] uppercase flex items-center justify-center gap-1.5">
-          <Truck className="w-4 h-4 text-[#B85C38]" /> Customer Service
+      <div className="text-center space-y-3 border-b border-[#E5D2BC]/30 pb-8">
+        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase flex items-center justify-center gap-1.5">
+          <Truck className="w-4 h-4 text-[#B08D57]" /> Customer Service
         </span>
-        <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#1F1B16]">
+        <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2A211C]">
           Shipping & Delivery
         </h1>
         <p className="font-sans text-xs md:text-sm text-stone-600 max-w-2xl mx-auto leading-relaxed">
@@ -65,46 +65,46 @@ export const ShippingDeliveryPage: React.FC = () => {
 
       {/* Quick Shipping Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="shipping-summary-grid">
-        <div className="bg-white/80 p-5 rounded-lg border border-[#C9B79C]/30 shadow-sm space-y-2 text-center sm:text-left">
-          <div className="w-10 h-10 rounded-full bg-[#E4D8C3]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#B85C38]">
+        <div className="bg-white/80 p-5 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-2 text-center sm:text-left">
+          <div className="w-10 h-10 rounded-full bg-[#F4E6D7]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#B08D57]">
             <Truck className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#B85C38]">Free Shipping</div>
-            <div className="text-sm font-serif font-bold text-[#1F1B16]">Orders Above ₹1,999</div>
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#B08D57]">Free Shipping</div>
+            <div className="text-sm font-serif font-bold text-[#2A211C]">Orders Above ₹1,999</div>
             <div className="text-[11px] font-sans text-stone-500 mt-1">Complimentary domestic delivery across India</div>
           </div>
         </div>
 
-        <div className="bg-white/80 p-5 rounded-lg border border-[#C9B79C]/30 shadow-sm space-y-2 text-center sm:text-left">
-          <div className="w-10 h-10 rounded-full bg-[#E4D8C3]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#1F1B16]">
+        <div className="bg-white/80 p-5 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-2 text-center sm:text-left">
+          <div className="w-10 h-10 rounded-full bg-[#F4E6D7]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#2A211C]">
             <Box className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16]/60">Standard Shipping</div>
-            <div className="text-sm font-serif font-bold text-[#1F1B16]">₹99 Flat Fee</div>
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C]/60">Standard Shipping</div>
+            <div className="text-sm font-serif font-bold text-[#2A211C]">₹99 Flat Fee</div>
             <div className="text-[11px] font-sans text-stone-500 mt-1">Applicable on orders up to ₹1,999</div>
           </div>
         </div>
 
-        <div className="bg-white/80 p-5 rounded-lg border border-[#C9B79C]/30 shadow-sm space-y-2 text-center sm:text-left">
-          <div className="w-10 h-10 rounded-full bg-[#E4D8C3]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#5C6B4A]">
+        <div className="bg-white/80 p-5 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-2 text-center sm:text-left">
+          <div className="w-10 h-10 rounded-full bg-[#F4E6D7]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#C98A82]">
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#5C6B4A]">Order Processing</div>
-            <div className="text-sm font-serif font-bold text-[#1F1B16]">1–2 Business Days</div>
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#C98A82]">Order Processing</div>
+            <div className="text-sm font-serif font-bold text-[#2A211C]">1–2 Business Days</div>
             <div className="text-[11px] font-sans text-stone-500 mt-1">Quality inspection & dispatch preparation</div>
           </div>
         </div>
 
-        <div className="bg-white/80 p-5 rounded-lg border border-[#C9B79C]/30 shadow-sm space-y-2 text-center sm:text-left">
-          <div className="w-10 h-10 rounded-full bg-[#E4D8C3]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#1F1B16]">
+        <div className="bg-white/80 p-5 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-2 text-center sm:text-left">
+          <div className="w-10 h-10 rounded-full bg-[#F4E6D7]/30 flex items-center justify-center mx-auto sm:mx-0 text-[#2A211C]">
             <PackageCheck className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#1F1B16]/60">Estimated Delivery</div>
-            <div className="text-sm font-serif font-bold text-[#1F1B16]">3–5 Business Days</div>
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#2A211C]/60">Estimated Delivery</div>
+            <div className="text-sm font-serif font-bold text-[#2A211C]">3–5 Business Days</div>
             <div className="text-[11px] font-sans text-stone-500 mt-1">Standard transit time across India</div>
           </div>
         </div>
@@ -114,10 +114,10 @@ export const ShippingDeliveryPage: React.FC = () => {
       <div className="space-y-8 font-sans text-xs md:text-sm leading-relaxed" id="shipping-policy-details">
 
         {/* Section 1: Shipping Coverage */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <MapPin className="w-5 h-5 text-[#B85C38]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Shipping Coverage</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <MapPin className="w-5 h-5 text-[#B08D57]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Shipping Coverage</h2>
           </div>
           <p className="text-stone-700">
             Sa and Sha currently ships orders within <strong>India only</strong>.
@@ -128,10 +128,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 2: Order Processing */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <Clock className="w-5 h-5 text-[#5C6B4A]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Order Processing</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <Clock className="w-5 h-5 text-[#C98A82]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Order Processing</h2>
           </div>
           <p className="text-stone-700">
             Orders are generally processed and prepared for dispatch within <strong>1–2 business days</strong> after order confirmation.
@@ -145,19 +145,19 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 3: Shipping Charges */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-4">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <ShieldCheck className="w-5 h-5 text-[#B85C38]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Shipping Charges</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <ShieldCheck className="w-5 h-5 text-[#B08D57]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Shipping Charges</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2">
-            <div className="bg-[#E4D8C3]/20 p-4 rounded-lg border border-[#C9B79C]/30 space-y-1">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#B85C38]">Orders Above ₹1,999</span>
-              <div className="text-base font-serif font-bold text-[#1F1B16]">FREE SHIPPING</div>
+            <div className="bg-[#F4E6D7]/20 p-4 rounded-lg border border-[#E5D2BC]/30 space-y-1">
+              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#B08D57]">Orders Above ₹1,999</span>
+              <div className="text-base font-serif font-bold text-[#2A211C]">FREE SHIPPING</div>
             </div>
             <div className="bg-stone-50 p-4 rounded-lg border border-stone-200 space-y-1">
               <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-stone-500">Orders up to & including ₹1,999</span>
-              <div className="text-base font-serif font-bold text-[#1F1B16]">₹99 Shipping Charge</div>
+              <div className="text-base font-serif font-bold text-[#2A211C]">₹99 Shipping Charge</div>
             </div>
           </div>
           <p className="text-stone-600 text-xs">
@@ -166,10 +166,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 4: Estimated Delivery */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <PackageCheck className="w-5 h-5 text-[#1F1B16]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Estimated Delivery</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <PackageCheck className="w-5 h-5 text-[#2A211C]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Estimated Delivery</h2>
           </div>
           <p className="text-stone-700">
             Orders are generally delivered within approximately <strong>3–5 business days</strong>.
@@ -183,10 +183,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 5: Track Your Order */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-4">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <Truck className="w-5 h-5 text-[#B85C38]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Track Your Order</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <Truck className="w-5 h-5 text-[#B08D57]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Track Your Order</h2>
           </div>
           <p className="text-stone-700">
             Once tracking information becomes available, you can monitor the delivery status of your shipment.
@@ -197,7 +197,7 @@ export const ShippingDeliveryPage: React.FC = () => {
           <div className="pt-2">
             <Link 
               to="/track-order" 
-              className="inline-flex items-center gap-2 bg-[#1F1B16] hover:bg-[#B85C38] text-white font-sans font-bold text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors"
+              className="inline-flex items-center gap-2 bg-[#2A211C] hover:bg-[#B08D57] text-white font-sans font-bold text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors"
             >
               <span>Track Your Order</span>
               <ChevronRight className="w-4 h-4" />
@@ -206,10 +206,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 6: Delivery Address */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <MapPin className="w-5 h-5 text-[#5C6B4A]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Delivery Address</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <MapPin className="w-5 h-5 text-[#C98A82]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Delivery Address</h2>
           </div>
           <p className="text-stone-700">
             Please ensure that you provide a complete and accurate shipping address, PIN code and contact number when placing your order.
@@ -219,7 +219,7 @@ export const ShippingDeliveryPage: React.FC = () => {
           </p>
           <p className="text-stone-600">
             If you notice an error in your shipping information, please{' '}
-            <Link to="/contact-support" className="text-[#B85C38] font-semibold underline underline-offset-2 hover:text-[#1F1B16] transition-colors">
+            <Link to="/contact-support" className="text-[#B08D57] font-semibold underline underline-offset-2 hover:text-[#2A211C] transition-colors">
               contact Sa and Sha
             </Link>{' '}
             as soon as possible before dispatch.
@@ -227,10 +227,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 7: Delivery Attempts */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
             <AlertCircle className="w-5 h-5 text-amber-700" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Delivery Attempts</h2>
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Delivery Attempts</h2>
           </div>
           <p className="text-stone-700">
             Our delivery partner may contact you if assistance is required to complete the delivery.
@@ -244,23 +244,23 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 8: Delayed Orders */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
             <Clock className="w-5 h-5 text-amber-800" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Delayed Orders</h2>
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Delayed Orders</h2>
           </div>
           <p className="text-stone-700">
             While we work to ensure timely delivery, occasional delays may occur.
           </p>
           <p className="text-stone-600">
             If your order has exceeded the estimated delivery period, please first check the available{' '}
-            <Link to="/track-order" className="text-[#B85C38] font-semibold underline underline-offset-2 hover:text-[#1F1B16] transition-colors">
+            <Link to="/track-order" className="text-[#B08D57] font-semibold underline underline-offset-2 hover:text-[#2A211C] transition-colors">
               tracking information
             </Link>.
           </p>
           <p className="text-stone-600">
             If you still require assistance, please{' '}
-            <Link to="/contact-support" className="text-[#B85C38] font-semibold underline underline-offset-2 hover:text-[#1F1B16] transition-colors">
+            <Link to="/contact-support" className="text-[#B08D57] font-semibold underline underline-offset-2 hover:text-[#2A211C] transition-colors">
               contact Sa and Sha
             </Link>{' '}
             with your Order ID so our support team can assist you.
@@ -268,10 +268,10 @@ export const ShippingDeliveryPage: React.FC = () => {
         </section>
 
         {/* Section 9: Damaged or Incorrect Shipment */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <RotateCcw className="w-5 h-5 text-[#B85C38]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Damaged or Incorrect Shipment</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <RotateCcw className="w-5 h-5 text-[#B08D57]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Damaged or Incorrect Shipment</h2>
           </div>
           <p className="text-stone-700">
             If your order arrives damaged or you receive an incorrect item, please contact Sa and Sha promptly.
@@ -281,17 +281,17 @@ export const ShippingDeliveryPage: React.FC = () => {
           </p>
           <p className="text-stone-600">
             Please note that all return and exchange requests must be submitted within 7 days of the date of delivery. After 7 days, the return and exchange window closes. Eligible cases will be handled according to the applicable{' '}
-            <Link to="/returns-exchanges" className="text-[#B85C38] font-semibold underline underline-offset-2 hover:text-[#1F1B16] transition-colors">
+            <Link to="/returns-exchanges" className="text-[#B08D57] font-semibold underline underline-offset-2 hover:text-[#2A211C] transition-colors">
               Sa and Sha Returns & Exchanges Policy
             </Link>.
           </p>
         </section>
 
         {/* Section 10: Split Shipments */}
-        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#C9B79C]/30 space-y-3">
-          <div className="flex items-center gap-2.5 border-b border-[#C9B79C]/20 pb-3">
-            <Box className="w-5 h-5 text-[#5C6B4A]" />
-            <h2 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">Split Shipments</h2>
+        <section className="bg-white/60 p-6 md:p-8 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E5D2BC]/20 pb-3">
+            <Box className="w-5 h-5 text-[#C98A82]" />
+            <h2 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">Split Shipments</h2>
           </div>
           <p className="text-stone-700">
             In some circumstances, items from the same order may be dispatched separately.
@@ -307,11 +307,11 @@ export const ShippingDeliveryPage: React.FC = () => {
       </div>
 
       {/* Need Help Section */}
-      <div className="bg-[#1F1B16] text-[#F5F1E8] p-8 md:p-10 rounded-xl space-y-6 text-center border border-[#C9B79C]/20 mt-12" id="shipping-help-cta">
+      <div className="bg-[#2A211C] text-[#FBF6EE] p-8 md:p-10 rounded-xl space-y-6 text-center border border-[#E5D2BC]/20 mt-12" id="shipping-help-cta">
         <div className="max-w-xl mx-auto space-y-2">
-          <Headphones className="w-8 h-8 text-[#B85C38] mx-auto mb-2" />
+          <Headphones className="w-8 h-8 text-[#B08D57] mx-auto mb-2" />
           <h2 className="font-serif text-2xl font-bold tracking-tight">Need Help With Your Delivery?</h2>
-          <p className="font-sans text-xs md:text-sm text-[#F5F1E8]/70 leading-relaxed">
+          <p className="font-sans text-xs md:text-sm text-[#FBF6EE]/70 leading-relaxed">
             If you need assistance with an existing shipment, our support team is here to help. Please keep your Order ID available when contacting us so we can assist you efficiently.
           </p>
         </div>
@@ -319,20 +319,20 @@ export const ShippingDeliveryPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <Link 
             to="/track-order" 
-            className="w-full sm:w-auto bg-[#B85C38] hover:bg-[#B85C38]/90 text-white font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto bg-[#B08D57] hover:bg-[#B08D57]/90 text-white font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
           >
             <span>Track Order</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
           <Link 
             to="/contact-support" 
-            className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-[#F5F1E8] border border-[#C9B79C]/30 font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-[#FBF6EE] border border-[#E5D2BC]/30 font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
           >
             <span>Contact Support</span>
           </Link>
           <Link 
             to="/returns-exchanges" 
-            className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-[#F5F1E8] border border-[#C9B79C]/30 font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-[#FBF6EE] border border-[#E5D2BC]/30 font-sans font-bold text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors inline-flex items-center justify-center gap-2"
           >
             <span>Returns & Exchanges</span>
           </Link>

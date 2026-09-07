@@ -387,7 +387,7 @@ export const AdminPage: React.FC = () => {
   const [formFabric, setFormFabric] = useState('');
   const [formFit, setFormFit] = useState<'Slim' | 'Regular' | 'Relaxed'>('Regular');
   const [formColor, setFormColor] = useState('');
-  const [formColorHex, setFormColorHex] = useState('#F5F1E8');
+  const [formColorHex, setFormColorHex] = useState('#FBF6EE');
   const [formSizes, setFormSizes] = useState<string[]>([]);
   const [formCollar, setFormCollar] = useState<string>('Spread');
   const [formSleeve, setFormSleeve] = useState<string>('Full Sleeve');
@@ -1248,7 +1248,7 @@ export const AdminPage: React.FC = () => {
       setFormFabric(product.fabric || '');
       setFormFit(product.fit || 'Regular');
       setFormColor(product.color || '');
-      setFormColorHex(product.colorHex || '#F5F1E8');
+      setFormColorHex(product.colorHex || '#FBF6EE');
       setFormSizes(product.sizes || []);
       setFormCollar(product.collar || 'Spread');
       setFormSleeve(product.sleeve || 'Full Sleeve');
@@ -1278,7 +1278,7 @@ export const AdminPage: React.FC = () => {
       setFormFabric('');
       setFormFit('Regular');
       setFormColor('');
-      setFormColorHex('#F5F1E8');
+      setFormColorHex('#FBF6EE');
       setFormSizes([]);
       setFormCollar('Spread');
       setFormSleeve('Full Sleeve');
@@ -1485,7 +1485,7 @@ export const AdminPage: React.FC = () => {
         fabric: formFabric || 'Premium Linen Flax Blend',
         fit: formFit,
         color: formColor || 'Natural',
-        colorHex: formColorHex || '#F5F1E8',
+        colorHex: formColorHex || '#FBF6EE',
         sizes: formSizes,
         collar: (formCategory === 'shirts' ? formCollar : undefined) as any,
         sleeve: (formCategory === 'shirts' ? formSleeve : undefined) as any,
@@ -1673,16 +1673,16 @@ export const AdminPage: React.FC = () => {
       {!isLoggedIn ? (
         /* LOGIN PANEL */
         <div className="min-h-[60vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-md w-full space-y-8 bg-white p-8 md:p-10 rounded-xl shadow-xl border border-[#C9B79C]/20 relative overflow-hidden">
+          <div className="max-w-md w-full space-y-8 bg-white p-8 md:p-10 rounded-xl shadow-xl border border-[#E5D2BC]/20 relative overflow-hidden">
             
             {/* Top design accent */}
-            <div className="absolute top-0 inset-x-0 h-1.5 bg-[#B85C38]" />
+            <div className="absolute top-0 inset-x-0 h-1.5 bg-[#B08D57]" />
 
             <div className="text-center space-y-2">
-              <div className="inline-flex p-3 rounded-full bg-[#1F1B16] text-[#F5F1E8] mb-2">
+              <div className="inline-flex p-3 rounded-full bg-[#2A211C] text-[#FBF6EE] mb-2">
                 <Lock className="w-6 h-6" />
               </div>
-              <h2 className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-[#1F1B16]">
+              <h2 className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-[#2A211C]">
                 Sa and Sha Admin
               </h2>
               <p className="text-stone-500 text-xs font-sans">
@@ -1711,7 +1711,7 @@ export const AdminPage: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter administrative email"
-                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#C9B79C]/30 focus:outline-none focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38] bg-stone-50 text-[#1F1B16] font-medium"
+                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#E5D2BC]/30 focus:outline-none focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57] bg-stone-50 text-[#2A211C] font-medium"
                       id="admin-email-input"
                     />
                   </div>
@@ -1729,7 +1729,7 @@ export const AdminPage: React.FC = () => {
                         setForgotEmail('');
                         setShowForgotModal(true);
                       }}
-                      className="text-[10px] font-bold text-[#B85C38] hover:underline uppercase tracking-wider cursor-pointer"
+                      className="text-[10px] font-bold text-[#B08D57] hover:underline uppercase tracking-wider cursor-pointer"
                     >
                       Forgot?
                     </button>
@@ -1742,7 +1742,7 @@ export const AdminPage: React.FC = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#C9B79C]/30 focus:outline-none focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38] bg-stone-50 text-[#1F1B16] font-medium"
+                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#E5D2BC]/30 focus:outline-none focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57] bg-stone-50 text-[#2A211C] font-medium"
                       id="admin-password-input"
                     />
                   </div>
@@ -1763,7 +1763,7 @@ export const AdminPage: React.FC = () => {
                       value={totpCode}
                       onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
                       placeholder="Enter 6-digit verification code"
-                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#C9B79C]/30 focus:outline-none focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38] bg-stone-50 text-[#1F1B16] font-medium tracking-[0.1em] text-center text-sm"
+                      className="w-full pl-9 pr-3 py-2.5 rounded border border-[#E5D2BC]/30 focus:outline-none focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57] bg-stone-50 text-[#2A211C] font-medium tracking-[0.1em] text-center text-sm"
                       id="admin-totp-input"
                     />
                   </div>
@@ -1772,7 +1772,7 @@ export const AdminPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#1F1B16] hover:bg-[#322c24] text-[#F5F1E8] font-sans font-bold text-xs uppercase tracking-widest py-3.5 px-4 rounded-lg transition-colors cursor-pointer shadow-md flex items-center justify-center gap-2"
+                className="w-full bg-[#2A211C] hover:bg-[#322c24] text-[#FBF6EE] font-sans font-bold text-xs uppercase tracking-widest py-3.5 px-4 rounded-lg transition-colors cursor-pointer shadow-md flex items-center justify-center gap-2"
                 id="admin-login-submit"
               >
                 <span>Authorize Login</span>
@@ -1795,7 +1795,7 @@ export const AdminPage: React.FC = () => {
                     setEmail(ADMIN_EMAIL);
                     showToast('Autofilled admin email. Enter password and your 6-digit Authenticator code.');
                   }}
-                  className="w-full bg-stone-50 hover:bg-stone-100 text-[#1F1B16] font-sans font-bold text-xs uppercase tracking-widest py-3 px-4 rounded-lg transition-colors cursor-pointer border border-[#C9B79C]/30 flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full bg-stone-50 hover:bg-stone-100 text-[#2A211C] font-sans font-bold text-xs uppercase tracking-widest py-3 px-4 rounded-lg transition-colors cursor-pointer border border-[#E5D2BC]/30 flex items-center justify-center gap-2 shadow-sm"
                   id="admin-login-bypass"
                 >
                   <span>Autofill Sandbox Email</span>
@@ -1817,14 +1817,14 @@ export const AdminPage: React.FC = () => {
         <div className="space-y-6">
           
           {/* HEADER ROW */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#C9B79C]/20 pb-5">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E5D2BC]/20 pb-5">
             <div>
               <div className="flex items-center gap-2 text-stone-500 text-xs tracking-wider uppercase font-sans font-bold">
                 <span>Executive Dashboard</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#5C6B4A]"></span>
-                <span className="text-[#5C6B4A]">Live Session</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C98A82]"></span>
+                <span className="text-[#C98A82]">Live Session</span>
               </div>
-              <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16] mt-1">
+              <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C] mt-1">
                 Sa and Sha Order Registry
               </h1>
             </div>
@@ -1833,7 +1833,7 @@ export const AdminPage: React.FC = () => {
               <button
                 onClick={loadOrders}
                 disabled={isLoading}
-                className="p-2.5 rounded-lg border border-[#C9B79C]/30 hover:bg-stone-50 text-[#1F1B16] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider disabled:opacity-50"
+                className="p-2.5 rounded-lg border border-[#E5D2BC]/30 hover:bg-stone-50 text-[#2A211C] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                 <span>Refresh</span>
@@ -1857,8 +1857,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('orders')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'orders'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
             >
               <ShoppingBag className="w-4 h-4" />
@@ -1868,8 +1868,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('products')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'products'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
             >
               <Package className="w-4 h-4" />
@@ -1879,8 +1879,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('promotions')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'promotions'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-promotions"
             >
@@ -1891,8 +1891,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('customers')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'customers'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-customers"
             >
@@ -1903,8 +1903,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('returns')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'returns'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
             >
               <RotateCcw className="w-4 h-4" />
@@ -1914,8 +1914,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('enquiries')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'enquiries'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
             >
               <Mail className="w-4 h-4" />
@@ -1925,8 +1925,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('communications')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'communications'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-communications"
             >
@@ -1937,8 +1937,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('identity')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'identity'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-identity"
             >
@@ -1949,8 +1949,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('tax-master')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'tax-master'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-tax-master"
             >
@@ -1961,8 +1961,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('rewards-policy')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'rewards-policy'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-rewards-policy"
             >
@@ -1973,8 +1973,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('credit-notes')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'credit-notes'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-credit-notes"
             >
@@ -1985,8 +1985,8 @@ export const AdminPage: React.FC = () => {
               onClick={() => setActiveTab('homepage-media')}
               className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                 activeTab === 'homepage-media'
-                  ? 'border-[#B85C38] text-[#B85C38]'
-                  : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
               }`}
               id="admin-tab-homepage-media"
             >
@@ -2019,12 +2019,12 @@ export const AdminPage: React.FC = () => {
             <div className="space-y-6 animate-fade-in">
               {/* METRIC CARDS GRID */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="admin-metrics-row">
-                <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-sm space-y-1.5">
-                  <div className="flex items-center justify-between text-[#1F1B16]/50">
+                <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-sm space-y-1.5">
+                  <div className="flex items-center justify-between text-[#2A211C]/50">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">Total Revenue</span>
-                    <DollarSign className="w-4 h-4 text-[#B85C38]" />
+                    <DollarSign className="w-4 h-4 text-[#B08D57]" />
                   </div>
-                  <div className="font-serif text-lg md:text-2xl font-bold text-[#1F1B16]">
+                  <div className="font-serif text-lg md:text-2xl font-bold text-[#2A211C]">
                     ₹{totalRevenue.toLocaleString('en-IN')}
                   </div>
                   <div className="text-[10px] text-stone-400 font-sans tracking-wide">
@@ -2032,12 +2032,12 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-sm space-y-1.5">
-                  <div className="flex items-center justify-between text-[#1F1B16]/50">
+                <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-sm space-y-1.5">
+                  <div className="flex items-center justify-between text-[#2A211C]/50">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">Total Orders</span>
                     <ShoppingBag className="w-4 h-4 text-stone-600" />
                   </div>
-                  <div className="font-serif text-lg md:text-2xl font-bold text-[#1F1B16]">
+                  <div className="font-serif text-lg md:text-2xl font-bold text-[#2A211C]">
                     {totalOrdersCount}
                   </div>
                   <div className="text-[10px] text-stone-400 font-sans tracking-wide">
@@ -2045,12 +2045,12 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-sm space-y-1.5">
-                  <div className="flex items-center justify-between text-[#1F1B16]/50">
+                <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-sm space-y-1.5">
+                  <div className="flex items-center justify-between text-[#2A211C]/50">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">Active Processing</span>
-                    <Clock className="w-4 h-4 text-[#B85C38]" />
+                    <Clock className="w-4 h-4 text-[#B08D57]" />
                   </div>
-                  <div className="font-serif text-lg md:text-2xl font-bold text-[#1F1B16]">
+                  <div className="font-serif text-lg md:text-2xl font-bold text-[#2A211C]">
                     {activeOrdersCount}
                   </div>
                   <div className="text-[10px] text-stone-400 font-sans tracking-wide">
@@ -2058,12 +2058,12 @@ export const AdminPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-sm space-y-1.5">
-                  <div className="flex items-center justify-between text-[#1F1B16]/50">
+                <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-sm space-y-1.5">
+                  <div className="flex items-center justify-between text-[#2A211C]/50">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">Average Value</span>
-                    <TrendingUp className="w-4 h-4 text-[#5C6B4A]" />
+                    <TrendingUp className="w-4 h-4 text-[#C98A82]" />
                   </div>
-                  <div className="font-serif text-lg md:text-2xl font-bold text-[#1F1B16]">
+                  <div className="font-serif text-lg md:text-2xl font-bold text-[#2A211C]">
                     ₹{Math.round(averageOrderValue).toLocaleString('en-IN')}
                   </div>
                   <div className="text-[10px] text-stone-400 font-sans tracking-wide">
@@ -2073,7 +2073,7 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* FILTER AND SEARCH BAR */}
-              <div className="bg-white p-4 rounded-xl border border-[#C9B79C]/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="bg-white p-4 rounded-xl border border-[#E5D2BC]/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="relative md:w-1/3 font-sans text-xs">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
                   <input
@@ -2081,7 +2081,7 @@ export const AdminPage: React.FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search ID, Customer, City, PIN..."
-                    className="w-full pl-9 pr-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38] bg-stone-50 text-stone-800"
+                    className="w-full pl-9 pr-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57] bg-stone-50 text-stone-800"
                   />
                 </div>
 
@@ -2093,8 +2093,8 @@ export const AdminPage: React.FC = () => {
                       onClick={() => setStatusFilter(status)}
                       className={`px-3 py-1.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider transition-colors cursor-pointer ${
                         statusFilter === status 
-                          ? 'bg-[#1F1B16] text-[#F5F1E8]' 
-                          : 'bg-stone-100 hover:bg-stone-200 text-[#1F1B16]/70'
+                          ? 'bg-[#2A211C] text-[#FBF6EE]' 
+                          : 'bg-stone-100 hover:bg-stone-200 text-[#2A211C]/70'
                       }`}
                     >
                       {status}
@@ -2104,11 +2104,11 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* ORDERS REGISTRY LIST TABLE */}
-              <div className="bg-white rounded-xl border border-[#C9B79C]/20 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl border border-[#E5D2BC]/20 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse font-sans text-xs md:text-sm">
                     <thead>
-                      <tr className="bg-[#1F1B16] text-[#F5F1E8] text-[10px] font-bold tracking-widest uppercase border-b border-stone-800">
+                      <tr className="bg-[#2A211C] text-[#FBF6EE] text-[10px] font-bold tracking-widest uppercase border-b border-stone-800">
                         <th className="p-4">Order ID</th>
                         <th className="p-4">Date</th>
                         <th className="p-4">Customer</th>
@@ -2118,7 +2118,7 @@ export const AdminPage: React.FC = () => {
                         <th className="p-4 text-center">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-stone-100 text-[#1F1B16]">
+                    <tbody className="divide-y divide-stone-100 text-[#2A211C]">
                       {filteredOrders.length === 0 ? (
                         <tr>
                           <td colSpan={7} className="p-12 text-center text-stone-400 space-y-2">
@@ -2167,7 +2167,7 @@ export const AdminPage: React.FC = () => {
                               <td className="p-4 text-center whitespace-nowrap">
                                 <button
                                   onClick={() => setSelectedOrder(order)}
-                                  className="px-3 py-1.5 bg-[#1F1B16] hover:bg-[#322c24] text-white text-[10px] font-bold uppercase tracking-wider rounded transition-colors cursor-pointer"
+                                  className="px-3 py-1.5 bg-[#2A211C] hover:bg-[#322c24] text-white text-[10px] font-bold uppercase tracking-wider rounded transition-colors cursor-pointer"
                                 >
                                   Details
                                 </button>
@@ -2186,7 +2186,7 @@ export const AdminPage: React.FC = () => {
           {/* PRODUCT CATALOG & MANAGER VIEW */}
           {activeTab === 'products' && (
             <div className="space-y-6 animate-fade-in">
-              <div className="bg-white p-4 rounded-xl border border-[#C9B79C]/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="bg-white p-4 rounded-xl border border-[#E5D2BC]/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 {/* Search Input */}
                 <div className="relative md:w-1/3 font-sans text-xs">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
@@ -2195,7 +2195,7 @@ export const AdminPage: React.FC = () => {
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
                     placeholder="Search product catalog by Name, SKU, color..."
-                    className="w-full pl-9 pr-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38] bg-stone-50 text-stone-800"
+                    className="w-full pl-9 pr-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57] bg-stone-50 text-stone-800"
                   />
                 </div>
 
@@ -2206,7 +2206,7 @@ export const AdminPage: React.FC = () => {
                     <select
                       value={productCategoryFilter}
                       onChange={(e) => setProductCategoryFilter(e.target.value)}
-                      className="px-3 py-2 rounded-lg bg-stone-100 text-xs text-[#1F1B16] font-bold uppercase border-none focus:ring-1 focus:ring-[#B85C38]"
+                      className="px-3 py-2 rounded-lg bg-stone-100 text-xs text-[#2A211C] font-bold uppercase border-none focus:ring-1 focus:ring-[#B08D57]"
                     >
                       <option value="All">All Categories</option>
                       <option value="shirts">Shirts</option>
@@ -2220,7 +2220,7 @@ export const AdminPage: React.FC = () => {
 
                   <button
                     onClick={() => initProductForm(null)}
-                    className="bg-[#B85C38] hover:bg-[#a04e2e] text-white py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                    className="bg-[#B08D57] hover:bg-[#a04e2e] text-white py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add New Product</span>
@@ -2229,11 +2229,11 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* PRODUCTS LIST TABLE */}
-              <div className="bg-white rounded-xl border border-[#C9B79C]/20 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl border border-[#E5D2BC]/20 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse font-sans text-xs md:text-sm">
                     <thead>
-                      <tr className="bg-[#1F1B16] text-[#F5F1E8] text-[10px] font-bold tracking-widest uppercase border-b border-stone-800">
+                      <tr className="bg-[#2A211C] text-[#FBF6EE] text-[10px] font-bold tracking-widest uppercase border-b border-stone-800">
                         <th className="p-4 w-16">Preview</th>
                         <th className="p-4">Product details</th>
                         <th className="p-4">SKU Code</th>
@@ -2244,7 +2244,7 @@ export const AdminPage: React.FC = () => {
                         <th className="p-4 text-center">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-stone-100 text-[#1F1B16]">
+                    <tbody className="divide-y divide-stone-100 text-[#2A211C]">
                       {filteredProducts.length === 0 ? (
                         <tr>
                           <td colSpan={8} className="p-12 text-center text-stone-400 space-y-2">
@@ -2252,7 +2252,7 @@ export const AdminPage: React.FC = () => {
                             <p className="font-medium text-xs">No products found in Firestore catalog</p>
                             <button
                               onClick={() => initProductForm(null)}
-                              className="text-[#B85C38] hover:underline font-bold text-xs"
+                              className="text-[#B08D57] hover:underline font-bold text-xs"
                             >
                               Create your first product now
                             </button>
@@ -2355,12 +2355,12 @@ export const AdminPage: React.FC = () => {
           {/* ADD / EDIT PRODUCT FORM FULL-OVERLAY */}
           {showProductForm && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-end">
-              <div className="bg-white shadow-2xl max-w-4xl w-full h-full overflow-y-auto border-l border-[#C9B79C]/30 flex flex-col font-sans animate-slide-left">
+              <div className="bg-white shadow-2xl max-w-4xl w-full h-full overflow-y-auto border-l border-[#E5D2BC]/30 flex flex-col font-sans animate-slide-left">
                 {/* Form Pinned Header */}
                 <div className="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50 sticky top-0 z-10">
                   <div>
-                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B85C38] block">Product Catalog Administration</span>
-                    <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B08D57] block">Product Catalog Administration</span>
+                    <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                       {editingProduct ? `Edit Product: ${editingProduct.name}` : 'Create Brand-New Product'}
                     </h3>
                   </div>
@@ -2397,7 +2397,7 @@ export const AdminPage: React.FC = () => {
                             }
                           }}
                           placeholder="e.g. Belgian Heritage Mandarin Collar Shirt"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                       </div>
 
@@ -2408,7 +2408,7 @@ export const AdminPage: React.FC = () => {
                           value={formSlug}
                           onChange={(e) => setFormSlug(slugify(e.target.value))}
                           placeholder={slugify(formName) || "e.g. amalfi-pure-linen-shirt"}
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                         <p className="text-[10px] text-stone-400">Canonical URL: /product/{formSlug || slugify(formName) || "..."}</p>
                       </div>
@@ -2421,7 +2421,7 @@ export const AdminPage: React.FC = () => {
                             value={formSku}
                             onChange={(e) => setFormSku(e.target.value)}
                             placeholder="e.g. KL-SH-004"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                           />
                         </div>
 
@@ -2430,7 +2430,7 @@ export const AdminPage: React.FC = () => {
                           <select
                             value={formFit}
                             onChange={(e) => setFormFit(e.target.value as any)}
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                           >
                             <option value="Slim">Slim Fit</option>
                             <option value="Regular">Regular Fit</option>
@@ -2443,10 +2443,10 @@ export const AdminPage: React.FC = () => {
                       <div className="border border-stone-200 bg-stone-50/70 rounded-xl p-4 space-y-3">
                         <div className="flex items-center justify-between border-b border-stone-200/80 pb-2">
                           <div className="flex items-center gap-1.5">
-                            <Tag className="w-3.5 h-3.5 text-[#B85C38]" />
+                            <Tag className="w-3.5 h-3.5 text-[#B08D57]" />
                             <span className="text-[11px] font-bold uppercase tracking-wider text-stone-800">Catalog Classification</span>
                           </div>
-                          <span className="text-[9px] font-bold bg-[#B85C38]/10 text-[#B85C38] px-2 py-0.5 rounded-full">Normalized Taxonomy</span>
+                          <span className="text-[9px] font-bold bg-[#B08D57]/10 text-[#B08D57] px-2 py-0.5 rounded-full">Normalized Taxonomy</span>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
@@ -2455,7 +2455,7 @@ export const AdminPage: React.FC = () => {
                             <select
                               value={formCollection}
                               onChange={(e) => handleCollectionChange(e.target.value)}
-                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
                               <option value="">-- None / Unassigned --</option>
                               {CANONICAL_COLLECTIONS.map(col => (
@@ -2469,7 +2469,7 @@ export const AdminPage: React.FC = () => {
                             <select
                               value={formProductType}
                               onChange={(e) => handleProductTypeChange(e.target.value)}
-                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
                               <option value="">-- None / Unassigned --</option>
                               {getAvailableProductTypesForCollection(formCollection).map(pt => (
@@ -2485,7 +2485,7 @@ export const AdminPage: React.FC = () => {
                             <select
                               value={formProductSubType}
                               onChange={(e) => setFormProductSubType(e.target.value)}
-                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
                               <option value="">-- Standard / No Sub-Type --</option>
                               {getAvailableSubTypesForProductType(formProductType).map(st => (
@@ -2500,7 +2500,7 @@ export const AdminPage: React.FC = () => {
                           <select
                             value={formMaterialType}
                             onChange={(e) => setFormMaterialType(e.target.value)}
-                            className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                            className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                           >
                             <option value="">-- None / Unassigned --</option>
                             {CANONICAL_MATERIAL_TYPES.map(mt => (
@@ -2567,7 +2567,7 @@ export const AdminPage: React.FC = () => {
                                 else if (cat === 'jackets') setFormSubCategory('jackets');
                                 else if (cat === 'accessories') setFormSubCategory('accessories');
                               }}
-                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
                               <option value="shirts">Shirts</option>
                               <option value="pants">Pants/Trousers</option>
@@ -2583,7 +2583,7 @@ export const AdminPage: React.FC = () => {
                             <select
                               value={formSubCategory}
                               onChange={(e) => setFormSubCategory(e.target.value as any)}
-                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-white text-stone-800 text-xs"
+                              className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
                               {formCategory === 'shirts' && (
                                 <>
@@ -2614,7 +2614,7 @@ export const AdminPage: React.FC = () => {
                           value={formDescription}
                           onChange={(e) => setFormDescription(e.target.value)}
                           placeholder="Brief single-paragraph customer hooks describing the item..."
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                       </div>
 
@@ -2625,7 +2625,7 @@ export const AdminPage: React.FC = () => {
                           value={formDetails}
                           onChange={(e) => setFormDetails(e.target.value)}
                           placeholder="e.g. Crafted in Belgian Highlands flax linen&#10;Breathable open linen weave&#10;Pre-washed for signature soft feel"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800 font-mono text-[11px]"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800 font-mono text-[11px]"
                         />
                       </div>
 
@@ -2636,7 +2636,7 @@ export const AdminPage: React.FC = () => {
                           value={formCareInstructions}
                           onChange={(e) => setFormCareInstructions(e.target.value)}
                           placeholder="e.g. Cold gentle machine wash&#10;Dry flat in soft ambient shade&#10;Warm iron on reverse while damp"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800 font-mono text-[11px]"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800 font-mono text-[11px]"
                         />
                       </div>
                     </div>
@@ -2653,7 +2653,7 @@ export const AdminPage: React.FC = () => {
                             value={formPrice}
                             onChange={(e) => setFormPrice(e.target.value)}
                             placeholder="e.g. 3200"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-[#1F1B16]"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
                         </div>
 
@@ -2665,7 +2665,7 @@ export const AdminPage: React.FC = () => {
                             value={formCompareAtPrice}
                             onChange={(e) => setFormCompareAtPrice(e.target.value)}
                             placeholder="e.g. 4500"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-[#1F1B16]"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
                         </div>
                       </div>
@@ -2677,7 +2677,7 @@ export const AdminPage: React.FC = () => {
                           value={formFabric}
                           onChange={(e) => setFormFabric(e.target.value)}
                           placeholder="e.g. 100% Pure Belgian Linen, 180 GSM"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-stone-800"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                       </div>
 
@@ -2689,7 +2689,7 @@ export const AdminPage: React.FC = () => {
                             value={formColor}
                             onChange={(e) => setFormColor(e.target.value)}
                             placeholder="e.g. Sage Green, Flax Ecru"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-medium text-[#1F1B16]"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
                         </div>
 
@@ -2706,15 +2706,15 @@ export const AdminPage: React.FC = () => {
                               type="text"
                               value={formColorHex}
                               onChange={(e) => setFormColorHex(e.target.value)}
-                              placeholder="#F5F1E8"
-                              className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-mono text-[11px] text-stone-800"
+                              placeholder="#FBF6EE"
+                              className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-[11px] text-stone-800"
                             />
                           </div>
                         </div>
                       </div>
 
                       {formCategory === 'shirts' && (
-                        <div className="grid grid-cols-2 gap-4 border border-[#C9B79C]/10 p-3 rounded-lg bg-stone-50">
+                        <div className="grid grid-cols-2 gap-4 border border-[#E5D2BC]/10 p-3 rounded-lg bg-stone-50">
                           <div className="space-y-1">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Collar Style</label>
                             <input
@@ -2756,7 +2756,7 @@ export const AdminPage: React.FC = () => {
                                     type="checkbox"
                                     checked={isChecked}
                                     onChange={() => handleSizeToggle(size)}
-                                    className="rounded border-stone-300 text-[#B85C38] focus:ring-[#B85C38] w-4 h-4 cursor-pointer"
+                                    className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
                                   />
                                   <span className="font-bold text-stone-800 text-xs font-mono">{size}</span>
                                 </label>
@@ -2768,7 +2768,7 @@ export const AdminPage: React.FC = () => {
                                     placeholder="Stock Qty"
                                     value={formStock[size] !== undefined ? formStock[size] : ''}
                                     onChange={(e) => handleStockChange(size, e.target.value)}
-                                    className="w-full px-1.5 py-1 text-[11px] font-mono border border-stone-200 rounded focus:outline-none focus:ring-1 focus:ring-[#B85C38]"
+                                    className="w-full px-1.5 py-1 text-[11px] font-mono border border-stone-200 rounded focus:outline-none focus:ring-1 focus:ring-[#B08D57]"
                                   />
                                 )}
                               </div>
@@ -2789,8 +2789,8 @@ export const AdminPage: React.FC = () => {
                           onDrop={handleDrop}
                           className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 ${
                             isDragging
-                              ? 'border-[#B85C38] bg-[#B85C38]/5'
-                              : 'border-stone-200 hover:border-[#B85C38] hover:bg-stone-50'
+                              ? 'border-[#B08D57] bg-[#B08D57]/5'
+                              : 'border-stone-200 hover:border-[#B08D57] hover:bg-stone-50'
                           }`}
                         >
                           <Upload className="w-7 h-7 text-stone-400 animate-pulse" />
@@ -2848,7 +2848,7 @@ export const AdminPage: React.FC = () => {
                                 >
                                   <X className="w-2.5 h-2.5" />
                                 </button>
-                                <div className="absolute bottom-0 inset-x-0 bg-[#5C6B4A] text-[8px] text-white text-center font-bold py-0.5">
+                                <div className="absolute bottom-0 inset-x-0 bg-[#C98A82] text-[8px] text-white text-center font-bold py-0.5">
                                   Pending
                                 </div>
                               </div>
@@ -2881,7 +2881,7 @@ export const AdminPage: React.FC = () => {
                             onClick={() => setFormStatus('published')}
                             className={`px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-all cursor-pointer ${
                               formStatus === 'published'
-                                ? 'bg-[#5C6B4A] text-white shadow'
+                                ? 'bg-[#C98A82] text-white shadow'
                                 : 'bg-white text-stone-500 border border-stone-200'
                             }`}
                           >
@@ -2910,7 +2910,7 @@ export const AdminPage: React.FC = () => {
                     <button
                       type="submit"
                       disabled={isSavingProduct}
-                      className="px-6 py-2.5 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded font-bold uppercase tracking-wider text-[10px] transition-colors flex items-center gap-2 disabled:opacity-50"
+                      className="px-6 py-2.5 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded font-bold uppercase tracking-wider text-[10px] transition-colors flex items-center gap-2 disabled:opacity-50"
                     >
                       {isSavingProduct ? (
                         <>
@@ -2943,7 +2943,7 @@ export const AdminPage: React.FC = () => {
                       placeholder="Search Request ID, Order ID, Email..."
                       value={returnsSearch}
                       onChange={(e) => setReturnsSearch(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                     />
                   </div>
 
@@ -2953,7 +2953,7 @@ export const AdminPage: React.FC = () => {
                     <select
                       value={returnsStatusFilter}
                       onChange={(e) => setReturnsStatusFilter(e.target.value)}
-                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                     >
                       <option value="All">All Statuses</option>
                       <option value="REQUESTED">Requested</option>
@@ -2973,7 +2973,7 @@ export const AdminPage: React.FC = () => {
                   <select
                     value={returnsTypeFilter}
                     onChange={(e) => setReturnsTypeFilter(e.target.value)}
-                    className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                    className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                   >
                     <option value="All">All Types</option>
                     <option value="RETURN">Return Only</option>
@@ -3023,7 +3023,7 @@ export const AdminPage: React.FC = () => {
                       .map(req => (
                         <tr key={req.request_id} className="hover:bg-stone-50 transition-colors">
                           <td className="p-3.5 whitespace-nowrap">
-                            <span className="font-mono font-bold text-[#B85C38] block">{req.request_id}</span>
+                            <span className="font-mono font-bold text-[#B08D57] block">{req.request_id}</span>
                             <span className="text-[10px] text-stone-400">
                               {new Date(req.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
@@ -3071,7 +3071,7 @@ export const AdminPage: React.FC = () => {
                                 setSelectedReturnReq(req);
                                 setAdminNotesInput(req.admin_notes || '');
                               }}
-                              className="px-3 py-1.5 bg-[#1F1B16] hover:bg-[#332c24] text-white rounded text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                              className="px-3 py-1.5 bg-[#2A211C] hover:bg-[#332c24] text-white rounded text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
                             >
                               Manage
                             </button>
@@ -3094,13 +3094,13 @@ export const AdminPage: React.FC = () => {
           {/* ORDER DETAIL DRAWER / MODAL OVERLAY */}
           {selectedOrder && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#C9B79C]/30 flex flex-col font-sans">
+              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#E5D2BC]/30 flex flex-col font-sans">
                 {/* Header */}
                 <div className="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50">
                   <div>
-                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B85C38] block">Order Detail Invoice</span>
+                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B08D57] block">Order Detail Invoice</span>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <h3 className="font-serif text-lg font-bold text-[#1F1B16]">Registry ID: {selectedOrder.order_id}</h3>
+                      <h3 className="font-serif text-lg font-bold text-[#2A211C]">Registry ID: {selectedOrder.order_id}</h3>
                       <span className={`px-2.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${getOrderStatusBadgeClass(selectedOrder.status)}`}>
                         {(selectedOrder.status || 'placed').replace('_', ' ')}
                       </span>
@@ -3144,7 +3144,7 @@ export const AdminPage: React.FC = () => {
                                 isDisabled
                                   ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed opacity-60'
                                   : selectedOrder.status?.toLowerCase() === st.key || (st.key === 'dispatched' && selectedOrder.status?.toLowerCase() === 'shipped')
-                                  ? 'bg-[#B85C38] text-white shadow'
+                                  ? 'bg-[#B08D57] text-white shadow'
                                   : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200 cursor-pointer'
                               }`}
                             >
@@ -3171,7 +3171,7 @@ export const AdminPage: React.FC = () => {
                             navigator.clipboard.writeText(link);
                             showToast('Tracking link copied to clipboard!');
                           }}
-                          className="px-2 py-1 bg-[#1F1B16] text-[#FDFBF7] rounded hover:bg-[#38322B] text-[10px] font-medium flex items-center gap-1"
+                          className="px-2 py-1 bg-[#2A211C] text-[#FDFBF7] rounded hover:bg-[#38322B] text-[10px] font-medium flex items-center gap-1"
                         >
                           <Copy className="w-3 h-3" />
                           <span>Copy Tracking Link</span>
@@ -3189,7 +3189,7 @@ export const AdminPage: React.FC = () => {
                       <div className="mt-3 p-3 bg-white rounded border border-stone-200 space-y-1 text-stone-700 text-[11px]">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-stone-900 flex items-center gap-1.5">
-                            <Truck className="w-3.5 h-3.5 text-[#B85C38]" />
+                            <Truck className="w-3.5 h-3.5 text-[#B08D57]" />
                             <span>Courier: {selectedOrder.courier_name || selectedOrder.courier || 'Express Shipping'}</span>
                           </span>
                           <span className="font-mono font-bold text-stone-900">AWB: {selectedOrder.tracking_number}</span>
@@ -3200,7 +3200,7 @@ export const AdminPage: React.FC = () => {
                               href={selectedOrder.tracking_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#B85C38] font-mono hover:underline flex items-center gap-1 text-[10px]"
+                              className="text-[#B08D57] font-mono hover:underline flex items-center gap-1 text-[10px]"
                             >
                               <span>Track Live Package</span>
                               <ArrowRight className="w-3 h-3" />
@@ -3252,7 +3252,7 @@ export const AdminPage: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-[10px] text-stone-400 block uppercase font-bold">Refundable Balance</span>
-                        <span className="font-bold font-mono text-[#B85C38]">
+                        <span className="font-bold font-mono text-[#B08D57]">
                           ₹{(
                             selectedOrder.refundable_balance !== undefined
                               ? selectedOrder.refundable_balance
@@ -3308,7 +3308,7 @@ export const AdminPage: React.FC = () => {
                         </div>
                         <button
                           onClick={() => handleOpenRazorpayRefundModal(selectedOrder)}
-                          className="px-3 py-1.5 bg-[#B85C38] hover:bg-[#a04e2e] text-white font-bold text-[10px] uppercase tracking-wider rounded transition-colors shrink-0 cursor-pointer"
+                          className="px-3 py-1.5 bg-[#B08D57] hover:bg-[#a04e2e] text-white font-bold text-[10px] uppercase tracking-wider rounded transition-colors shrink-0 cursor-pointer"
                         >
                           Initiate Refund
                         </button>
@@ -3321,7 +3321,7 @@ export const AdminPage: React.FC = () => {
                       <div className="pt-1 flex justify-end">
                         <button
                           onClick={() => handleOpenRazorpayRefundModal(selectedOrder)}
-                          className="px-4 py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white font-bold text-xs uppercase tracking-wider rounded shadow transition-colors flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white font-bold text-xs uppercase tracking-wider rounded shadow transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
                           <RefreshCw className="w-3.5 h-3.5" />
                           <span>Initiate Razorpay Refund</span>
@@ -3431,7 +3431,7 @@ export const AdminPage: React.FC = () => {
                   {/* Customer Information Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2 border-r border-stone-100 pr-2">
-                      <h4 className="font-bold text-[#1F1B16] text-[10px] uppercase tracking-wider text-stone-400">Buyer Profile</h4>
+                      <h4 className="font-bold text-[#2A211C] text-[10px] uppercase tracking-wider text-stone-400">Buyer Profile</h4>
                       <div className="space-y-1.5 text-stone-600 font-medium">
                         <p className="font-bold text-stone-900">{selectedOrder.customer_name}</p>
                         <p className="flex items-center gap-2">
@@ -3446,13 +3446,13 @@ export const AdminPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#1F1B16] text-[10px] uppercase tracking-wider text-stone-400">Delivery Address</h4>
+                      <h4 className="font-bold text-[#2A211C] text-[10px] uppercase tracking-wider text-stone-400">Delivery Address</h4>
                       <div className="space-y-1.5 text-stone-600 font-medium">
                         <p className="flex items-start gap-1.5">
                           <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0 mt-0.5" />
                           <span>{selectedOrder.address}, {selectedOrder.city}, {selectedOrder.state} - {selectedOrder.pincode}</span>
                         </p>
-                        <p className="text-[10px] uppercase tracking-widest font-bold text-[#5C6B4A] mt-1.5">
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-[#C98A82] mt-1.5">
                           Method: {selectedOrder.shipping_method} • Mode: {selectedOrder.payment_method}
                         </p>
                       </div>
@@ -3461,7 +3461,7 @@ export const AdminPage: React.FC = () => {
 
                   {/* Items Invoice list */}
                   <div className="space-y-3">
-                    <h4 className="font-bold text-[#1F1B16] text-[10px] uppercase tracking-wider text-stone-400 border-b border-stone-100 pb-1.5">Items Ordered</h4>
+                    <h4 className="font-bold text-[#2A211C] text-[10px] uppercase tracking-wider text-stone-400 border-b border-stone-100 pb-1.5">Items Ordered</h4>
                     <div className="space-y-3">
                       {selectedOrder.items && Array.isArray(selectedOrder.items) ? (
                         selectedOrder.items.map((item: any, idx: number) => (
@@ -3510,7 +3510,7 @@ export const AdminPage: React.FC = () => {
                       <span>Shipping Fee ({selectedOrder.shipping_method})</span>
                       <span className="text-stone-900">₹{Number(selectedOrder.shipping_cost).toLocaleString('en-IN')}</span>
                     </div>
-                    <div className="flex justify-between text-base font-serif font-bold text-[#1F1B16] border-t border-stone-100 pt-3.5">
+                    <div className="flex justify-between text-base font-serif font-bold text-[#2A211C] border-t border-stone-100 pt-3.5">
                       <span>Grand Total Amount</span>
                       <span>₹{Number(selectedOrder.grand_total).toLocaleString('en-IN')}</span>
                     </div>
@@ -3533,12 +3533,12 @@ export const AdminPage: React.FC = () => {
           {/* RETURN REQUEST DETAIL DRAWER / MODAL OVERLAY */}
           {selectedReturnReq && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#C9B79C]/30 flex flex-col font-sans">
+              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#E5D2BC]/30 flex flex-col font-sans">
                 {/* Header */}
                 <div className="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50">
                   <div>
-                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B85C38] block">Return / Exchange Request</span>
-                    <h3 className="font-serif text-lg font-bold text-[#1F1B16]">ID: {selectedReturnReq.request_id}</h3>
+                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B08D57] block">Return / Exchange Request</span>
+                    <h3 className="font-serif text-lg font-bold text-[#2A211C]">ID: {selectedReturnReq.request_id}</h3>
                   </div>
                   <button
                     onClick={() => setSelectedReturnReq(null)}
@@ -3553,11 +3553,11 @@ export const AdminPage: React.FC = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-stone-50 rounded-xl border border-stone-200">
                     <div>
                       <span className="text-[10px] uppercase text-stone-400 font-bold block">Order ID</span>
-                      <span className="font-mono font-bold text-[#1F1B16]">{selectedReturnReq.order_id}</span>
+                      <span className="font-mono font-bold text-[#2A211C]">{selectedReturnReq.order_id}</span>
                     </div>
                     <div>
                       <span className="text-[10px] uppercase text-stone-400 font-bold block">Request Type</span>
-                      <span className="font-bold text-[#B85C38] uppercase">{selectedReturnReq.request_type}</span>
+                      <span className="font-bold text-[#B08D57] uppercase">{selectedReturnReq.request_type}</span>
                     </div>
                     <div>
                       <span className="text-[10px] uppercase text-stone-400 font-bold block">Date Submitted</span>
@@ -3571,7 +3571,7 @@ export const AdminPage: React.FC = () => {
 
                   {/* CUSTOMER & REVERSE PICKUP ADDRESS */}
                   <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
-                    <span className="font-bold text-[#1F1B16] uppercase text-[10px] tracking-wider block">Customer & Reverse Pickup Location</span>
+                    <span className="font-bold text-[#2A211C] uppercase text-[10px] tracking-wider block">Customer & Reverse Pickup Location</span>
                     <div className="flex flex-wrap justify-between gap-2">
                       <div>
                         <div className="font-bold text-stone-900">{selectedReturnReq.customer_name}</div>
@@ -3593,7 +3593,7 @@ export const AdminPage: React.FC = () => {
                         <div key={idx} className="p-3 bg-[#FAF8F5] rounded-xl border border-stone-200 space-y-1">
                           <div className="flex justify-between font-bold text-stone-900">
                             <span>{it.name}</span>
-                            <span className="uppercase text-[#B85C38]">{it.action}</span>
+                            <span className="uppercase text-[#B08D57]">{it.action}</span>
                           </div>
                           <div className="text-stone-600">
                             Purchased Size: <strong className="font-mono">{it.original_size}</strong>
@@ -3643,8 +3643,8 @@ export const AdminPage: React.FC = () => {
                           onClick={() => handleUpdateReturnStatus(st)}
                           className={`px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-all cursor-pointer ${
                             selectedReturnReq.status === st
-                              ? 'bg-[#B85C38] text-white shadow'
-                              : 'bg-white text-stone-700 border border-stone-200 hover:border-[#B85C38]'
+                              ? 'bg-[#B08D57] text-white shadow'
+                              : 'bg-white text-stone-700 border border-stone-200 hover:border-[#B08D57]'
                           }`}
                         >
                           {st.replace('_', ' ')}
@@ -3659,7 +3659,7 @@ export const AdminPage: React.FC = () => {
                         value={adminNotesInput}
                         onChange={(e) => setAdminNotesInput(e.target.value)}
                         placeholder="Add tracking numbers, courier notes, or customer communication logs..."
-                        className="w-full p-2.5 rounded border border-stone-200 bg-white text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                        className="w-full p-2.5 rounded border border-stone-200 bg-white text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                       />
                     </div>
                   </div>
@@ -3693,7 +3693,7 @@ export const AdminPage: React.FC = () => {
                       placeholder="Search Ticket ID, Customer Name, Email, Phone, Order ID..."
                       value={enquiriesSearch}
                       onChange={(e) => setEnquiriesSearch(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                     />
                   </div>
 
@@ -3703,7 +3703,7 @@ export const AdminPage: React.FC = () => {
                     <select
                       value={enquiriesStatusFilter}
                       onChange={(e) => setEnquiriesStatusFilter(e.target.value)}
-                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                     >
                       <option value="All">All Statuses</option>
                       <option value="NEW">New Ticket</option>
@@ -3719,7 +3719,7 @@ export const AdminPage: React.FC = () => {
                     <select
                       value={enquiriesTypeFilter}
                       onChange={(e) => setEnquiriesTypeFilter(e.target.value)}
-                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                      className="py-2 px-3 rounded-lg border border-stone-200 bg-stone-50 font-bold text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                     >
                       <option value="All">All Categories</option>
                       <option value="Order Related">Order Related</option>
@@ -3791,7 +3791,7 @@ export const AdminPage: React.FC = () => {
                               <td className="p-4 font-medium text-stone-800">
                                 {enq.enquiry_type || 'General'}
                               </td>
-                              <td className="p-4 font-mono font-bold text-[#B85C38]">
+                              <td className="p-4 font-mono font-bold text-[#B08D57]">
                                 {enq.order_id ? `#${enq.order_id}` : '—'}
                               </td>
                               <td className="p-4 max-w-xs truncate text-stone-600">
@@ -3813,7 +3813,7 @@ export const AdminPage: React.FC = () => {
                                     setSelectedEnquiry(enq);
                                     setEnquiryAdminNotes(enq.admin_notes || '');
                                   }}
-                                  className="px-3 py-1.5 bg-[#1F1B16] hover:bg-[#322c24] text-white rounded text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                  className="px-3 py-1.5 bg-[#2A211C] hover:bg-[#322c24] text-white rounded text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
                                 >
                                   Manage Ticket
                                 </button>
@@ -3841,12 +3841,12 @@ export const AdminPage: React.FC = () => {
               {/* ENQUIRY DETAILS & RESPONSE MODAL */}
               {selectedEnquiry && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full border border-[#C9B79C]/30 overflow-hidden flex flex-col max-h-[90vh]">
+                  <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full border border-[#E5D2BC]/30 overflow-hidden flex flex-col max-h-[90vh]">
                     {/* Header */}
                     <div className="p-5 bg-stone-900 text-stone-100 flex items-center justify-between border-b border-stone-800">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold tracking-widest uppercase text-[#C9B79C]">Customer Support Ticket</span>
+                          <span className="text-[10px] font-bold tracking-widest uppercase text-[#E5D2BC]">Customer Support Ticket</span>
                           <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-stone-800 text-amber-400 border border-stone-700 font-mono">
                             #{selectedEnquiry.enquiry_id || selectedEnquiry.id}
                           </span>
@@ -3873,20 +3873,20 @@ export const AdminPage: React.FC = () => {
                         </div>
                         <div>
                           <span className="text-[10px] font-bold uppercase text-stone-400 block">Email Address</span>
-                          <a href={`mailto:${selectedEnquiry.customer_email}`} className="font-mono text-stone-900 hover:text-[#B85C38] underline mt-0.5 block">
+                          <a href={`mailto:${selectedEnquiry.customer_email}`} className="font-mono text-stone-900 hover:text-[#B08D57] underline mt-0.5 block">
                             {selectedEnquiry.customer_email}
                           </a>
                         </div>
                         <div>
                           <span className="text-[10px] font-bold uppercase text-stone-400 block">Mobile Number</span>
-                          <a href={`tel:${selectedEnquiry.customer_phone}`} className="font-mono text-stone-900 hover:text-[#B85C38] underline mt-0.5 block">
+                          <a href={`tel:${selectedEnquiry.customer_phone}`} className="font-mono text-stone-900 hover:text-[#B08D57] underline mt-0.5 block">
                             {selectedEnquiry.customer_phone}
                           </a>
                         </div>
                         {selectedEnquiry.order_id && (
                           <div className="col-span-full pt-2 border-t border-stone-200/60 flex items-center gap-2">
                             <span className="text-[10px] font-bold uppercase text-stone-500">Related Order Reference:</span>
-                            <span className="font-mono font-bold text-[#B85C38] bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                            <span className="font-mono font-bold text-[#B08D57] bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                               #{selectedEnquiry.order_id}
                             </span>
                           </div>
@@ -3913,7 +3913,7 @@ export const AdminPage: React.FC = () => {
                                 handleUpdateEnquiryStatus(selectedEnquiry.enquiry_id || selectedEnquiry.id, newStatus);
                               }}
                               disabled={isUpdatingEnquiry}
-                              className="w-full p-2.5 rounded border border-stone-300 font-bold text-xs text-stone-900 bg-white focus:outline-none focus:border-[#B85C38]"
+                              className="w-full p-2.5 rounded border border-stone-300 font-bold text-xs text-stone-900 bg-white focus:outline-none focus:border-[#B08D57]"
                             >
                               <option value="NEW">NEW - Unassigned</option>
                               <option value="IN_PROGRESS">IN_PROGRESS - Concierge Reviewing</option>
@@ -3927,7 +3927,7 @@ export const AdminPage: React.FC = () => {
                             <label className="text-[10px] font-bold uppercase text-stone-500 block mb-1">Direct Email Action</label>
                             <a
                               href={`mailto:${selectedEnquiry.customer_email}?subject=${encodeURIComponent(`[Sa and Sha] Re: Ticket #${selectedEnquiry.enquiry_id || selectedEnquiry.id} - ${selectedEnquiry.enquiry_type || 'Support Enquiry'}`)}`}
-                              className="w-full py-2.5 px-4 bg-[#B85C38] hover:bg-[#a04e2e] text-white font-bold rounded text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                              className="w-full py-2.5 px-4 bg-[#B08D57] hover:bg-[#a04e2e] text-white font-bold rounded text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 cursor-pointer"
                             >
                               <Mail className="w-4 h-4" />
                               <span>Reply via Email Client</span>
@@ -3942,7 +3942,7 @@ export const AdminPage: React.FC = () => {
                             value={enquiryAdminNotes}
                             onChange={(e) => setEnquiryAdminNotes(e.target.value)}
                             placeholder="Add concierge notes, resolution details, or phone call summaries..."
-                            className="w-full p-2.5 rounded border border-stone-300 bg-white text-xs text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full p-2.5 rounded border border-stone-300 bg-white text-xs text-stone-800 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
 
@@ -3950,7 +3950,7 @@ export const AdminPage: React.FC = () => {
                           <button
                             onClick={() => handleUpdateEnquiryStatus(selectedEnquiry.enquiry_id || selectedEnquiry.id, selectedEnquiry.status || 'NEW')}
                             disabled={isUpdatingEnquiry}
-                            className="px-5 py-2 bg-[#1F1B16] hover:bg-[#322c24] text-white rounded text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5"
+                            className="px-5 py-2 bg-[#2A211C] hover:bg-[#322c24] text-white rounded text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5"
                           >
                             {isUpdatingEnquiry ? 'Saving...' : 'Save Notes & Status'}
                           </button>
@@ -3977,16 +3977,16 @@ export const AdminPage: React.FC = () => {
           {activeTab === 'promotions' && (
             <div className="space-y-6 animate-fade-in" id="admin-promotions-view">
               {/* Header & Controls */}
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-sm">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-sm">
                 <div>
-                  <h2 className="font-serif text-lg font-bold text-[#1F1B16]">Promo Code Directory</h2>
+                  <h2 className="font-serif text-lg font-bold text-[#2A211C]">Promo Code Directory</h2>
                   <p className="text-xs text-stone-500 font-sans">
                     Create, manage, and monitor server-authoritative discount promo codes.
                   </p>
                 </div>
                 <button
                   onClick={() => handleOpenPromoModal()}
-                  className="px-4 py-2.5 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 shadow-sm"
+                  className="px-4 py-2.5 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 shadow-sm"
                   id="admin-create-promo-btn"
                 >
                   <Plus className="w-4 h-4" />
@@ -4003,7 +4003,7 @@ export const AdminPage: React.FC = () => {
                     value={promotionsSearch}
                     onChange={(e) => setPromotionsSearch(e.target.value)}
                     placeholder="Search promo code..."
-                    className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-stone-200 bg-white text-xs text-stone-900 focus:outline-none focus:border-[#B85C38]"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-stone-200 bg-white text-xs text-stone-900 focus:outline-none focus:border-[#B08D57]"
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -4011,7 +4011,7 @@ export const AdminPage: React.FC = () => {
                   <select
                     value={promotionsStatusFilter}
                     onChange={(e) => setPromotionsStatusFilter(e.target.value)}
-                    className="px-3 py-2.5 rounded-lg border border-stone-200 bg-white text-xs font-semibold text-stone-800 focus:outline-none focus:border-[#B85C38]"
+                    className="px-3 py-2.5 rounded-lg border border-stone-200 bg-white text-xs font-semibold text-stone-800 focus:outline-none focus:border-[#B08D57]"
                   >
                     <option value="All">All Statuses</option>
                     <option value="Active">Active Only</option>
@@ -4022,7 +4022,7 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* Promotions Table */}
-              <div className="bg-white rounded-xl border border-[#C9B79C]/20 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl border border-[#E5D2BC]/20 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left font-sans text-xs">
                     <thead className="bg-stone-50 border-b border-stone-200 text-stone-500 text-[10px] font-bold uppercase tracking-wider">
@@ -4072,8 +4072,8 @@ export const AdminPage: React.FC = () => {
                           return (
                             <tr key={promo.id} className="hover:bg-stone-50/80 transition-colors">
                               <td className="p-4 whitespace-nowrap">
-                                <div className="font-mono font-bold text-sm text-[#1F1B16] flex items-center gap-2">
-                                  <Tag className="w-3.5 h-3.5 text-[#B85C38]" />
+                                <div className="font-mono font-bold text-sm text-[#2A211C] flex items-center gap-2">
+                                  <Tag className="w-3.5 h-3.5 text-[#B08D57]" />
                                   <span>{promo.code}</span>
                                 </div>
                               </td>
@@ -4151,11 +4151,11 @@ export const AdminPage: React.FC = () => {
               {/* PROMO CODE EDIT/CREATE MODAL */}
               {isPromoModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full border border-[#C9B79C]/30 overflow-hidden flex flex-col max-h-[90vh]">
+                  <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full border border-[#E5D2BC]/30 overflow-hidden flex flex-col max-h-[90vh]">
                     {/* Modal Header */}
                     <div className="p-5 bg-stone-900 text-stone-100 flex items-center justify-between border-b border-stone-800">
                       <div className="flex items-center gap-2">
-                        <Tag className="w-5 h-5 text-[#C9B79C]" />
+                        <Tag className="w-5 h-5 text-[#E5D2BC]" />
                         <h3 className="font-serif text-lg font-bold text-white">
                           {selectedPromo ? `Edit Promo Code "${selectedPromo.code}"` : 'Create New Promo Code'}
                         </h3>
@@ -4184,7 +4184,7 @@ export const AdminPage: React.FC = () => {
                           value={promoForm.code || ''}
                           onChange={(e) => setPromoForm({ ...promoForm, code: e.target.value.toUpperCase() })}
                           placeholder="e.g. SUMMER25"
-                          className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono font-bold text-sm text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                          className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono font-bold text-sm text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -4194,7 +4194,7 @@ export const AdminPage: React.FC = () => {
                           <select
                             value={promoForm.discount_type || 'percentage'}
                             onChange={(e) => setPromoForm({ ...promoForm, discount_type: e.target.value as any })}
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-semibold text-xs text-stone-900 bg-white focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-semibold text-xs text-stone-900 bg-white focus:outline-none focus:border-[#B08D57]"
                           >
                             <option value="percentage">Percentage (%)</option>
                             <option value="fixed_amount">Fixed Amount (₹)</option>
@@ -4213,7 +4213,7 @@ export const AdminPage: React.FC = () => {
                             value={promoForm.discount_value ?? ''}
                             onChange={(e) => setPromoForm({ ...promoForm, discount_value: parseFloat(e.target.value) || 0 })}
                             placeholder={promoForm.discount_type === 'percentage' ? 'e.g. 15' : 'e.g. 500'}
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono font-bold text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono font-bold text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
                       </div>
@@ -4227,7 +4227,7 @@ export const AdminPage: React.FC = () => {
                             value={promoForm.minimum_order_amount ?? ''}
                             onChange={(e) => setPromoForm({ ...promoForm, minimum_order_amount: parseFloat(e.target.value) || 0 })}
                             placeholder="0 for no minimum"
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
 
@@ -4239,7 +4239,7 @@ export const AdminPage: React.FC = () => {
                             value={promoForm.maximum_discount_amount ?? ''}
                             onChange={(e) => setPromoForm({ ...promoForm, maximum_discount_amount: e.target.value ? parseFloat(e.target.value) : null })}
                             placeholder="Optional cap for % discounts"
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
                       </div>
@@ -4253,7 +4253,7 @@ export const AdminPage: React.FC = () => {
                             value={promoForm.usage_limit ?? ''}
                             onChange={(e) => setPromoForm({ ...promoForm, usage_limit: e.target.value ? parseInt(e.target.value) : null })}
                             placeholder="Unlimited if blank"
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
 
@@ -4265,7 +4265,7 @@ export const AdminPage: React.FC = () => {
                             value={promoForm.per_customer_limit ?? ''}
                             onChange={(e) => setPromoForm({ ...promoForm, per_customer_limit: e.target.value ? parseInt(e.target.value) : null })}
                             placeholder="Unlimited if blank"
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded font-mono text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
                       </div>
@@ -4277,7 +4277,7 @@ export const AdminPage: React.FC = () => {
                             type="date"
                             value={promoForm.starts_at || ''}
                             onChange={(e) => setPromoForm({ ...promoForm, starts_at: e.target.value })}
-                            className="w-full px-3 py-2 border border-stone-300 rounded text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2 border border-stone-300 rounded text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
 
@@ -4287,7 +4287,7 @@ export const AdminPage: React.FC = () => {
                             type="date"
                             value={promoForm.expires_at || ''}
                             onChange={(e) => setPromoForm({ ...promoForm, expires_at: e.target.value })}
-                            className="w-full px-3 py-2 border border-stone-300 rounded text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                            className="w-full px-3 py-2 border border-stone-300 rounded text-xs text-stone-900 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                           />
                         </div>
                       </div>
@@ -4298,7 +4298,7 @@ export const AdminPage: React.FC = () => {
                             type="checkbox"
                             checked={promoForm.is_active ?? true}
                             onChange={(e) => setPromoForm({ ...promoForm, is_active: e.target.checked })}
-                            className="w-4 h-4 text-[#B85C38] rounded border-stone-300 focus:ring-[#B85C38]"
+                            className="w-4 h-4 text-[#B08D57] rounded border-stone-300 focus:ring-[#B08D57]"
                           />
                           <span className="text-xs font-semibold text-stone-800">
                             Promo code is active for customer checkout
@@ -4318,7 +4318,7 @@ export const AdminPage: React.FC = () => {
                       <button
                         onClick={handleSavePromotion}
                         disabled={isSavingPromo}
-                        className="px-5 py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2"
+                        className="px-5 py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2"
                       >
                         {isSavingPromo ? (
                           <>
@@ -4349,7 +4349,7 @@ export const AdminPage: React.FC = () => {
           {/* FORGOT PASSWORD MODAL */}
           {showForgotModal && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 border border-[#C9B79C]/30 relative">
+              <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 border border-[#E5D2BC]/30 relative">
                 <button
                   onClick={() => setShowForgotModal(false)}
                   className="absolute right-4 top-4 p-1 rounded-full hover:bg-stone-100 text-stone-500 cursor-pointer"
@@ -4358,7 +4358,7 @@ export const AdminPage: React.FC = () => {
                 </button>
 
                 <div className="text-center space-y-3">
-                  <div className="p-3 bg-stone-100 inline-block rounded-full text-[#B85C38] mb-1">
+                  <div className="p-3 bg-stone-100 inline-block rounded-full text-[#B08D57] mb-1">
                     <KeyRound className="w-6 h-6" />
                   </div>
                   <h3 className="font-serif text-lg font-bold text-stone-900">Forgot Password Recovery</h3>
@@ -4368,14 +4368,14 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {forgotStatus === 'success' ? (
-                  <div className="mt-6 p-4 bg-[#5C6B4A]/10 border border-[#5C6B4A]/20 text-[#1F1B16] rounded-lg text-xs font-sans space-y-2 text-center">
-                    <p className="font-bold text-[#5C6B4A] uppercase text-[10px]">Secure Email Sent!</p>
+                  <div className="mt-6 p-4 bg-[#C98A82]/10 border border-[#C98A82]/20 text-[#2A211C] rounded-lg text-xs font-sans space-y-2 text-center">
+                    <p className="font-bold text-[#C98A82] uppercase text-[10px]">Secure Email Sent!</p>
                     <p className="leading-relaxed">
                       A personalized recovery verification link has been dispatched to <strong className="underline text-stone-900 font-bold">{forgotEmail}</strong>.
                     </p>
                     <button
                       onClick={() => setShowForgotModal(false)}
-                      className="mt-2 w-full py-1.5 bg-[#5C6B4A] hover:bg-[#5C6B4A]/90 text-white font-bold rounded uppercase text-[10px] tracking-wider"
+                      className="mt-2 w-full py-1.5 bg-[#C98A82] hover:bg-[#C98A82]/90 text-white font-bold rounded uppercase text-[10px] tracking-wider"
                     >
                       Return to login
                     </button>
@@ -4392,14 +4392,14 @@ export const AdminPage: React.FC = () => {
                         value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)}
                         placeholder="Enter administrative email"
-                        className="w-full px-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:border-[#B85C38] bg-stone-50"
+                        className="w-full px-3 py-2.5 rounded border border-stone-200 focus:outline-none focus:border-[#B08D57] bg-stone-50"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={forgotStatus === 'sending'}
-                      className="w-full bg-[#1F1B16] hover:bg-[#322c24] text-[#F5F1E8] font-bold uppercase tracking-widest py-3 rounded transition-colors cursor-pointer"
+                      className="w-full bg-[#2A211C] hover:bg-[#322c24] text-[#FBF6EE] font-bold uppercase tracking-widest py-3 rounded transition-colors cursor-pointer"
                     >
                       {forgotStatus === 'sending' ? 'Sending Recovery Mail...' : 'Send Recovery Link'}
                     </button>
@@ -4412,7 +4412,7 @@ export const AdminPage: React.FC = () => {
           {/* STATUS CHANGE & DISPATCH FORM MODAL */}
           {statusUpdateModal?.isOpen && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 border border-[#C9B79C]/30 relative font-sans space-y-5">
+              <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 border border-[#E5D2BC]/30 relative font-sans space-y-5">
                 <button
                   onClick={() => setStatusUpdateModal(null)}
                   className="absolute right-4 top-4 p-1 rounded-full hover:bg-stone-100 text-stone-500 cursor-pointer"
@@ -4421,11 +4421,11 @@ export const AdminPage: React.FC = () => {
                 </button>
 
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B85C38] block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B08D57] block">
                     Authoritative Order Transition
                   </span>
                   <h3 className="font-serif text-lg font-bold text-stone-900">
-                    Update Order #{statusUpdateModal.order.order_id} → <span className="uppercase text-[#B85C38]">{statusUpdateModal.targetStatus.replace('_', ' ')}</span>
+                    Update Order #{statusUpdateModal.order.order_id} → <span className="uppercase text-[#B08D57]">{statusUpdateModal.targetStatus.replace('_', ' ')}</span>
                   </h3>
                   <p className="text-xs text-stone-500 flex items-center gap-1.5 mt-1">
                     <span>Current Status:</span>
@@ -4453,7 +4453,7 @@ export const AdminPage: React.FC = () => {
                         value={dispatchForm.courier_name}
                         onChange={(e) => setDispatchForm({ ...dispatchForm, courier_name: e.target.value })}
                         placeholder="e.g. Delhivery, DTDC, India Post"
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900 font-medium"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900 font-medium"
                       />
                     </div>
 
@@ -4466,7 +4466,7 @@ export const AdminPage: React.FC = () => {
                           value={dispatchForm.tracking_number}
                           onChange={(e) => setDispatchForm({ ...dispatchForm, tracking_number: e.target.value })}
                           placeholder="e.g. 1234567890"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900 font-mono font-medium"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900 font-mono font-medium"
                         />
                       </div>
 
@@ -4477,7 +4477,7 @@ export const AdminPage: React.FC = () => {
                           required
                           value={dispatchForm.dispatch_date}
                           onChange={(e) => setDispatchForm({ ...dispatchForm, dispatch_date: e.target.value })}
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900 font-medium"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900 font-medium"
                         />
                       </div>
                     </div>
@@ -4490,7 +4490,7 @@ export const AdminPage: React.FC = () => {
                         value={dispatchForm.tracking_url}
                         onChange={(e) => setDispatchForm({ ...dispatchForm, tracking_url: e.target.value })}
                         placeholder="https://courier.com/track?awb=..."
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900 font-mono text-[11px]"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900 font-mono text-[11px]"
                       />
                     </div>
 
@@ -4501,7 +4501,7 @@ export const AdminPage: React.FC = () => {
                         required
                         value={dispatchForm.estimated_delivery_date}
                         onChange={(e) => setDispatchForm({ ...dispatchForm, estimated_delivery_date: e.target.value })}
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900 font-medium"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900 font-medium"
                       />
                     </div>
 
@@ -4512,7 +4512,7 @@ export const AdminPage: React.FC = () => {
                         value={dispatchForm.adminNotes}
                         onChange={(e) => setDispatchForm({ ...dispatchForm, adminNotes: e.target.value })}
                         placeholder="Optional internal dispatch notes..."
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900"
                       />
                     </div>
                   </div>
@@ -4533,7 +4533,7 @@ export const AdminPage: React.FC = () => {
                         type="checkbox"
                         checked={refundProviderConfirmed}
                         onChange={(e) => setRefundProviderConfirmed(e.target.checked)}
-                        className="mt-0.5 w-4 h-4 text-[#B85C38] rounded border-stone-300 focus:ring-[#B85C38] cursor-pointer"
+                        className="mt-0.5 w-4 h-4 text-[#B08D57] rounded border-stone-300 focus:ring-[#B08D57] cursor-pointer"
                       />
                       <span className="text-xs font-semibold text-stone-800 leading-snug">
                         I have initiated this refund through Razorpay/payment provider.
@@ -4550,7 +4550,7 @@ export const AdminPage: React.FC = () => {
                         value={refundAmountInput}
                         onChange={(e) => setRefundAmountInput(e.target.value)}
                         placeholder="e.g. 2999"
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-mono text-stone-900 font-bold"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-stone-900 font-bold"
                       />
                     </div>
 
@@ -4561,7 +4561,7 @@ export const AdminPage: React.FC = () => {
                         value={refundNoteInput}
                         onChange={(e) => setRefundNoteInput(e.target.value)}
                         placeholder="Internal notes or customer explanation for refund initiation..."
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900"
                       />
                     </div>
                   </div>
@@ -4583,7 +4583,7 @@ export const AdminPage: React.FC = () => {
                         value={refundReferenceInput}
                         onChange={(e) => setRefundReferenceInput(e.target.value)}
                         placeholder="e.g. rfnd_P18273645920 or Razorpay Refund ID"
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-mono text-stone-900 font-bold"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-stone-900 font-bold"
                       />
                     </div>
 
@@ -4597,7 +4597,7 @@ export const AdminPage: React.FC = () => {
                         value={refundAmountInput}
                         onChange={(e) => setRefundAmountInput(e.target.value)}
                         placeholder="e.g. 2999"
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-mono text-stone-900 font-bold"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-stone-900 font-bold"
                       />
                     </div>
                   </div>
@@ -4607,7 +4607,7 @@ export const AdminPage: React.FC = () => {
                     <div className="p-3.5 bg-stone-50 border border-stone-200 rounded-lg text-stone-700 space-y-1">
                       <p className="font-bold text-stone-900">Automatic Customer Notification</p>
                       <p className="text-stone-500 leading-relaxed">
-                        Updating status to <strong className="uppercase text-[#B85C38]">{statusUpdateModal.targetStatus.replace('_', ' ')}</strong> will execute backend validation and trigger a transactional email to <strong>{statusUpdateModal.order.customer_email}</strong> via Resend.
+                        Updating status to <strong className="uppercase text-[#B08D57]">{statusUpdateModal.targetStatus.replace('_', ' ')}</strong> will execute backend validation and trigger a transactional email to <strong>{statusUpdateModal.order.customer_email}</strong> via Resend.
                       </p>
                     </div>
 
@@ -4618,7 +4618,7 @@ export const AdminPage: React.FC = () => {
                         value={statusNotesInput}
                         onChange={(e) => setStatusNotesInput(e.target.value)}
                         placeholder="Reason for status change or internal notes..."
-                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900"
+                        className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900"
                       />
                     </div>
                   </div>
@@ -4636,7 +4636,7 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={handleExecuteStatusUpdate}
                     disabled={isSubmittingStatus}
-                    className="px-5 py-2 bg-[#1F1B16] hover:bg-[#322c24] text-white font-bold text-xs uppercase tracking-wider rounded transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                    className="px-5 py-2 bg-[#2A211C] hover:bg-[#322c24] text-white font-bold text-xs uppercase tracking-wider rounded transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50"
                   >
                     {isSubmittingStatus && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
                     <span>{isSubmittingStatus ? 'Updating Status...' : 'Confirm Status Update'}</span>
@@ -4649,7 +4649,7 @@ export const AdminPage: React.FC = () => {
           {/* REAL RAZORPAY REFUND MODAL */}
           {razorpayRefundModal?.isOpen && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 border border-[#C9B79C]/30 relative font-sans space-y-5">
+              <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 border border-[#E5D2BC]/30 relative font-sans space-y-5">
                 <button
                   onClick={() => setRazorpayRefundModal(null)}
                   className="absolute right-4 top-4 p-1 rounded-full hover:bg-stone-100 text-stone-500 cursor-pointer"
@@ -4658,7 +4658,7 @@ export const AdminPage: React.FC = () => {
                 </button>
 
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B85C38] block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B08D57] block">
                     Razorpay Automated Refund Engine
                   </span>
                   <h3 className="font-serif text-lg font-bold text-stone-900">
@@ -4691,7 +4691,7 @@ export const AdminPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between text-amber-900 border-t border-amber-200/60 pt-1.5 font-bold">
                     <span>Maximum Refundable Balance:</span>
-                    <span className="font-mono text-base text-[#B85C38]">
+                    <span className="font-mono text-base text-[#B08D57]">
                       ₹{Math.max(
                         0,
                         (Number(razorpayRefundModal.order.grand_total) || 0) -
@@ -4714,7 +4714,7 @@ export const AdminPage: React.FC = () => {
                       value={razorpayRefundModal.amountInput}
                       onChange={(e) => setRazorpayRefundModal({ ...razorpayRefundModal, amountInput: e.target.value })}
                       placeholder="e.g. 2999"
-                      className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 font-mono text-stone-900 font-bold"
+                      className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-stone-900 font-bold"
                     />
                   </div>
 
@@ -4725,7 +4725,7 @@ export const AdminPage: React.FC = () => {
                       value={razorpayRefundModal.reasonInput}
                       onChange={(e) => setRazorpayRefundModal({ ...razorpayRefundModal, reasonInput: e.target.value })}
                       placeholder="e.g. Customer cancellation, quality dispute, item out of stock..."
-                      className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B85C38] bg-stone-50 text-stone-900"
+                      className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 text-stone-900"
                     />
                   </div>
 
@@ -4734,7 +4734,7 @@ export const AdminPage: React.FC = () => {
                       type="checkbox"
                       checked={razorpayRefundModal.confirmed}
                       onChange={(e) => setRazorpayRefundModal({ ...razorpayRefundModal, confirmed: e.target.checked })}
-                      className="mt-0.5 w-4 h-4 text-[#B85C38] rounded border-stone-300 focus:ring-[#B85C38] cursor-pointer"
+                      className="mt-0.5 w-4 h-4 text-[#B08D57] rounded border-stone-300 focus:ring-[#B08D57] cursor-pointer"
                     />
                     <span className="text-xs font-semibold text-red-900 leading-snug">
                       I understand this will initiate a real refund through Razorpay.
@@ -4767,7 +4767,7 @@ export const AdminPage: React.FC = () => {
                             .reduce((sum: number, r: any) => sum + (Number(r.amount) || 0), 0))
                         ) + 0.01
                     }
-                    className="px-5 py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white font-bold text-xs uppercase tracking-wider rounded transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                    className="px-5 py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white font-bold text-xs uppercase tracking-wider rounded transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50"
                   >
                     {razorpayRefundModal.isSubmitting && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
                     <span>{razorpayRefundModal.isSubmitting ? 'Executing Refund...' : 'Execute Razorpay Refund'}</span>

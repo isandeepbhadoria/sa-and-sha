@@ -411,22 +411,22 @@ export const ReturnsExchangesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1F1B16] font-sans pt-6 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#2A211C] font-sans pt-6 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
 
         {/* BREADCRUMBS */}
         <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-medium text-stone-500">
-          <Link to="/" className="hover:text-[#B85C38] transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#B08D57] transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3 text-stone-400" />
           <span className="text-stone-900 font-semibold">Returns & Exchanges</span>
         </nav>
 
         {/* HEADER TITLE */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-3 bg-[#F2ECE4] rounded-full text-[#B85C38] mb-3">
+          <div className="inline-flex items-center justify-center p-3 bg-[#F2ECE4] rounded-full text-[#B08D57] mb-3">
             <RotateCcw className="w-6 h-6" />
           </div>
-          <h1 id="returns-page-title" className="font-serif text-3xl sm:text-4xl font-bold text-[#1F1B16] tracking-tight mb-2">
+          <h1 id="returns-page-title" className="font-serif text-3xl sm:text-4xl font-bold text-[#2A211C] tracking-tight mb-2">
             Returns & Exchanges
           </h1>
           <p className="text-stone-600 text-sm max-w-lg mx-auto">
@@ -441,7 +441,7 @@ export const ReturnsExchangesPage: React.FC = () => {
 
         {/* STEP 1: LOOKUP FORM */}
         {currentStep === 'lookup' && (
-          <div className="bg-white rounded-2xl border border-[#C9B79C]/25 shadow-sm p-6 sm:p-10 max-w-xl mx-auto animate-fade-in">
+          <div className="bg-white rounded-2xl border border-[#E5D2BC]/25 shadow-sm p-6 sm:p-10 max-w-xl mx-auto animate-fade-in">
             <form onSubmit={handleLookupSubmit} className="space-y-6">
               
               {lookupError && (
@@ -465,7 +465,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                       placeholder="e.g. KL102548"
                       value={orderIdInput}
                       onChange={(e) => setOrderIdInput(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#1F1B16] focus:outline-none focus:ring-2 focus:ring-[#B85C38]/20 focus:border-[#B85C38] transition-all font-mono"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#2A211C] focus:outline-none focus:ring-2 focus:ring-[#B08D57]/20 focus:border-[#B08D57] transition-all font-mono"
                     />
                   </div>
                   <p className="text-[11px] text-stone-400 mt-1">Found in your order confirmation SMS / Email.</p>
@@ -488,7 +488,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                     placeholder="e.g. customer@gmail.com"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#1F1B16] focus:outline-none focus:ring-2 focus:ring-[#B85C38]/20 focus:border-[#B85C38] transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#2A211C] focus:outline-none focus:ring-2 focus:ring-[#B08D57]/20 focus:border-[#B08D57] transition-all"
                   />
                 </div>
 
@@ -509,7 +509,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                     placeholder="e.g. 9876543210"
                     value={phoneInput}
                     onChange={(e) => setPhoneInput(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#1F1B16] focus:outline-none focus:ring-2 focus:ring-[#B85C38]/20 focus:border-[#B85C38] transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#2A211C] focus:outline-none focus:ring-2 focus:ring-[#B08D57]/20 focus:border-[#B08D57] transition-all"
                   />
                 </div>
               </div>
@@ -524,7 +524,7 @@ export const ReturnsExchangesPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSearching}
-                className="w-full py-3.5 bg-[#1F1B16] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                className="w-full py-3.5 bg-[#2A211C] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
                 {isSearching ? (
                   <>
@@ -542,7 +542,7 @@ export const ReturnsExchangesPage: React.FC = () => {
               {/* POLICY SUMMARY BOX */}
               <div className="pt-4 border-t border-stone-100 text-[11px] text-stone-500 space-y-1.5">
                 <div className="flex items-center gap-1.5 font-bold text-stone-700">
-                  <Info className="w-3.5 h-3.5 text-[#B85C38]" />
+                  <Info className="w-3.5 h-3.5 text-[#B08D57]" />
                   <span>Sa and Sha Policy Snapshot:</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 pl-1">
@@ -558,17 +558,17 @@ export const ReturnsExchangesPage: React.FC = () => {
 
         {/* STEP 2: OTP VERIFICATION CHALLENGE */}
         {currentStep === 'verify_otp' && (
-          <div className="bg-white rounded-2xl border border-[#C9B79C]/25 shadow-sm p-6 sm:p-10 max-w-md mx-auto animate-fade-in text-center space-y-6">
-            <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-[#B85C38]">
+          <div className="bg-white rounded-2xl border border-[#E5D2BC]/25 shadow-sm p-6 sm:p-10 max-w-md mx-auto animate-fade-in text-center space-y-6">
+            <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-[#B08D57]">
               <Lock className="w-6 h-6" />
             </div>
 
             <div>
-              <h2 className="font-serif text-xl font-bold text-[#1F1B16] mb-1">Verify Customer Identity</h2>
+              <h2 className="font-serif text-xl font-bold text-[#2A211C] mb-1">Verify Customer Identity</h2>
               <p className="text-xs text-stone-500">
                 To protect privacy, we sent a 6-digit verification code to:
               </p>
-              <p className="text-sm font-mono font-bold text-[#1F1B16] mt-1">{otpTarget}</p>
+              <p className="text-sm font-mono font-bold text-[#2A211C] mt-1">{otpTarget}</p>
             </div>
 
             {otpError && (
@@ -587,7 +587,7 @@ export const ReturnsExchangesPage: React.FC = () => {
             {debugOtp && (
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs text-left">
                 <span className="font-bold block">Preview Test Verification Code:</span>
-                <span className="font-mono text-base font-bold tracking-widest text-[#B85C38]">{debugOtp}</span>
+                <span className="font-mono text-base font-bold tracking-widest text-[#B08D57]">{debugOtp}</span>
                 <span className="block text-[10px] text-amber-700 mt-0.5">Enter code above or 123456 to verify.</span>
               </div>
             )}
@@ -600,14 +600,14 @@ export const ReturnsExchangesPage: React.FC = () => {
                   placeholder="0 0 0 0 0 0"
                   value={otpCodeInput}
                   onChange={(e) => setOtpCodeInput(e.target.value)}
-                  className="w-full text-center text-xl font-mono tracking-widest py-3 rounded-xl border border-stone-200 bg-stone-50 text-[#1F1B16] focus:outline-none focus:border-[#B85C38]"
+                  className="w-full text-center text-xl font-mono tracking-widest py-3 rounded-xl border border-stone-200 bg-stone-50 text-[#2A211C] focus:outline-none focus:border-[#B08D57]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isVerifyingOtp}
-                className="w-full py-3.5 bg-[#1F1B16] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer disabled:opacity-60"
+                className="w-full py-3.5 bg-[#2A211C] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer disabled:opacity-60"
               >
                 {isVerifyingOtp ? 'Verifying...' : 'VERIFY & VIEW ORDERS'}
               </button>
@@ -616,7 +616,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => triggerSendOtp(otpTarget)}
-                  className="text-[#B85C38] hover:underline font-semibold cursor-pointer"
+                  className="text-[#B08D57] hover:underline font-semibold cursor-pointer"
                 >
                   Resend OTP Code
                 </button>
@@ -636,10 +636,10 @@ export const ReturnsExchangesPage: React.FC = () => {
         {currentStep === 'order_list' && (
           <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
-              <h2 className="font-serif text-xl font-bold text-[#1F1B16]">Your Verified Orders ({ordersList.length})</h2>
+              <h2 className="font-serif text-xl font-bold text-[#2A211C]">Your Verified Orders ({ordersList.length})</h2>
               <button
                 onClick={() => setCurrentStep('lookup')}
-                className="text-xs font-bold text-[#B85C38] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-[#B08D57] hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Search Different Order</span>
@@ -650,12 +650,12 @@ export const ReturnsExchangesPage: React.FC = () => {
               {ordersList.map((order) => (
                 <div 
                   key={order.order_id} 
-                  className="bg-white rounded-2xl border border-[#C9B79C]/25 p-5 shadow-sm hover:border-[#B85C38]/40 transition-all space-y-4"
+                  className="bg-white rounded-2xl border border-[#E5D2BC]/25 p-5 shadow-sm hover:border-[#B08D57]/40 transition-all space-y-4"
                 >
                   {/* CARD TOP BAR */}
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-100 pb-3">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-sm font-bold text-[#1F1B16]">{order.order_id}</span>
+                      <span className="font-mono text-sm font-bold text-[#2A211C]">{order.order_id}</span>
                       <span className="text-xs text-stone-500 flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -671,7 +671,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                         {order.eligible ? 'Eligible for Return / Exchange' : 'Not Eligible'}
                       </span>
 
-                      <span className="text-sm font-serif font-bold text-[#1F1B16]">
+                      <span className="text-sm font-serif font-bold text-[#2A211C]">
                         ₹{Number(order.grand_total).toLocaleString('en-IN')}
                       </span>
                     </div>
@@ -689,7 +689,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                               <ImageIcon className="w-4 h-4" />
                             </div>
                           )}
-                          <span className="absolute bottom-0 right-0 bg-[#1F1B16] text-white text-[9px] font-bold px-1 rounded-tl">
+                          <span className="absolute bottom-0 right-0 bg-[#2A211C] text-white text-[9px] font-bold px-1 rounded-tl">
                             {it.size}
                           </span>
                         </div>
@@ -704,7 +704,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                         setSelectedOrder(order);
                         setCurrentStep('order_details');
                       }}
-                      className="px-4 py-2 bg-[#1F1B16] hover:bg-[#332c24] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shrink-0 cursor-pointer"
+                      className="px-4 py-2 bg-[#2A211C] hover:bg-[#332c24] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shrink-0 cursor-pointer"
                     >
                       SELECT ORDER
                     </button>
@@ -725,17 +725,17 @@ export const ReturnsExchangesPage: React.FC = () => {
         {currentStep === 'order_details' && selectedOrder && (
           <div className="space-y-8 animate-fade-in">
             {/* TOP BAR */}
-            <div className="bg-white rounded-2xl border border-[#C9B79C]/25 p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-white rounded-2xl border border-[#E5D2BC]/25 p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
               <div>
                 <button
                   onClick={() => setCurrentStep(ordersList.length > 1 ? 'order_list' : 'lookup')}
-                  className="text-xs font-bold text-[#B85C38] hover:underline flex items-center gap-1 cursor-pointer mb-1"
+                  className="text-xs font-bold text-[#B08D57] hover:underline flex items-center gap-1 cursor-pointer mb-1"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Orders</span>
                 </button>
                 <div className="flex items-center gap-3">
-                  <h2 className="font-serif text-xl font-bold text-[#1F1B16]">Order #{selectedOrder.order_id}</h2>
+                  <h2 className="font-serif text-xl font-bold text-[#2A211C]">Order #{selectedOrder.order_id}</h2>
                   <span className="text-xs text-stone-500">
                     Placed on {new Date(selectedOrder.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
@@ -744,7 +744,7 @@ export const ReturnsExchangesPage: React.FC = () => {
 
               <div className="text-right">
                 <span className="text-xs text-stone-500 block">Total Paid</span>
-                <span className="font-serif text-lg font-bold text-[#1F1B16]">₹{Number(selectedOrder.grand_total).toLocaleString('en-IN')}</span>
+                <span className="font-serif text-lg font-bold text-[#2A211C]">₹{Number(selectedOrder.grand_total).toLocaleString('en-IN')}</span>
               </div>
             </div>
 
@@ -765,8 +765,8 @@ export const ReturnsExchangesPage: React.FC = () => {
                       key={itemKey}
                       className={`bg-white rounded-2xl border transition-all overflow-hidden ${
                         isSelected 
-                          ? 'border-[#B85C38] shadow-md ring-1 ring-[#B85C38]/30' 
-                          : 'border-[#C9B79C]/25 shadow-sm'
+                          ? 'border-[#B08D57] shadow-md ring-1 ring-[#B08D57]/30' 
+                          : 'border-[#E5D2BC]/25 shadow-sm'
                       }`}
                     >
                       {/* ITEM ROW HEADER */}
@@ -785,19 +785,19 @@ export const ReturnsExchangesPage: React.FC = () => {
 
                           {/* DETAILS */}
                           <div className="space-y-1">
-                            <h4 className="font-serif font-bold text-sm text-[#1F1B16]">{item.name}</h4>
+                            <h4 className="font-serif font-bold text-sm text-[#2A211C]">{item.name}</h4>
                             <div className="flex flex-wrap items-center gap-2 text-xs text-stone-600">
-                              <span>Purchased Size: <strong className="text-[#1F1B16] font-mono">{item.size}</strong></span>
+                              <span>Purchased Size: <strong className="text-[#2A211C] font-mono">{item.size}</strong></span>
                               {item.color && (
                                 <>
                                   <span className="text-stone-300">•</span>
-                                  <span>Color: <strong className="text-[#1F1B16]">{item.color}</strong></span>
+                                  <span>Color: <strong className="text-[#2A211C]">{item.color}</strong></span>
                                 </>
                               )}
                               <span className="text-stone-300">•</span>
-                              <span>Qty: <strong className="text-[#1F1B16]">{item.quantity}</strong></span>
+                              <span>Qty: <strong className="text-[#2A211C]">{item.quantity}</strong></span>
                             </div>
-                            <div className="font-serif font-bold text-sm text-[#1F1B16]">
+                            <div className="font-serif font-bold text-sm text-[#2A211C]">
                               ₹{Number(item.price).toLocaleString('en-IN')}
                             </div>
                           </div>
@@ -812,7 +812,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                               className={`w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
                                 isSelected
                                   ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
-                                  : 'bg-[#1F1B16] hover:bg-[#332c24] text-white shadow-sm'
+                                  : 'bg-[#2A211C] hover:bg-[#332c24] text-white shadow-sm'
                               }`}
                             >
                               {isSelected ? (
@@ -842,7 +842,7 @@ export const ReturnsExchangesPage: React.FC = () => {
 
                       {/* ITEM CONFIGURATION EXPANDED PANEL */}
                       {isSelected && itemConfig && (
-                        <div className="bg-[#FAF8F5] border-t border-[#C9B79C]/20 p-5 space-y-5 animate-fade-in">
+                        <div className="bg-[#FAF8F5] border-t border-[#E5D2BC]/20 p-5 space-y-5 animate-fade-in">
                           
                           {/* ACTION SELECTOR: EXCHANGE vs RETURN */}
                           <div>
@@ -857,12 +857,12 @@ export const ReturnsExchangesPage: React.FC = () => {
                                 onClick={() => updateItemConfig(itemKey, { action: 'exchange' })}
                                 className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
                                   itemConfig.action === 'exchange'
-                                    ? 'bg-white border-[#B85C38] shadow-sm ring-1 ring-[#B85C38]'
+                                    ? 'bg-white border-[#B08D57] shadow-sm ring-1 ring-[#B08D57]'
                                     : 'bg-white/60 border-stone-200 hover:border-stone-300'
                                 }`}
                               >
                                 <div className="flex items-center justify-between mb-1">
-                                  <span className="font-bold text-xs uppercase tracking-wider text-[#1F1B16]">EXCHANGE SIZE</span>
+                                  <span className="font-bold text-xs uppercase tracking-wider text-[#2A211C]">EXCHANGE SIZE</span>
                                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
                                     FREE (₹0 Fee)
                                   </span>
@@ -878,12 +878,12 @@ export const ReturnsExchangesPage: React.FC = () => {
                                 onClick={() => updateItemConfig(itemKey, { action: 'return' })}
                                 className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
                                   itemConfig.action === 'return'
-                                    ? 'bg-white border-[#B85C38] shadow-sm ring-1 ring-[#B85C38]'
+                                    ? 'bg-white border-[#B08D57] shadow-sm ring-1 ring-[#B08D57]'
                                     : 'bg-white/60 border-stone-200 hover:border-stone-300'
                                 }`}
                               >
                                 <div className="flex items-center justify-between mb-1">
-                                  <span className="font-bold text-xs uppercase tracking-wider text-[#1F1B16]">RETURN ITEM</span>
+                                  <span className="font-bold text-xs uppercase tracking-wider text-[#2A211C]">RETURN ITEM</span>
                                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-stone-100 text-stone-700">
                                     -₹100 Pickup Fee
                                   </span>
@@ -900,7 +900,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                             <div className="space-y-3 bg-white p-4 rounded-xl border border-stone-200">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                                  Select New Size (Current Size: <strong className="text-[#B85C38] font-mono">{item.size}</strong>)
+                                  Select New Size (Current Size: <strong className="text-[#B08D57] font-mono">{item.size}</strong>)
                                 </span>
                                 {isLoadingSizes[item.product_id] && (
                                   <span className="text-[10px] text-stone-400 flex items-center gap-1">
@@ -932,12 +932,12 @@ export const ReturnsExchangesPage: React.FC = () => {
                                       onClick={() => updateItemConfig(itemKey, { requested_size: szObj.size })}
                                       className={`px-3.5 py-2 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer relative ${
                                         isChosen
-                                          ? 'bg-[#B85C38] text-white shadow'
+                                          ? 'bg-[#B08D57] text-white shadow'
                                           : isCurrent
                                           ? 'bg-stone-100 text-stone-400 line-through cursor-not-allowed border border-stone-200'
                                           : !szObj.inStock
                                           ? 'bg-stone-100 text-stone-300 cursor-not-allowed border border-stone-200'
-                                          : 'bg-stone-50 border border-stone-200 text-stone-800 hover:border-[#B85C38]'
+                                          : 'bg-stone-50 border border-stone-200 text-stone-800 hover:border-[#B08D57]'
                                       }`}
                                     >
                                       {szObj.size}
@@ -970,7 +970,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                               <select
                                 value={itemConfig.reason}
                                 onChange={(e) => updateItemConfig(itemKey, { reason: e.target.value })}
-                                className="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-800 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                                className="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-800 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                               >
                                 {(itemConfig.action === 'exchange' ? RETURNS_CONFIG.EXCHANGE_REASONS : RETURNS_CONFIG.RETURN_REASONS).map(r => (
                                   <option key={r} value={r}>{r}</option>
@@ -987,7 +987,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                                 placeholder="Tell us more details..."
                                 value={itemConfig.reason_notes}
                                 onChange={(e) => updateItemConfig(itemKey, { reason_notes: e.target.value })}
-                                className="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs text-stone-800 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+                                className="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs text-stone-800 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
                               />
                             </div>
                           </div>
@@ -1002,8 +1002,8 @@ export const ReturnsExchangesPage: React.FC = () => {
 
             {/* REQUEST SUMMARY BAR & CONTINUE BUTTON */}
             {selectedConfigList.length > 0 && (
-              <div className="bg-white rounded-2xl border border-[#C9B79C]/30 p-6 shadow-md space-y-4 animate-fade-in">
-                <h3 className="font-serif font-bold text-base text-[#1F1B16] border-b border-stone-100 pb-2">
+              <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 p-6 shadow-md space-y-4 animate-fade-in">
+                <h3 className="font-serif font-bold text-base text-[#2A211C] border-b border-stone-100 pb-2">
                   Request Summary ({selectedConfigList.length} {selectedConfigList.length === 1 ? 'item' : 'items'})
                 </h3>
 
@@ -1021,15 +1021,15 @@ export const ReturnsExchangesPage: React.FC = () => {
 
                   <div className="border-t border-stone-100 pt-2 flex items-center justify-between text-stone-600">
                     <span>Return Pickup Shipping Fee ({hasReturnItem ? '1 pickup fee per request' : 'Free'})</span>
-                    <span className="font-bold text-[#B85C38]">
+                    <span className="font-bold text-[#B08D57]">
                       {hasReturnItem ? `-₹${RETURNS_CONFIG.RETURN_SHIPPING_FEE}` : '₹0'}
                     </span>
                   </div>
 
                   {hasReturnItem && (
-                    <div className="border-t border-stone-200 pt-2 flex items-center justify-between text-sm font-bold text-[#1F1B16]">
+                    <div className="border-t border-stone-200 pt-2 flex items-center justify-between text-sm font-bold text-[#2A211C]">
                       <span>Estimated Total Refund</span>
-                      <span className="font-serif text-lg text-[#1F1B16]">
+                      <span className="font-serif text-lg text-[#2A211C]">
                         ₹{estimatedRefundTotal.toLocaleString('en-IN')}
                       </span>
                     </div>
@@ -1039,7 +1039,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleProceedToReview}
-                  className="w-full py-4 bg-[#1F1B16] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4 bg-[#2A211C] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>PROCEED TO REVIEW REQUEST</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1052,16 +1052,16 @@ export const ReturnsExchangesPage: React.FC = () => {
 
         {/* STEP 5: REVIEW SCREEN */}
         {currentStep === 'review' && selectedOrder && (
-          <div className="bg-white rounded-2xl border border-[#C9B79C]/25 p-6 sm:p-10 shadow-sm space-y-6 animate-fade-in max-w-2xl mx-auto">
+          <div className="bg-white rounded-2xl border border-[#E5D2BC]/25 p-6 sm:p-10 shadow-sm space-y-6 animate-fade-in max-w-2xl mx-auto">
             <div className="flex items-center justify-between border-b border-stone-100 pb-4">
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#1F1B16]">Review Request</h2>
+                <h2 className="font-serif text-xl font-bold text-[#2A211C]">Review Request</h2>
                 <p className="text-xs text-stone-500">Order #{selectedOrder.order_id}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setCurrentStep('order_details')}
-                className="text-xs font-bold text-[#B85C38] hover:underline cursor-pointer"
+                className="text-xs font-bold text-[#B08D57] hover:underline cursor-pointer"
               >
                 Edit Selection
               </button>
@@ -1073,9 +1073,9 @@ export const ReturnsExchangesPage: React.FC = () => {
               {selectedConfigList.map((c: SelectedItemConfig) => (
                 <div key={`${c.item.product_id}_${c.item.size}`} className="p-3.5 bg-stone-50 rounded-xl border border-stone-200 flex items-center justify-between text-xs">
                   <div>
-                    <span className="font-bold text-[#1F1B16] block">{c.item.name}</span>
+                    <span className="font-bold text-[#2A211C] block">{c.item.name}</span>
                     <span className="text-stone-500">
-                      Action: <strong className="uppercase text-[#B85C38]">{c.action}</strong> | {c.action === 'exchange' ? `Size: ${c.item.size} → ${c.requested_size}` : `Size: ${c.item.size}`}
+                      Action: <strong className="uppercase text-[#B08D57]">{c.action}</strong> | {c.action === 'exchange' ? `Size: ${c.item.size} → ${c.requested_size}` : `Size: ${c.item.size}`}
                     </span>
                     <span className="block text-[11px] text-stone-400">Reason: {c.reason}</span>
                   </div>
@@ -1087,7 +1087,7 @@ export const ReturnsExchangesPage: React.FC = () => {
             </div>
 
             {/* CHARGES BREAKDOWN */}
-            <div className="p-4 bg-[#FAF8F5] rounded-xl border border-[#C9B79C]/20 space-y-2 text-xs">
+            <div className="p-4 bg-[#FAF8F5] rounded-xl border border-[#E5D2BC]/20 space-y-2 text-xs">
               <div className="flex justify-between text-stone-600">
                 <span>Exchange Fee</span>
                 <span className="font-bold text-emerald-700">₹0 (FREE)</span>
@@ -1099,7 +1099,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                 </div>
               )}
               {hasReturnItem && (
-                <div className="border-t border-stone-200 pt-2 flex justify-between text-sm font-bold text-[#1F1B16]">
+                <div className="border-t border-stone-200 pt-2 flex justify-between text-sm font-bold text-[#2A211C]">
                   <span>Estimated Total Refund</span>
                   <span className="font-serif text-base">₹{estimatedRefundTotal.toLocaleString('en-IN')}</span>
                 </div>
@@ -1116,7 +1116,7 @@ export const ReturnsExchangesPage: React.FC = () => {
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmitRequest}
-              className="w-full py-4 bg-[#1F1B16] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              className="w-full py-4 bg-[#2A211C] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isSubmitting ? (
                 <>
@@ -1135,13 +1135,13 @@ export const ReturnsExchangesPage: React.FC = () => {
 
         {/* STEP 6: CONFIRMATION SCREEN */}
         {currentStep === 'success' && submittedResponse && (
-          <div className="bg-white rounded-2xl border border-[#C9B79C]/25 p-8 sm:p-12 shadow-sm text-center space-y-6 max-w-xl mx-auto animate-fade-in">
+          <div className="bg-white rounded-2xl border border-[#E5D2BC]/25 p-8 sm:p-12 shadow-sm text-center space-y-6 max-w-xl mx-auto animate-fade-in">
             <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-700">
               <CheckCircle2 className="w-8 h-8" />
             </div>
 
             <div>
-              <h2 className="font-serif text-2xl font-bold text-[#1F1B16] mb-1">Request Submitted Successfully</h2>
+              <h2 className="font-serif text-2xl font-bold text-[#2A211C] mb-1">Request Submitted Successfully</h2>
               <p className="text-xs text-stone-500">
                 Your return/exchange request has been logged and sent to our customer experience team.
               </p>
@@ -1151,7 +1151,7 @@ export const ReturnsExchangesPage: React.FC = () => {
             <div className="p-5 bg-stone-50 rounded-2xl border border-stone-200 text-left space-y-3">
               <div className="flex justify-between items-center border-b border-stone-200 pb-2">
                 <span className="text-xs text-stone-500">Request Reference ID</span>
-                <span className="font-mono text-base font-bold text-[#B85C38]">{submittedResponse.request_id}</span>
+                <span className="font-mono text-base font-bold text-[#B08D57]">{submittedResponse.request_id}</span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
@@ -1174,7 +1174,7 @@ export const ReturnsExchangesPage: React.FC = () => {
               {submittedResponse.estimated_refund_total > 0 && (
                 <div className="flex justify-between items-center text-xs pt-2 border-t border-stone-200 font-bold">
                   <span className="text-stone-800">Estimated Refund</span>
-                  <span className="font-serif text-sm text-[#1F1B16]">₹{submittedResponse.estimated_refund_total.toLocaleString('en-IN')}</span>
+                  <span className="font-serif text-sm text-[#2A211C]">₹{submittedResponse.estimated_refund_total.toLocaleString('en-IN')}</span>
                 </div>
               )}
             </div>
@@ -1182,7 +1182,7 @@ export const ReturnsExchangesPage: React.FC = () => {
             {/* TIMELINE */}
             <div className="text-left text-xs space-y-2 p-4 bg-amber-50/50 rounded-xl border border-amber-200/50">
               <span className="font-bold text-amber-900 block flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-[#B85C38]" /> Next Steps Timeline:
+                <Truck className="w-4 h-4 text-[#B08D57]" /> Next Steps Timeline:
               </span>
               <ol className="list-decimal list-inside text-stone-600 space-y-1 pl-1">
                 <li>Our quality team reviews your request within 24 hours.</li>
@@ -1194,7 +1194,7 @@ export const ReturnsExchangesPage: React.FC = () => {
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
               <Link
                 to="/shop"
-                className="w-full py-3.5 bg-[#1F1B16] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer block text-center"
+                className="w-full py-3.5 bg-[#2A211C] hover:bg-[#332c24] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer block text-center"
               >
                 RETURN TO SHOP
               </Link>

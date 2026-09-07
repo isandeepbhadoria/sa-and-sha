@@ -237,7 +237,7 @@ export function buildProviderNeutralShipment(orderData: any): ProviderNeutralShi
       label: 'Order Packed',
       location: 'Sa and Sha Warehouse',
       occurred_at: orderData.packed_at || new Date().toISOString(),
-      description: 'Items inspected, carefully packaged in linen bags, and ready for courier pickup.',
+      description: 'Items inspected, carefully packaged, and ready for courier pickup.',
       source: 'warehouse'
     });
   }
@@ -246,7 +246,7 @@ export function buildProviderNeutralShipment(orderData: any): ProviderNeutralShi
     events.push({
       code: 'SHIPPED',
       label: 'Handed to Courier',
-      location: orderData.dispatch_location || 'Hub - Jaipur',
+      location: orderData.dispatch_location || 'Dispatch Hub',
       occurred_at: orderData.shipped_at || new Date().toISOString(),
       description: `Handed over to ${orderData.courier_name || 'Courier Partner'}${awb ? ` (AWB: ${awb})` : ''}.`,
       source: isBlueDart ? 'bluedart' : 'courier'
@@ -335,8 +335,8 @@ export function buildOrderStatusTimeline(statusRaw: string, orderData: any): Tim
   const stepLabels: Record<string, { label: string; description: string; dateKey: string }> = {
     placed: { label: 'Order Placed', description: 'Order received and logged', dateKey: 'created_at' },
     confirmed: { label: 'Order Confirmed', description: 'Payment verified & order confirmed', dateKey: 'confirmed_at' },
-    processing: { label: 'Processing', description: 'Preparing artisanal fabric & crafting items', dateKey: 'processing_at' },
-    packed: { label: 'Packed', description: 'Quality checked & custom packed in linen pouch', dateKey: 'packed_at' },
+    processing: { label: 'Processing', description: 'Preparing and quality-checking your items', dateKey: 'processing_at' },
+    packed: { label: 'Packed', description: 'Quality checked & carefully packed', dateKey: 'packed_at' },
     shipped: { label: 'Shipped', description: 'Handed over to courier partner', dateKey: 'shipped_at' },
     out_for_delivery: { label: 'Out for Delivery', description: 'Courier executive out for delivery', dateKey: 'out_for_delivery_at' },
     delivered: { label: 'Delivered', description: 'Package delivered to address', dateKey: 'delivered_at' }

@@ -35,7 +35,7 @@ export const RmaExchangePreview: React.FC<RmaExchangePreviewProps> = ({ exchange
             <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-600">
               <div>
                 <span className="text-stone-400">Original:</span> {item.original_variant} →{" "}
-                <span className="font-bold text-[#B85C38]">Requested: {item.requested_variant}</span>
+                <span className="font-bold text-[#B08D57]">Requested: {item.requested_variant}</span>
               </div>
               <div className="flex items-center gap-1">
                 {item.stock_available ? (

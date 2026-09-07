@@ -27,7 +27,7 @@ export const RmaInternalNotes: React.FC<RmaInternalNotesProps> = ({ notes, onAdd
     <div className="space-y-4 text-xs">
       <div className="flex items-center justify-between border-b border-stone-200 pb-2">
         <h4 className="font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
-          <MessageSquare className="w-4 h-4 text-[#B85C38]" />
+          <MessageSquare className="w-4 h-4 text-[#B08D57]" />
           Internal Staff Notes ({notes?.length || 0})
         </h4>
         <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded flex items-center gap-1">
@@ -42,7 +42,7 @@ export const RmaInternalNotes: React.FC<RmaInternalNotesProps> = ({ notes, onAdd
           <select
             value={noteType}
             onChange={(e) => setNoteType(e.target.value)}
-            className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+            className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
           >
             <option value="general">General Note</option>
             <option value="customer_contact">Customer Contact</option>
@@ -60,12 +60,12 @@ export const RmaInternalNotes: React.FC<RmaInternalNotesProps> = ({ notes, onAdd
             placeholder="Type confidential staff note..."
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
-            className="flex-1 px-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+            className="flex-1 px-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
           />
           <button
             type="submit"
             disabled={!noteText.trim() || submitting}
-            className="px-4 py-2 bg-[#1F1B16] text-white rounded-lg font-semibold hover:bg-black transition disabled:opacity-50 cursor-pointer flex items-center gap-1.5 shrink-0"
+            className="px-4 py-2 bg-[#2A211C] text-white rounded-lg font-semibold hover:bg-black transition disabled:opacity-50 cursor-pointer flex items-center gap-1.5 shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
             Add Note

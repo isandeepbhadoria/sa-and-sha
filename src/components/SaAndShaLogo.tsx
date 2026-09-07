@@ -11,9 +11,9 @@ export interface SaAndShaLogoProps {
 }
 
 const SIZE_MAP: Record<string, string> = {
-  sm: "text-base",
-  md: "text-xl",
-  lg: "text-3xl",
+  sm: "text-sm",
+  md: "text-lg",
+  lg: "text-2xl",
 };
 
 export function SaAndShaLogo({
@@ -22,16 +22,19 @@ export function SaAndShaLogo({
   variant = "horizontal",
   size = "md",
 }: SaAndShaLogoProps) {
-  const textColor = light ? "#F5F1EA" : "#2C2B26";
-  const sizeClass = SIZE_MAP[size] ?? "text-xl";
+  const textColor = light ? "#FBF6EE" : "#2A211C";
+  const accentColor = "#B08D57";
+  const sizeClass = SIZE_MAP[size] ?? "text-lg";
   const stacked = variant === "stacked";
 
   return (
     <span
-      className={`inline-flex ${stacked ? "flex-col items-center leading-tight" : "items-center"} font-serif tracking-wide ${sizeClass} ${className}`}
+      className={`inline-flex ${stacked ? "flex-col items-center leading-tight gap-1" : "items-center gap-2"} font-serif uppercase tracking-[0.22em] font-medium ${sizeClass} ${className}`}
       style={{ color: textColor }}
     >
-      Sa and Sha
+      <span>Sa</span>
+      <span style={{ color: accentColor }}>&amp;</span>
+      <span>Sha</span>
     </span>
   );
 }

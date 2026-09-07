@@ -15,26 +15,26 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer id="global-footer" className="bg-[#1F1B16] text-[#F5F1E8] pt-16 pb-8 border-t border-[#C9B79C]/20">
+    <footer id="global-footer" className="bg-[#2A211C] text-[#FBF6EE] pt-16 pb-8 border-t border-[#E5D2BC]/20">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         
         {/* Top footer row: columns & newsletters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 pb-12 border-b border-[#C9B79C]/10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 pb-12 border-b border-[#E5D2BC]/10">
           
           {/* Column 1: Brand Info */}
           <div className="space-y-4 sm:col-span-2 md:col-span-3 lg:col-span-1">
             <div className="pb-1">
               <SaAndShaLogo variant="horizontal" size="md" light={true} />
             </div>
-            <p className="font-sans text-xs text-[#F5F1E8]/70 leading-relaxed max-w-sm">
-              We specialize in linen-first menswear designed for the modern tropics. By weaving European flax with traditional luxury finishes, we deliver shirts, trousers, and chinos that breathe with your body.
+            <p className="font-sans text-xs text-[#FBF6EE]/70 leading-relaxed max-w-sm">
+              Sa and Sha is a ladies apparel brand designing dresses, tops, co-ord sets, and more for everyday elegance.
             </p>
-            <div className="flex items-center gap-4 pt-2 text-[#F5F1E8]/60">
+            <div className="flex items-center gap-4 pt-2 text-[#FBF6EE]/60">
               <a
                 href="https://www.instagram.com/_saandsha"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[#B85C38] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B85C38]"
+                className="hover:text-[#B08D57] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B08D57]"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
                 href="https://www.facebook.com/saandsha"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[#B85C38] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B85C38]"
+                className="hover:text-[#B08D57] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B08D57]"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" />
@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
                 href="https://x.com/_saandsha"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[#B85C38] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B85C38]"
+                className="hover:text-[#B08D57] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B08D57]"
                 aria-label="X (Twitter)"
               >
                 <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -63,7 +63,7 @@ export const Footer: React.FC = () => {
                 href="https://www.pinterest.com/saandsha1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[#B85C38] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B85C38]"
+                className="hover:text-[#B08D57] transition-colors p-1 -m-1 focus:outline-none focus:text-[#B08D57]"
                 aria-label="Pinterest"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -73,63 +73,57 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 2: Collections */}
+          {/* Column 2: Categories */}
           <div>
-            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#C9B79C] mb-4">
-              Collections
+            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#E5D2BC] mb-4">
+              Categories
             </h4>
-            <ul className="space-y-2 text-xs font-sans text-[#F5F1E8]/70">
+            <ul className="space-y-2 text-xs font-sans text-[#FBF6EE]/70">
               <li>
-                <Link to="/shop/collection/pure-linen" className="hover:text-white transition-colors">Pure Linen</Link>
+                <Link to="/shop/product/dresses" className="hover:text-white transition-colors">Dresses</Link>
               </li>
               <li>
-                <Link to="/shop/collection/linen-cotton-blend" className="hover:text-white transition-colors">Linen-Cotton Blend</Link>
+                <Link to="/shop/product/tops-shirts" className="hover:text-white transition-colors">Top & Shirts</Link>
               </li>
               <li>
-                <Link to="/shop/collection/pure-cotton" className="hover:text-white transition-colors">Pure Cotton</Link>
-              </li>
-              <li>
-                <Link to="/shop/collection/chinos" className="hover:text-white transition-colors">Chinos</Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Products */}
-          <div>
-            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#C9B79C] mb-4">
-              Products
-            </h4>
-            <ul className="space-y-2 text-xs font-sans text-[#F5F1E8]/70">
-              <li>
-                <Link to="/shop/product/shirts" className="hover:text-white transition-colors">Shirts</Link>
-              </li>
-              <li>
-                <Link to="/shop/product/trousers" className="hover:text-white transition-colors">Trousers</Link>
-              </li>
-              <li>
-                <Link to="/shop/product/shorts" className="hover:text-white transition-colors">Shorts</Link>
-              </li>
-              <li>
-                <Link to="/shop/product/pyjamas" className="hover:text-white transition-colors">Pyjamas</Link>
-              </li>
-              <li>
-                <Link to="/shop/product/kurtas" className="hover:text-white transition-colors">Kurtas</Link>
+                <Link to="/shop/product/shorts-skirts" className="hover:text-white transition-colors">Shorts & Skirts</Link>
               </li>
               <li>
                 <Link to="/shop/product/co-ord-sets" className="hover:text-white transition-colors">Co-Ord Sets</Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Column 3: More Categories */}
+          <div>
+            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#E5D2BC] mb-4">
+              More
+            </h4>
+            <ul className="space-y-2 text-xs font-sans text-[#FBF6EE]/70">
               <li>
-                <Link to="/shop/product/chinos" className="hover:text-white transition-colors">Chinos</Link>
+                <Link to="/shop/product/trousers" className="hover:text-white transition-colors">Trousers</Link>
+              </li>
+              <li>
+                <Link to="/shop/product/jackets" className="hover:text-white transition-colors">Jackets</Link>
+              </li>
+              <li>
+                <Link to="/shop/product/bags-pouches" className="hover:text-white transition-colors">Bags & Pouches</Link>
+              </li>
+              <li>
+                <Link to="/shop/new-arrivals" className="hover:text-white transition-colors">New Arrivals</Link>
+              </li>
+              <li>
+                <Link to="/shop/bestsellers" className="hover:text-white transition-colors">Bestsellers</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 3: Help Menu */}
           <div>
-            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#C9B79C] mb-4">
+            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#E5D2BC] mb-4">
               Help & Info
             </h4>
-            <ul className="space-y-2 text-xs font-sans text-[#F5F1E8]/70">
+            <ul className="space-y-2 text-xs font-sans text-[#FBF6EE]/70">
               <li>
                 <Link to="/about" className="hover:text-white transition-colors">About Sa and Sha</Link>
               </li>
@@ -143,7 +137,7 @@ export const Footer: React.FC = () => {
                 <Link to="/returns-exchanges" className="hover:text-white transition-colors">Returns & Exchanges</Link>
               </li>
               <li>
-                <Link to="/account" className="hover:text-white transition-colors text-[#C9B79C] font-semibold">Customer Portal</Link>
+                <Link to="/account" className="hover:text-white transition-colors text-[#E5D2BC] font-semibold">Customer Portal</Link>
               </li>
               <li>
                 <Link to="/create-account" className="hover:text-white transition-colors font-medium">Create Account</Link>
@@ -161,7 +155,7 @@ export const Footer: React.FC = () => {
                 <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
               </li>
               <li className="pt-2 border-t border-white/5">
-                <Link to="/admin" className="hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-[#C9B79C]">
+                <Link to="/admin" className="hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-[#E5D2BC]">
                   <span>Admin Portal</span>
                 </Link>
               </li>
@@ -170,38 +164,38 @@ export const Footer: React.FC = () => {
 
           {/* Column 4: Newsletter Subscription */}
           <div className="space-y-4">
-            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#C9B79C]">
-              Kora Chronicles
+            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.15em] text-[#E5D2BC]">
+              Stay in Touch
             </h4>
-            <p className="font-sans text-xs text-[#F5F1E8]/70 leading-normal">
-              Subscribe to receive private collection launches, linen care guides, and an automatic 10% off your first order.
+            <p className="font-sans text-xs text-[#FBF6EE]/70 leading-normal">
+              Subscribe for new arrivals, styling edits, and an automatic 10% off your first order.
             </p>
             {!subscribed ? (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
                 <div className="relative">
-                  <Mail className="absolute left-2.5 top-2.5 w-4 h-4 text-[#F5F1E8]/40" />
+                  <Mail className="absolute left-2.5 top-2.5 w-4 h-4 text-[#FBF6EE]/40" />
                   <input
                     type="email"
                     placeholder="Enter your email"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     required
-                    className="w-full bg-[#F5F1E8]/10 text-xs text-[#F5F1E8] pl-9 pr-3 py-2.5 rounded border border-[#C9B79C]/30 focus:outline-none focus:border-[#C9B79C] placeholder-white/30"
+                    className="w-full bg-[#FBF6EE]/10 text-xs text-[#FBF6EE] pl-9 pr-3 py-2.5 rounded border border-[#E5D2BC]/30 focus:outline-none focus:border-[#E5D2BC] placeholder-white/30"
                     id="newsletter-email"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#B85C38] hover:bg-[#B85C38]/90 text-white font-sans font-bold text-xs uppercase tracking-widest py-2.5 px-4 rounded transition-colors"
+                  className="bg-[#B08D57] hover:bg-[#B08D57]/90 text-white font-sans font-bold text-xs uppercase tracking-widest py-2.5 px-4 rounded transition-colors"
                   id="newsletter-subscribe-btn"
                 >
                   Subscribe
                 </button>
               </form>
             ) : (
-              <div className="bg-[#5C6B4A]/10 p-3 rounded border border-[#5C6B4A]/30 flex items-center gap-2 text-xs text-[#8C9C8F] font-sans">
-                <ShieldCheck className="w-5 h-5 text-[#5C6B4A]" />
-                <span>Thank you! You have subscribed to the Kora Chronicles. Check your inbox for 10% off.</span>
+              <div className="bg-[#C98A82]/10 p-3 rounded border border-[#C98A82]/30 flex items-center gap-2 text-xs text-[#8C9C8F] font-sans">
+                <ShieldCheck className="w-5 h-5 text-[#C98A82]" />
+                <span>Thank you! You're subscribed. Check your inbox for 10% off.</span>
               </div>
             )}
           </div>
@@ -209,10 +203,10 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom row: copyright and payment modes */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-sans text-[#F5F1E8]/50">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-sans text-[#FBF6EE]/50">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
-            <span>&copy; {new Date().getFullYear()} Sa and Sha. A Trademark Brand of Rajasthan Exports Overseas Pvt Ltd. Crafted in Jaipur, India.</span>
-            <div className="flex items-center gap-3 text-[10px] text-[#C9B79C]/80">
+            <span>&copy; {new Date().getFullYear()} Sa and Sha. All rights reserved.</span>
+            <div className="flex items-center gap-3 text-[10px] text-[#E5D2BC]/80">
               <Link to="/privacy-policy" className="hover:text-white transition-colors underline underline-offset-2">Privacy Policy</Link>
               <span>•</span>
               <Link to="/terms-and-conditions" className="hover:text-white transition-colors underline underline-offset-2">Terms & Conditions</Link>
@@ -221,11 +215,11 @@ export const Footer: React.FC = () => {
           
           {/* Payment Badges */}
           <div className="flex items-center gap-2">
-            <span className="px-2 py-1 rounded bg-[#F5F1E8]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">VISA</span>
-            <span className="px-2 py-1 rounded bg-[#F5F1E8]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">MASTERCARD</span>
-            <span className="px-2 py-1 rounded bg-[#F5F1E8]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">AMEX</span>
-            <span className="px-2 py-1 rounded bg-[#F5F1E8]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">UPI</span>
-            <span className="px-2 py-1 rounded bg-[#F5F1E8]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">COD</span>
+            <span className="px-2 py-1 rounded bg-[#FBF6EE]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">VISA</span>
+            <span className="px-2 py-1 rounded bg-[#FBF6EE]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">MASTERCARD</span>
+            <span className="px-2 py-1 rounded bg-[#FBF6EE]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">AMEX</span>
+            <span className="px-2 py-1 rounded bg-[#FBF6EE]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">UPI</span>
+            <span className="px-2 py-1 rounded bg-[#FBF6EE]/10 border border-white/5 font-semibold text-[9px] tracking-widest uppercase">COD</span>
           </div>
         </div>
 

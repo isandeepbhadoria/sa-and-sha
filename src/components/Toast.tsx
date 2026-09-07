@@ -15,9 +15,9 @@ export const Toast: React.FC = () => {
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ type: 'spring', damping: 20, stiffness: 300 }}
           id="toast-alert"
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#1F1B16] text-[#F5F1E8] px-5 py-3.5 rounded-lg shadow-xl border border-[#C9B79C]/20 max-w-md w-[calc(100vw-2rem)]"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#2A211C] text-[#FBF6EE] px-5 py-3.5 rounded-lg shadow-xl border border-[#E5D2BC]/20 max-w-md w-[calc(100vw-2rem)]"
         >
-          <div className="bg-[#B85C38] text-white p-1 rounded-full shrink-0">
+          <div className="bg-[#B08D57] text-white p-1 rounded-full shrink-0">
             <CheckCircle2 className="w-4 h-4" />
           </div>
           <div className="flex-1 text-sm font-sans font-medium tracking-wide leading-tight">

@@ -30,24 +30,24 @@ export const AboutPage: React.FC = () => {
   });
 
   return (
-    <div className="bg-[#F5F1E8] text-[#1F1B16] min-h-screen" id="about-page">
+    <div className="bg-[#FBF6EE] text-[#2A211C] min-h-screen" id="about-page">
       
       {/* Container wrapper */}
       <div className="max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-16 space-y-16 md:space-y-24">
 
         {/* Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="text-xs font-sans text-stone-500 flex items-center gap-2">
-          <Link to="/" className="hover:text-[#B85C38] transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#B08D57] transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3 text-stone-400" />
-          <span className="text-[#1F1B16] font-medium">About Sa and Sha</span>
+          <span className="text-[#2A211C] font-medium">About Sa and Sha</span>
         </nav>
 
         {/* Hero Section */}
         <section className="text-center space-y-6 max-w-3xl mx-auto pt-2" id="about-hero">
-          <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B85C38] uppercase block">
+          <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase block">
             ABOUT SA AND SHA
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#1F1B16] leading-[1.15]">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#2A211C] leading-[1.15]">
             Made for a Life Lived Naturally
           </h1>
           <p className="font-sans text-sm md:text-base text-stone-600 leading-relaxed max-w-2xl mx-auto">
@@ -56,7 +56,7 @@ export const AboutPage: React.FC = () => {
         </section>
 
         {/* Feature Editorial Image Banner */}
-        <div className="relative rounded-xl overflow-hidden border border-[#C9B79C]/30 shadow-sm aspect-[16/9] md:aspect-[21/9] bg-[#E4D8C3]">
+        <div className="relative rounded-xl overflow-hidden border border-[#E5D2BC]/30 shadow-sm aspect-[16/9] md:aspect-[21/9] bg-[#F4E6D7]">
           <img
             src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=1600&auto=format&fit=crop&q=80"
             alt="Sa and Sha woven texture detail"
@@ -74,10 +74,10 @@ export const AboutPage: React.FC = () => {
         {/* Brand Story Section */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center" id="brand-story">
           <div className="md:col-span-5 space-y-3">
-            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#5C6B4A] uppercase">
+            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#C98A82] uppercase">
               PHILOSOPHY
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
               The Sa and Sha Story
             </h2>
           </div>
@@ -94,15 +94,15 @@ export const AboutPage: React.FC = () => {
           </div>
         </section>
 
-        <hr className="border-[#C9B79C]/30 my-0" />
+        <hr className="border-[#E5D2BC]/30 my-0" />
 
         {/* Material Philosophy: Why Linen */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center" id="why-linen">
           <div className="md:col-span-6 order-2 md:order-1 space-y-4 font-sans text-xs md:text-sm text-stone-700 leading-relaxed">
-            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#B85C38] uppercase block">
+            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase block">
               MATERIAL
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
               Why Linen
             </h2>
             <p>
@@ -116,7 +116,7 @@ export const AboutPage: React.FC = () => {
             </p>
           </div>
           <div className="md:col-span-6 order-1 md:order-2">
-            <div className="rounded-xl overflow-hidden border border-[#C9B79C]/30 aspect-[4/3] bg-[#E4D8C3]">
+            <div className="rounded-xl overflow-hidden border border-[#E5D2BC]/30 aspect-[4/3] bg-[#F4E6D7]">
               <img
                 src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=1000&auto=format&fit=crop&q=80"
                 alt="Refined linen tailoring"
@@ -129,15 +129,15 @@ export const AboutPage: React.FC = () => {
         </section>
 
         {/* Design Philosophy: Designed with Intention */}
-        <section className="bg-white/80 p-8 md:p-12 rounded-xl border border-[#C9B79C]/30 space-y-6 text-center max-w-4xl mx-auto" id="designed-with-intention">
-          <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#1F1B16]/60 uppercase block">
+        <section className="bg-white/80 p-8 md:p-12 rounded-xl border border-[#E5D2BC]/30 space-y-6 text-center max-w-4xl mx-auto" id="designed-with-intention">
+          <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#2A211C]/60 uppercase block">
             CRAFTSMANSHIP
           </span>
-          <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
             Designed with Intention
           </h2>
           <div className="space-y-4 font-sans text-xs md:text-sm text-stone-700 leading-relaxed max-w-2xl mx-auto">
-            <p className="font-medium text-[#1F1B16]">
+            <p className="font-medium text-[#2A211C]">
               We believe good design is often found in restraint.
             </p>
             <p>
@@ -152,19 +152,19 @@ export const AboutPage: React.FC = () => {
         {/* Three Brand Principles */}
         <section className="space-y-8" id="brand-principles">
           <div className="text-center space-y-2">
-            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#B85C38] uppercase">
+            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase">
               FOUNDATIONAL PILLARS
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
               Our Brand Principles
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pt-4">
             
-            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#C9B79C]/30 space-y-3">
-              <span className="font-serif text-2xl font-bold text-[#B85C38] block">01</span>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">
+            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+              <span className="font-serif text-2xl font-bold text-[#B08D57] block">01</span>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">
                 Natural Comfort
               </h3>
               <p className="font-sans text-xs md:text-sm text-stone-600 leading-relaxed">
@@ -172,9 +172,9 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#C9B79C]/30 space-y-3">
-              <span className="font-serif text-2xl font-bold text-[#5C6B4A] block">02</span>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">
+            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+              <span className="font-serif text-2xl font-bold text-[#C98A82] block">02</span>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">
                 Considered Design
               </h3>
               <p className="font-sans text-xs md:text-sm text-stone-600 leading-relaxed">
@@ -182,9 +182,9 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#C9B79C]/30 space-y-3">
-              <span className="font-serif text-2xl font-bold text-[#1F1B16]/70 block">03</span>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16] tracking-wide">
+            <div className="p-6 md:p-8 bg-white/60 rounded-xl border border-[#E5D2BC]/30 space-y-3">
+              <span className="font-serif text-2xl font-bold text-[#2A211C]/70 block">03</span>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C] tracking-wide">
                 Enduring Style
               </h3>
               <p className="font-sans text-xs md:text-sm text-stone-600 leading-relaxed">
@@ -198,7 +198,7 @@ export const AboutPage: React.FC = () => {
         {/* Craft / Detail Section */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center" id="its-in-the-details">
           <div className="md:col-span-6">
-            <div className="rounded-xl overflow-hidden border border-[#C9B79C]/30 aspect-[4/3] bg-[#E4D8C3]">
+            <div className="rounded-xl overflow-hidden border border-[#E5D2BC]/30 aspect-[4/3] bg-[#F4E6D7]">
               <img
                 src="https://images.unsplash.com/photo-1603252109303-2751441dd157?w=1000&auto=format&fit=crop&q=80"
                 alt="Garment detail and texture"
@@ -209,10 +209,10 @@ export const AboutPage: React.FC = () => {
             </div>
           </div>
           <div className="md:col-span-6 space-y-4 font-sans text-xs md:text-sm text-stone-700 leading-relaxed">
-            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#5C6B4A] uppercase block">
+            <span className="text-[10px] font-sans font-bold tracking-[0.2em] text-[#C98A82] uppercase block">
               ATTENTION TO DETAIL
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
               It's in the Details
             </h2>
             <p>
@@ -225,8 +225,8 @@ export const AboutPage: React.FC = () => {
         </section>
 
         {/* Modern Wardrobe Section & CTA */}
-        <section className="bg-white/80 p-8 md:p-12 rounded-xl border border-[#C9B79C]/30 text-center space-y-6 max-w-3xl mx-auto" id="modern-wardrobe">
-          <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">
+        <section className="bg-white/80 p-8 md:p-12 rounded-xl border border-[#E5D2BC]/30 text-center space-y-6 max-w-3xl mx-auto" id="modern-wardrobe">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">
             For the Modern Wardrobe
           </h2>
           <div className="space-y-3 font-sans text-xs md:text-sm text-stone-700 leading-relaxed max-w-xl mx-auto">
@@ -240,7 +240,7 @@ export const AboutPage: React.FC = () => {
           <div className="pt-2">
             <Link
               to="/shop/all"
-              className="inline-flex items-center gap-2 bg-[#1F1B16] hover:bg-[#B85C38] text-white font-sans font-bold text-xs uppercase tracking-[0.2em] px-7 py-3.5 rounded transition-colors"
+              className="inline-flex items-center gap-2 bg-[#2A211C] hover:bg-[#B08D57] text-white font-sans font-bold text-xs uppercase tracking-[0.2em] px-7 py-3.5 rounded transition-colors"
               id="about-explore-cta"
             >
               <span>Explore the Collection</span>
@@ -250,11 +250,11 @@ export const AboutPage: React.FC = () => {
         </section>
 
         {/* Closing Brand Statement */}
-        <section className="text-center space-y-6 py-8 border-t border-b border-[#C9B79C]/30" id="brand-closing">
-          <div className="font-serif text-xl sm:text-2xl md:text-3xl italic text-[#1F1B16] leading-relaxed max-w-lg mx-auto space-y-1">
+        <section className="text-center space-y-6 py-8 border-t border-b border-[#E5D2BC]/30" id="brand-closing">
+          <div className="font-serif text-xl sm:text-2xl md:text-3xl italic text-[#2A211C] leading-relaxed max-w-lg mx-auto space-y-1">
             <p>Less complication.</p>
             <p>More character.</p>
-            <p className="text-[#B85C38] not-italic font-bold pt-1">Clothing that feels naturally yours.</p>
+            <p className="text-[#B08D57] not-italic font-bold pt-1">Clothing that feels naturally yours.</p>
           </div>
           <div className="font-sans text-xs font-bold tracking-[0.3em] uppercase text-stone-500 pt-2">
             SA AND SHA

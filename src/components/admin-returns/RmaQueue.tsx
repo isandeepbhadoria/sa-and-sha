@@ -117,7 +117,7 @@ export const RmaQueue: React.FC<RmaQueueProps> = ({
                     <span>{item.rma_number}</span>
                     {item.has_photos && (
                       <span title="Evidence photos uploaded">
-                        <Camera className="w-3.5 h-3.5 text-[#B85C38]" />
+                        <Camera className="w-3.5 h-3.5 text-[#B08D57]" />
                       </span>
                     )}
                   </div>
@@ -205,7 +205,7 @@ export const RmaQueue: React.FC<RmaQueueProps> = ({
                   <div className="flex items-center justify-end gap-1.5 flex-wrap">
                     <button
                       onClick={() => onViewDetail(item.id)}
-                      className="px-2.5 py-1 text-xs font-bold bg-[#1F1B16] text-white rounded-lg hover:bg-black transition cursor-pointer flex items-center gap-1"
+                      className="px-2.5 py-1 text-xs font-bold bg-[#2A211C] text-white rounded-lg hover:bg-black transition cursor-pointer flex items-center gap-1"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       View

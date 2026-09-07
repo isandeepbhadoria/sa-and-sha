@@ -13,9 +13,9 @@ interface HeaderProps {
 
 const promoMessages = [
   'FREE SHIPPING ON ALL ORDERS ABOVE ₹1,999',
-  'EXTRA 15% OFF ON FRESH ARRIVALS | CODE: FRESH15',
-  '20% OFF ON LUXURY PURE LINEN COLLECTIONS | CODE: LINENLOVE',
-  'PRE-SHRUNK & PRE-WASHED EUROPEAN FLAX | LUXURY COMFORT'
+  'EXTRA 15% OFF ON NEW ARRIVALS | CODE: FRESH15',
+  '20% OFF YOUR FIRST ORDER | CODE: WELCOME20',
+  'EASY 7-DAY RETURNS & EXCHANGES'
 ];
 
 export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
@@ -36,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   const [mobileCollectionExpanded, setMobileCollectionExpanded] = useState(true);
   const [mobileProductExpanded, setMobileProductExpanded] = useState(true);
   const [mobileShirtsExpanded, setMobileShirtsExpanded] = useState(false);
+  const [mobileShortsSkirtsExpanded, setMobileShortsSkirtsExpanded] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -124,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
   return (
     <>
       {/* 1. Rotating Announcement Bar */}
-      <div className="bg-[#1F1B16] text-[#F5F1E8] py-2 text-[10px] md:text-[11px] font-sans font-semibold tracking-[0.15em] text-center border-b border-[#C9B79C]/10 z-50 relative overflow-hidden h-9 flex items-center justify-center">
+      <div className="bg-[#2A211C] text-[#FBF6EE] py-2 text-[10px] md:text-[11px] font-sans font-semibold tracking-[0.15em] text-center border-b border-[#E5D2BC]/10 z-50 relative overflow-hidden h-9 flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={promoIndex}
@@ -144,8 +145,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
         id="main-app-header"
         className={`sticky top-0 z-40 transition-all duration-300 w-full ${
           isScrolled
-            ? 'bg-[#F5F1E8]/95 backdrop-blur-md shadow-md border-b border-[#C9B79C]/20 py-3'
-            : 'bg-[#F5F1E8] border-b border-[#C9B79C]/10 py-5'
+            ? 'bg-[#FBF6EE]/95 backdrop-blur-md shadow-md border-b border-[#E5D2BC]/20 py-3'
+            : 'bg-[#FBF6EE] border-b border-[#E5D2BC]/10 py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between relative">
@@ -153,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
           {/* Hamburger Menu (Mobile Only) */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-1 text-[#1F1B16] hover:text-[#B85C38] transition-colors"
+            className="md:hidden p-1 text-[#2A211C] hover:text-[#B08D57] transition-colors"
             id="mobile-hamburger-btn"
             aria-label="Open mobile menu"
           >
@@ -183,8 +184,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 className={({ isActive }) =>
                   `font-sans font-semibold text-[11px] lg:text-xs tracking-[0.2em] uppercase flex items-center gap-1.5 pb-1 transition-colors ${
                     isActive || isDesktopShopOpen
-                      ? 'text-[#B85C38] border-b border-[#B85C38]'
-                      : 'text-[#1F1B16] hover:text-[#B85C38]'
+                      ? 'text-[#B08D57] border-b border-[#B08D57]'
+                      : 'text-[#2A211C] hover:text-[#B08D57]'
                   }`
                 }
                 aria-expanded={isDesktopShopOpen}
@@ -194,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 <span>Shop</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    isDesktopShopOpen ? 'rotate-180 text-[#B85C38]' : ''
+                    isDesktopShopOpen ? 'rotate-180 text-[#B08D57]' : ''
                   }`}
                 />
               </NavLink>
@@ -208,197 +209,204 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 6 }}
                     transition={{ duration: 0.2, ease: 'easeOut' }}
-                    className="absolute left-1/2 -translate-x-1/3 top-full w-[780px] bg-[#F5F1E8] border border-[#C9B79C]/40 shadow-2xl p-7 rounded-b-xl grid grid-cols-12 gap-7 z-50 text-[#1F1B16]"
+                    className="absolute left-1/2 -translate-x-1/3 top-full w-[780px] bg-[#FBF6EE] border border-[#E5D2BC]/40 shadow-2xl p-7 rounded-b-xl grid grid-cols-12 gap-7 z-50 text-[#2A211C]"
                   >
-                    {/* Column 1: SHOP BY COLLECTION */}
-                    <div className="col-span-4 space-y-4">
-                      <div className="border-b border-[#C9B79C]/30 pb-2">
-                        <span className="font-serif font-bold text-xs uppercase tracking-[0.16em] text-[#1F1B16] block">
-                          Shop by Collection
-                        </span>
-                      </div>
-                      <ul className="space-y-2.5 text-xs font-sans">
-                        <li>
-                          <Link
-                            to="/shop/collection/pure-linen"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="group flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Pure Linen</span>
-                            <span className="text-[10px] text-[#C9B79C] tracking-wider uppercase group-hover:text-[#B85C38]">100% Flax</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/shop/collection/linen-cotton-blend"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="group flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Linen-Cotton Blend</span>
-                            <span className="text-[10px] text-[#C9B79C] tracking-wider uppercase group-hover:text-[#B85C38]">Hybrid Drape</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/shop/collection/pure-cotton"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="group flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Pure Cotton</span>
-                            <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/shop/collection/chinos"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="group flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Chinos</span>
-                            <span className="text-[10px] text-[#C9B79C] tracking-wider uppercase group-hover:text-[#B85C38]">Tailored Twill</span>
-                          </Link>
-                        </li>
-                      </ul>
-
-                      <div className="pt-2 border-t border-[#C9B79C]/20">
-                        <Link
-                          to="/shop/all"
-                          onClick={() => setIsDesktopShopOpen(false)}
-                          className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#B85C38] hover:underline inline-flex items-center gap-1.5"
-                        >
-                          <span>Explore All Collections</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Column 2: SHOP BY PRODUCT */}
-                    <div className="col-span-4 space-y-4 border-l border-[#C9B79C]/20 pl-6">
-                      <div className="border-b border-[#C9B79C]/30 pb-2">
-                        <span className="font-serif font-bold text-xs uppercase tracking-[0.16em] text-[#1F1B16] block">
-                          Shop by Product
+                    {/* Column 1: SHOP BY CATEGORY */}
+                    <div className="col-span-5 space-y-4">
+                      <div className="border-b border-[#E5D2BC]/30 pb-2">
+                        <span className="font-serif font-bold text-xs uppercase tracking-[0.16em] text-[#2A211C] block">
+                          Shop by Category
                         </span>
                       </div>
                       <ul className="space-y-2 text-xs font-sans">
-                        {/* Shirts with indented Full Sleeve & Half Sleeve children */}
                         <li>
                           <Link
-                            to="/shop/product/shirts"
+                            to="/shop/product/dresses"
                             onClick={() => setIsDesktopShopOpen(false)}
-                            className="font-bold text-[#1F1B16] hover:text-[#B85C38] transition-colors block"
+                            className="flex items-center justify-between text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors"
                           >
-                            Shirts
+                            <span>Dresses</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
                           </Link>
-                          <div className="pl-3 mt-1 space-y-1 border-l border-[#C9B79C]/40 ml-1">
+                        </li>
+
+                        {/* Top & Shirts with indented Tops & Shirts children */}
+                        <li>
+                          <Link
+                            to="/shop/product/tops-shirts"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="flex items-center justify-between font-bold text-[#2A211C] hover:text-[#B08D57] transition-colors"
+                          >
+                            <span>Top & Shirts</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans font-normal tracking-wide">Coming Soon</span>
+                          </Link>
+                          <div className="pl-3 mt-1 space-y-1 border-l border-[#E5D2BC]/40 ml-1">
                             <Link
-                              to="/shop/product/shirts/full-sleeve"
+                              to="/shop/product/tops-shirts/tops"
                               onClick={() => setIsDesktopShopOpen(false)}
-                              className="block text-[11px] text-[#1F1B16]/75 hover:text-[#B85C38] transition-colors"
+                              className="block text-[11px] text-[#2A211C]/75 hover:text-[#B08D57] transition-colors"
                             >
-                              Full Sleeve Shirts
+                              Tops
                             </Link>
                             <Link
-                              to="/shop/product/shirts/half-sleeve"
+                              to="/shop/product/tops-shirts/shirts"
                               onClick={() => setIsDesktopShopOpen(false)}
-                              className="block text-[11px] text-[#1F1B16]/75 hover:text-[#B85C38] transition-colors"
+                              className="block text-[11px] text-[#2A211C]/75 hover:text-[#B08D57] transition-colors"
                             >
-                              Half Sleeve Shirts
+                              Shirts
                             </Link>
                           </div>
                         </li>
 
+                        {/* Shorts & Skirts with indented Shorts & Skirts children */}
                         <li>
                           <Link
-                            to="/shop/product/trousers"
+                            to="/shop/product/shorts-skirts"
                             onClick={() => setIsDesktopShopOpen(false)}
-                            className="text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors block"
+                            className="flex items-center justify-between font-bold text-[#2A211C] hover:text-[#B08D57] transition-colors"
                           >
-                            Trousers
+                            <span>Shorts & Skirts</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans font-normal tracking-wide">Coming Soon</span>
                           </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="/shop/product/chinos"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors block"
-                          >
-                            Chinos
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="/shop/product/shorts"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Shorts</span>
-                            <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="/shop/product/pyjamas"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Pyjamas</span>
-                            <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="/shop/product/kurtas"
-                            onClick={() => setIsDesktopShopOpen(false)}
-                            className="flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
-                          >
-                            <span>Kurtas</span>
-                            <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
-                          </Link>
+                          <div className="pl-3 mt-1 space-y-1 border-l border-[#E5D2BC]/40 ml-1">
+                            <Link
+                              to="/shop/product/shorts-skirts/shorts"
+                              onClick={() => setIsDesktopShopOpen(false)}
+                              className="block text-[11px] text-[#2A211C]/75 hover:text-[#B08D57] transition-colors"
+                            >
+                              Shorts
+                            </Link>
+                            <Link
+                              to="/shop/product/shorts-skirts/skirts"
+                              onClick={() => setIsDesktopShopOpen(false)}
+                              className="block text-[11px] text-[#2A211C]/75 hover:text-[#B08D57] transition-colors"
+                            >
+                              Skirts
+                            </Link>
+                          </div>
                         </li>
 
                         <li>
                           <Link
                             to="/shop/product/co-ord-sets"
                             onClick={() => setIsDesktopShopOpen(false)}
-                            className="flex items-center justify-between text-[#1F1B16]/85 hover:text-[#B85C38] font-medium transition-colors"
+                            className="flex items-center justify-between text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors"
                           >
                             <span>Co-Ord Sets</span>
-                            <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="/shop/product/trousers"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="flex items-center justify-between text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors"
+                          >
+                            <span>Trousers</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="/shop/product/jackets"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="flex items-center justify-between text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors"
+                          >
+                            <span>Jackets</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="/shop/product/bags-pouches"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="flex items-center justify-between text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors"
+                          >
+                            <span>Bags & Pouches</span>
+                            <span className="text-[9px] bg-[#E5D2BC]/30 text-[#2A211C]/75 px-1.5 py-0.5 rounded font-sans tracking-wide">Coming Soon</span>
+                          </Link>
+                        </li>
+                      </ul>
+
+                      <div className="pt-2 border-t border-[#E5D2BC]/20">
+                        <Link
+                          to="/shop/all"
+                          onClick={() => setIsDesktopShopOpen(false)}
+                          className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#B08D57] hover:underline inline-flex items-center gap-1.5"
+                        >
+                          <span>Shop All</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Column 2: QUICK LINKS */}
+                    <div className="col-span-3 space-y-4 border-l border-[#E5D2BC]/20 pl-6">
+                      <div className="border-b border-[#E5D2BC]/30 pb-2">
+                        <span className="font-serif font-bold text-xs uppercase tracking-[0.16em] text-[#2A211C] block">
+                          Quick Links
+                        </span>
+                      </div>
+                      <ul className="space-y-2.5 text-xs font-sans">
+                        <li>
+                          <Link
+                            to="/shop/new-arrivals"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors block"
+                          >
+                            New Arrivals
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/shop/bestsellers"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors block"
+                          >
+                            Bestsellers
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/shop/collection/accessories"
+                            onClick={() => setIsDesktopShopOpen(false)}
+                            className="text-[#2A211C]/85 hover:text-[#B08D57] font-medium transition-colors block"
+                          >
+                            Accessories
                           </Link>
                         </li>
                       </ul>
                     </div>
 
-                    {/* Column 3: Featured Story Highlight */}
-                    <div className="col-span-4 border-l border-[#C9B79C]/20 pl-6 flex flex-col justify-between">
+                    {/* Column 3: Featured Category Highlight */}
+                    <div className="col-span-4 border-l border-[#E5D2BC]/20 pl-6 flex flex-col justify-between">
                       <div>
-                        <div className="rounded-lg overflow-hidden bg-[#E4D8C3] relative h-36 border border-[#C9B79C]/30 shadow-inner group/card">
+                        <div className="rounded-lg overflow-hidden bg-[#F4E6D7] relative h-36 border border-[#E5D2BC]/30 shadow-inner group/card">
                           <img
-                            src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80"
-                            alt="European Flax Linen"
+                            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80"
+                            alt="New Arrivals"
                             className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700"
                             referrerPolicy="no-referrer"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent p-3.5 flex flex-col justify-end text-white">
-                            <span className="text-[9px] font-sans tracking-[0.2em] font-bold uppercase text-[#C9B79C]">European Flax</span>
-                            <h4 className="font-serif font-bold text-sm leading-tight text-[#F5F1E8]">Artisanal Pure Linen</h4>
+                            <span className="text-[9px] font-sans tracking-[0.2em] font-bold uppercase text-[#E5D2BC]">Just In</span>
+                            <h4 className="font-serif font-bold text-sm leading-tight text-[#FBF6EE]">New Arrivals</h4>
                           </div>
                         </div>
-                        <p className="font-sans text-[11px] text-[#1F1B16]/70 mt-3 leading-relaxed">
-                          Certified Belgian flax woven with patient craftsmanship for airy tropical cooling.
+                        <p className="font-sans text-[11px] text-[#2A211C]/70 mt-3 leading-relaxed">
+                          Fresh styles added every week — dresses, co-ord sets, and more.
                         </p>
                       </div>
                       <div className="pt-3">
                         <Link
-                          to="/shop/collection/pure-linen"
+                          to="/shop/new-arrivals"
                           onClick={() => setIsDesktopShopOpen(false)}
-                          className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#B85C38] hover:underline inline-flex items-center gap-1.5"
+                          className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#B08D57] hover:underline inline-flex items-center gap-1.5"
                         >
-                          <span>Explore Pure Linen</span>
+                          <span>Shop New Arrivals</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
@@ -413,12 +421,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
               to="/shop/bestsellers"
               className={({ isActive }) =>
                 `font-sans font-semibold text-[11px] lg:text-xs tracking-[0.2em] uppercase pb-1 border-b transition-colors flex items-center gap-1 ${
-                  isActive ? 'text-[#B85C38] border-[#B85C38]' : 'text-[#1F1B16] hover:text-[#B85C38] border-transparent'
+                  isActive ? 'text-[#B08D57] border-[#B08D57]' : 'text-[#2A211C] hover:text-[#B08D57] border-transparent'
                 }`
               }
             >
               <span>Bestsellers</span>
-              <span className="bg-[#B85C38] text-white px-1.5 py-0.5 rounded-[3px] text-[8px] font-sans font-bold leading-none tracking-normal">HOT</span>
+              <span className="bg-[#B08D57] text-white px-1.5 py-0.5 rounded-[3px] text-[8px] font-sans font-bold leading-none tracking-normal">HOT</span>
             </NavLink>
 
             {/* Fresh Arrivals link */}
@@ -426,12 +434,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
               to="/shop/new-arrivals"
               className={({ isActive }) =>
                 `font-sans font-semibold text-[11px] lg:text-xs tracking-[0.2em] uppercase pb-1 border-b transition-colors flex items-center gap-1 ${
-                  isActive ? 'text-[#B85C38] border-[#B85C38]' : 'text-[#1F1B16] hover:text-[#B85C38] border-transparent'
+                  isActive ? 'text-[#B08D57] border-[#B08D57]' : 'text-[#2A211C] hover:text-[#B08D57] border-transparent'
                 }`
               }
             >
               <span>Fresh Arrivals</span>
-              <span className="bg-[#5C6B4A] text-white px-1.5 py-0.5 rounded-[3px] text-[8px] font-sans font-bold leading-none tracking-normal">NEW</span>
+              <span className="bg-[#C98A82] text-white px-1.5 py-0.5 rounded-[3px] text-[8px] font-sans font-bold leading-none tracking-normal">NEW</span>
             </NavLink>
           </nav>
 
@@ -440,7 +448,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Inline Search Bar Trigger */}
             <div className="relative">
               {isSearchOpen ? (
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-[#F5F1E8] border border-[#C9B79C] rounded-full px-3 py-1.5 w-[200px] md:w-[280px] shadow-lg z-50">
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-[#FBF6EE] border border-[#E5D2BC] rounded-full px-3 py-1.5 w-[200px] md:w-[280px] shadow-lg z-50">
                   <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center">
                     <input
                       ref={searchInputRef}
@@ -448,7 +456,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                       placeholder="Search Sa and Sha..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent text-xs font-sans text-[#1F1B16] focus:outline-none focus:ring-0"
+                      className="w-full bg-transparent text-xs font-sans text-[#2A211C] focus:outline-none focus:ring-0"
                       id="header-search-input"
                     />
                   </form>
@@ -460,13 +468,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                     className="p-0.5 hover:bg-black/5 rounded-full"
                     id="close-search-btn"
                   >
-                    <X className="w-3.5 h-3.5 text-[#1F1B16]/60" />
+                    <X className="w-3.5 h-3.5 text-[#2A211C]/60" />
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className="p-1.5 hover:text-[#B85C38] transition-colors text-[#1F1B16]"
+                  className="p-1.5 hover:text-[#B08D57] transition-colors text-[#2A211C]"
                   id="open-search-btn"
                   aria-label="Open search panel"
                 >
@@ -481,28 +489,28 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 top-[120%] bg-white border border-[#C9B79C]/30 rounded-lg shadow-2xl w-[260px] md:w-[320px] overflow-hidden z-50"
+                    className="absolute right-0 top-[120%] bg-white border border-[#E5D2BC]/30 rounded-lg shadow-2xl w-[260px] md:w-[320px] overflow-hidden z-50"
                   >
-                    <div className="p-2 border-b border-[#C9B79C]/10 bg-[#E4D8C3]/20">
-                      <p className="text-[10px] uppercase font-sans font-bold text-[#1F1B16]/50 tracking-wider">Product Matches</p>
+                    <div className="p-2 border-b border-[#E5D2BC]/10 bg-[#F4E6D7]/20">
+                      <p className="text-[10px] uppercase font-sans font-bold text-[#2A211C]/50 tracking-wider">Product Matches</p>
                     </div>
-                    <div className="divide-y divide-[#C9B79C]/10">
+                    <div className="divide-y divide-[#E5D2BC]/10">
                       {searchResults.map((product) => (
                         <div
                           key={product.id}
                           onClick={() => handleSearchResultClick(product)}
-                          className="p-3 flex items-center gap-3 hover:bg-[#E4D8C3]/30 cursor-pointer transition-colors"
+                          className="p-3 flex items-center gap-3 hover:bg-[#F4E6D7]/30 cursor-pointer transition-colors"
                         >
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-10 h-12 object-cover rounded bg-[#E4D8C3]/30"
+                            className="w-10 h-12 object-cover rounded bg-[#F4E6D7]/30"
                             referrerPolicy="no-referrer"
                           />
                           <div className="flex-1">
-                            <h5 className="text-[11px] font-semibold text-[#1F1B16] line-clamp-1">{product.name}</h5>
-                            <p className="text-[9px] text-[#C9B79C] uppercase font-sans tracking-widest">{product.fabric}</p>
-                            <span className="text-[10px] font-bold text-[#1F1B16]">₹{product.price.toLocaleString('en-IN')}</span>
+                            <h5 className="text-[11px] font-semibold text-[#2A211C] line-clamp-1">{product.name}</h5>
+                            <p className="text-[9px] text-[#E5D2BC] uppercase font-sans tracking-widest">{product.fabric}</p>
+                            <span className="text-[10px] font-bold text-[#2A211C]">₹{product.price.toLocaleString('en-IN')}</span>
                           </div>
                         </div>
                       ))}
@@ -515,7 +523,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Customer Account Link */}
             <Link
               to="/account"
-              className="p-1.5 hover:text-[#B85C38] transition-colors text-[#1F1B16] relative"
+              className="p-1.5 hover:text-[#B08D57] transition-colors text-[#2A211C] relative"
               id="customer-portal-icon"
               aria-label="Customer Account Portal"
               title="Customer Account Portal"
@@ -526,13 +534,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Wishlist Link Icon with Badge */}
             <Link
               to="/wishlist"
-              className="p-1.5 hover:text-[#B85C38] transition-colors text-[#1F1B16] relative"
+              className="p-1.5 hover:text-[#B08D57] transition-colors text-[#2A211C] relative"
               id="wishlist-link-icon"
               aria-label="Wishlist page"
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#B85C38] text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-sans font-bold leading-none shadow shadow-[#B85C38]/40">
+                <span className="absolute -top-0.5 -right-0.5 bg-[#B08D57] text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-sans font-bold leading-none shadow shadow-[#B08D57]/40">
                   {wishlistCount}
                 </span>
               )}
@@ -541,13 +549,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             {/* Cart/Bag trigger Button with Badge */}
             <button
               onClick={onOpenCart}
-              className="p-1.5 hover:text-[#B85C38] transition-colors text-[#1F1B16] relative active:scale-95 transition-transform"
+              className="p-1.5 hover:text-[#B08D57] transition-colors text-[#2A211C] relative active:scale-95 transition-transform"
               id="cart-trigger-btn"
               aria-label="Open cart bag"
             >
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#1F1B16] text-[#F5F1E8] rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-sans font-bold leading-none shadow shadow-[#1F1B16]/30">
+                <span className="absolute -top-0.5 -right-0.5 bg-[#2A211C] text-[#FBF6EE] rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-sans font-bold leading-none shadow shadow-[#2A211C]/30">
                   {cartCount}
                 </span>
               )}
@@ -575,12 +583,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed left-0 top-0 bottom-0 w-full max-w-sm bg-[#F5F1E8] z-50 shadow-2xl flex flex-col md:hidden border-r border-[#C9B79C]/30"
+              className="fixed left-0 top-0 bottom-0 w-full max-w-sm bg-[#FBF6EE] z-50 shadow-2xl flex flex-col md:hidden border-r border-[#E5D2BC]/30"
               id="mobile-nav-drawer"
             >
               {/* Header */}
-              <div className="p-5 border-b border-[#C9B79C]/30 flex justify-between items-center bg-[#1F1B16] text-[#F5F1E8]">
-                <span className="font-serif font-bold uppercase tracking-[0.2em] text-sm text-[#C9B79C]">Menu</span>
+              <div className="p-5 border-b border-[#E5D2BC]/30 flex justify-between items-center bg-[#2A211C] text-[#FBF6EE]">
+                <span className="font-serif font-bold uppercase tracking-[0.2em] text-sm text-[#E5D2BC]">Menu</span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-1.5 hover:bg-white/10 rounded-full text-white"
@@ -591,13 +599,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
               </div>
 
               {/* Items Tree Accordion */}
-              <div className="flex-1 overflow-y-auto py-4 px-5 space-y-4 font-sans text-sm font-semibold tracking-wider uppercase text-[#1F1B16]">
+              <div className="flex-1 overflow-y-auto py-4 px-5 space-y-4 font-sans text-sm font-semibold tracking-wider uppercase text-[#2A211C]">
                 
                 {/* Home link */}
                 <Link
                   to="/"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="block py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   Home
                 </Link>
@@ -609,13 +617,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                     onClick={() => setMobileCollectionExpanded(!mobileCollectionExpanded)}
                     aria-expanded={mobileCollectionExpanded}
                     aria-controls="mobile-collection-panel"
-                    className="w-full flex justify-between items-center py-2.5 min-h-[44px] border-b border-[#C9B79C]/20 text-left hover:text-[#B85C38] transition-colors"
+                    className="w-full flex justify-between items-center py-2.5 min-h-[44px] border-b border-[#E5D2BC]/20 text-left hover:text-[#B08D57] transition-colors"
                     id="mobile-nav-collections-toggle"
                   >
-                    <span className="text-xs tracking-[0.14em]">Shop by Collection</span>
+                    <span className="text-xs tracking-[0.14em]">Shop by Category</span>
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${
-                        mobileCollectionExpanded ? 'rotate-180 text-[#B85C38]' : ''
+                        mobileCollectionExpanded ? 'rotate-180 text-[#B08D57]' : ''
                       }`}
                     />
                   </button>
@@ -627,59 +635,168 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="overflow-hidden pl-3 mt-1 space-y-2 font-normal text-xs uppercase text-[#1F1B16]/80 tracking-wider border-l-2 border-[#C9B79C]/40 ml-2 py-1.5"
+                        className="overflow-hidden pl-3 mt-1 space-y-1.5 font-normal text-xs uppercase text-[#2A211C]/80 tracking-wider border-l-2 border-[#E5D2BC]/40 ml-2 py-1.5"
                       >
                         <Link
-                          to="/shop/collection/pure-linen"
+                          to="/shop/product/dresses"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Pure Linen</span>
-                          <span className="text-[10px] text-[#C9B79C] tracking-widest lowercase font-sans">100% flax</span>
+                          Dresses
                         </Link>
+
+                        {/* Top & Shirts with sub-navigation */}
+                        <div className="py-1">
+                          <div className="flex items-center justify-between min-h-[38px]">
+                            <Link
+                              to="/shop/product/tops-shirts"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="hover:text-[#B08D57] font-bold text-[#2A211C]"
+                            >
+                              Top & Shirts
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => setMobileShirtsExpanded(!mobileShirtsExpanded)}
+                              aria-expanded={mobileShirtsExpanded}
+                              aria-label="Toggle Top & Shirts options"
+                              className="p-2 text-[#2A211C]/60 hover:text-[#B08D57]"
+                            >
+                              <ChevronDown
+                                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                  mobileShirtsExpanded ? 'rotate-180 text-[#B08D57]' : ''
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <AnimatePresence>
+                            {mobileShirtsExpanded && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="pl-3 py-1 space-y-1 border-l border-[#E5D2BC]/30 ml-1 text-[11px] normal-case"
+                              >
+                                <Link
+                                  to="/shop/product/tops-shirts/tops"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1 min-h-[32px] hover:text-[#B08D57]"
+                                >
+                                  Tops
+                                </Link>
+                                <Link
+                                  to="/shop/product/tops-shirts/shirts"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1 min-h-[32px] hover:text-[#B08D57]"
+                                >
+                                  Shirts
+                                </Link>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Shorts & Skirts with sub-navigation */}
+                        <div className="py-1">
+                          <div className="flex items-center justify-between min-h-[38px]">
+                            <Link
+                              to="/shop/product/shorts-skirts"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="hover:text-[#B08D57] font-bold text-[#2A211C]"
+                            >
+                              Shorts & Skirts
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => setMobileShortsSkirtsExpanded(!mobileShortsSkirtsExpanded)}
+                              aria-expanded={mobileShortsSkirtsExpanded}
+                              aria-label="Toggle Shorts & Skirts options"
+                              className="p-2 text-[#2A211C]/60 hover:text-[#B08D57]"
+                            >
+                              <ChevronDown
+                                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                  mobileShortsSkirtsExpanded ? 'rotate-180 text-[#B08D57]' : ''
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <AnimatePresence>
+                            {mobileShortsSkirtsExpanded && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="pl-3 py-1 space-y-1 border-l border-[#E5D2BC]/30 ml-1 text-[11px] normal-case"
+                              >
+                                <Link
+                                  to="/shop/product/shorts-skirts/shorts"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1 min-h-[32px] hover:text-[#B08D57]"
+                                >
+                                  Shorts
+                                </Link>
+                                <Link
+                                  to="/shop/product/shorts-skirts/skirts"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1 min-h-[32px] hover:text-[#B08D57]"
+                                >
+                                  Skirts
+                                </Link>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
                         <Link
-                          to="/shop/collection/linen-cotton-blend"
+                          to="/shop/product/co-ord-sets"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Linen-Cotton Blend</span>
-                          <span className="text-[10px] text-[#C9B79C] tracking-widest lowercase font-sans">hybrid</span>
+                          Co-Ord Sets
                         </Link>
+
                         <Link
-                          to="/shop/collection/pure-cotton"
+                          to="/shop/product/trousers"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Pure Cotton</span>
-                          <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded normal-case tracking-normal">Coming Soon</span>
+                          Trousers
                         </Link>
+
                         <Link
-                          to="/shop/collection/chinos"
+                          to="/shop/product/jackets"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Chinos</span>
-                          <span className="text-[10px] text-[#C9B79C] tracking-widest lowercase font-sans">twill</span>
+                          Jackets
+                        </Link>
+
+                        <Link
+                          to="/shop/product/bags-pouches"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
+                        >
+                          Bags & Pouches
                         </Link>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Shop by Product Accordion */}
+                {/* Quick Links Accordion */}
                 <div>
                   <button
                     type="button"
                     onClick={() => setMobileProductExpanded(!mobileProductExpanded)}
                     aria-expanded={mobileProductExpanded}
                     aria-controls="mobile-product-panel"
-                    className="w-full flex justify-between items-center py-2.5 min-h-[44px] border-b border-[#C9B79C]/20 text-left hover:text-[#B85C38] transition-colors"
+                    className="w-full flex justify-between items-center py-2.5 min-h-[44px] border-b border-[#E5D2BC]/20 text-left hover:text-[#B08D57] transition-colors"
                     id="mobile-nav-products-toggle"
                   >
-                    <span className="text-xs tracking-[0.14em]">Shop by Product</span>
+                    <span className="text-xs tracking-[0.14em]">Quick Links</span>
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${
-                        mobileProductExpanded ? 'rotate-180 text-[#B85C38]' : ''
+                        mobileProductExpanded ? 'rotate-180 text-[#B08D57]' : ''
                       }`}
                     />
                   </button>
@@ -691,109 +808,30 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="overflow-hidden pl-3 mt-1 space-y-1.5 font-normal text-xs uppercase text-[#1F1B16]/80 tracking-wider border-l-2 border-[#C9B79C]/40 ml-2 py-1.5"
+                        className="overflow-hidden pl-3 mt-1 space-y-1.5 font-normal text-xs uppercase text-[#2A211C]/80 tracking-wider border-l-2 border-[#E5D2BC]/40 ml-2 py-1.5"
                       >
-                        {/* Shirts with sub-navigation */}
-                        <div className="py-1">
-                          <div className="flex items-center justify-between min-h-[38px]">
-                            <Link
-                              to="/shop/product/shirts"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="hover:text-[#B85C38] font-bold text-[#1F1B16]"
-                            >
-                              Shirts
-                            </Link>
-                            <button
-                              type="button"
-                              onClick={() => setMobileShirtsExpanded(!mobileShirtsExpanded)}
-                              aria-expanded={mobileShirtsExpanded}
-                              aria-label="Toggle Shirt sleeve options"
-                              className="p-2 text-[#1F1B16]/60 hover:text-[#B85C38]"
-                            >
-                              <ChevronDown
-                                className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                                  mobileShirtsExpanded ? 'rotate-180 text-[#B85C38]' : ''
-                                }`}
-                              />
-                            </button>
-                          </div>
-                          <AnimatePresence>
-                            {mobileShirtsExpanded && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="pl-3 py-1 space-y-1 border-l border-[#C9B79C]/30 ml-1 text-[11px] normal-case"
-                              >
-                                <Link
-                                  to="/shop/product/shirts/full-sleeve"
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block py-1 min-h-[32px] hover:text-[#B85C38]"
-                                >
-                                  Full Sleeve Shirts
-                                </Link>
-                                <Link
-                                  to="/shop/product/shirts/half-sleeve"
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block py-1 min-h-[32px] hover:text-[#B85C38]"
-                                >
-                                  Half Sleeve Shirts
-                                </Link>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-
                         <Link
-                          to="/shop/product/trousers"
+                          to="/shop/new-arrivals"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="block py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          Trousers
+                          New Arrivals
                         </Link>
 
                         <Link
-                          to="/shop/product/shorts"
+                          to="/shop/bestsellers"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Shorts</span>
-                          <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded normal-case tracking-normal">Coming Soon</span>
+                          Bestsellers
                         </Link>
 
                         <Link
-                          to="/shop/product/pyjamas"
+                          to="/shop/collection/accessories"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
+                          className="block py-1.5 min-h-[38px] hover:text-[#B08D57]"
                         >
-                          <span>Pyjamas</span>
-                          <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded normal-case tracking-normal">Coming Soon</span>
-                        </Link>
-
-                        <Link
-                          to="/shop/product/kurtas"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
-                        >
-                          <span>Kurtas</span>
-                          <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded normal-case tracking-normal">Coming Soon</span>
-                        </Link>
-
-                        <Link
-                          to="/shop/product/co-ord-sets"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center justify-between py-1.5 min-h-[38px] hover:text-[#B85C38]"
-                        >
-                          <span>Co-Ord Sets</span>
-                          <span className="text-[9px] bg-[#C9B79C]/30 text-[#1F1B16]/75 px-1.5 py-0.5 rounded normal-case tracking-normal">Coming Soon</span>
-                        </Link>
-
-                        <Link
-                          to="/shop/product/chinos"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="block py-1.5 min-h-[38px] hover:text-[#B85C38]"
-                        >
-                          Chinos
+                          Accessories
                         </Link>
                       </motion.div>
                     )}
@@ -804,27 +842,27 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 <Link
                   to="/shop/bestsellers"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="flex items-center justify-between py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   <span>Bestsellers</span>
-                  <span className="bg-[#B85C38] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold leading-none tracking-normal">HOT</span>
+                  <span className="bg-[#B08D57] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold leading-none tracking-normal">HOT</span>
                 </Link>
 
                 {/* Fresh Arrivals */}
                 <Link
                   to="/shop/new-arrivals"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="flex items-center justify-between py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   <span>Fresh Arrivals</span>
-                  <span className="bg-[#5C6B4A] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold leading-none tracking-normal">NEW</span>
+                  <span className="bg-[#C98A82] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold leading-none tracking-normal">NEW</span>
                 </Link>
 
                 {/* Wishlist */}
                 <Link
                   to="/wishlist"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="block py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   My Wishlist ({wishlistCount})
                 </Link>
@@ -833,7 +871,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 <Link
                   to="/track-order"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="block py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   Track Order
                 </Link>
@@ -842,20 +880,20 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
                 <Link
                   to="/returns-exchanges"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 border-b border-[#C9B79C]/20 hover:text-[#B85C38]"
+                  className="block py-2.5 border-b border-[#E5D2BC]/20 hover:text-[#B08D57]"
                 >
                   Returns & Exchanges
                 </Link>
               </div>
 
               {/* Sidebar footer banner */}
-              <div className="p-5 border-t border-[#C9B79C]/30 bg-[#E4D8C3]/20 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-sans text-[#1F1B16] font-semibold">
-                  <Sparkles className="w-4 h-4 text-[#B85C38]" />
-                  <span>100% Pure Italian Flax certified.</span>
+              <div className="p-5 border-t border-[#E5D2BC]/30 bg-[#F4E6D7]/20 space-y-3">
+                <div className="flex items-center gap-2 text-xs font-sans text-[#2A211C] font-semibold">
+                  <Sparkles className="w-4 h-4 text-[#B08D57]" />
+                  <span>New styles added every week.</span>
                 </div>
-                <p className="text-[11px] text-[#1F1B16]/60 leading-normal">
-                  Sa and Sha represents luxury linen craftsmanship. Pre-washed for incredible softness and ultimate ventilation.
+                <p className="text-[11px] text-[#2A211C]/60 leading-normal">
+                  Sa and Sha designs everyday elegance — quality fabrics, considered fits, and details that last.
                 </p>
               </div>
             </motion.div>

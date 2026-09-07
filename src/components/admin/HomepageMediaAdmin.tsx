@@ -334,10 +334,10 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
   return (
     <div className="space-y-6" id="admin-homepage-media-cms">
       {/* Top Banner */}
-      <div className="bg-white p-6 rounded-lg border border-[#C9B79C]/30 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-6 rounded-lg border border-[#E5D2BC]/30 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-sans font-bold tracking-[0.2em] text-[#B85C38] uppercase">
+            <span className="text-xs font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase">
               Storefront CMS
             </span>
             <span className="text-xs text-stone-300">|</span>
@@ -345,7 +345,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               Admin Media Manager
             </span>
           </div>
-          <h2 className="text-2xl font-serif font-bold text-[#1F1B16] mt-1">
+          <h2 className="text-2xl font-serif font-bold text-[#2A211C] mt-1">
             Homepage Media CMS
           </h2>
           <p className="text-xs text-stone-600 font-sans mt-1 max-w-2xl">
@@ -388,7 +388,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
           id="media-subtab-hero"
           className={`py-3 px-5 text-xs font-bold uppercase tracking-wider border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
             activeSubTab === "hero"
-              ? "border-[#B85C38] text-[#B85C38]"
+              ? "border-[#B08D57] text-[#B08D57]"
               : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
@@ -401,7 +401,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
           id="media-subtab-instagram"
           className={`py-3 px-5 text-xs font-bold uppercase tracking-wider border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
             activeSubTab === "instagram"
-              ? "border-[#B85C38] text-[#B85C38]"
+              ? "border-[#B08D57] text-[#B08D57]"
               : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
@@ -414,7 +414,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
           id="media-subtab-reels"
           className={`py-3 px-5 text-xs font-bold uppercase tracking-wider border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
             activeSubTab === "reels"
-              ? "border-[#B85C38] text-[#B85C38]"
+              ? "border-[#B08D57] text-[#B08D57]"
               : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
@@ -430,8 +430,8 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
         <div className="space-y-6">
           {/* Slider Global Settings Card */}
           <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-xs space-y-4">
-            <h3 className="font-serif text-lg font-bold text-[#1F1B16] flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-[#B85C38]" />
+            <h3 className="font-serif text-lg font-bold text-[#2A211C] flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#B08D57]" />
               <span>Hero Carousel Configuration</span>
             </h3>
 
@@ -439,7 +439,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               {/* Autoplay Toggle */}
               <div className="flex items-center justify-between p-4 bg-stone-50 rounded border border-stone-200">
                 <div>
-                  <span className="font-sans text-xs font-bold text-[#1F1B16] block">
+                  <span className="font-sans text-xs font-bold text-[#2A211C] block">
                     Automatic Slide Transition
                   </span>
                   <span className="text-[11px] font-sans text-stone-500">
@@ -456,17 +456,17 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                     }))
                   }
                   id="hero-autoplay-toggle"
-                  className="w-5 h-5 accent-[#B85C38] cursor-pointer"
+                  className="w-5 h-5 accent-[#B08D57] cursor-pointer"
                 />
               </div>
 
               {/* Interval Slider */}
               <div className="p-4 bg-stone-50 rounded border border-stone-200 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="font-sans text-xs font-bold text-[#1F1B16]">
+                  <span className="font-sans text-xs font-bold text-[#2A211C]">
                     Transition Interval
                   </span>
-                  <span className="text-xs font-bold text-[#B85C38]">
+                  <span className="text-xs font-bold text-[#B08D57]">
                     {heroConfig.settings.slideInterval}s
                   </span>
                 </div>
@@ -483,7 +483,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                     }))
                   }
                   id="hero-interval-slider"
-                  className="w-full accent-[#B85C38] cursor-pointer"
+                  className="w-full accent-[#B08D57] cursor-pointer"
                 />
                 <span className="text-[10px] text-stone-500 block">
                   Allowed range: 3 to 10 seconds (default: 5s)
@@ -491,11 +491,11 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               </div>
 
               {/* Dimension Specification Badge */}
-              <div className="p-4 bg-[#FAF7F2] rounded border border-[#C9B79C]/40 flex flex-col justify-center">
-                <span className="text-[11px] font-bold text-[#B85C38] uppercase tracking-wider">
+              <div className="p-4 bg-[#FAF7F2] rounded border border-[#E5D2BC]/40 flex flex-col justify-center">
+                <span className="text-[11px] font-bold text-[#B08D57] uppercase tracking-wider">
                   Canonical Desktop Specification
                 </span>
-                <span className="text-sm font-bold text-[#1F1B16] mt-0.5">
+                <span className="text-sm font-bold text-[#2A211C] mt-0.5">
                   2400 × 1000 pixels (12:5 Aspect Ratio)
                 </span>
                 <span className="text-[11px] text-stone-600 mt-1">
@@ -508,7 +508,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
           {/* Slides List */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                 Hero Slides ({heroConfig.slides.length} of 5)
               </h3>
 
@@ -543,7 +543,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                 className={`px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 ${
                   heroConfig.slides.length >= 5
                     ? "bg-stone-200 text-stone-400 cursor-not-allowed"
-                    : "bg-[#1F1B16] hover:bg-[#B85C38] text-white cursor-pointer transition-colors shadow-xs"
+                    : "bg-[#2A211C] hover:bg-[#B08D57] text-white cursor-pointer transition-colors shadow-xs"
                 }`}
               >
                 <Plus className="w-4 h-4" />
@@ -568,7 +568,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                       <span className="w-6 h-6 rounded-full bg-stone-100 text-stone-700 text-xs font-bold flex items-center justify-center">
                         {index + 1}
                       </span>
-                      <span className="font-sans font-bold text-sm text-[#1F1B16]">
+                      <span className="font-sans font-bold text-sm text-[#2A211C]">
                         {slide.heading || `Slide #${index + 1}`}
                       </span>
                       <span
@@ -674,7 +674,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                           }}
                           className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10 flex items-center justify-center"
                         >
-                          <div className="w-5 h-5 rounded-full border-2 border-white bg-[#B85C38]/80 shadow-md flex items-center justify-center animate-pulse">
+                          <div className="w-5 h-5 rounded-full border-2 border-white bg-[#B08D57]/80 shadow-md flex items-center justify-center animate-pulse">
                             <div className="w-1.5 h-1.5 rounded-full bg-white" />
                           </div>
                         </div>
@@ -709,7 +709,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }}
                             className={`py-1 px-1.5 rounded text-[11px] font-medium border text-center transition-colors cursor-pointer ${
                               (slide.focalPosition?.y ?? 50) <= 30
-                                ? "bg-[#B85C38] text-white border-[#B85C38]"
+                                ? "bg-[#B08D57] text-white border-[#B08D57]"
                                 : "bg-white text-stone-700 border-stone-200 hover:border-stone-400"
                             }`}
                           >
@@ -727,7 +727,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }}
                             className={`py-1 px-1.5 rounded text-[11px] font-medium border text-center transition-colors cursor-pointer ${
                               (slide.focalPosition?.y ?? 50) > 30 && (slide.focalPosition?.y ?? 50) < 70
-                                ? "bg-[#B85C38] text-white border-[#B85C38]"
+                                ? "bg-[#B08D57] text-white border-[#B08D57]"
                                 : "bg-white text-stone-700 border-stone-200 hover:border-stone-400"
                             }`}
                           >
@@ -745,7 +745,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }}
                             className={`py-1 px-1.5 rounded text-[11px] font-medium border text-center transition-colors cursor-pointer ${
                               (slide.focalPosition?.y ?? 50) >= 70
-                                ? "bg-[#B85C38] text-white border-[#B85C38]"
+                                ? "bg-[#B08D57] text-white border-[#B08D57]"
                                 : "bg-white text-stone-700 border-stone-200 hover:border-stone-400"
                             }`}
                           >
@@ -770,7 +770,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
 
                       {/* File Upload Button */}
                       <div>
-                        <label className="w-full py-2 px-3 border border-dashed border-stone-300 hover:border-[#B85C38] rounded text-xs font-bold text-stone-700 hover:text-[#B85C38] bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                        <label className="w-full py-2 px-3 border border-dashed border-stone-300 hover:border-[#B08D57] rounded text-xs font-bold text-stone-700 hover:text-[#B08D57] bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2 cursor-pointer">
                           <Upload className="w-3.5 h-3.5" />
                           <span>Upload 2400 × 1000 Image</span>
                           <input
@@ -828,7 +828,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="https://images.unsplash.com/... or /uploads/..."
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -850,7 +850,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="Describe the image content..."
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -872,7 +872,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="e.g. Summer Solace in Pure Linen"
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -894,7 +894,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="e.g. Artisanal European Flax"
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -916,7 +916,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="e.g. Shop Shirts"
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -938,7 +938,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           placeholder="e.g. /shop/shirts"
-                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B85C38] focus:border-[#B85C38]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
 
@@ -957,7 +957,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                             }));
                           }}
                           id={`hero-slide-enabled-${index}`}
-                          className="w-4 h-4 accent-[#B85C38] cursor-pointer"
+                          className="w-4 h-4 accent-[#B08D57] cursor-pointer"
                         />
                         <label
                           htmlFor={`hero-slide-enabled-${index}`}
@@ -979,7 +979,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               onClick={saveHero}
               disabled={isSaving}
               id="hero-save-btn"
-              className="px-6 py-3 rounded bg-[#B85C38] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-6 py-3 rounded bg-[#B08D57] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? "Saving..." : "Save Hero Slider Changes"}</span>
@@ -995,7 +995,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
         <div className="space-y-6">
           <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                 Best of Instagram Feed ({instagramConfig.items.length} items)
               </h3>
               <p className="text-xs text-stone-600 font-sans mt-0.5">
@@ -1024,7 +1024,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                 }));
               }}
               id="insta-add-item-btn"
-              className="px-4 py-2 rounded bg-[#1F1B16] hover:bg-[#B85C38] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-xs self-start sm:self-auto"
+              className="px-4 py-2 rounded bg-[#2A211C] hover:bg-[#B08D57] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-xs self-start sm:self-auto"
             >
               <Plus className="w-4 h-4" />
               <span>Add Social Card</span>
@@ -1041,7 +1041,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                   className="bg-white rounded-lg border border-stone-200 p-4 shadow-xs space-y-3"
                 >
                   <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
-                    <span className="font-sans font-bold text-xs text-[#1F1B16]">
+                    <span className="font-sans font-bold text-xs text-[#2A211C]">
                       Item #{index + 1}
                     </span>
                     <div className="flex items-center gap-1">
@@ -1108,7 +1108,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                           ? `${item.width} × ${item.height}`
                           : "1080 × 1350"}
                       </div>
-                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B85C38] rounded text-[10px] font-bold text-stone-700 bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer">
+                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B08D57] rounded text-[10px] font-bold text-stone-700 bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer">
                         <Upload className="w-3 h-3" />
                         <span>Upload 4:5</span>
                         <input
@@ -1243,7 +1243,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                                 )
                               }));
                             }}
-                            className="w-3.5 h-3.5 accent-[#B85C38]"
+                            className="w-3.5 h-3.5 accent-[#B08D57]"
                           />
                           <span>Active</span>
                         </label>
@@ -1260,7 +1260,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               onClick={saveInstagram}
               disabled={isSaving}
               id="insta-save-btn"
-              className="px-6 py-3 rounded bg-[#B85C38] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-6 py-3 rounded bg-[#B08D57] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? "Saving..." : "Save Instagram Changes"}</span>
@@ -1276,7 +1276,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
         <div className="space-y-6">
           <div className="bg-white p-5 rounded-lg border border-stone-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                 Insta Reels Showcase ({reelsConfig.items.length} reels)
               </h3>
               <p className="text-xs text-stone-600 font-sans mt-0.5">
@@ -1306,7 +1306,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                 }));
               }}
               id="reels-add-item-btn"
-              className="px-4 py-2 rounded bg-[#1F1B16] hover:bg-[#B85C38] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-xs self-start sm:self-auto"
+              className="px-4 py-2 rounded bg-[#2A211C] hover:bg-[#B08D57] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-xs self-start sm:self-auto"
             >
               <Plus className="w-4 h-4" />
               <span>Add Portrait Reel</span>
@@ -1323,7 +1323,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                   className="bg-white rounded-lg border border-stone-200 p-4 shadow-xs space-y-3"
                 >
                   <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
-                    <span className="font-sans font-bold text-xs text-[#1F1B16]">
+                    <span className="font-sans font-bold text-xs text-[#2A211C]">
                       Reel #{index + 1}
                     </span>
                     <div className="flex items-center gap-1">
@@ -1390,7 +1390,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                       </div>
 
                       {/* Poster Upload */}
-                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B85C38] rounded text-[10px] font-bold text-stone-700 bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer text-center">
+                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B08D57] rounded text-[10px] font-bold text-stone-700 bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer text-center">
                         <Upload className="w-3 h-3" />
                         <span>Poster (Img)</span>
                         <input
@@ -1420,7 +1420,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                       </label>
 
                       {/* Video File Upload */}
-                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B85C38] rounded text-[10px] font-bold text-[#B85C38] bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer text-center">
+                      <label className="w-full py-1.5 px-2 border border-dashed border-stone-300 hover:border-[#B08D57] rounded text-[10px] font-bold text-[#B08D57] bg-stone-50 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-1 cursor-pointer text-center">
                         <Upload className="w-3 h-3" />
                         <span>Video (MP4)</span>
                         <input
@@ -1574,7 +1574,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                                 )
                               }));
                             }}
-                            className="w-3.5 h-3.5 accent-[#B85C38]"
+                            className="w-3.5 h-3.5 accent-[#B08D57]"
                           />
                           <span>Active on Storefront</span>
                         </label>
@@ -1591,7 +1591,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
               onClick={saveReels}
               disabled={isSaving}
               id="reels-save-btn"
-              className="px-6 py-3 rounded bg-[#B85C38] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-6 py-3 rounded bg-[#B08D57] hover:bg-[#A04E2E] text-white font-sans text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? "Saving..." : "Save Reels Changes"}</span>

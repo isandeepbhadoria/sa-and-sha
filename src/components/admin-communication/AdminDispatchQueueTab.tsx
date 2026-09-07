@@ -401,7 +401,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
           <button
             onClick={handleProcessBatch}
             disabled={processingBatch}
-            className="px-4 py-2.5 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer flex items-center gap-2 whitespace-nowrap"
+            className="px-4 py-2.5 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer flex items-center gap-2 whitespace-nowrap"
           >
             <Zap className={`w-4 h-4 ${processingBatch ? 'animate-bounce' : ''}`} />
             <span>{processingBatch ? 'Processing Batch...' : 'Process Next Batch'}</span>
@@ -411,54 +411,54 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
 
       {/* SUMMARY STATS CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-        <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs">
+        <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs">
           <div className="flex items-center justify-between text-amber-700 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Queued</span>
             <Clock className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="text-2xl font-black text-[#1F1B16]">{stats?.queued ?? 0}</div>
+          <div className="text-2xl font-black text-[#2A211C]">{stats?.queued ?? 0}</div>
           <p className="text-[11px] text-stone-500 mt-0.5">Awaiting Background Worker</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs">
+        <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs">
           <div className="flex items-center justify-between text-sky-700 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Processing</span>
             <Zap className="w-4 h-4 text-sky-600" />
           </div>
-          <div className="text-2xl font-black text-[#1F1B16]">{stats?.processing ?? 0}</div>
+          <div className="text-2xl font-black text-[#2A211C]">{stats?.processing ?? 0}</div>
           <p className="text-[11px] text-stone-500 mt-0.5">Active Dispatch Lock</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs">
+        <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs">
           <div className="flex items-center justify-between text-emerald-700 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Completed</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-2xl font-black text-[#1F1B16]">{stats?.completed ?? 0}</div>
+          <div className="text-2xl font-black text-[#2A211C]">{stats?.completed ?? 0}</div>
           <p className="text-[11px] text-stone-500 mt-0.5">Successfully Delivered</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs">
+        <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs">
           <div className="flex items-center justify-between text-rose-700 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Failed</span>
             <AlertCircle className="w-4 h-4 text-rose-600" />
           </div>
-          <div className="text-2xl font-black text-[#1F1B16]">{stats?.failed ?? 0}</div>
+          <div className="text-2xl font-black text-[#2A211C]">{stats?.failed ?? 0}</div>
           <p className="text-[11px] text-stone-500 mt-0.5">Delivery Error / Exceeded</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs">
+        <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs">
           <div className="flex items-center justify-between text-stone-600 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Cancelled</span>
             <XCircle className="w-4 h-4 text-stone-500" />
           </div>
-          <div className="text-2xl font-black text-[#1F1B16]">{stats?.cancelled ?? 0}</div>
+          <div className="text-2xl font-black text-[#2A211C]">{stats?.cancelled ?? 0}</div>
           <p className="text-[11px] text-stone-500 mt-0.5">Admin Aborted</p>
         </div>
       </div>
 
       {/* FILTER & CONTROL BAR */}
-      <div className="p-4 bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-3 flex-wrap">
+      <div className="p-4 bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap flex-1">
           {/* SEARCH BOX */}
           <div className="relative flex-1 min-w-[200px]">
@@ -469,7 +469,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && fetchQueueData()}
-              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs focus:ring-1 focus:ring-[#B85C38] outline-none"
+              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs focus:ring-1 focus:ring-[#B08D57] outline-none"
             />
           </div>
 
@@ -527,7 +527,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
           <button
             onClick={fetchQueueData}
             disabled={loading}
-            className="px-3 py-1.5 bg-[#B85C38] text-white hover:bg-[#A04D2E] rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+            className="px-3 py-1.5 bg-[#B08D57] text-white hover:bg-[#A04D2E] rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh Queue</span>
@@ -536,7 +536,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
       </div>
 
       {/* DISPATCH QUEUE TABLE */}
-      <div className="bg-white border border-[#C9B79C]/30 rounded-xl shadow-2xs overflow-hidden">
+      <div className="bg-white border border-[#E5D2BC]/30 rounded-xl shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -554,7 +554,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-stone-500">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#B85C38] mb-2" />
+                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#B08D57] mb-2" />
                     <span>Loading dispatch queue jobs...</span>
                   </td>
                 </tr>
@@ -590,7 +590,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
                         {job.customer_email || job.customer_phone || 'System / Batch'}
                       </div>
                       {job.order_id && (
-                        <div className="text-[10px] text-[#B85C38] font-medium mt-0.5">
+                        <div className="text-[10px] text-[#B08D57] font-medium mt-0.5">
                           Order #{job.order_id}
                         </div>
                       )}
@@ -757,7 +757,7 @@ export const AdminDispatchQueueTab: React.FC<AdminDispatchQueueTabProps> = ({
                   <button
                     onClick={() => handleDispatchJob(selectedJob.job_id)}
                     disabled={dispatchingJobId === selectedJob.job_id}
-                    className="px-4 py-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
+                    className="px-4 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
                   >
                     <Zap className={`w-3.5 h-3.5 ${dispatchingJobId === selectedJob.job_id ? 'animate-bounce' : ''}`} />
                     <span>{dispatchingJobId === selectedJob.job_id ? 'Dispatching Job...' : 'Dispatch Selected Job'}</span>

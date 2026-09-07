@@ -48,8 +48,8 @@ const FAQPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 space-y-8 text-stone-800">
-      <div className="text-center space-y-2 border-b border-[#C9B79C]/20 pb-6">
-        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B85C38] uppercase">Premium Care</span>
+      <div className="text-center space-y-2 border-b border-[#E5D2BC]/20 pb-6">
+        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase">Premium Care</span>
         <h1 className="font-serif text-3xl md:text-4xl font-bold">Linen Care & FAQs</h1>
         <p className="font-sans text-xs md:text-sm text-stone-500 max-w-lg mx-auto">
           Linen is a living, breathing organic fabric. Learn how to wash, press, and cherish your Sa and Sha apparel to ensure it lasts for decades.
@@ -58,9 +58,9 @@ const FAQPage: React.FC = () => {
 
       <div className="space-y-6 font-sans text-xs md:text-sm leading-relaxed">
         
-        <div className="bg-[#E4D8C3]/20 p-6 rounded-lg border border-[#C9B79C]/20 space-y-3">
-          <h2 className="font-serif text-base font-bold text-[#1F1B16] uppercase tracking-wider">🌿 Wash and Care Guides</h2>
-          <ul className="list-decimal pl-4 space-y-2 text-[#1F1B16]/80 font-medium">
+        <div className="bg-[#F4E6D7]/20 p-6 rounded-lg border border-[#E5D2BC]/20 space-y-3">
+          <h2 className="font-serif text-base font-bold text-[#2A211C] uppercase tracking-wider">🌿 Wash and Care Guides</h2>
+          <ul className="list-decimal pl-4 space-y-2 text-[#2A211C]/80 font-medium">
             <li><strong>Machine Wash:</strong> Wash on a gentle, cool cycle (maximum 30°C) with similar soft neutral colors using a mild organic liquid detergent.</li>
             <li><strong>No Bleach:</strong> Never use bleach or fabric softeners. Synthetic softeners coat the natural flax fibers, reducing their native moisture-wicking and breathing powers.</li>
             <li><strong>Drying:</strong> Hang-dry in shaded breeze. Avoid direct, high-intensity sunlight which can weaken fibers. Avoid machine tumble drying.</li>
@@ -69,25 +69,25 @@ const FAQPage: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <h2 className="font-serif text-lg font-bold text-[#1F1B16] uppercase tracking-wider border-b border-[#C9B79C]/10 pb-2">📦 Frequently Asked Questions</h2>
+          <h2 className="font-serif text-lg font-bold text-[#2A211C] uppercase tracking-wider border-b border-[#E5D2BC]/10 pb-2">📦 Frequently Asked Questions</h2>
           
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#1F1B16]">Q: Does Sa and Sha shrink after washing?</h3>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Does Sa and Sha shrink after washing?</h3>
             <p className="text-stone-600">A: No! Every Kora garment is pre-washed and garment-shrunk at our local Jaipur facilities prior to packaging. This ensures your fit stays exact from the first wear to the hundredth.</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#1F1B16]">Q: Why are there tiny slubs or knots on my fabric?</h3>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Why are there tiny slubs or knots on my fabric?</h3>
             <p className="text-stone-600">A: Tiny slubs and natural texture variations are the hallmark proof of 100% organic European flax. These are not defects; they represent the artisanal signature of natural weaving.</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#1F1B16]">Q: Do you offer exchanges and what is the cost?</h3>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Do you offer exchanges and what is the cost?</h3>
             <p className="text-stone-600">A: We provide complete 100% free exchanges within 7 days of delivery! Simply submit a request within 7 days of receiving your order and we will coordinate a reverse-pickup at your doorstep for zero shipping charge.</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#1F1B16]">Q: Are your linens made sustainably?</h3>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Are your linens made sustainably?</h3>
             <p className="text-stone-600">A: Absolutely. Our Belgian flax is sourced with rainwater irrigation and zero chemical runoff, making it completely organic, biodegradable, and sustainable.</p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function App() {
     <ShopProvider>
       <BrowserRouter>
         <ScrollToTop />
-        <div className="min-h-screen flex flex-col justify-between bg-[#F5F1E8] text-[#1F1B16] antialiased font-sans">
+        <div className="min-h-screen flex flex-col justify-between bg-[#FBF6EE] text-[#2A211C] antialiased font-sans">
           
           {/* Header element */}
           <Header onOpenCart={() => setIsCartOpen(true)} />

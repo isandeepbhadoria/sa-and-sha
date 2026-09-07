@@ -399,18 +399,18 @@ export const CollectionPage: React.FC = () => {
       )}
       
       {/* a) Breadcrumbs */}
-      <nav className="text-xs font-sans text-[#1F1B16]/50 tracking-wider uppercase flex items-center gap-1.5" id="breadcrumb-nav">
+      <nav className="text-xs font-sans text-[#2A211C]/50 tracking-wider uppercase flex items-center gap-1.5" id="breadcrumb-nav">
         {routeInfo.breadcrumbs.map((crumb, idx) => {
           const isLast = idx === routeInfo.breadcrumbs.length - 1;
           return (
             <React.Fragment key={crumb.name}>
               {idx > 0 && <span>/</span>}
               {crumb.url && !isLast ? (
-                <Link to={crumb.url} className="hover:text-[#B85C38] transition-colors">
+                <Link to={crumb.url} className="hover:text-[#B08D57] transition-colors">
                   {crumb.name}
                 </Link>
               ) : (
-                <span className={isLast ? "text-[#1F1B16] font-semibold" : ""}>{crumb.name}</span>
+                <span className={isLast ? "text-[#2A211C] font-semibold" : ""}>{crumb.name}</span>
               )}
             </React.Fragment>
           );
@@ -418,16 +418,16 @@ export const CollectionPage: React.FC = () => {
       </nav>
 
       {/* b) Page Header with Live Count */}
-      <div className="flex flex-col md:flex-row justify-between items-baseline gap-2 border-b border-[#C9B79C]/20 pb-4">
+      <div className="flex flex-col md:flex-row justify-between items-baseline gap-2 border-b border-[#E5D2BC]/20 pb-4">
         <div>
-          <h1 className="font-serif text-2xl md:text-4xl font-bold text-[#1F1B16] tracking-tight">
+          <h1 className="font-serif text-2xl md:text-4xl font-bold text-[#2A211C] tracking-tight">
             {searchParams.get('search') ? `Search results for: "${searchParams.get('search')}"` : routeInfo.h1}
           </h1>
           {searchParams.get('search') && (
-            <p className="text-xs font-sans text-[#1F1B16]/60 mt-1 uppercase font-medium tracking-widest">Woven linen fiber search matches</p>
+            <p className="text-xs font-sans text-[#2A211C]/60 mt-1 uppercase font-medium tracking-widest">Woven linen fiber search matches</p>
           )}
         </div>
-        <span className="text-xs font-sans font-bold text-[#1F1B16]/60 uppercase tracking-widest">
+        <span className="text-xs font-sans font-bold text-[#2A211C]/60 uppercase tracking-widest">
           {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'} Available
         </span>
       </div>
@@ -435,18 +435,18 @@ export const CollectionPage: React.FC = () => {
       {/* c) Sticky Utility Bar (Filters, Density, Sort) */}
       <div
         id="collection-utility-bar"
-        className="sticky top-[73px] md:top-[85px] bg-[#F5F1E8]/95 backdrop-blur-sm border border-[#C9B79C]/30 p-3.5 rounded-lg flex justify-between items-center z-30 shadow-sm"
+        className="sticky top-[73px] md:top-[85px] bg-[#FBF6EE]/95 backdrop-blur-sm border border-[#E5D2BC]/30 p-3.5 rounded-lg flex justify-between items-center z-30 shadow-sm"
       >
         {/* Toggle Filters trigger Button */}
         <button
           onClick={() => setIsFilterOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 border border-[#C9B79C]/40 rounded bg-white hover:bg-[#1F1B16] hover:text-[#F5F1E8] transition-all text-xs font-sans font-bold uppercase tracking-widest active:scale-95 cursor-pointer"
+          className="flex items-center gap-2 px-3 py-2 border border-[#E5D2BC]/40 rounded bg-white hover:bg-[#2A211C] hover:text-[#FBF6EE] transition-all text-xs font-sans font-bold uppercase tracking-widest active:scale-95 cursor-pointer"
           id="toggle-filters-drawer-btn"
         >
-          <SlidersHorizontal className="w-4 h-4 text-[#B85C38]" />
+          <SlidersHorizontal className="w-4 h-4 text-[#B08D57]" />
           <span>Filters</span>
           {(activeSubCats.length + activeColors.length + activeSizes.length + activeFits.length + activePatterns.length + activeSleeves.length + activeCollars.length + activeFabrics.length + (priceMax < 5000 ? 1 : 0)) > 0 && (
-            <span className="bg-[#B85C38] text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px]">
+            <span className="bg-[#B08D57] text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px]">
               {activeSubCats.length + activeColors.length + activeSizes.length + activeFits.length + activePatterns.length + activeSleeves.length + activeCollars.length + activeFabrics.length + (priceMax < 5000 ? 1 : 0)}
             </span>
           )}
@@ -456,11 +456,11 @@ export const CollectionPage: React.FC = () => {
         <div className="flex items-center gap-4">
           
           {/* Density selection (Desktop Only) */}
-          <div className="hidden md:flex items-center border border-[#C9B79C]/30 rounded bg-white p-0.5 overflow-hidden">
+          <div className="hidden md:flex items-center border border-[#E5D2BC]/30 rounded bg-white p-0.5 overflow-hidden">
             <button
               onClick={() => setGridDensity('double')}
               className={`p-1.5 transition-colors rounded ${
-                gridDensity === 'double' ? 'bg-[#1F1B16] text-[#F5F1E8]' : 'hover:bg-gray-100 text-[#1F1B16]'
+                gridDensity === 'double' ? 'bg-[#2A211C] text-[#FBF6EE]' : 'hover:bg-gray-100 text-[#2A211C]'
               }`}
               id="grid-density-double"
               aria-label="Two column grid"
@@ -470,7 +470,7 @@ export const CollectionPage: React.FC = () => {
             <button
               onClick={() => setGridDensity('quad')}
               className={`p-1.5 transition-colors rounded ${
-                gridDensity === 'quad' ? 'bg-[#1F1B16] text-[#F5F1E8]' : 'hover:bg-gray-100 text-[#1F1B16]'
+                gridDensity === 'quad' ? 'bg-[#2A211C] text-[#FBF6EE]' : 'hover:bg-gray-100 text-[#2A211C]'
               }`}
               id="grid-density-quad"
               aria-label="Four column grid"
@@ -483,7 +483,7 @@ export const CollectionPage: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center gap-1 px-3 py-2 border border-[#C9B79C]/40 rounded bg-white text-xs font-sans font-bold uppercase tracking-widest hover:border-[#1F1B16]"
+              className="flex items-center gap-1 px-3 py-2 border border-[#E5D2BC]/40 rounded bg-white text-xs font-sans font-bold uppercase tracking-widest hover:border-[#2A211C]"
               id="sort-trigger-btn"
             >
               <span>Sort: {activeSort.replace(/-/g, ' ')}</span>
@@ -497,13 +497,13 @@ export const CollectionPage: React.FC = () => {
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 5 }}
-                  className="absolute right-0 top-[110%] w-48 bg-white border border-[#C9B79C]/30 rounded-md shadow-xl z-50 overflow-hidden text-xs font-sans"
+                  className="absolute right-0 top-[110%] w-48 bg-white border border-[#E5D2BC]/30 rounded-md shadow-xl z-50 overflow-hidden text-xs font-sans"
                 >
-                  <button onClick={() => handleSortChange('featured')} className={`w-full text-left px-4 py-2.5 hover:bg-[#E4D8C3]/30 transition-colors ${activeSort === 'featured' ? 'font-bold text-[#B85C38]' : ''}`}>Featured</button>
-                  <button onClick={() => handleSortChange('new-arrivals')} className={`w-full text-left px-4 py-2.5 hover:bg-[#E4D8C3]/30 transition-colors ${activeSort === 'new-arrivals' ? 'font-bold text-[#B85C38]' : ''}`}>New Arrivals</button>
-                  <button onClick={() => handleSortChange('best-selling')} className={`w-full text-left px-4 py-2.5 hover:bg-[#E4D8C3]/30 transition-colors ${activeSort === 'best-selling' ? 'font-bold text-[#B85C38]' : ''}`}>Best Selling</button>
-                  <button onClick={() => handleSortChange('price-low-high')} className={`w-full text-left px-4 py-2.5 hover:bg-[#E4D8C3]/30 transition-colors ${activeSort === 'price-low-high' ? 'font-bold text-[#B85C38]' : ''}`}>Price: Low to High</button>
-                  <button onClick={() => handleSortChange('price-high-low')} className={`w-full text-left px-4 py-2.5 hover:bg-[#E4D8C3]/30 transition-colors ${activeSort === 'price-high-low' ? 'font-bold text-[#B85C38]' : ''}`}>Price: High to Low</button>
+                  <button onClick={() => handleSortChange('featured')} className={`w-full text-left px-4 py-2.5 hover:bg-[#F4E6D7]/30 transition-colors ${activeSort === 'featured' ? 'font-bold text-[#B08D57]' : ''}`}>Featured</button>
+                  <button onClick={() => handleSortChange('new-arrivals')} className={`w-full text-left px-4 py-2.5 hover:bg-[#F4E6D7]/30 transition-colors ${activeSort === 'new-arrivals' ? 'font-bold text-[#B08D57]' : ''}`}>New Arrivals</button>
+                  <button onClick={() => handleSortChange('best-selling')} className={`w-full text-left px-4 py-2.5 hover:bg-[#F4E6D7]/30 transition-colors ${activeSort === 'best-selling' ? 'font-bold text-[#B08D57]' : ''}`}>Best Selling</button>
+                  <button onClick={() => handleSortChange('price-low-high')} className={`w-full text-left px-4 py-2.5 hover:bg-[#F4E6D7]/30 transition-colors ${activeSort === 'price-low-high' ? 'font-bold text-[#B08D57]' : ''}`}>Price: Low to High</button>
+                  <button onClick={() => handleSortChange('price-high-low')} className={`w-full text-left px-4 py-2.5 hover:bg-[#F4E6D7]/30 transition-colors ${activeSort === 'price-high-low' ? 'font-bold text-[#B08D57]' : ''}`}>Price: High to Low</button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -514,12 +514,12 @@ export const CollectionPage: React.FC = () => {
 
       {/* Selected Filter Chips Row */}
       {(activeSubCats.length + activeColors.length + activeSizes.length + activeFits.length + activePatterns.length + activeSleeves.length + activeCollars.length + activeFabrics.length + (priceMax < 5000 ? 1 : 0)) > 0 && (
-        <div className="flex flex-wrap items-center gap-2 bg-[#E4D8C3]/10 p-3 rounded border border-[#C9B79C]/20 text-xs font-sans">
-          <span className="font-bold text-[#1F1B16]/60 uppercase tracking-widest text-[10px]">Active Filters:</span>
+        <div className="flex flex-wrap items-center gap-2 bg-[#F4E6D7]/10 p-3 rounded border border-[#E5D2BC]/20 text-xs font-sans">
+          <span className="font-bold text-[#2A211C]/60 uppercase tracking-widest text-[10px]">Active Filters:</span>
           
           {/* Render category chips */}
           {activeSubCats.map(sub => (
-            <span key={sub} className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span key={sub} className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>{sub.replace(/-/g, ' ')}</span>
               <button onClick={() => toggleFilterValue('subcategory', sub, activeSubCats)} className="hover:text-red-600 font-bold"><X className="w-3 h-3" /></button>
             </span>
@@ -527,7 +527,7 @@ export const CollectionPage: React.FC = () => {
 
           {/* Render colors */}
           {activeColors.map(col => (
-            <span key={col} className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span key={col} className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>{col}</span>
               <button onClick={() => toggleFilterValue('color', col, activeColors)} className="hover:text-red-600 font-bold"><X className="w-3 h-3" /></button>
             </span>
@@ -535,7 +535,7 @@ export const CollectionPage: React.FC = () => {
 
           {/* Render sizes */}
           {activeSizes.map(sz => (
-            <span key={sz} className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span key={sz} className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>Size: {sz}</span>
               <button onClick={() => toggleFilterValue('size', sz, activeSizes)} className="hover:text-red-600 font-bold"><X className="w-3 h-3" /></button>
             </span>
@@ -543,7 +543,7 @@ export const CollectionPage: React.FC = () => {
 
           {/* Render fits */}
           {activeFits.map(f => (
-            <span key={f} className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span key={f} className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>{f} Fit</span>
               <button onClick={() => toggleFilterValue('fit', f, activeFits)} className="hover:text-red-600 font-bold"><X className="w-3 h-3" /></button>
             </span>
@@ -551,7 +551,7 @@ export const CollectionPage: React.FC = () => {
 
           {/* Render patterns */}
           {activePatterns.map(pat => (
-            <span key={pat} className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span key={pat} className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>{pat}</span>
               <button onClick={() => toggleFilterValue('pattern', pat, activePatterns)} className="hover:text-red-600 font-bold"><X className="w-3 h-3" /></button>
             </span>
@@ -559,7 +559,7 @@ export const CollectionPage: React.FC = () => {
 
           {/* Price Max */}
           {priceMax < 5000 && (
-            <span className="bg-white border border-[#C9B79C]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
+            <span className="bg-white border border-[#E5D2BC]/40 text-stone-800 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
               <span>Under ₹{priceMax}</span>
               <button onClick={() => {
                 const newParams = new URLSearchParams(searchParams);
@@ -571,7 +571,7 @@ export const CollectionPage: React.FC = () => {
 
           <button
             onClick={handleClearAll}
-            className="text-[10px] text-[#B85C38] font-bold uppercase tracking-wider hover:underline ml-2"
+            className="text-[10px] text-[#B08D57] font-bold uppercase tracking-wider hover:underline ml-2"
             id="clear-all-filters-btn"
           >
             Clear All
@@ -581,14 +581,14 @@ export const CollectionPage: React.FC = () => {
 
       {/* d) Product Grid listing */}
       {routeInfo.isComingSoon && filteredProducts.length === 0 ? (
-        <div className="bg-white/80 border border-[#C9B79C]/30 rounded-xl p-8 md:p-16 text-center space-y-6 shadow-sm my-6">
-          <div className="w-16 h-16 bg-[#E4D8C3]/30 text-[#B85C38] flex items-center justify-center rounded-full mx-auto">
+        <div className="bg-white/80 border border-[#E5D2BC]/30 rounded-xl p-8 md:p-16 text-center space-y-6 shadow-sm my-6">
+          <div className="w-16 h-16 bg-[#F4E6D7]/30 text-[#B08D57] flex items-center justify-center rounded-full mx-auto">
             <Sparkles className="w-8 h-8" />
           </div>
           <div className="space-y-2 max-w-md mx-auto">
-            <span className="text-[11px] font-sans font-bold tracking-[0.2em] text-[#B85C38] uppercase">Artisan Atelier In Craft</span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16]">{routeInfo.h1} — Coming Soon</h2>
-            <p className="font-sans text-xs md:text-sm text-[#1F1B16]/70 leading-relaxed pt-2">
+            <span className="text-[11px] font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase">Artisan Atelier In Craft</span>
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">{routeInfo.h1} — Coming Soon</h2>
+            <p className="font-sans text-xs md:text-sm text-[#2A211C]/70 leading-relaxed pt-2">
               {routeInfo.filterCollection === 'pure-cotton' && (
                 "Our artisans are currently sourcing and weaving exceptional long-staple organic cotton garments. Check back soon or explore our pure European flax linen collections."
               )}
@@ -612,28 +612,28 @@ export const CollectionPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
             <Link
               to="/shop/collection/pure-linen"
-              className="w-full sm:w-auto bg-[#1F1B16] hover:bg-[#B85C38] text-[#F5F1E8] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded transition-colors"
+              className="w-full sm:w-auto bg-[#2A211C] hover:bg-[#B08D57] text-[#FBF6EE] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded transition-colors"
             >
               Explore Pure Linen
             </Link>
             <Link
               to="/shop/all"
-              className="w-full sm:w-auto bg-transparent hover:bg-[#1F1B16]/5 text-[#1F1B16] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded border border-[#1F1B16]/30 transition-colors"
+              className="w-full sm:w-auto bg-transparent hover:bg-[#2A211C]/5 text-[#2A211C] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded border border-[#2A211C]/30 transition-colors"
             >
               Shop All Products
             </Link>
           </div>
         </div>
       ) : filteredProducts.length === 0 ? (
-        <div className="text-center py-24 border border-dashed border-[#C9B79C]/40 rounded-xl bg-[#E4D8C3]/5">
-          <Info className="w-10 h-10 text-[#C9B79C] mx-auto mb-3" />
-          <h3 className="font-serif text-lg font-bold text-[#1F1B16]">No Results Found</h3>
-          <p className="font-sans text-xs text-[#1F1B16]/60 mt-1 max-w-sm mx-auto leading-normal">
+        <div className="text-center py-24 border border-dashed border-[#E5D2BC]/40 rounded-xl bg-[#F4E6D7]/5">
+          <Info className="w-10 h-10 text-[#E5D2BC] mx-auto mb-3" />
+          <h3 className="font-serif text-lg font-bold text-[#2A211C]">No Results Found</h3>
+          <p className="font-sans text-xs text-[#2A211C]/60 mt-1 max-w-sm mx-auto leading-normal">
             We couldn’t find any linen items matching your filter specifications. Try broadening your criteria or resetting filters.
           </p>
           <button
             onClick={handleClearAll}
-            className="bg-[#1F1B16] text-[#F5F1E8] hover:bg-[#B85C38] transition-colors py-2 px-5 mt-5 text-xs font-sans font-semibold uppercase tracking-wider rounded"
+            className="bg-[#2A211C] text-[#FBF6EE] hover:bg-[#B08D57] transition-colors py-2 px-5 mt-5 text-xs font-sans font-semibold uppercase tracking-wider rounded"
             id="reset-filter-no-results-btn"
           >
             Clear All Filters
@@ -660,12 +660,12 @@ export const CollectionPage: React.FC = () => {
               <button
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
-                className="inline-flex items-center gap-2 border border-[#C9B79C] hover:bg-[#1F1B16] hover:text-[#F5F1E8] px-8 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-widest transition-all text-[#1F1B16] bg-white disabled:opacity-50"
+                className="inline-flex items-center gap-2 border border-[#E5D2BC] hover:bg-[#2A211C] hover:text-[#FBF6EE] px-8 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-widest transition-all text-[#2A211C] bg-white disabled:opacity-50"
                 id="load-more-btn"
               >
                 {isLoadingMore ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin text-[#B85C38]" />
+                    <RefreshCw className="w-4 h-4 animate-spin text-[#B08D57]" />
                     <span>Spinning Flax...</span>
                   </>
                 ) : (
@@ -680,12 +680,12 @@ export const CollectionPage: React.FC = () => {
       )}
 
       {/* e) Below the grid: Collapsible SEO & FAQ Footer section */}
-      <section className="border-t border-[#C9B79C]/20 pt-10 mt-16 space-y-6">
+      <section className="border-t border-[#E5D2BC]/20 pt-10 mt-16 space-y-6">
         <div className="flex justify-between items-baseline">
-          <h3 className="font-serif text-lg font-bold text-[#1F1B16]">About our {currentCategory.name}</h3>
+          <h3 className="font-serif text-lg font-bold text-[#2A211C]">About our {currentCategory.name}</h3>
           <button
             onClick={() => setIsSeoExpanded(!isSeoExpanded)}
-            className="text-xs font-sans font-bold text-[#B85C38] uppercase tracking-wider hover:underline"
+            className="text-xs font-sans font-bold text-[#B08D57] uppercase tracking-wider hover:underline"
             id="expand-seo-btn"
           >
             {isSeoExpanded ? 'Read Less' : 'Read More'}
@@ -698,40 +698,40 @@ export const CollectionPage: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden space-y-10 text-xs md:text-sm text-[#1F1B16]/70 leading-relaxed font-medium"
+              className="overflow-hidden space-y-10 text-xs md:text-sm text-[#2A211C]/70 leading-relaxed font-medium"
             >
               {/* Category description */}
               <div className="space-y-2">
-                <h4 className="font-serif font-bold text-sm text-[#1F1B16]">{currentSeo.title}</h4>
+                <h4 className="font-serif font-bold text-sm text-[#2A211C]">{currentSeo.title}</h4>
                 <p>{currentSeo.description}</p>
               </div>
 
               {/* Comparison table */}
               <div className="space-y-4">
-                <h4 className="font-serif font-bold text-sm text-[#1F1B16]">{currentSeo.comparisonTitle}</h4>
+                <h4 className="font-serif font-bold text-sm text-[#2A211C]">{currentSeo.comparisonTitle}</h4>
                 <p>{currentSeo.comparisonText}</p>
-                <div className="overflow-x-auto rounded-lg border border-[#C9B79C]/30 shadow-sm">
+                <div className="overflow-x-auto rounded-lg border border-[#E5D2BC]/30 shadow-sm">
                   <table className="w-full text-left font-sans text-[11px] md:text-xs">
                     <thead>
-                      <tr className="bg-[#E4D8C3]/30 text-[#1F1B16] font-bold border-b border-[#C9B79C]/30">
+                      <tr className="bg-[#F4E6D7]/30 text-[#2A211C] font-bold border-b border-[#E5D2BC]/30">
                         <th className="p-3">Characteristic</th>
                         <th className="p-3">Sa and Sha Blend</th>
                         <th className="p-3">Standard Mall Fabrics</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#C9B79C]/20 bg-white">
+                    <tbody className="divide-y divide-[#E5D2BC]/20 bg-white">
                       <tr>
-                        <td className="p-3 font-semibold text-[#1F1B16]">Fiber Airflow</td>
+                        <td className="p-3 font-semibold text-[#2A211C]">Fiber Airflow</td>
                         <td className="p-3">Hollow flax fibers secure continuous 2x cooler skin ventilation.</td>
                         <td className="p-3">Synthetic solid fibers trap body heat and humidity.</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-semibold text-[#1F1B16]">Durability</td>
+                        <td className="p-3 font-semibold text-[#2A211C]">Durability</td>
                         <td className="p-3">Strengthens with washings, organic luster becomes buttery and smooth.</td>
                         <td className="p-3">Pills, stretches, and loses shape after multiple washes.</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-semibold text-[#1F1B16]">Pre-Shrinkage</td>
+                        <td className="p-3 font-semibold text-[#2A211C]">Pre-Shrinkage</td>
                         <td className="p-3">Garment-washed and pre-shrunk for exact sizing confidence.</td>
                         <td className="p-3">Shrinks up to 5% on first cold water wash.</td>
                       </tr>
@@ -742,20 +742,20 @@ export const CollectionPage: React.FC = () => {
 
               {/* Category FAQ accordion */}
               <div className="space-y-3">
-                <h4 className="font-serif font-bold text-sm text-[#1F1B16] flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4 text-[#B85C38]" />
+                <h4 className="font-serif font-bold text-sm text-[#2A211C] flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-[#B08D57]" />
                   <span>Frequently Asked Questions</span>
                 </h4>
-                <div className="divide-y divide-[#C9B79C]/20 border-t border-b border-[#C9B79C]/20">
+                <div className="divide-y divide-[#E5D2BC]/20 border-t border-b border-[#E5D2BC]/20">
                   {currentFAQs.map((faq, idx) => (
                     <div key={idx} className="py-3">
                       <button
                         onClick={() => toggleFAQ(idx)}
-                        className="w-full flex justify-between items-center text-left font-sans text-xs md:text-sm font-semibold text-[#1F1B16] hover:text-[#B85C38]"
+                        className="w-full flex justify-between items-center text-left font-sans text-xs md:text-sm font-semibold text-[#2A211C] hover:text-[#B08D57]"
                         id={`faq-btn-${idx}`}
                       >
                         <span>{faq.q}</span>
-                        {faqExpanded[idx] ? <ChevronUp className="w-4 h-4 text-[#C9B79C]" /> : <ChevronDown className="w-4 h-4 text-[#C9B79C]" />}
+                        {faqExpanded[idx] ? <ChevronUp className="w-4 h-4 text-[#E5D2BC]" /> : <ChevronDown className="w-4 h-4 text-[#E5D2BC]" />}
                       </button>
                       <AnimatePresence>
                         {faqExpanded[idx] && (
@@ -763,7 +763,7 @@ export const CollectionPage: React.FC = () => {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden font-sans text-[11px] md:text-xs text-[#1F1B16]/60 leading-relaxed mt-2"
+                            className="overflow-hidden font-sans text-[11px] md:text-xs text-[#2A211C]/60 leading-relaxed mt-2"
                           >
                             {faq.a}
                           </motion.div>
@@ -798,13 +798,13 @@ export const CollectionPage: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed left-0 top-0 bottom-0 w-full max-w-sm bg-[#F5F1E8] z-50 shadow-2xl flex flex-col border-r border-[#C9B79C]/30"
+              className="fixed left-0 top-0 bottom-0 w-full max-w-sm bg-[#FBF6EE] z-50 shadow-2xl flex flex-col border-r border-[#E5D2BC]/30"
               id="filter-drawer-panel"
             >
               {/* Header */}
-              <div className="p-5 border-b border-[#C9B79C]/30 flex justify-between items-center bg-[#1F1B16] text-[#F5F1E8]">
+              <div className="p-5 border-b border-[#E5D2BC]/30 flex justify-between items-center bg-[#2A211C] text-[#FBF6EE]">
                 <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-[#C9B79C]" />
+                  <SlidersHorizontal className="w-4 h-4 text-[#E5D2BC]" />
                   <span className="font-sans font-bold uppercase tracking-widest text-xs">Filter Collections</span>
                 </div>
                 <button
@@ -818,16 +818,16 @@ export const CollectionPage: React.FC = () => {
               </div>
 
               {/* Collapsible Groups scrollable list */}
-              <div className="flex-1 overflow-y-auto p-5 space-y-6 text-[#1F1B16]">
+              <div className="flex-1 overflow-y-auto p-5 space-y-6 text-[#2A211C]">
                 
                 {/* 1. Subcategory filter */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('subCategory')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Sub Category</span>
-                    {expandedFilters.subCategory ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.subCategory ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.subCategory && (
                     <div className="space-y-2 pl-1">
@@ -837,7 +837,7 @@ export const CollectionPage: React.FC = () => {
                             type="checkbox"
                             checked={activeSubCats.includes(opt.id)}
                             onChange={() => toggleFilterValue('subcategory', opt.id, activeSubCats)}
-                            className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                            className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                           />
                           <span className="font-medium">{opt.label}</span>
                         </label>
@@ -847,13 +847,13 @@ export const CollectionPage: React.FC = () => {
                 </div>
 
                 {/* 2. Color swatches */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('color')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Color Swatch</span>
-                    {expandedFilters.color ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.color ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.color && (
                     <div className="flex flex-wrap gap-2 pl-1">
@@ -864,7 +864,7 @@ export const CollectionPage: React.FC = () => {
                             key={col.name}
                             onClick={() => toggleFilterValue('color', col.name, activeColors)}
                             className={`px-2.5 py-1.5 rounded-md border text-[10px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm ${
-                              isSel ? 'border-[#B85C38] bg-white ring-1 ring-[#B85C38]' : 'border-[#C9B79C]/30 bg-white hover:border-[#1F1B16]'
+                              isSel ? 'border-[#B08D57] bg-white ring-1 ring-[#B08D57]' : 'border-[#E5D2BC]/30 bg-white hover:border-[#2A211C]'
                             }`}
                             id={`color-swatch-filter-${col.name.replace(/\s+/g, '-').toLowerCase()}`}
                           >
@@ -878,13 +878,13 @@ export const CollectionPage: React.FC = () => {
                 </div>
 
                 {/* 3. Price slider range */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('price')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Price Range</span>
-                    {expandedFilters.price ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.price ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.price && (
                     <div className="space-y-3 px-1">
@@ -899,22 +899,22 @@ export const CollectionPage: React.FC = () => {
                         step="100"
                         value={priceMax}
                         onChange={handlePriceChange}
-                        className="w-full accent-[#B85C38] h-1.5 bg-[#E4D8C3] rounded-lg cursor-pointer"
+                        className="w-full accent-[#B08D57] h-1.5 bg-[#F4E6D7] rounded-lg cursor-pointer"
                         id="price-range-slider"
                       />
-                      <span className="text-[10px] font-sans text-[#1F1B16]/60 leading-none">Max Limit: ₹5,000</span>
+                      <span className="text-[10px] font-sans text-[#2A211C]/60 leading-none">Max Limit: ₹5,000</span>
                     </div>
                   )}
                 </div>
 
                 {/* 4. Sizes chips */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('size')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Sizes</span>
-                    {expandedFilters.size ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.size ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.size && (
                     <div className="flex flex-wrap gap-1.5 pl-1">
@@ -925,7 +925,7 @@ export const CollectionPage: React.FC = () => {
                             key={sz}
                             onClick={() => toggleFilterValue('size', sz, activeSizes)}
                             className={`w-9 h-9 text-[11px] font-sans font-bold rounded border flex items-center justify-center transition-all ${
-                              isSel ? 'bg-[#1F1B16] text-[#F5F1E8] border-[#1F1B16] font-extrabold shadow' : 'bg-white text-[#1F1B16] border-[#C9B79C]/30 hover:border-[#1F1B16]'
+                              isSel ? 'bg-[#2A211C] text-[#FBF6EE] border-[#2A211C] font-extrabold shadow' : 'bg-white text-[#2A211C] border-[#E5D2BC]/30 hover:border-[#2A211C]'
                             }`}
                             id={`size-filter-btn-${sz}`}
                           >
@@ -938,13 +938,13 @@ export const CollectionPage: React.FC = () => {
                 </div>
 
                 {/* 5. Fits selection */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('fit')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Fits</span>
-                    {expandedFilters.fit ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.fit ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.fit && (
                     <div className="space-y-2 pl-1">
@@ -954,7 +954,7 @@ export const CollectionPage: React.FC = () => {
                             type="checkbox"
                             checked={activeFits.includes(f)}
                             onChange={() => toggleFilterValue('fit', f, activeFits)}
-                            className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                            className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                           />
                           <span className="font-medium">{f} Fit</span>
                         </label>
@@ -964,13 +964,13 @@ export const CollectionPage: React.FC = () => {
                 </div>
 
                 {/* 6. Pattern */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('pattern')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Patterns</span>
-                    {expandedFilters.pattern ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.pattern ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.pattern && (
                     <div className="space-y-2 pl-1">
@@ -980,7 +980,7 @@ export const CollectionPage: React.FC = () => {
                             type="checkbox"
                             checked={activePatterns.includes(pat)}
                             onChange={() => toggleFilterValue('pattern', pat, activePatterns)}
-                            className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                            className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                           />
                           <span className="font-medium">{pat}</span>
                         </label>
@@ -991,13 +991,13 @@ export const CollectionPage: React.FC = () => {
 
                 {/* 7. Sleeve (Shirts only) */}
                 {(currentCategory.isShirts) && (
-                  <div className="border-b border-[#C9B79C]/20 pb-4">
+                  <div className="border-b border-[#E5D2BC]/20 pb-4">
                     <button
                       onClick={() => toggleAccordion('sleeve')}
                       className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                     >
                       <span>Sleeves</span>
-                      {expandedFilters.sleeve ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                      {expandedFilters.sleeve ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                     </button>
                     {expandedFilters.sleeve && (
                       <div className="space-y-2 pl-1">
@@ -1007,7 +1007,7 @@ export const CollectionPage: React.FC = () => {
                               type="checkbox"
                               checked={activeSleeves.includes(sl)}
                               onChange={() => toggleFilterValue('sleeve', sl, activeSleeves)}
-                              className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                              className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                             />
                             <span className="font-medium">{sl}</span>
                           </label>
@@ -1019,13 +1019,13 @@ export const CollectionPage: React.FC = () => {
 
                 {/* 8. Collar (Shirts only) */}
                 {(currentCategory.isShirts) && (
-                  <div className="border-b border-[#C9B79C]/20 pb-4">
+                  <div className="border-b border-[#E5D2BC]/20 pb-4">
                     <button
                       onClick={() => toggleAccordion('collar')}
                       className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                     >
                       <span>Collars</span>
-                      {expandedFilters.collar ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                      {expandedFilters.collar ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                     </button>
                     {expandedFilters.collar && (
                       <div className="space-y-2 pl-1">
@@ -1035,7 +1035,7 @@ export const CollectionPage: React.FC = () => {
                               type="checkbox"
                               checked={activeCollars.includes(cl)}
                               onChange={() => toggleFilterValue('collar', cl, activeCollars)}
-                              className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                              className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                             />
                             <span className="font-medium">{cl}</span>
                           </label>
@@ -1046,13 +1046,13 @@ export const CollectionPage: React.FC = () => {
                 )}
 
                 {/* 9. Fabric blend */}
-                <div className="border-b border-[#C9B79C]/20 pb-4">
+                <div className="border-b border-[#E5D2BC]/20 pb-4">
                   <button
                     onClick={() => toggleAccordion('fabric')}
                     className="w-full flex justify-between items-center font-sans text-xs font-bold uppercase tracking-widest mb-3"
                   >
                     <span>Fabrics</span>
-                    {expandedFilters.fabric ? <ChevronUp className="w-3.5 h-3.5 text-[#C9B79C]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#C9B79C]" />}
+                    {expandedFilters.fabric ? <ChevronUp className="w-3.5 h-3.5 text-[#E5D2BC]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E5D2BC]" />}
                   </button>
                   {expandedFilters.fabric && (
                     <div className="space-y-2 pl-1">
@@ -1062,7 +1062,7 @@ export const CollectionPage: React.FC = () => {
                             type="checkbox"
                             checked={activeFabrics.includes(fb)}
                             onChange={() => toggleFilterValue('fabric', fb, activeFabrics)}
-                            className="rounded border-[#C9B79C] text-[#B85C38] focus:ring-[#B85C38] w-4 h-4"
+                            className="rounded border-[#E5D2BC] text-[#B08D57] focus:ring-[#B08D57] w-4 h-4"
                           />
                           <span className="font-medium">{fb}</span>
                         </label>
@@ -1074,17 +1074,17 @@ export const CollectionPage: React.FC = () => {
               </div>
 
               {/* Bottom Apply Drawer Action button */}
-              <div className="p-4 border-t border-[#C9B79C]/30 bg-white grid grid-cols-2 gap-3.5">
+              <div className="p-4 border-t border-[#E5D2BC]/30 bg-white grid grid-cols-2 gap-3.5">
                 <button
                   onClick={handleClearAll}
-                  className="py-3 border border-[#C9B79C] text-[#1F1B16] rounded text-xs font-sans font-bold uppercase tracking-widest hover:bg-[#1F1B16]/5"
+                  className="py-3 border border-[#E5D2BC] text-[#2A211C] rounded text-xs font-sans font-bold uppercase tracking-widest hover:bg-[#2A211C]/5"
                   id="drawer-clear-all-btn"
                 >
                   Clear All
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="py-3 bg-[#1F1B16] text-[#F5F1E8] hover:bg-[#B85C38] transition-colors rounded text-xs font-sans font-bold uppercase tracking-widest"
+                  className="py-3 bg-[#2A211C] text-[#FBF6EE] hover:bg-[#B08D57] transition-colors rounded text-xs font-sans font-bold uppercase tracking-widest"
                   id="drawer-apply-filters-btn"
                 >
                   Apply Filters ({filteredProducts.length})

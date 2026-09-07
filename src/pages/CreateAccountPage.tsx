@@ -286,7 +286,7 @@ export const CreateAccountPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F1E8] text-[#1C1917] font-sans antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FBF6EE] text-[#1C1917] font-sans antialiased py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-6">
         
         {/* Navigation / Header */}
@@ -324,30 +324,30 @@ export const CreateAccountPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* SECTION: COUNTRY / REGION SELECTION */}
-          <div className="bg-[#FAF8F5] border border-[#C9B79C]/30 rounded-2xl p-6 space-y-3">
+          <div className="bg-[#FAF8F5] border border-[#E5D2BC]/30 rounded-2xl p-6 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
-                <Globe className="w-5 h-5 text-[#B85C38]" />
+                <Globe className="w-5 h-5 text-[#B08D57]" />
                 <div>
-                  <h2 className="font-serif text-base font-bold text-[#1F1B16]">Country / Region</h2>
-                  <p className="text-[11px] text-[#1F1B16]/60">Currently serving deliveries across India (International expansion coming soon)</p>
+                  <h2 className="font-serif text-base font-bold text-[#2A211C]">Country / Region</h2>
+                  <p className="text-[11px] text-[#2A211C]/60">Currently serving deliveries across India (International expansion coming soon)</p>
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1F1B16]/5 border border-[#C9B79C]/40 rounded-full text-xs font-bold text-[#1F1B16]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#2A211C]/5 border border-[#E5D2BC]/40 rounded-full text-xs font-bold text-[#2A211C]">
                 <IndiaFlagIcon className="w-4 h-3" />
                 <span>India (+91)</span>
               </span>
             </div>
             <div className="pt-1">
-              <div className="flex items-center w-full border border-[#C9B79C]/40 rounded-xl bg-white overflow-hidden focus-within:border-[#1F1B16] focus-within:ring-2 focus-within:ring-[#1F1B16]/10">
-                <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#FAF8F5]/80 border-r border-[#C9B79C]/40 select-none flex-shrink-0">
+              <div className="flex items-center w-full border border-[#E5D2BC]/40 rounded-xl bg-white overflow-hidden focus-within:border-[#2A211C] focus-within:ring-2 focus-within:ring-[#2A211C]/10">
+                <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#FAF8F5]/80 border-r border-[#E5D2BC]/40 select-none flex-shrink-0">
                   <IndiaFlagIcon className="w-5 h-3.5" />
-                  <span className="text-xs font-bold text-[#1F1B16]">IN</span>
+                  <span className="text-xs font-bold text-[#2A211C]">IN</span>
                 </div>
                 <select
                   value={country}
                   onChange={e => setCountry(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs font-semibold bg-transparent focus:outline-none text-[#1F1B16] h-[42px] cursor-pointer"
+                  className="w-full px-3.5 py-2.5 text-xs font-semibold bg-transparent focus:outline-none text-[#2A211C] h-[42px] cursor-pointer"
                 >
                   <option value="India">India (Domestic Shipping)</option>
                 </select>

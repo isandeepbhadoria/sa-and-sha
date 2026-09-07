@@ -45,7 +45,7 @@ export const RmaEvidencePanel: React.FC<RmaEvidencePanelProps> = ({
       <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold text-stone-900 uppercase tracking-wide">
-            <FileText className="w-4 h-4 text-[#B85C38]" />
+            <FileText className="w-4 h-4 text-[#B08D57]" />
             <span>Customer Selected Reason: {reason}</span>
           </div>
           <span className="px-2.5 py-1 text-[11px] font-semibold bg-stone-200 text-stone-800 rounded-full">
@@ -74,7 +74,7 @@ export const RmaEvidencePanel: React.FC<RmaEvidencePanelProps> = ({
               <div
                 key={idx}
                 onClick={() => setSelectedImage(img)}
-                className="group relative aspect-square bg-stone-100 rounded-xl border border-stone-200 overflow-hidden cursor-pointer hover:border-[#B85C38] transition"
+                className="group relative aspect-square bg-stone-100 rounded-xl border border-stone-200 overflow-hidden cursor-pointer hover:border-[#B08D57] transition"
               >
                 <img src={img} alt={`Evidence ${idx + 1}`} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white">
@@ -121,7 +121,7 @@ export const RmaEvidencePanel: React.FC<RmaEvidencePanelProps> = ({
                       <span>Qty: {it.quantity || 1}</span>
                     </div>
                     {it.action === "exchange" && (
-                      <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-[#B85C38] font-bold">
+                      <div className="mt-1 inline-flex items-center gap-1 text-[11px] text-[#B08D57] font-bold">
                         Requested Exchange Size: {it.requested_size || "L"}
                       </div>
                     )}

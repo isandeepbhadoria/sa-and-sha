@@ -771,7 +771,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-5 bg-white rounded-2xl border border-stone-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <RotateCcw className="w-5 h-5 text-[#B85C38]" />
+            <RotateCcw className="w-5 h-5 text-[#B08D57]" />
             <h2 className="text-lg font-bold text-stone-900 tracking-tight">Notification Retry Centre</h2>
             <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[11px] font-bold rounded-full border border-amber-200">
               Queue Paused (Safeguard)
@@ -793,7 +793,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               type="checkbox"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
-              className="rounded text-[#B85C38] focus:ring-[#B85C38] w-3.5 h-3.5"
+              className="rounded text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5"
             />
             <span>Auto Refresh (30s)</span>
           </label>
@@ -801,7 +801,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
           <button
             onClick={fetchRetryData}
             disabled={loading}
-            className="p-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center justify-center transition-colors"
+            className="p-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center justify-center transition-colors"
             title="Refresh Data Now"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -866,7 +866,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
         <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-2xs space-y-1">
           <div className="flex items-center justify-between text-xs font-semibold text-stone-500">
             <span>Manual Actions Today</span>
-            <History className="w-4 h-4 text-[#B85C38]" />
+            <History className="w-4 h-4 text-[#B08D57]" />
           </div>
           <div className="text-xl font-bold text-stone-900">{auditLogs.length}</div>
           <div className="text-[10px] text-stone-500 font-medium">Audit logs logged</div>
@@ -884,7 +884,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               placeholder="Search Job ID, Order ID, Event, Masked Customer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-white border border-stone-200 rounded-xl text-xs text-stone-900 focus:ring-2 focus:ring-[#B85C38] focus:outline-hidden"
+              className="w-full pl-9 pr-3 py-1.5 bg-white border border-stone-200 rounded-xl text-xs text-stone-900 focus:ring-2 focus:ring-[#B08D57] focus:outline-hidden"
             />
           </div>
 
@@ -897,7 +897,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                   const p = savedViews.find((v) => v.id === e.target.value);
                   if (p) applyPreset(p);
                 }}
-                className="pl-8 pr-8 py-1.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-stone-800 cursor-pointer focus:ring-2 focus:ring-[#B85C38] focus:outline-hidden"
+                className="pl-8 pr-8 py-1.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-stone-800 cursor-pointer focus:ring-2 focus:ring-[#B08D57] focus:outline-hidden"
               >
                 <option value="">Saved Views / Presets...</option>
                 {savedViews.map((v) => (
@@ -913,7 +913,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               onClick={() => setShowSavePresetModal(true)}
               className="px-3 py-1.5 bg-white hover:bg-stone-100 border border-stone-200 rounded-xl text-xs font-bold text-stone-700 cursor-pointer flex items-center gap-1.5 shadow-2xs"
             >
-              <Bookmark className="w-3.5 h-3.5 text-[#B85C38]" />
+              <Bookmark className="w-3.5 h-3.5 text-[#B08D57]" />
               <span>Save View</span>
             </button>
           </div>
@@ -1001,7 +1001,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
             onClick={() => setActiveTab('scheduled')}
             className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
               activeTab === 'scheduled'
-                ? 'bg-[#B85C38] text-white shadow-xs'
+                ? 'bg-[#B08D57] text-white shadow-xs'
                 : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -1013,7 +1013,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
             onClick={() => setActiveTab('failed')}
             className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
               activeTab === 'failed'
-                ? 'bg-[#B85C38] text-white shadow-xs'
+                ? 'bg-[#B08D57] text-white shadow-xs'
                 : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -1025,7 +1025,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
             onClick={() => setActiveTab('dead_letter')}
             className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
               activeTab === 'dead_letter'
-                ? 'bg-[#B85C38] text-white shadow-xs'
+                ? 'bg-[#B08D57] text-white shadow-xs'
                 : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -1037,7 +1037,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
             onClick={() => setActiveTab('audit')}
             className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
               activeTab === 'audit'
-                ? 'bg-[#B85C38] text-white shadow-xs'
+                ? 'bg-[#B08D57] text-white shadow-xs'
                 : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -1049,7 +1049,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
             onClick={() => setActiveTab('analytics')}
             className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
               activeTab === 'analytics'
-                ? 'bg-[#B85C38] text-white shadow-xs'
+                ? 'bg-[#B08D57] text-white shadow-xs'
                 : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
             }`}
           >
@@ -1085,7 +1085,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                 <span className="text-xs font-bold text-amber-900">{selectedScheduledIds.size} Selected</span>
                 <button
                   onClick={() => setBulkActionModal({ type: 'retry', targetIds: Array.from(selectedScheduledIds) })}
-                  className="px-3 py-1 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                  className="px-3 py-1 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold flex items-center gap-1"
                 >
                   <Zap className="w-3 h-3" /> Retry Selected
                 </button>
@@ -1114,7 +1114,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                       type="checkbox"
                       checked={isScheduledPageAllSelected}
                       onChange={toggleSelectScheduledAllPage}
-                      className="rounded text-[#B85C38] focus:ring-[#B85C38] w-4 h-4 cursor-pointer"
+                      className="rounded text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
                     />
                   </th>
                   <th className="p-3">Job ID / Event</th>
@@ -1140,7 +1140,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                           type="checkbox"
                           checked={selectedScheduledIds.has(item.job_id)}
                           onChange={() => toggleSelectScheduledItem(item.job_id)}
-                          className="rounded text-[#B85C38] focus:ring-[#B85C38] w-4 h-4 cursor-pointer"
+                          className="rounded text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
                         />
                       </td>
                       <td className="p-3 font-mono">
@@ -1148,7 +1148,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                         <div className="text-[11px] text-stone-500">{item.event_id}</div>
                       </td>
                       <td className="p-3">
-                        <div className="font-bold text-[#B85C38]">{item.order_id ? `#${item.order_id}` : 'None'}</div>
+                        <div className="font-bold text-[#B08D57]">{item.order_id ? `#${item.order_id}` : 'None'}</div>
                         <div className="text-[11px] text-stone-500 font-mono">{item.masked_customer || 'N/A'}</div>
                       </td>
                       <td className="p-3">{getChannelBadge(item.channel)}</td>
@@ -1168,7 +1168,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                         <button
                           onClick={() => setConfirmRetry(item)}
                           disabled={isRetryDisabled(item)}
-                          className="px-2.5 py-1 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
+                          className="px-2.5 py-1 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
                         >
                           Retry Now
                         </button>
@@ -1221,7 +1221,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                 <span className="text-xs font-bold text-rose-900">{selectedFailedIds.size} Selected</span>
                 <button
                   onClick={() => setBulkActionModal({ type: 'retry', targetIds: Array.from(selectedFailedIds) })}
-                  className="px-3 py-1 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold flex items-center gap-1"
+                  className="px-3 py-1 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold flex items-center gap-1"
                 >
                   <Zap className="w-3 h-3" /> Retry Selected
                 </button>
@@ -1244,7 +1244,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                       type="checkbox"
                       checked={isFailedPageAllSelected}
                       onChange={toggleSelectFailedAllPage}
-                      className="rounded text-[#B85C38] focus:ring-[#B85C38] w-4 h-4 cursor-pointer"
+                      className="rounded text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
                     />
                   </th>
                   <th className="p-3">Job ID / Event</th>
@@ -1270,7 +1270,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                           type="checkbox"
                           checked={selectedFailedIds.has(item.job_id)}
                           onChange={() => toggleSelectFailedItem(item.job_id)}
-                          className="rounded text-[#B85C38] focus:ring-[#B85C38] w-4 h-4 cursor-pointer"
+                          className="rounded text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
                         />
                       </td>
                       <td className="p-3 font-mono">
@@ -1278,7 +1278,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                         <div className="text-[11px] text-stone-500">{item.event_id}</div>
                       </td>
                       <td className="p-3">
-                        <div className="font-bold text-[#B85C38]">{item.order_id ? `#${item.order_id}` : 'None'}</div>
+                        <div className="font-bold text-[#B08D57]">{item.order_id ? `#${item.order_id}` : 'None'}</div>
                         <div className="text-[11px] text-stone-500 font-mono">{item.masked_customer || 'N/A'}</div>
                       </td>
                       <td className="p-3">{getChannelBadge(item.channel)}</td>
@@ -1301,7 +1301,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                         <button
                           onClick={() => setConfirmRetry(item)}
                           disabled={isRetryDisabled(item)}
-                          className="px-2.5 py-1 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
+                          className="px-2.5 py-1 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
                         >
                           Retry Now
                         </button>
@@ -1413,7 +1413,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                         <div className="text-[11px] text-stone-500">{dl.event_id}</div>
                       </td>
                       <td className="p-3">
-                        <div className="font-bold text-[#B85C38]">{dl.order_id ? `#${dl.order_id}` : 'None'}</div>
+                        <div className="font-bold text-[#B08D57]">{dl.order_id ? `#${dl.order_id}` : 'None'}</div>
                         <div className="text-[11px] text-stone-500 font-mono">{dl.masked_customer || 'N/A'}</div>
                       </td>
                       <td className="p-3">{getChannelBadge(dl.channel)}</td>
@@ -1476,7 +1476,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
           <div className="p-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
             <div>
               <h3 className="font-bold text-stone-900 text-sm flex items-center gap-2">
-                <History className="w-4 h-4 text-[#B85C38]" /> Retry Action Audit History (notification_retry_audit)
+                <History className="w-4 h-4 text-[#B08D57]" /> Retry Action Audit History (notification_retry_audit)
               </h3>
               <p className="text-xs text-stone-500">Immutable audit logs of manual retries, cancellations, and DLQ requeues.</p>
             </div>
@@ -1568,7 +1568,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
           <div className="p-4 bg-white rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
             <div>
               <h3 className="font-bold text-stone-900 text-sm flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-[#B85C38]" /> Retry Analytics & Trend Intelligence
+                <BarChart3 className="w-4 h-4 text-[#B08D57]" /> Retry Analytics & Trend Intelligence
               </h3>
               <p className="text-xs text-stone-500">Action metrics, channel failure breakdown, and outcome ratios over time.</p>
             </div>
@@ -1705,7 +1705,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
           <div className="bg-white rounded-2xl max-w-xl w-full border border-stone-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-4 bg-stone-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-[#B85C38]" />
+                <Eye className="w-4 h-4 text-[#B08D57]" />
                 <h3 className="font-bold text-sm">
                   Inspect {selectedInspectItem.type === 'retry' ? 'Notification Job' : 'Dead-Letter Record'}
                 </h3>
@@ -1741,7 +1741,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
 
                 <div>
                   <span className="font-bold text-stone-500 uppercase text-[10px]">Order ID:</span>
-                  <div className="font-mono text-[#B85C38] font-bold">
+                  <div className="font-mono text-[#B08D57] font-bold">
                     {selectedInspectItem.item.order_id ? `#${selectedInspectItem.item.order_id}` : 'None'}
                   </div>
                 </div>
@@ -1771,7 +1771,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
                       setConfirmRetry(selectedInspectItem.item as RetryJobItem);
                       setSelectedInspectItem(null);
                     }}
-                    className="px-4 py-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5"
+                    className="px-4 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5"
                   >
                     <Zap className="w-3.5 h-3.5" />
                     <span>Retry Job Now</span>
@@ -1808,7 +1808,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
           <div className="bg-white rounded-2xl max-w-xl w-full border border-stone-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-4 bg-stone-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <History className="w-4 h-4 text-[#B85C38]" />
+                <History className="w-4 h-4 text-[#B08D57]" />
                 <h3 className="font-bold text-sm">Audit Log Details ({selectedInspectAudit.audit_id})</h3>
               </div>
               <button onClick={() => setSelectedInspectAudit(null)} className="text-stone-400 hover:text-white cursor-pointer">
@@ -1901,7 +1901,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               <button
                 onClick={executeBulkAction}
                 disabled={actionLoading}
-                className="px-4 py-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
               >
                 {actionLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
                 <span>{actionLoading ? 'Processing...' : `Confirm Bulk ${bulkActionModal.type}`}</span>
@@ -1978,7 +1978,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-2xl space-y-4">
             <h3 className="font-bold text-stone-900 text-sm flex items-center gap-2">
-              <Bookmark className="w-4 h-4 text-[#B85C38]" /> Save Current Filter View
+              <Bookmark className="w-4 h-4 text-[#B08D57]" /> Save Current Filter View
             </h3>
             <div className="space-y-1">
               <label className="text-xs font-bold text-stone-700">Preset Name</label>
@@ -2000,7 +2000,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               <button
                 onClick={handleSavePreset}
                 disabled={!newPresetName.trim()}
-                className="px-4 py-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold disabled:opacity-50"
+                className="px-4 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold disabled:opacity-50"
               >
                 Save Preset
               </button>
@@ -2035,7 +2035,7 @@ export const AdminNotificationRetryTab: React.FC<AdminNotificationRetryTabProps>
               <button
                 onClick={executeRetryNow}
                 disabled={actionLoading}
-                className="px-4 py-2 bg-[#B85C38] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
               >
                 {actionLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
                 <span>{actionLoading ? 'Retrying...' : 'Confirm Retry'}</span>

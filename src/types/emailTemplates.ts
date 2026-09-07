@@ -75,23 +75,23 @@ export const MOCK_TEST_VARIABLES: Record<string, string> = {
         <th style="padding:8px 12px; text-align:right;">Price</th>
       </tr>
     </thead>
-    <tbody style="font-size:13px; color:#1F1B16;">
+    <tbody style="font-size:13px; color:#2A211C;">
       <tr style="border-bottom:1px solid #eee;">
-        <td style="padding:10px 12px;">Pure Belgian Linen Bed Sheet Set (Queen, Pure White)</td>
+        <td style="padding:10px 12px;">Floral Wrap Midi Dress (M, Blush Pink)</td>
         <td style="padding:10px 12px;">1</td>
-        <td style="padding:10px 12px; text-align:right;">₹9,500</td>
+        <td style="padding:10px 12px; text-align:right;">₹3,500</td>
       </tr>
       <tr style="border-bottom:1px solid #eee;">
-        <td style="padding:10px 12px;">Handcrafted Linen Pillow Covers (Pair, Terracotta)</td>
+        <td style="padding:10px 12px;">Co-Ord Set — Top & Skirt (S, Ivory)</td>
         <td style="padding:10px 12px;">2</td>
-        <td style="padding:10px 12px; text-align:right;">₹5,000</td>
+        <td style="padding:10px 12px; text-align:right;">₹4,200</td>
       </tr>
     </tbody>
   </table>`,
   item_count: '3',
   tracking_number: 'SF10098234IN',
   courier_name: 'Delhivery Direct',
-  tracking_url: 'https://saandsha.com/track/KL-100452',
+  tracking_url: 'https://saandsha.com/track/SS-100452',
   estimated_delivery: '8 August 2026',
   shipping_address: '42, Marine Drive, Nariman Point, Mumbai, Maharashtra 400020',
   payment_method: 'Prepaid (Razorpay / UPI)',

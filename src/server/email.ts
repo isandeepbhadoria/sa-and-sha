@@ -142,7 +142,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
       const hasImg = item.image && item.image.trim().length > 0;
       const imgHtml = hasImg
         ? `<img src="${item.image}" alt="${item.name}" width="60" height="75" style="width: 60px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid #E5E0D8; display: block;" />`
-        : `<div style="width: 60px; height: 75px; background-color: #F5F1E8; border-radius: 4px; border: 1px solid #E5E0D8; display: flex; align-items: center; justify-center; text-align: center; color: #8C7A6B; font-size: 9px; font-weight: bold; letter-spacing: 1px; padding: 4px;">SA AND SHA</div>`;
+        : `<div style="width: 60px; height: 75px; background-color: #FBF6EE; border-radius: 4px; border: 1px solid #E5E0D8; display: flex; align-items: center; justify-center; text-align: center; color: #8C7A6B; font-size: 9px; font-weight: bold; letter-spacing: 1px; padding: 4px;">SA AND SHA</div>`;
 
       return `
         <tr style="border-bottom: 1px solid #EAE5DC;">
@@ -150,17 +150,17 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
             ${imgHtml}
           </td>
           <td style="padding: 12px 8px; vertical-align: top;">
-            <div style="font-size: 13px; font-weight: 600; color: #1F1B16; margin-bottom: 4px;">${item.name}</div>
+            <div style="font-size: 13px; font-weight: 600; color: #2A211C; margin-bottom: 4px;">${item.name}</div>
             <div style="font-size: 11px; color: #7A6C5D;">
-              Size: <strong style="color: #1F1B16;">${item.size}</strong> ${
-        item.color ? `| Color: <strong style="color: #1F1B16;">${item.color}</strong>` : ''
+              Size: <strong style="color: #2A211C;">${item.size}</strong> ${
+        item.color ? `| Color: <strong style="color: #2A211C;">${item.color}</strong>` : ''
       }
             </div>
             <div style="font-size: 11px; color: #7A6C5D; margin-top: 2px;">
               Qty: ${item.quantity} × ₹${(item.price || 0).toLocaleString('en-IN')}
             </div>
           </td>
-          <td style="padding: 12px 0 12px 8px; text-align: right; vertical-align: top; font-size: 13px; font-weight: 700; color: #1F1B16; white-space: nowrap;">
+          <td style="padding: 12px 0 12px 8px; text-align: right; vertical-align: top; font-size: 13px; font-weight: 700; color: #2A211C; white-space: nowrap;">
             ₹${itemTotal.toLocaleString('en-IN')}
           </td>
         </tr>
@@ -175,7 +175,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed — ${order.order_id}</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1F1B16; -webkit-font-smoothing: antialiased;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2A211C; -webkit-font-smoothing: antialiased;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr>
       <td align="center">
@@ -183,19 +183,19 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
           
           <!-- Header Banner -->
           <tr>
-            <td style="background-color: #1F1B16; padding: 28px 24px; text-align: center;">
-              <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-              <div style="font-size: 9px; letter-spacing: 3px; color: #C9B79C; text-transform: uppercase; margin-top: 6px; font-weight: 600;">ARTISANAL EUROPEAN FLAX MENSWEAR | JAIPUR</div>
+            <td style="background-color: #2A211C; padding: 28px 24px; text-align: center;">
+              <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+              <div style="font-size: 9px; letter-spacing: 3px; color: #E5D2BC; text-transform: uppercase; margin-top: 6px; font-weight: 600;">LADIES APPAREL</div>
             </td>
           </tr>
 
           <!-- Main Greeting -->
           <tr>
             <td style="padding: 32px 28px 20px 28px;">
-              <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B85C38; text-transform: uppercase; margin-bottom: 8px;">Order Confirmed</div>
-              <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 22px; color: #1F1B16; font-weight: 600;">Thank you for your order, ${order.customer_name}.</h2>
+              <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B08D57; text-transform: uppercase; margin-bottom: 8px;">Order Confirmed</div>
+              <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 22px; color: #2A211C; font-weight: 600;">Thank you for your order, ${order.customer_name}.</h2>
               <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #52473C;">
-                We have received your payment and our master tailors in Jaipur are preparing your handcrafted linen garments with meticulous care.
+                We have received your payment and our team is preparing your order with meticulous care.
               </p>
             </td>
           </tr>
@@ -207,23 +207,23 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
                 <tr>
                   <td width="50%" style="padding: 4px 8px; vertical-align: top;">
                     <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C7A6B; font-weight: 700;">Order Reference</div>
-                    <div style="font-size: 14px; font-weight: 700; color: #1F1B16; margin-top: 2px; font-family: monospace;">${order.order_id}</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #2A211C; margin-top: 2px; font-family: monospace;">${order.order_id}</div>
                   </td>
                   <td width="50%" style="padding: 4px 8px; vertical-align: top;">
                     <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C7A6B; font-weight: 700;">Order Date</div>
-                    <div style="font-size: 13px; font-weight: 600; color: #1F1B16; margin-top: 2px;">${formattedDate}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: #2A211C; margin-top: 2px;">${formattedDate}</div>
                   </td>
                 </tr>
                 <tr>
                   <td width="50%" style="padding: 12px 8px 4px 8px; vertical-align: top;">
                     <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C7A6B; font-weight: 700;">Payment Status</div>
-                    <div style="font-size: 13px; font-weight: 700; color: ${isPaid ? '#2E6B38' : '#B85C38'}; margin-top: 2px;">
+                    <div style="font-size: 13px; font-weight: 700; color: ${isPaid ? '#2E6B38' : '#B08D57'}; margin-top: 2px;">
                       ${paymentStatusText}
                     </div>
                   </td>
                   <td width="50%" style="padding: 12px 8px 4px 8px; vertical-align: top;">
                     <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8C7A6B; font-weight: 700;">Method</div>
-                    <div style="font-size: 12px; font-weight: 600; color: #1F1B16; margin-top: 2px;">${paymentMethodText}</div>
+                    <div style="font-size: 12px; font-weight: 600; color: #2A211C; margin-top: 2px;">${paymentMethodText}</div>
                   </td>
                 </tr>
               </table>
@@ -233,7 +233,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
           <!-- Products Table Header -->
           <tr>
             <td style="padding: 0 28px;">
-              <div style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #1F1B16; padding-bottom: 8px; border-bottom: 2px solid #1F1B16;">
+              <div style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #2A211C; padding-bottom: 8px; border-bottom: 2px solid #2A211C;">
                 Purchased Items
               </div>
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -248,7 +248,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
                 <tr>
                   <td style="padding: 4px 0;">Subtotal</td>
-                  <td style="padding: 4px 0; text-align: right; font-weight: 600; color: #1F1B16;">₹${(order.subtotal || 0).toLocaleString('en-IN')}</td>
+                  <td style="padding: 4px 0; text-align: right; font-weight: 600; color: #2A211C;">₹${(order.subtotal || 0).toLocaleString('en-IN')}</td>
                 </tr>
                 ${
                   order.discount > 0
@@ -260,13 +260,13 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
                 }
                 <tr>
                   <td style="padding: 4px 0;">Shipping Fee</td>
-                  <td style="padding: 4px 0; text-align: right; font-weight: 600; color: #1F1B16;">
+                  <td style="padding: 4px 0; text-align: right; font-weight: 600; color: #2A211C;">
                     ${order.shipping_cost === 0 ? '<span style="color: #2E6B38; font-weight: 700;">FREE</span>' : `₹${order.shipping_cost}`}
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding: 12px 0 0 0; font-size: 15px; font-weight: 700; color: #1F1B16; border-top: 1px solid #1F1B16;">${totalLabel}</td>
-                  <td style="padding: 12px 0 0 0; text-align: right; font-size: 17px; font-weight: 800; color: #B85C38; border-top: 1px solid #1F1B16;">
+                  <td style="padding: 12px 0 0 0; font-size: 15px; font-weight: 700; color: #2A211C; border-top: 1px solid #2A211C;">${totalLabel}</td>
+                  <td style="padding: 12px 0 0 0; text-align: right; font-size: 17px; font-weight: 800; color: #B08D57; border-top: 1px solid #2A211C;">
                     ₹${(order.grand_total || 0).toLocaleString('en-IN')}
                   </td>
                 </tr>
@@ -280,10 +280,10 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; border-radius: 6px; border: 1px solid #EAE5DC; padding: 20px;">
                 <tr>
                   <td>
-                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #1F1B16; margin-bottom: 8px;">
+                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #2A211C; margin-bottom: 8px;">
                       Shipping Destination
                     </div>
-                    <div style="font-size: 13px; font-weight: 700; color: #1F1B16; margin-bottom: 4px;">${order.customer_name}</div>
+                    <div style="font-size: 13px; font-weight: 700; color: #2A211C; margin-bottom: 4px;">${order.customer_name}</div>
                     <div style="font-size: 13px; line-height: 1.5; color: #52473C;">
                       ${order.address}<br>
                       ${order.city}, ${order.state} - ${order.pincode}<br>
@@ -304,7 +304,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
           <!-- CTA Button -->
           <tr>
             <td style="padding: 0 28px 32px 28px; text-align: center;">
-              <a href="https://saandsha.com" target="_blank" style="display: inline-block; background-color: #1F1B16; color: #F5F1E8; padding: 14px 32px; text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+              <a href="https://saandsha.com" target="_blank" style="display: inline-block; background-color: #2A211C; color: #FBF6EE; padding: 14px 32px; text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
                 Visit Sa and Sha
               </a>
             </td>
@@ -315,10 +315,10 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
             <td style="background-color: #FAF8F5; padding: 24px; text-align: center; border-top: 1px solid #EAE5DC;">
               <div style="font-size: 12px; color: #7A6C5D; line-height: 1.5;">
                 Need assistance with your order? Reply directly to this email or write to us at 
-                <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: none; font-weight: 600;">shop@saandsha.com</a>.
+                <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: none; font-weight: 600;">shop@saandsha.com</a>.
               </div>
               <div style="font-size: 10px; color: #A39587; margin-top: 16px; letter-spacing: 1px; text-transform: uppercase;">
-                © 2026 Sa and Sha. Artisanal Organic Flax Apparel. All Rights Reserved.
+                © 2026 Sa and Sha. All Rights Reserved.
               </div>
             </td>
           </tr>
@@ -346,43 +346,43 @@ export function generateAdminNotificationHTML(order: OrderData): string {
   <meta charset="utf-8">
   <title>New Paid Order Alert — ${order.order_id}</title>
 </head>
-<body style="margin: 0; padding: 16px; font-family: monospace, sans-serif; background-color: #1F1B16; color: #F5F1E8;">
-  <div style="max-width: 650px; margin: 0 auto; background-color: #2A241E; border: 1px solid #C9B79C; padding: 24px; border-radius: 6px;">
-    <h2 style="margin-top: 0; color: #B85C38; font-size: 18px; border-bottom: 1px solid #C9B79C; padding-bottom: 12px;">
+<body style="margin: 0; padding: 16px; font-family: monospace, sans-serif; background-color: #2A211C; color: #FBF6EE;">
+  <div style="max-width: 650px; margin: 0 auto; background-color: #2A241E; border: 1px solid #E5D2BC; padding: 24px; border-radius: 6px;">
+    <h2 style="margin-top: 0; color: #B08D57; font-size: 18px; border-bottom: 1px solid #E5D2BC; padding-bottom: 12px;">
       ⚡ NEW PAID ORDER SECURED — ${order.order_id}
     </h2>
 
     <table width="100%" border="0" cellspacing="0" cellpadding="6" style="font-size: 13px; color: #E8E2D8; border-collapse: collapse;">
       <tr>
-        <td width="35%" style="color: #C9B79C; font-weight: bold;">Order Reference:</td>
+        <td width="35%" style="color: #E5D2BC; font-weight: bold;">Order Reference:</td>
         <td style="font-weight: bold; font-size: 15px; color: #FFFFFF;">${order.order_id}</td>
       </tr>
       <tr>
-        <td style="color: #C9B79C; font-weight: bold;">Grand Total Paid:</td>
-        <td style="font-weight: bold; font-size: 16px; color: #B85C38;">₹${(order.grand_total || 0).toLocaleString('en-IN')}</td>
+        <td style="color: #E5D2BC; font-weight: bold;">Grand Total Paid:</td>
+        <td style="font-weight: bold; font-size: 16px; color: #B08D57;">₹${(order.grand_total || 0).toLocaleString('en-IN')}</td>
       </tr>
       <tr>
-        <td style="color: #C9B79C; font-weight: bold;">Payment Method:</td>
+        <td style="color: #E5D2BC; font-weight: bold;">Payment Method:</td>
         <td>${order.payment_method || 'Razorpay Prepaid'} (${order.status})</td>
       </tr>
       <tr>
-        <td style="color: #C9B79C; font-weight: bold;">Razorpay Payment ID:</td>
+        <td style="color: #E5D2BC; font-weight: bold;">Razorpay Payment ID:</td>
         <td>${order.payment_id || 'N/A'}</td>
       </tr>
       <tr>
-        <td style="color: #C9B79C; font-weight: bold;">Razorpay Order ID:</td>
+        <td style="color: #E5D2BC; font-weight: bold;">Razorpay Order ID:</td>
         <td>${order.razorpay_order_id || 'N/A'}</td>
       </tr>
       <tr>
-        <td style="color: #C9B79C; font-weight: bold;">Timestamp:</td>
+        <td style="color: #E5D2BC; font-weight: bold;">Timestamp:</td>
         <td>${order.created_at || new Date().toISOString()}</td>
       </tr>
     </table>
 
     <hr style="border: 0; border-top: 1px solid #42382E; margin: 16px 0;">
 
-    <h3 style="color: #C9B79C; font-size: 14px; margin-bottom: 8px;">CUSTOMER & SHIPPING DETAILS</h3>
-    <div style="font-size: 13px; line-height: 1.6; background-color: #1F1B16; padding: 12px; border-radius: 4px; border: 1px solid #42382E;">
+    <h3 style="color: #E5D2BC; font-size: 14px; margin-bottom: 8px;">CUSTOMER & SHIPPING DETAILS</h3>
+    <div style="font-size: 13px; line-height: 1.6; background-color: #2A211C; padding: 12px; border-radius: 4px; border: 1px solid #42382E;">
       <strong>Name:</strong> ${order.customer_name}<br>
       <strong>Email:</strong> ${order.customer_email}<br>
       <strong>Phone:</strong> ${order.customer_phone}<br>
@@ -392,12 +392,12 @@ export function generateAdminNotificationHTML(order: OrderData): string {
 
     <hr style="border: 0; border-top: 1px solid #42382E; margin: 16px 0;">
 
-    <h3 style="color: #C9B79C; font-size: 14px; margin-bottom: 8px;">ORDER ITEMS</h3>
-    <div style="font-size: 12px; line-height: 1.8; background-color: #1F1B16; padding: 12px; border-radius: 4px; border: 1px solid #42382E;">
+    <h3 style="color: #E5D2BC; font-size: 14px; margin-bottom: 8px;">ORDER ITEMS</h3>
+    <div style="font-size: 12px; line-height: 1.8; background-color: #2A211C; padding: 12px; border-radius: 4px; border: 1px solid #42382E;">
       ${itemsText}
     </div>
 
-    <div style="margin-top: 20px; padding: 12px; background-color: #B85C38; color: #FFFFFF; font-weight: bold; font-size: 12px; text-align: center; border-radius: 4px;">
+    <div style="margin-top: 20px; padding: 12px; background-color: #B08D57; color: #FFFFFF; font-weight: bold; font-size: 12px; text-align: center; border-radius: 4px;">
       ACTION REQUIRED: Please check https://saandsha.com/admin to prepare shipment and generate courier AWB.
     </div>
   </div>
@@ -510,16 +510,16 @@ function renderItemsRows(items: OrderItem[]): string {
     const hasImg = item.image && item.image.trim().length > 0;
     const imgHtml = hasImg
       ? `<img src="${item.image}" alt="${item.name}" width="50" height="65" style="width: 50px; height: 65px; object-fit: cover; border-radius: 4px; border: 1px solid #E5E0D8; display: block;" />`
-      : `<div style="width: 50px; height: 65px; background-color: #F5F1E8; border-radius: 4px; border: 1px solid #E5E0D8; text-align: center; color: #8C7A6B; font-size: 8px; font-weight: bold; padding-top: 20px;">KORA</div>`;
+      : `<div style="width: 50px; height: 65px; background-color: #FBF6EE; border-radius: 4px; border: 1px solid #E5E0D8; text-align: center; color: #8C7A6B; font-size: 8px; font-weight: bold; padding-top: 20px;">KORA</div>`;
 
     return `
       <tr style="border-bottom: 1px solid #EAE5DC;">
         <td style="padding: 10px 8px 10px 0; width: 60px; vertical-align: top;">${imgHtml}</td>
         <td style="padding: 10px 8px; vertical-align: top;">
-          <div style="font-size: 13px; font-weight: 600; color: #1F1B16;">${item.name}</div>
+          <div style="font-size: 13px; font-weight: 600; color: #2A211C;">${item.name}</div>
           <div style="font-size: 11px; color: #7A6C5D; margin-top: 2px;">Size: <strong>${item.size}</strong> | Qty: <strong>${item.quantity}</strong></div>
         </td>
-        <td style="padding: 10px 0 10px 8px; text-align: right; vertical-align: top; font-size: 13px; font-weight: 700; color: #1F1B16; white-space: nowrap;">
+        <td style="padding: 10px 0 10px 8px; text-align: right; vertical-align: top; font-size: 13px; font-weight: 700; color: #2A211C; white-space: nowrap;">
           ₹${itemTotal.toLocaleString('en-IN')}
         </td>
       </tr>
@@ -535,35 +535,35 @@ export function generateProcessingEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Preparing Your Order</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
-          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B85C38; text-transform: uppercase; margin-bottom: 8px;">Order Processing</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">We’re Preparing Your Order — ${order.order_id}</h2>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B08D57; text-transform: uppercase; margin-bottom: 8px;">Order Processing</div>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">We’re Preparing Your Order — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
-            Your order is now being processed! Our master tailors and artisans in Jaipur are carefully crafting, inspecting, and packaging your handcrafted linen garments with meticulous attention to detail.
+            Your order is now being processed! Our team is carefully inspecting and packaging your order with meticulous attention to detail.
           </p>
           <div style="background-color: #FAF8F5; border: 1px solid #EAE5DC; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
-              <tr><td style="padding: 4px 0; font-weight: 600;">Order Reference:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #1F1B16;">${order.order_id}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Payment Method:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${paymentWording}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Grand Total:</td><td style="text-align: right; font-weight: 700; color: #1F1B16;">₹${(order.grand_total || 0).toLocaleString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Order Reference:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #2A211C;">${order.order_id}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Payment Method:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${paymentWording}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Grand Total:</td><td style="text-align: right; font-weight: 700; color: #2A211C;">₹${(order.grand_total || 0).toLocaleString('en-IN')}</td></tr>
             </table>
           </div>
-          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1F1B16; margin-bottom: 8px; border-bottom: 2px solid #1F1B16; padding-bottom: 4px;">Items Being Prepared</div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #2A211C; margin-bottom: 8px; border-bottom: 2px solid #2A211C; padding-bottom: 4px;">Items Being Prepared</div>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
             You will receive a dispatch notification with your tracking details as soon as your parcel is handed over to our courier partner.<br><br>
-            For any queries, reach us at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B85C38; text-decoration: underline;">saandsha.com</a>.
+            For any queries, reach us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B08D57; text-decoration: underline;">saandsha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -584,38 +584,38 @@ export function generateDispatchedEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Order Dispatched</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #2E6B38; text-transform: uppercase; margin-bottom: 8px;">Order Dispatched</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">Your Order Has Shipped — ${order.order_id}</h2>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">Your Order Has Shipped — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
             Great news! Your Sa and Sha order has been carefully pressed, sealed, and handed over to our courier partner. It is now on its way to you.
           </p>
           <div style="background-color: #FAF8F5; border: 1px solid #EAE5DC; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
-              <tr><td style="padding: 4px 0; font-weight: 600;">Courier Partner:</td><td style="text-align: right; font-weight: 700; color: #1F1B16;">${courier}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">AWB / Tracking No:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #1F1B16;">${awb}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Dispatch Date:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${dispatchDate}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Courier Partner:</td><td style="text-align: right; font-weight: 700; color: #2A211C;">${courier}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">AWB / Tracking No:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #2A211C;">${awb}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Dispatch Date:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${dispatchDate}</td></tr>
               <tr><td style="padding: 4px 0; font-weight: 600;">Estimated Delivery:</td><td style="text-align: right; font-weight: 700; color: #2E6B38;">${estDelivery}</td></tr>
             </table>
           </div>
           <div style="text-align: center; margin: 24px 0;">
-            <a href="${trackUrl}" target="_blank" style="display: inline-block; background-color: #1F1B16; color: #F5F1E8; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 14px 28px; border-radius: 4px; text-transform: uppercase;">TRACK YOUR ORDER</a>
+            <a href="${trackUrl}" target="_blank" style="display: inline-block; background-color: #2A211C; color: #FBF6EE; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 14px 28px; border-radius: 4px; text-transform: uppercase;">TRACK YOUR ORDER</a>
           </div>
-          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1F1B16; margin-bottom: 8px; border-bottom: 2px solid #1F1B16; padding-bottom: 4px;">Items in Shipment</div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #2A211C; margin-bottom: 8px; border-bottom: 2px solid #2A211C; padding-bottom: 4px;">Items in Shipment</div>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you need assistance with your delivery, contact us at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a>.
+            If you need assistance with your delivery, contact us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -630,27 +630,27 @@ export function generateDeliveredEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Order Delivered</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #2E6B38; text-transform: uppercase; margin-bottom: 8px;">Order Delivered</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">Your Order Has Been Delivered — ${order.order_id}</h2>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">Your Order Has Been Delivered — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
-            Your order <strong>${order.order_id}</strong> has been successfully delivered! We hope you love your new handcrafted linen garments as much as we loved creating them for you.
+            Your order <strong>${order.order_id}</strong> has been successfully delivered! We hope you love your new pieces as much as we loved putting them together for you.
           </p>
-          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1F1B16; margin-bottom: 8px; border-bottom: 2px solid #1F1B16; padding-bottom: 4px;">Summary of Delivered Items</div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #2A211C; margin-bottom: 8px; border-bottom: 2px solid #2A211C; padding-bottom: 4px;">Summary of Delivered Items</div>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            Thank you for choosing Sa and Sha. For care instructions or support, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B85C38; text-decoration: underline;">saandsha.com</a>.
+            Thank you for choosing Sa and Sha. For care instructions or support, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B08D57; text-decoration: underline;">saandsha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -670,34 +670,34 @@ export function generateCancellationEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Order Cancelled</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
-          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B85C38; text-transform: uppercase; margin-bottom: 8px;">Order Notice</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">Order Cancelled — ${order.order_id}</h2>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B08D57; text-transform: uppercase; margin-bottom: 8px;">Order Notice</div>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">Order Cancelled — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
             Your order reference <strong>${order.order_id}</strong> has been cancelled.<br>${refundNote}
           </p>
           <div style="background-color: #FAF8F5; border: 1px solid #EAE5DC; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
-              <tr><td style="padding: 4px 0; font-weight: 600;">Order Reference:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #1F1B16;">${order.order_id}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Cancellation Date:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${new Date().toLocaleDateString('en-IN')}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Payment Method:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${order.payment_method || 'Razorpay'}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Order Reference:</td><td style="text-align: right; font-family: monospace; font-weight: 700; color: #2A211C;">${order.order_id}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Cancellation Date:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${new Date().toLocaleDateString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Payment Method:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${order.payment_method || 'Razorpay'}</td></tr>
             </table>
           </div>
-          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1F1B16; margin-bottom: 8px; border-bottom: 2px solid #1F1B16; padding-bottom: 4px;">Cancelled Items</div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #2A211C; margin-bottom: 8px; border-bottom: 2px solid #2A211C; padding-bottom: 4px;">Cancelled Items</div>
           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you have questions regarding this cancellation, contact customer care at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a>.
+            If you have questions regarding this cancellation, contact customer care at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -714,30 +714,30 @@ export function generateRefundInitiatedEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refund Initiated</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
-          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B85C38; text-transform: uppercase; margin-bottom: 8px;">Refund Update</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">Refund Initiated — ${order.order_id}</h2>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #B08D57; text-transform: uppercase; margin-bottom: 8px;">Refund Update</div>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">Refund Initiated — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
             Your refund request for order <strong>${order.order_id}</strong> in the amount of <strong>₹${refundAmount.toLocaleString('en-IN')}</strong> has been initiated.
           </p>
           <div style="background-color: #FAF8F5; border: 1px solid #EAE5DC; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
-              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Amount:</td><td style="text-align: right; font-weight: 700; color: #1F1B16;">₹${refundAmount.toLocaleString('en-IN')}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Initiated Date:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${new Date().toLocaleDateString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Amount:</td><td style="text-align: right; font-weight: 700; color: #2A211C;">₹${refundAmount.toLocaleString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Initiated Date:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${new Date().toLocaleDateString('en-IN')}</td></tr>
               <tr><td style="padding: 4px 0; font-weight: 600;">Note:</td><td style="text-align: right; font-weight: 600; color: #2E6B38;">Refund posting time may vary depending on your bank or payment provider.</td></tr>
             </table>
           </div>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you need further details, please contact our support desk at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a>.
+            If you need further details, please contact our support desk at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -755,31 +755,31 @@ export function generateRefundCompletedEmailHTML(order: OrderData): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refund Completed</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5; padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; border: 1px solid #EAE5DC;">
-        <tr><td style="background-color: #1F1B16; padding: 24px; text-align: center;">
-          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #F5F1E8; text-transform: uppercase;">SA AND SHA™</h1>
-          <div style="font-size: 9px; letter-spacing: 2px; color: #C9B79C; text-transform: uppercase; margin-top: 4px;">ARTISANAL LINEN MENSWEAR | JAIPUR</div>
+        <tr><td style="background-color: #2A211C; padding: 24px; text-align: center;">
+          <h1 style="margin: 0; font-family: 'Times New Roman', Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #FBF6EE; text-transform: uppercase;">SA AND SHA™</h1>
+          <div style="font-size: 9px; letter-spacing: 2px; color: #E5D2BC; text-transform: uppercase; margin-top: 4px;">LADIES APPAREL</div>
         </td></tr>
         <tr><td style="padding: 28px;">
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #2E6B38; text-transform: uppercase; margin-bottom: 8px;">Refund Completed</div>
-          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #1F1B16;">Refund Completed — ${order.order_id}</h2>
+          <h2 style="margin: 0 0 12px 0; font-family: 'Times New Roman', Georgia, serif; font-size: 20px; color: #2A211C;">Refund Completed — ${order.order_id}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #52473C;">
             Dear ${order.customer_name},<br><br>
             Your refund of <strong>₹${refundAmount.toLocaleString('en-IN')}</strong> for order <strong>${order.order_id}</strong> has been recorded as completed.
           </p>
           <div style="background-color: #FAF8F5; border: 1px solid #EAE5DC; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #52473C;">
-              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Amount:</td><td style="text-align: right; font-weight: 700; color: #1F1B16;">₹${refundAmount.toLocaleString('en-IN')}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Reference:</td><td style="text-align: right; font-weight: 700; color: #1F1B16; font-family: monospace;">${refundRef}</td></tr>
-              <tr><td style="padding: 4px 0; font-weight: 600;">Completion Date:</td><td style="text-align: right; font-weight: 600; color: #1F1B16;">${new Date().toLocaleDateString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Amount:</td><td style="text-align: right; font-weight: 700; color: #2A211C;">₹${refundAmount.toLocaleString('en-IN')}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Refund Reference:</td><td style="text-align: right; font-weight: 700; color: #2A211C; font-family: monospace;">${refundRef}</td></tr>
+              <tr><td style="padding: 4px 0; font-weight: 600;">Completion Date:</td><td style="text-align: right; font-weight: 600; color: #2A211C;">${new Date().toLocaleDateString('en-IN')}</td></tr>
               <tr><td style="padding: 4px 0; font-weight: 600;">Status:</td><td style="text-align: right; font-weight: 700; color: #2E6B38;">Credited to Original Method</td></tr>
             </table>
           </div>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            Thank you for your patience. For any further assistance, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B85C38; text-decoration: underline;">shop@saandsha.com</a>.
+            Thank you for your patience. For any further assistance, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
           </p>
         </td></tr>
       </table>

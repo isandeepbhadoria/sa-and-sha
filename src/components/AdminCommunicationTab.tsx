@@ -370,14 +370,14 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
   return (
     <div className="space-y-6 animate-fade-in pb-12">
       {/* HEADER SECTION */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <Radio className="w-5 h-5 text-[#B85C38]" />
-            <h1 className="font-serif text-xl md:text-2xl font-bold text-[#1F1B16]">
+            <Radio className="w-5 h-5 text-[#B08D57]" />
+            <h1 className="font-serif text-xl md:text-2xl font-bold text-[#2A211C]">
               Communication Centre
             </h1>
-            <span className="px-2 py-0.5 bg-[#B85C38]/10 text-[#B85C38] border border-[#B85C38]/20 rounded text-[10px] font-bold uppercase tracking-wider">
+            <span className="px-2 py-0.5 bg-[#B08D57]/10 text-[#B08D57] border border-[#B08D57]/20 rounded text-[10px] font-bold uppercase tracking-wider">
               Phase 9B.1
             </span>
           </div>
@@ -418,13 +418,13 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
       )}
 
       {/* NAVIGATION SUB-TABS */}
-      <div className="flex flex-wrap gap-2 md:gap-4 border-b border-stone-200 bg-white px-4 rounded-xl border border-[#C9B79C]/20 shadow-xs">
+      <div className="flex flex-wrap gap-2 md:gap-4 border-b border-stone-200 bg-white px-4 rounded-xl border border-[#E5D2BC]/20 shadow-xs">
         <button
           onClick={() => setActiveSubTab('dashboard')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'dashboard'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Layers className="w-4 h-4" />
@@ -435,8 +435,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('events')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'events'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Bell className="w-4 h-4" />
@@ -447,8 +447,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('email_templates')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'email_templates'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Mail className="w-4 h-4" />
@@ -459,8 +459,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('providers')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'providers'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Server className="w-4 h-4" />
@@ -471,8 +471,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('queue')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'queue'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Clock className="w-4 h-4" />
@@ -483,8 +483,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('retry')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'retry'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <RotateCcw className="w-4 h-4" />
@@ -495,8 +495,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onClick={() => setActiveSubTab('settings')}
           className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             activeSubTab === 'settings'
-              ? 'border-[#B85C38] text-[#B85C38]'
-              : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
           }`}
         >
           <Settings className="w-4 h-4" />
@@ -514,14 +514,14 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* EMAIL */}
-              <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-3">
+              <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-blue-50 text-blue-700 rounded-lg">
                       <Mail className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1F1B16] text-sm">Email Provider</h3>
+                      <h3 className="font-bold text-[#2A211C] text-sm">Email Provider</h3>
                       <p className="text-[11px] text-stone-500">
                         {providers.email?.provider || 'Resend API'}
                       </p>
@@ -539,14 +539,14 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               </div>
 
               {/* WHATSAPP */}
-              <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-3">
+              <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-emerald-50 text-emerald-700 rounded-lg">
                       <MessageSquare className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1F1B16] text-sm">WhatsApp Provider</h3>
+                      <h3 className="font-bold text-[#2A211C] text-sm">WhatsApp Provider</h3>
                       <p className="text-[11px] text-stone-500">
                         {providers.whatsapp?.provider || 'Interakt / Meta Cloud API'}
                       </p>
@@ -564,14 +564,14 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               </div>
 
               {/* SMS */}
-              <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-3">
+              <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-amber-50 text-amber-700 rounded-lg">
                       <Smartphone className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1F1B16] text-sm">SMS Provider</h3>
+                      <h3 className="font-bold text-[#2A211C] text-sm">SMS Provider</h3>
                       <p className="text-[11px] text-stone-500">
                         {providers.sms?.provider || 'MSG91'}
                       </p>
@@ -596,11 +596,11 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               Event Dispatch Coverage
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs">
+              <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs">
                 <p className="text-xs text-stone-500 font-bold uppercase tracking-wider">
                   Total Events Configured
                 </p>
-                <p className="text-3xl font-serif font-bold text-[#1F1B16] mt-1">
+                <p className="text-3xl font-serif font-bold text-[#2A211C] mt-1">
                   {eventSettings.length}
                 </p>
                 <p className="text-[11px] text-stone-400 mt-1">OTP, Orders, Returns, Auth</p>
@@ -673,7 +673,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                     Phase 9B.3
                   </span>
                   <div className="flex items-center gap-2 text-stone-700 font-bold text-xs">
-                    <Clock className="w-4 h-4 text-[#B85C38]" />
+                    <Clock className="w-4 h-4 text-[#B08D57]" />
                     <span>Async Dispatch Queue</span>
                   </div>
                   <p className="text-xs text-stone-500">
@@ -686,7 +686,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                     Phase 9B.4
                   </span>
                   <div className="flex items-center gap-2 text-stone-700 font-bold text-xs">
-                    <RotateCcw className="w-4 h-4 text-[#B85C38]" />
+                    <RotateCcw className="w-4 h-4 text-[#B08D57]" />
                     <span>Retry & Dead-Letter Queue</span>
                   </div>
                   <p className="text-xs text-stone-500">
@@ -699,7 +699,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                     Phase 9B.5
                   </span>
                   <div className="flex items-center gap-2 text-stone-700 font-bold text-xs">
-                    <Layers className="w-4 h-4 text-[#B85C38]" />
+                    <Layers className="w-4 h-4 text-[#B08D57]" />
                     <span>Delivery Analytics & Webhooks</span>
                   </div>
                   <p className="text-xs text-stone-500">
@@ -716,7 +716,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
       {activeSubTab === 'events' && (
         <div className="space-y-4">
           {/* SEARCH & CATEGORY FILTERS */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-xl border border-[#C9B79C]/20 shadow-xs">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-xl border border-[#E5D2BC]/20 shadow-xs">
             <div className="relative w-full sm:w-72">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
               <input
@@ -724,7 +724,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 placeholder="Search event name or ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs focus:outline-none focus:border-[#B85C38]"
+                className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs focus:outline-none focus:border-[#B08D57]"
               />
             </div>
 
@@ -744,7 +744,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   onClick={() => setCategoryFilter(cat.id)}
                   className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
                     categoryFilter === cat.id
-                      ? 'bg-[#B85C38] text-white'
+                      ? 'bg-[#B08D57] text-white'
                       : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}
                 >
@@ -755,7 +755,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           </div>
 
           {/* EVENTS TABLE */}
-          <div className="bg-white rounded-xl border border-[#C9B79C]/20 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-[#E5D2BC]/20 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
@@ -772,7 +772,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   {loadingEvents ? (
                     <tr>
                       <td colSpan={6} className="py-12 text-center text-stone-400">
-                        <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-[#B85C38]" />
+                        <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-[#B08D57]" />
                         <span>Loading notification event settings...</span>
                       </td>
                     </tr>
@@ -787,7 +787,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                       <tr key={ev.event_id} className="hover:bg-stone-50/60 transition-colors">
                         <td className="py-3.5 px-4">
                           <div>
-                            <p className="font-bold text-[#1F1B16] text-xs">{ev.event_name}</p>
+                            <p className="font-bold text-[#2A211C] text-xs">{ev.event_name}</p>
                             <span className="font-mono text-[10px] text-stone-400">
                               {ev.event_id}
                             </span>
@@ -869,7 +869,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                               setEditingEvent({ ...ev });
                               setIsEditModalOpen(true);
                             }}
-                            className="p-1.5 hover:bg-stone-100 text-stone-600 hover:text-[#B85C38] rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 hover:bg-stone-100 text-stone-600 hover:text-[#B08D57] rounded-lg transition-colors cursor-pointer"
                             title="Edit Event Details"
                           >
                             <Edit2 className="w-4 h-4" />
@@ -906,11 +906,11 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* EMAIL PROVIDER */}
-            <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-4">
+            <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-blue-600" />
-                  <h3 className="font-bold text-[#1F1B16] text-sm">Email Provider</h3>
+                  <h3 className="font-bold text-[#2A211C] text-sm">Email Provider</h3>
                 </div>
                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded uppercase ${
                   providers.email?.status === 'Active' || providers.email?.verified
@@ -997,7 +997,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 type="button"
                 onClick={() => handleSaveProvider('email')}
                 disabled={savingProviderChannel === 'email'}
-                className="w-full py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className="w-full py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 {savingProviderChannel === 'email' ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -1009,11 +1009,11 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
             </div>
 
             {/* WHATSAPP PROVIDER */}
-            <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-4">
+            <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <h3 className="font-bold text-[#1F1B16] text-sm">WhatsApp Provider</h3>
+                  <h3 className="font-bold text-[#2A211C] text-sm">WhatsApp Provider</h3>
                 </div>
                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded uppercase ${
                   providers.whatsapp?.status === 'Active'
@@ -1065,7 +1065,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 type="button"
                 onClick={() => handleSaveProvider('whatsapp')}
                 disabled={savingProviderChannel === 'whatsapp'}
-                className="w-full py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className="w-full py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 {savingProviderChannel === 'whatsapp' ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -1077,11 +1077,11 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
             </div>
 
             {/* SMS PROVIDER */}
-            <div className="bg-white p-5 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-4">
+            <div className="bg-white p-5 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-4 h-4 text-amber-600" />
-                  <h3 className="font-bold text-[#1F1B16] text-sm">SMS Provider</h3>
+                  <h3 className="font-bold text-[#2A211C] text-sm">SMS Provider</h3>
                 </div>
                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded uppercase ${
                   providers.sms?.status === 'Active'
@@ -1131,7 +1131,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 type="button"
                 onClick={() => handleSaveProvider('sms')}
                 disabled={savingProviderChannel === 'sms'}
-                className="w-full py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className="w-full py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 {savingProviderChannel === 'sms' ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -1148,9 +1148,9 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
       {/* SUB-TAB 4: SETTINGS */}
       {activeSubTab === 'settings' && (
         <form onSubmit={handleSaveGlobalSettings} className="space-y-6 max-w-3xl">
-          <div className="bg-white p-6 rounded-xl border border-[#C9B79C]/20 shadow-xs space-y-6">
+          <div className="bg-white p-6 rounded-xl border border-[#E5D2BC]/20 shadow-xs space-y-6">
             <div>
-              <h2 className="font-serif text-lg font-bold text-[#1F1B16]">
+              <h2 className="font-serif text-lg font-bold text-[#2A211C]">
                 Global Notification Engine Settings
               </h2>
               <p className="text-xs text-stone-500 mt-0.5">
@@ -1172,7 +1172,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               {/* ENABLE NOTIFICATIONS TOGGLE */}
               <div className="flex items-center justify-between p-3.5 bg-stone-50 rounded-lg border border-stone-200">
                 <div>
-                  <p className="font-bold text-xs text-[#1F1B16]">Master Dispatch Engine</p>
+                  <p className="font-bold text-xs text-[#2A211C]">Master Dispatch Engine</p>
                   <p className="text-[11px] text-stone-500">
                     Master killswitch for async worker queue. Active routing is governed per-event.
                   </p>
@@ -1185,7 +1185,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               {/* MAINTENANCE MODE TOGGLE */}
               <div className="flex items-center justify-between p-3.5 bg-stone-50 rounded-lg border border-stone-200">
                 <div>
-                  <p className="font-bold text-xs text-[#1F1B16]">Maintenance Mode Buffer</p>
+                  <p className="font-bold text-xs text-[#2A211C]">Maintenance Mode Buffer</p>
                   <p className="text-[11px] text-stone-500">
                     Hold outgoing non-essential messages during database migrations.
                   </p>
@@ -1198,7 +1198,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
               {/* RETRY FAILED JOBS */}
               <div className="flex items-center justify-between p-3.5 bg-stone-50 rounded-lg border border-stone-200">
                 <div>
-                  <p className="font-bold text-xs text-[#1F1B16]">Automated Exponential Retries</p>
+                  <p className="font-bold text-xs text-[#2A211C]">Automated Exponential Retries</p>
                   <p className="text-[11px] text-stone-500">
                     Queue failed dispatches for retry (1m, 5m, 30m, 6h, 24h).
                   </p>
@@ -1272,7 +1272,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
       {/* EDIT EVENT MODAL */}
       {isEditModalOpen && editingEvent && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 border border-[#C9B79C]/30 relative animate-scale-up space-y-5">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 border border-[#E5D2BC]/30 relative animate-scale-up space-y-5">
             <button
               onClick={() => {
                 setIsEditModalOpen(false);
@@ -1285,8 +1285,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
 
             <div>
               <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-[#B85C38]" />
-                <h3 className="font-serif text-lg font-bold text-[#1F1B16]">
+                <Bell className="w-5 h-5 text-[#B08D57]" />
+                <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                   Configure Notification Event
                 </h3>
               </div>
@@ -1491,7 +1491,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 type="button"
                 onClick={handleSaveModalEvent}
                 disabled={savingEventId === editingEvent.event_id}
-                className="px-5 py-2 bg-[#B85C38] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase cursor-pointer flex items-center gap-2"
+                className="px-5 py-2 bg-[#B08D57] hover:bg-[#a04e2e] text-white rounded-lg text-xs font-bold uppercase cursor-pointer flex items-center gap-2"
               >
                 {savingEventId === editingEvent.event_id ? (
                   <RefreshCw className="w-3 h-3 animate-spin" />

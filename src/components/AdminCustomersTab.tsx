@@ -961,8 +961,8 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
       {/* Top Navigation & Mode Switcher */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-[#1F1B16] flex items-center gap-2">
-            <Users className="w-6 h-6 text-[#B85C38]" />
+          <h2 className="font-serif text-2xl font-bold text-[#2A211C] flex items-center gap-2">
+            <Users className="w-6 h-6 text-[#B08D57]" />
             <span>Customer CRM & Intelligence Center</span>
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
@@ -976,17 +976,17 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             type="button"
             onClick={() => setActiveMainTab('directory')}
             className={`px-3.5 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
-              activeMainTab === 'directory' ? 'bg-white text-[#1F1B16] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
+              activeMainTab === 'directory' ? 'bg-white text-[#2A211C] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            <Users className="w-3.5 h-3.5 text-[#B85C38]" />
+            <Users className="w-3.5 h-3.5 text-[#B08D57]" />
             <span>Directory</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveMainTab('segments')}
             className={`px-3.5 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
-              activeMainTab === 'segments' ? 'bg-white text-[#1F1B16] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
+              activeMainTab === 'segments' ? 'bg-white text-[#2A211C] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             <Layers className="w-3.5 h-3.5 text-indigo-600" />
@@ -996,7 +996,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             type="button"
             onClick={() => setActiveMainTab('analytics')}
             className={`px-3.5 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
-              activeMainTab === 'analytics' ? 'bg-white text-[#1F1B16] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
+              activeMainTab === 'analytics' ? 'bg-white text-[#2A211C] shadow-2xs font-bold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             <PieChart className="w-3.5 h-3.5 text-emerald-600" />
@@ -1010,7 +1010,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             type="button"
             onClick={() => setExportMenuOpen(!exportMenuOpen)}
             disabled={isExporting}
-            className="px-4 py-2.5 bg-[#1F1B16] text-white rounded-lg text-xs font-bold hover:bg-[#38322B] transition-colors flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2A211C] text-white rounded-lg text-xs font-bold hover:bg-[#38322B] transition-colors flex items-center gap-2"
           >
             {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4 text-amber-400" />}
             <span>Export Directory</span>
@@ -1079,7 +1079,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
           <p className="text-[10px] font-bold uppercase text-stone-400 tracking-wider">Total Customer Directory</p>
-          <p className="font-serif text-xl font-bold text-[#1F1B16] mt-1">{summaryMetrics.totalCustomers.toLocaleString('en-IN')}</p>
+          <p className="font-serif text-xl font-bold text-[#2A211C] mt-1">{summaryMetrics.totalCustomers.toLocaleString('en-IN')}</p>
         </div>
         <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
           <p className="text-[10px] font-bold uppercase text-stone-400 tracking-wider">Repeat Customers</p>
@@ -1091,7 +1091,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         </div>
         <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
           <p className="text-[10px] font-bold uppercase text-stone-400 tracking-wider">Avg Customer Value (AOV)</p>
-          <p className="font-serif text-xl font-bold text-[#B85C38] mt-1">₹{summaryMetrics.averageCustomerValue.toLocaleString('en-IN')}</p>
+          <p className="font-serif text-xl font-bold text-[#B08D57] mt-1">₹{summaryMetrics.averageCustomerValue.toLocaleString('en-IN')}</p>
         </div>
       </div>
 
@@ -1110,7 +1110,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   placeholder="Search customers by name, phone, email, city, state..."
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-stone-200 rounded-lg text-xs focus:outline-none focus:border-[#B85C38]"
+                  className="w-full pl-9 pr-3 py-2 border border-stone-200 rounded-lg text-xs focus:outline-none focus:border-[#B08D57]"
                 />
               </div>
 
@@ -1118,7 +1118,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 <select
                   value={tierFilter}
                   onChange={e => { setTierFilter(e.target.value); setPage(1); }}
-                  className="py-2 px-3 border border-stone-200 rounded-lg text-xs bg-white focus:outline-none focus:border-[#B85C38]"
+                  className="py-2 px-3 border border-stone-200 rounded-lg text-xs bg-white focus:outline-none focus:border-[#B08D57]"
                 >
                   <option value="">All Tiers</option>
                   <option value="VIP">VIP Tier</option>
@@ -1131,7 +1131,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 <select
                   value={consentFilter}
                   onChange={e => { setConsentFilter(e.target.value); setPage(1); }}
-                  className="py-2 px-3 border border-stone-200 rounded-lg text-xs bg-white focus:outline-none focus:border-[#B85C38]"
+                  className="py-2 px-3 border border-stone-200 rounded-lg text-xs bg-white focus:outline-none focus:border-[#B08D57]"
                 >
                   <option value="">All Marketing Consent</option>
                   <option value="whatsapp">WhatsApp Consent</option>
@@ -1142,7 +1142,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#B85C38] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E]"
+                  className="px-4 py-2 bg-[#B08D57] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E]"
                 >
                   Search
                 </button>
@@ -1158,7 +1158,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   className="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 border border-stone-300"
                   title="Admin Utility: Assign missing business Customer IDs"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#B85C38]" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#B08D57]" />
                   <span>Assign Customer IDs</span>
                 </button>
               </div>
@@ -1185,7 +1185,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
           <div className="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
             {isLoading ? (
               <div className="flex items-center justify-center py-12 gap-2 text-stone-500 text-xs">
-                <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+                <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
                 <span>Loading customer records...</span>
               </div>
             ) : errorMsg ? (
@@ -1221,7 +1221,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                         <tr key={c.id} className="hover:bg-amber-50/40 transition-colors">
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-1.5 mb-0.5">
-                              <p className="font-bold text-[#1F1B16]">{c.full_name || 'Valued Customer'}</p>
+                              <p className="font-bold text-[#2A211C]">{c.full_name || 'Valued Customer'}</p>
                               {(c.customer_type?.toString().toLowerCase() === 'business' || Boolean(c.gstin)) ? (
                                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded text-[9px] font-bold">
                                   <Building2 className="w-2.5 h-2.5 text-emerald-700" />
@@ -1262,9 +1262,9 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                                 title={isUnmasked ? 'Hide contact details' : 'Show contact details'}
                               >
                                 {isLoadingUnmask ? (
-                                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B85C38]" />
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B08D57]" />
                                 ) : isUnmasked ? (
-                                  <EyeOff className="w-3.5 h-3.5 text-[#B85C38]" />
+                                  <EyeOff className="w-3.5 h-3.5 text-[#B08D57]" />
                                 ) : (
                                   <Eye className="w-3.5 h-3.5" />
                                 )}
@@ -1281,7 +1281,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                             {c.commerce_summary?.completed_orders || c.commerce_summary?.total_orders || 0}
                           </td>
 
-                          <td className="py-3 px-4 text-right font-bold text-[#B85C38]">
+                          <td className="py-3 px-4 text-right font-bold text-[#B08D57]">
                             ₹{(c.commerce_summary?.total_spent || 0).toLocaleString('en-IN')}
                           </td>
 
@@ -1379,13 +1379,13 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         <div className="space-y-6">
           <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
             <div>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">Customer Segments & Retention Cohorts</h3>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">Customer Segments & Retention Cohorts</h3>
               <p className="text-xs text-stone-500">Automated built-in cohorts and custom saved retention segments.</p>
             </div>
             <button
               type="button"
               onClick={() => setCreateSegmentModalOpen(true)}
-              className="px-4 py-2 bg-[#B85C38] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-2"
+              className="px-4 py-2 bg-[#B08D57] text-white rounded-lg text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               <span>Create Custom Segment</span>
@@ -1394,7 +1394,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
           {isSegmentsLoading ? (
             <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+              <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
               <span>Loading customer segments...</span>
             </div>
           ) : (
@@ -1410,7 +1410,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       </span>
                       <Layers className="w-4 h-4 text-stone-400" />
                     </div>
-                    <h4 className="font-bold text-sm text-[#1F1B16] mt-2">{seg.name}</h4>
+                    <h4 className="font-bold text-sm text-[#2A211C] mt-2">{seg.name}</h4>
                     <p className="text-xs text-stone-500 mt-1 leading-relaxed">{seg.description}</p>
                   </div>
 
@@ -1441,7 +1441,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
             <div>
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">Retention & Customer Health Intelligence</h3>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">Retention & Customer Health Intelligence</h3>
               <p className="text-xs text-stone-500">Automated health scores, RFM distributions, and bulk maintenance utilities.</p>
             </div>
 
@@ -1475,7 +1475,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
           {isAnalyticsLoading ? (
             <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+              <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
               <span>Calculating CRM analytics...</span>
             </div>
           ) : analyticsData ? (
@@ -1510,7 +1510,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
               {/* Marketing Opt-In Rates & RFM */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm space-y-3">
-                  <h4 className="font-bold text-sm text-[#1F1B16] flex items-center gap-2">
+                  <h4 className="font-bold text-sm text-[#2A211C] flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     <span>Marketing Channel Consent Opt-In Rates</span>
                   </h4>
@@ -1546,14 +1546,14 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 </div>
 
                 <div className="bg-white p-5 rounded-xl border border-stone-200 shadow-sm space-y-3">
-                  <h4 className="font-bold text-sm text-[#1F1B16] flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-[#B85C38]" />
+                  <h4 className="font-bold text-sm text-[#2A211C] flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-[#B08D57]" />
                     <span>Repeat Purchase & Retention Rate</span>
                   </h4>
                   <div className="grid grid-cols-2 gap-3 pt-1">
                     <div className="p-3 bg-stone-50 rounded-lg border border-stone-200">
                       <p className="text-[10px] font-bold text-stone-400 uppercase">Repeat Customer Rate</p>
-                      <p className="font-serif text-2xl font-bold text-[#B85C38] mt-1">{analyticsData.repeatRatePct || 0}%</p>
+                      <p className="font-serif text-2xl font-bold text-[#B08D57] mt-1">{analyticsData.repeatRatePct || 0}%</p>
                     </div>
                     <div className="p-3 bg-stone-50 rounded-lg border border-stone-200">
                       <p className="text-[10px] font-bold text-stone-400 uppercase">Average LTV per Account</p>
@@ -1577,7 +1577,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             {/* Drawer Header */}
             <div className="p-5 border-b border-stone-200 bg-[#FAF7F2] flex items-center justify-between sticky top-0 z-10">
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#1F1B16]">
+                <h3 className="font-serif text-xl font-bold text-[#2A211C]">
                   {customerDetail?.profile?.full_name || 'Customer Profile'}
                 </h3>
                 <div className="flex items-center gap-2 mt-0.5">
@@ -1606,7 +1606,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   type="button"
                   onClick={() => handleRepairProfile(customerDetail?.profile?.normalized_phone, customerDetail?.profile?.id)}
                   disabled={isRepairingProfile}
-                  className="px-3 py-1.5 bg-[#B85C38] text-white hover:bg-[#A04D2E] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs disabled:opacity-50"
+                  className="px-3 py-1.5 bg-[#B08D57] text-white hover:bg-[#A04D2E] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs disabled:opacity-50"
                   title="Rescan and repair GST details, separate billing address, and order linking"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isRepairingProfile ? 'animate-spin' : ''}`} />
@@ -1628,7 +1628,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => setDrawerTab('profile')}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'profile' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'profile' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <Users className="w-3.5 h-3.5" />
@@ -1638,7 +1638,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => { setDrawerTab('timeline'); fetchTimeline(selectedCustomerId, timelineCategory); }}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'timeline' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'timeline' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <Clock className="w-3.5 h-3.5" />
@@ -1648,7 +1648,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => setDrawerTab('health')}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'health' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'health' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <HeartPulse className="w-3.5 h-3.5 text-red-500" />
@@ -1658,7 +1658,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => { setDrawerTab('notes'); fetchNotes(selectedCustomerId); }}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'notes' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'notes' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <MessageCircle className="w-3.5 h-3.5 text-blue-600" />
@@ -1668,7 +1668,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => { setDrawerTab('loyalty'); if (selectedCustomerId) fetchLoyaltyData(selectedCustomerId); }}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'loyalty' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'loyalty' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <Award className="w-3.5 h-3.5 text-amber-600" />
@@ -1678,7 +1678,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 onClick={() => { setDrawerTab('security'); if (selectedCustomerId) fetchSecurityEvents(selectedCustomerId); }}
                 className={`px-4 py-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-                  drawerTab === 'security' ? 'border-[#B85C38] text-[#B85C38] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
+                  drawerTab === 'security' ? 'border-[#B08D57] text-[#B08D57] bg-white' : 'border-transparent text-stone-500 hover:text-stone-800'
                 }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -1689,7 +1689,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             {/* Drawer Body */}
             {isDetailLoading ? (
               <div className="flex items-center justify-center py-20 gap-2 text-xs text-stone-500">
-                <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+                <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
                 <span>Fetching customer profile and order history...</span>
               </div>
             ) : customerDetail ? (
@@ -1705,7 +1705,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 {customerDetail.profile?.vip_candidate && (
                   <div className="p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 font-bold text-[#1F1B16]">
+                      <div className="flex items-center gap-2 font-bold text-[#2A211C]">
                         <Sparkles className="w-4 h-4 text-purple-600" />
                         <span>Recommended VIP Promotion</span>
                       </div>
@@ -1771,8 +1771,8 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                     <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-xs space-y-3">
                       <div className="flex items-center justify-between border-b border-stone-100 pb-2">
                         <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-[#B85C38]" />
-                          <span className="font-bold text-[#1F1B16] text-xs uppercase tracking-wider">Customer Identity & Type</span>
+                          <Users className="w-4 h-4 text-[#B08D57]" />
+                          <span className="font-bold text-[#2A211C] text-xs uppercase tracking-wider">Customer Identity & Type</span>
                         </div>
                         {(customerDetail.profile?.customer_type?.toString().toLowerCase() === 'business' || Boolean(customerDetail.profile?.gstin)) ? (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-full text-[10px] font-bold">
@@ -1789,7 +1789,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-800">
                         <div>
                           <p className="text-[10px] uppercase font-bold text-stone-400">Full Name</p>
-                          <p className="font-bold text-[#1F1B16] text-sm">{customerDetail.profile?.full_name || 'N/A'}</p>
+                          <p className="font-bold text-[#2A211C] text-sm">{customerDetail.profile?.full_name || 'N/A'}</p>
                         </div>
                         <div>
                           <p className="text-[10px] uppercase font-bold text-stone-400">Customer ID</p>
@@ -1860,13 +1860,13 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50 p-4 rounded-xl border border-stone-200">
                       <div>
                         <p className="text-[10px] font-bold uppercase text-stone-400">Total Orders</p>
-                        <p className="font-serif text-lg font-bold text-[#1F1B16]">
+                        <p className="font-serif text-lg font-bold text-[#2A211C]">
                           {customerDetail.profile?.commerce_summary?.total_orders || 0}
                         </p>
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase text-stone-400">Total Spent</p>
-                        <p className="font-serif text-lg font-bold text-[#B85C38]">
+                        <p className="font-serif text-lg font-bold text-[#B08D57]">
                           ₹{(customerDetail.profile?.commerce_summary?.total_spent || 0).toLocaleString('en-IN')}
                         </p>
                       </div>
@@ -1886,7 +1886,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {/* Contact Info & Marketing Preferences */}
                     <div className="p-4 bg-amber-50/50 rounded-xl border border-amber-200/80 space-y-3">
-                      <p className="font-bold text-[#B85C38] uppercase text-[10px] tracking-wider">Verified Contact & Consent Information</p>
+                      <p className="font-bold text-[#B08D57] uppercase text-[10px] tracking-wider">Verified Contact & Consent Information</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-stone-800 border-b border-amber-200/60 pb-3">
                         <p>Phone: <span className="font-mono font-bold">{customerDetail.profile?.phone}</span></p>
                         <p>Email: <span className="font-bold">{customerDetail.profile?.email || 'N/A'}</span></p>
@@ -1919,8 +1919,8 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       {/* Default Shipping Address */}
                       <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-xs space-y-2">
                         <div className="flex items-center gap-2 border-b border-stone-100 pb-2">
-                          <MapPin className="w-3.5 h-3.5 text-[#B85C38]" />
-                          <span className="font-bold text-[#1F1B16] text-xs uppercase tracking-wider">Default Shipping Address</span>
+                          <MapPin className="w-3.5 h-3.5 text-[#B08D57]" />
+                          <span className="font-bold text-[#2A211C] text-xs uppercase tracking-wider">Default Shipping Address</span>
                         </div>
                         {(() => {
                           const shipAddr = (customerDetail.profile?.addresses && customerDetail.profile.addresses.length > 0)
@@ -1945,8 +1945,8 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-xs space-y-2">
                         <div className="flex items-center justify-between border-b border-stone-100 pb-2">
                           <div className="flex items-center gap-2">
-                            <Building2 className="w-3.5 h-3.5 text-[#B85C38]" />
-                            <span className="font-bold text-[#1F1B16] text-xs uppercase tracking-wider">Saved Billing Address</span>
+                            <Building2 className="w-3.5 h-3.5 text-[#B08D57]" />
+                            <span className="font-bold text-[#2A211C] text-xs uppercase tracking-wider">Saved Billing Address</span>
                           </div>
                           <span className="text-[10px] font-bold text-stone-500">
                             {customerDetail.profile?.billing_same_as_shipping === false || customerDetail.profile?.billing_address?.is_same_as_shipping === false
@@ -1992,7 +1992,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {/* Admin Tier & Metadata Section */}
                     <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-xs space-y-3">
-                      <p className="font-bold text-[#1F1B16] uppercase text-[10px] tracking-wider">Admin Customer Tier & Metadata</p>
+                      <p className="font-bold text-[#2A211C] uppercase text-[10px] tracking-wider">Admin Customer Tier & Metadata</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="font-bold uppercase text-[10px] text-stone-500">Tier Level</label>
@@ -2056,7 +2056,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                         type="button"
                         onClick={handleSaveAdminMetadata}
                         disabled={isSavingMetadata}
-                        className="px-4 py-2 bg-[#B85C38] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-2"
+                        className="px-4 py-2 bg-[#B08D57] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-2"
                       >
                         {isSavingMetadata ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                         <span>Save Internal Metadata</span>
@@ -2065,18 +2065,18 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {/* Order History */}
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#1F1B16] uppercase text-[11px]">
+                      <h4 className="font-bold text-[#2A211C] uppercase text-[11px]">
                         Order Snapshot History ({(customerDetail.orders || []).length})
                       </h4>
                       <div className="space-y-2">
                         {(customerDetail.orders || []).map((o: any) => (
                           <div key={o.order_id || o.id} className="p-3 bg-stone-50 border border-stone-200 rounded-lg flex items-center justify-between">
                             <div>
-                              <p className="font-bold text-[#1F1B16]">Order #{o.order_id || o.id}</p>
+                              <p className="font-bold text-[#2A211C]">Order #{o.order_id || o.id}</p>
                               <p className="text-[10px] text-stone-500">{new Date(o.created_at).toLocaleDateString('en-IN')}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-[#B85C38]">₹{(o.total || 0).toLocaleString('en-IN')}</p>
+                              <p className="font-bold text-[#B08D57]">₹{(o.total || 0).toLocaleString('en-IN')}</p>
                               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">
                                 {o.status || 'Paid'}
                               </span>
@@ -2092,7 +2092,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 {drawerTab === 'timeline' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-[#1F1B16] uppercase text-[11px]">Customer Activity Event Timeline</h4>
+                      <h4 className="font-bold text-[#2A211C] uppercase text-[11px]">Customer Activity Event Timeline</h4>
                       <select
                         value={timelineCategory}
                         onChange={e => {
@@ -2114,7 +2114,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {isTimelineLoading ? (
                       <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-[#B85C38]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#B08D57]" />
                         <span>Loading timeline events...</span>
                       </div>
                     ) : timelineEvents.length === 0 ? (
@@ -2123,7 +2123,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       <div className="relative border-l-2 border-stone-200 ml-3 pl-4 space-y-4 py-2">
                         {timelineEvents.map((evt: any) => (
                           <div key={evt.id} className="relative group">
-                            <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#B85C38] border-2 border-white" />
+                            <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#B08D57] border-2 border-white" />
                             <div className="p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-1">
                               <div className="flex items-center justify-between">
                                 <span className="font-bold text-stone-800">{evt.title}</span>
@@ -2151,14 +2151,14 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                     <div className="p-5 bg-white rounded-xl border border-stone-200 shadow-sm space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-bold text-[#1F1B16] text-sm">Customer Retention & Health Score</h4>
+                          <h4 className="font-bold text-[#2A211C] text-sm">Customer Retention & Health Score</h4>
                           <p className="text-xs text-stone-500">v1.0 Rules Engine Score & Risk Diagnostic</p>
                         </div>
                         <button
                           type="button"
                           onClick={handleRecalculateHealth}
                           disabled={isRecalculatingHealth}
-                          className="px-3 py-1.5 bg-[#B85C38] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
+                          className="px-3 py-1.5 bg-[#B08D57] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
                         >
                           {isRecalculatingHealth ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                           <span>Recalculate Score</span>
@@ -2168,7 +2168,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                       <div className="flex items-center gap-4 p-4 bg-stone-50 rounded-lg border border-stone-200">
                         <div className="text-center">
                           <p className="text-[10px] font-bold text-stone-400 uppercase">Health Score</p>
-                          <p className="font-serif text-3xl font-bold text-[#B85C38] mt-1">
+                          <p className="font-serif text-3xl font-bold text-[#B08D57] mt-1">
                             {customerDetail.profile?.health_score ?? 80}/100
                           </p>
                         </div>
@@ -2218,7 +2218,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 {drawerTab === 'notes' && (
                   <div className="space-y-4">
                     <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
-                      <p className="font-bold text-xs text-[#1F1B16] uppercase">Add Customer Service Note</p>
+                      <p className="font-bold text-xs text-[#2A211C] uppercase">Add Customer Service Note</p>
                       <div className="flex gap-2">
                         <select
                           value={newNoteType}
@@ -2243,7 +2243,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                           type="button"
                           disabled={isAddingNote || !newNoteText.trim()}
                           onClick={handleAddNote}
-                          className="px-4 py-2 bg-[#B85C38] text-white rounded text-xs font-bold hover:bg-[#A04D2E] disabled:opacity-40"
+                          className="px-4 py-2 bg-[#B08D57] text-white rounded text-xs font-bold hover:bg-[#A04D2E] disabled:opacity-40"
                         >
                           {isAddingNote ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Note'}
                         </button>
@@ -2252,7 +2252,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {isNotesLoading ? (
                       <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-[#B85C38]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#B08D57]" />
                         <span>Loading service notes...</span>
                       </div>
                     ) : notesList.length === 0 ? (
@@ -2296,7 +2296,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
                     {isLoyaltyLoading ? (
                       <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-                        <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+                        <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
                         <span>Loading loyalty ledger & store credit account...</span>
                       </div>
                     ) : loyaltyDetail ? (
@@ -2372,7 +2372,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                               <button
                                 type="submit"
                                 disabled={isSubmittingAdj || !ptsAdjAmount || !ptsAdjReason.trim()}
-                                className="w-full py-2 bg-[#B85C38] text-white font-bold rounded hover:bg-[#A04D2E] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5"
+                                className="w-full py-2 bg-[#B08D57] text-white font-bold rounded hover:bg-[#A04D2E] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5"
                               >
                                 {isSubmittingAdj ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Apply Points Adjustment'}
                               </button>
@@ -2526,7 +2526,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   <div className="space-y-6">
                     {isSecurityLoading ? (
                       <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-                        <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+                        <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
                         <span>Loading customer security history & session activity...</span>
                       </div>
                     ) : securityError ? (
@@ -2627,7 +2627,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             {largeAdjConfirmOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-fade-in">
                 <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-stone-200">
-                  <div className="flex items-center gap-2 text-[#1F1B16]">
+                  <div className="flex items-center gap-2 text-[#2A211C]">
                     <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
                     <h3 className="font-serif text-lg font-bold">Confirm Large Adjustment</h3>
                   </div>
@@ -2675,7 +2675,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-white rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl border border-stone-200">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16] flex items-center gap-2">
+              <h3 className="font-serif text-lg font-bold text-[#2A211C] flex items-center gap-2">
                 <GitMerge className="w-5 h-5 text-amber-600" />
                 <span>Duplicate Merge Preview & Validation</span>
               </h3>
@@ -2690,7 +2690,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
 
             {isMergePreviewLoading ? (
               <div className="py-12 text-center text-xs text-stone-500 flex items-center justify-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin text-[#B85C38]" />
+                <Loader2 className="w-5 h-5 animate-spin text-[#B08D57]" />
                 <span>Generating safe merge preview...</span>
               </div>
             ) : mergePreviewData ? (
@@ -2739,7 +2739,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-stone-200">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-              <h3 className="font-serif text-lg font-bold text-[#1F1B16]">Create Custom Retention Segment</h3>
+              <h3 className="font-serif text-lg font-bold text-[#2A211C]">Create Custom Retention Segment</h3>
               <button
                 type="button"
                 onClick={() => setCreateSegmentModalOpen(false)}
@@ -2823,7 +2823,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 <button
                   type="submit"
                   disabled={isCreatingSegment}
-                  className="px-4 py-2 bg-[#B85C38] text-white rounded font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
+                  className="px-4 py-2 bg-[#B08D57] text-white rounded font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
                 >
                   {isCreatingSegment ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Segment'}
                 </button>
@@ -2840,8 +2840,8 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs animate-fade-in">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-stone-200">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-              <div className="flex items-center gap-2 text-[#1F1B16]">
-                <ShieldCheck className="w-5 h-5 text-[#B85C38]" />
+              <div className="flex items-center gap-2 text-[#2A211C]">
+                <ShieldCheck className="w-5 h-5 text-[#B08D57]" />
                 <h3 className="font-serif text-lg font-bold">Assign Missing Customer IDs</h3>
               </div>
               <button
@@ -2879,7 +2879,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   type="button"
                   disabled={isMigrating}
                   onClick={handleRunMigrationDryRun}
-                  className="px-3 py-1.5 bg-[#B85C38] text-white rounded text-xs font-bold hover:bg-[#A04D2E] disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-[#B08D57] text-white rounded text-xs font-bold hover:bg-[#A04D2E] disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {isMigrating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                   <span>Run Dry Run</span>
@@ -2891,7 +2891,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                   <p className="font-bold text-stone-800">Dry Run Execution Summary:</p>
                   <div className="grid grid-cols-2 gap-2 text-stone-600 text-[11px]">
                     <div>Profiles Scanned: <span className="font-bold text-stone-900">{migrationDryRunResult.scanned}</span></div>
-                    <div>Needing ID Assignment: <span className="font-bold text-[#B85C38]">{migrationDryRunResult.assigned}</span></div>
+                    <div>Needing ID Assignment: <span className="font-bold text-[#B08D57]">{migrationDryRunResult.assigned}</span></div>
                     <div>Already Has ID: <span className="font-bold text-emerald-700">{migrationDryRunResult.alreadyHadId}</span></div>
                     <div>System Counter: <span className="font-bold text-stone-900">{migrationDryRunResult.currentCounter}</span></div>
                   </div>
@@ -2958,7 +2958,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
                 type="button"
                 disabled={isMigrating}
                 onClick={handleExecuteMigration}
-                className="px-4 py-2 bg-[#B85C38] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#B08D57] text-white rounded text-xs font-bold hover:bg-[#A04D2E] flex items-center gap-1.5"
               >
                 {isMigrating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
                 <span>Confirm & Assign</span>

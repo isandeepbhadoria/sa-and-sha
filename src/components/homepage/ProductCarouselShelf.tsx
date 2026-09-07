@@ -23,7 +23,7 @@ interface ProductCarouselShelfProps {
 export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
   idPrefix,
   eyebrow,
-  eyebrowColorClass = 'text-[#B85C38]',
+  eyebrowColorClass = 'text-[#B08D57]',
   title,
   subtitle,
   viewAllLink,
@@ -152,7 +152,7 @@ export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
     <section
       ref={sectionRef}
       id={`section-${idPrefix}`}
-      className={`${bgClassName} ${showBorderY ? 'border-y border-[#C9B79C]/20' : ''}`}
+      className={`${bgClassName} ${showBorderY ? 'border-y border-[#E5D2BC]/20' : ''}`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Section Header */}
@@ -161,10 +161,10 @@ export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
             <span className={`text-xs font-sans font-bold tracking-[0.25em] uppercase ${eyebrowColorClass}`}>
               {eyebrow}
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1F1B16] mt-2">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C] mt-2">
               {title}
             </h2>
-            <p className="font-sans text-xs md:text-sm text-[#1F1B16]/65 mt-2">
+            <p className="font-sans text-xs md:text-sm text-[#2A211C]/65 mt-2">
               {subtitle}
             </p>
           </div>
@@ -173,7 +173,7 @@ export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
           <div className="flex items-center justify-center md:justify-end gap-4 mt-4 md:mt-0 md:absolute md:right-0 md:bottom-0">
             <Link
               to={viewAllLink}
-              className="text-xs font-sans font-bold tracking-widest text-[#B85C38] uppercase hover:underline flex items-center gap-1.5 transition-all py-1.5"
+              className="text-xs font-sans font-bold tracking-widest text-[#B08D57] uppercase hover:underline flex items-center gap-1.5 transition-all py-1.5"
               id={viewAllId}
             >
               <span>View All</span>
@@ -184,7 +184,7 @@ export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
               <button
                 type="button"
                 onClick={() => handleScroll('left')}
-                className="p-2 border border-[#C9B79C]/30 hover:bg-[#1F1B16] hover:text-white rounded transition-colors text-[#1F1B16] bg-white cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#B85C38]"
+                className="p-2 border border-[#E5D2BC]/30 hover:bg-[#2A211C] hover:text-white rounded transition-colors text-[#2A211C] bg-white cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#B08D57]"
                 id={leftScrollId}
                 aria-label={`Scroll ${title} left`}
                 title="Previous"
@@ -194,7 +194,7 @@ export const ProductCarouselShelf: React.FC<ProductCarouselShelfProps> = ({
               <button
                 type="button"
                 onClick={() => handleScroll('right')}
-                className="p-2 border border-[#C9B79C]/30 hover:bg-[#1F1B16] hover:text-white rounded transition-colors text-[#1F1B16] bg-white cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#B85C38]"
+                className="p-2 border border-[#E5D2BC]/30 hover:bg-[#2A211C] hover:text-white rounded transition-colors text-[#2A211C] bg-white cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#B08D57]"
                 id={rightScrollId}
                 aria-label={`Scroll ${title} right`}
                 title="Next"

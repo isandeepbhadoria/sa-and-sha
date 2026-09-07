@@ -50,11 +50,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div
       onClick={handleCardClick}
       id={`product-card-${product.id}`}
-      className="group bg-white rounded-lg overflow-hidden border border-[#C9B79C]/20 hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer relative"
+      className="group bg-white rounded-lg overflow-hidden border border-[#E5D2BC]/20 hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer relative"
     >
       {/* Product Image Area */}
       <div
-        className="aspect-[3/4] w-full bg-[#E4D8C3]/40 overflow-hidden relative"
+        className="aspect-[3/4] w-full bg-[#F4E6D7]/40 overflow-hidden relative"
         onMouseEnter={() => product.images[1] && setCurrentImageIndex(1)}
         onMouseLeave={() => setCurrentImageIndex(0)}
       >
@@ -70,7 +70,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <button
           onClick={handleWishlistClick}
           className={`absolute top-3 right-3 p-2 rounded-full shadow-md z-10 transition-transform active:scale-95 ${
-            isWished ? 'bg-[#1F1B16] text-[#B85C38]' : 'bg-[#F5F1E8] text-[#1F1B16] hover:text-[#B85C38]'
+            isWished ? 'bg-[#2A211C] text-[#B08D57]' : 'bg-[#FBF6EE] text-[#2A211C] hover:text-[#B08D57]'
           }`}
           id={`wish-btn-${product.id}`}
           aria-label="Add to wishlist"
@@ -81,17 +81,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Badges container */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.bestseller && (
-            <span className="bg-[#B85C38] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
+            <span className="bg-[#B08D57] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
               Best Seller
             </span>
           )}
           {product.newArrival && (
-            <span className="bg-[#5C6B4A] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
+            <span className="bg-[#C98A82] text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
               New
             </span>
           )}
           {hasDiscount && (
-            <span className="bg-[#1F1B16] text-[#F5F1E8] px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
+            <span className="bg-[#2A211C] text-[#FBF6EE] px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
               {discountPercent}% OFF
             </span>
           )}
@@ -102,15 +102,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {!showSizeSelector ? (
             <button
               onClick={handleQuickAddClick}
-              className="w-full bg-[#F5F1E8] text-[#1F1B16] hover:bg-[#B85C38] hover:text-white py-2.5 rounded text-xs font-sans font-bold uppercase tracking-widest transition-all shadow flex items-center justify-center gap-1.5 active:scale-95"
+              className="w-full bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white py-2.5 rounded text-xs font-sans font-bold uppercase tracking-widest transition-all shadow flex items-center justify-center gap-1.5 active:scale-95"
               id={`quick-add-btn-${product.id}`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
               <span>+ Quick Add</span>
             </button>
           ) : (
-            <div className="bg-[#1F1B16] p-2.5 rounded-md border border-[#C9B79C]/30 flex flex-col gap-1.5">
-              <div className="flex justify-between items-center text-[10px] text-[#F5F1E8]/70 font-sans tracking-wider uppercase font-semibold">
+            <div className="bg-[#2A211C] p-2.5 rounded-md border border-[#E5D2BC]/30 flex flex-col gap-1.5">
+              <div className="flex justify-between items-center text-[10px] text-[#FBF6EE]/70 font-sans tracking-wider uppercase font-semibold">
                 <span>Select Size</span>
                 <button
                   onClick={(e) => {
@@ -128,7 +128,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   <button
                     key={size}
                     onClick={(e) => handleSizeSelect(e, size)}
-                    className="w-8 h-8 rounded bg-[#F5F1E8] text-[#1F1B16] hover:bg-[#B85C38] hover:text-white text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border border-[#C9B79C]/30"
+                    className="w-8 h-8 rounded bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border border-[#E5D2BC]/30"
                     id={`size-opt-${product.id}-${size}`}
                   >
                     {size}
@@ -144,39 +144,39 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="p-4 flex-1 flex flex-col justify-between space-y-1">
         <div>
           {/* Fabric */}
-          <span className="text-[10px] text-[#C9B79C] uppercase font-sans tracking-widest font-semibold block">
+          <span className="text-[10px] text-[#E5D2BC] uppercase font-sans tracking-widest font-semibold block">
             {product.fabric}
           </span>
 
           {/* Product Name */}
-          <h3 className="font-serif text-[#1F1B16] text-sm group-hover:text-[#B85C38] transition-colors line-clamp-1 mt-0.5">
+          <h3 className="font-serif text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors line-clamp-1 mt-0.5">
             {product.name}
           </h3>
 
           {/* Rating */}
-          <div className="flex items-center gap-1 mt-1 text-[11px] text-[#1F1B16]/60 font-sans">
+          <div className="flex items-center gap-1 mt-1 text-[11px] text-[#2A211C]/60 font-sans">
             <div className="flex items-center text-amber-500 shrink-0">
               <Star className="w-3 h-3 fill-current" />
             </div>
-            <span className="font-semibold text-[#1F1B16]">{product.rating.toFixed(1)}</span>
+            <span className="font-semibold text-[#2A211C]">{product.rating.toFixed(1)}</span>
             <span>({product.reviewCount})</span>
           </div>
         </div>
 
         {/* Price & Best Price */}
-        <div className="pt-2 border-t border-[#C9B79C]/10 mt-2">
+        <div className="pt-2 border-t border-[#E5D2BC]/10 mt-2">
           <div className="flex items-baseline gap-2">
-            <span className="font-sans text-sm font-bold text-[#1F1B16]">
+            <span className="font-sans text-sm font-bold text-[#2A211C]">
               ₹{product.price.toLocaleString('en-IN')}
             </span>
             {hasDiscount && (
-              <span className="font-sans text-xs text-[#1F1B16]/40 line-through">
+              <span className="font-sans text-xs text-[#2A211C]/40 line-through">
                 ₹{product.compareAtPrice.toLocaleString('en-IN')}
               </span>
             )}
           </div>
           {/* Best Price tag */}
-          <p className="text-[10px] text-[#5C6B4A] font-sans font-medium mt-0.5 bg-[#5C6B4A]/5 px-1.5 py-0.5 rounded inline-block">
+          <p className="text-[10px] text-[#C98A82] font-sans font-medium mt-0.5 bg-[#C98A82]/5 px-1.5 py-0.5 rounded inline-block">
             Best Price <span className="font-bold">₹{bestOfferPrice.toLocaleString('en-IN')}</span> with KORA10
           </p>
         </div>

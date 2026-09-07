@@ -47,7 +47,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
             placeholder="Search RMA Number, Order #, Customer ID, or Name..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B85C38]"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-200 bg-stone-50 focus:outline-none focus:border-[#B08D57]"
           />
         </div>
 
@@ -63,7 +63,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
           </button>
           <button
             onClick={onExport}
-            className="px-3 py-2 text-xs font-semibold text-white bg-[#1F1B16] hover:bg-black rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+            className="px-3 py-2 text-xs font-semibold text-white bg-[#2A211C] hover:bg-black rounded-lg flex items-center gap-1.5 transition cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             Export CSV
@@ -82,7 +82,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         <select
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="all">All Statuses</option>
           <option value="requested">Requested</option>
@@ -107,7 +107,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         <select
           value={typeFilter}
           onChange={(e) => onTypeFilterChange(e.target.value)}
-          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="all">All Request Types</option>
           <option value="return">Return Only</option>
@@ -119,7 +119,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         <select
           value={slaFilter}
           onChange={(e) => onSlaFilterChange(e.target.value)}
-          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="all">All SLA States</option>
           <option value="on_time">On Time</option>
@@ -131,7 +131,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         <select
           value={priorityFilter}
           onChange={(e) => onPriorityFilterChange(e.target.value)}
-          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="all">All Priorities</option>
           <option value="normal">Normal Priority</option>
@@ -143,7 +143,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         <select
           value={staffFilter}
           onChange={(e) => onStaffFilterChange(e.target.value)}
-          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B85C38]"
+          className="py-1.5 px-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="all">All Staff Assignments</option>
           <option value="unassigned">Unassigned Only</option>

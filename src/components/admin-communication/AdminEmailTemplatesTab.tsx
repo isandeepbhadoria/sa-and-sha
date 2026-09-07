@@ -157,12 +157,12 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
   return (
     <div className="space-y-6">
       {/* HEADER BAR */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-[#C9B79C]/20 shadow-xs">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-[#E5D2BC]/20 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <Mail className="w-5 h-5 text-[#B85C38]" />
-            <h2 className="text-lg font-serif font-bold text-[#1F1B16]">Email Template Engine</h2>
-            <span className="bg-[#B85C38]/10 text-[#B85C38] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+            <Mail className="w-5 h-5 text-[#B08D57]" />
+            <h2 className="text-lg font-serif font-bold text-[#2A211C]">Email Template Engine</h2>
+            <span className="bg-[#B08D57]/10 text-[#B08D57] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
               {templates.length} Templates
             </span>
           </div>
@@ -216,7 +216,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
         />
       ) : (
         /* TEMPLATES LIST TABLE VIEW */
-        <div className="bg-white rounded-2xl border border-[#C9B79C]/20 shadow-xs overflow-hidden space-y-4 p-5">
+        <div className="bg-white rounded-2xl border border-[#E5D2BC]/20 shadow-xs overflow-hidden space-y-4 p-5">
           {/* SEARCH & FILTERS BAR */}
           <div className="flex flex-col md:flex-row gap-3 justify-between items-stretch md:items-center">
             <div className="relative flex-1 max-w-md">
@@ -226,7 +226,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
                 placeholder="Search templates by event ID, name or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#B85C38] focus:bg-white text-[#1F1B16]"
+                className="w-full pl-9 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#B08D57] focus:bg-white text-[#2A211C]"
               />
             </div>
 
@@ -237,7 +237,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-transparent border-none text-xs font-bold text-[#1F1B16] focus:outline-none cursor-pointer"
+                  className="bg-transparent border-none text-xs font-bold text-[#2A211C] focus:outline-none cursor-pointer"
                 >
                   <option value="all">All Templates</option>
                   <option value="published">Published</option>
@@ -251,7 +251,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
                 <select
                   value={sortBy}
                   onChange={(e: any) => setSortBy(e.target.value)}
-                  className="bg-transparent border-none text-xs font-bold text-[#1F1B16] focus:outline-none cursor-pointer"
+                  className="bg-transparent border-none text-xs font-bold text-[#2A211C] focus:outline-none cursor-pointer"
                 >
                   <option value="name">Name (A-Z)</option>
                   <option value="version">Version (High-Low)</option>
@@ -264,7 +264,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
           {/* TABLE OF TEMPLATES */}
           {loading ? (
             <div className="py-12 text-center text-xs text-stone-500 flex flex-col items-center gap-2">
-              <RefreshCw className="w-5 h-5 animate-spin text-[#B85C38]" />
+              <RefreshCw className="w-5 h-5 animate-spin text-[#B08D57]" />
               <span>Loading email template repository...</span>
             </div>
           ) : filteredTemplates.length === 0 ? (
@@ -290,7 +290,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
                   {filteredTemplates.map((tpl) => (
                     <tr key={tpl.template_id} className="hover:bg-stone-50/80 transition-colors group">
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-[#1F1B16] text-sm group-hover:text-[#B85C38] transition-colors">
+                        <div className="font-bold text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors">
                           {tpl.name}
                         </div>
                         <div className="font-mono text-[11px] text-stone-400 font-normal">
@@ -324,7 +324,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setEditingTemplate(tpl)}
-                            className="px-3 py-1.5 bg-[#B85C38] hover:bg-[#8C4328] text-white rounded-lg font-bold text-[11px] uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+                            className="px-3 py-1.5 bg-[#B08D57] hover:bg-[#8C4328] text-white rounded-lg font-bold text-[11px] uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
                             title="Edit HTML & Plain Text Template"
                           >
                             <Edit3 className="w-3 h-3" />
@@ -333,7 +333,7 @@ export const AdminEmailTemplatesTab: React.FC<AdminEmailTemplatesTabProps> = ({ 
 
                           <button
                             onClick={() => setTestTemplateId(tpl.template_id)}
-                            className="p-1.5 text-stone-500 hover:text-[#B85C38] hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-stone-500 hover:text-[#B08D57] hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
                             title="Send Test Email"
                           >
                             <Send className="w-3.5 h-3.5" />
@@ -610,7 +610,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
   return (
     <div className="space-y-4 animate-fade-in">
       {/* EDITOR BAR */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-[#C9B79C]/20 shadow-xs">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-[#E5D2BC]/20 shadow-xs">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
@@ -621,11 +621,11 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-serif font-bold text-[#1F1B16]">{template.name}</h2>
+              <h2 className="text-base font-serif font-bold text-[#2A211C]">{template.name}</h2>
               <span className="font-mono text-[10px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded-md">
                 {template.template_id}
               </span>
-              <span className="font-mono font-bold text-[10px] bg-[#B85C38]/10 text-[#B85C38] px-2 py-0.5 rounded-full">
+              <span className="font-mono font-bold text-[10px] bg-[#B08D57]/10 text-[#B08D57] px-2 py-0.5 rounded-full">
                 v{template.version}
               </span>
             </div>
@@ -647,7 +647,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
             onClick={onOpenTestModal}
             className="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Send className="w-3.5 h-3.5 text-[#B85C38]" />
+            <Send className="w-3.5 h-3.5 text-[#B08D57]" />
             <span>Test Email</span>
           </button>
 
@@ -663,7 +663,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
           <button
             onClick={handlePublish}
             disabled={publishing}
-            className="px-4 py-1.5 bg-[#B85C38] hover:bg-[#8C4328] text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs disabled:opacity-50"
+            className="px-4 py-1.5 bg-[#B08D57] hover:bg-[#8C4328] text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs disabled:opacity-50"
           >
             {publishing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
             <span>Publish Version</span>
@@ -712,7 +712,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
         {/* LEFT COLUMN: EDITOR (SPAN 7) */}
         <div className="lg:col-span-7 space-y-4">
           {/* SUBJECT LINE INPUT */}
-          <div className="bg-white p-4 rounded-2xl border border-[#C9B79C]/20 shadow-xs space-y-2">
+          <div className="bg-white p-4 rounded-2xl border border-[#E5D2BC]/20 shadow-xs space-y-2">
             <label className="text-xs font-bold uppercase tracking-wider text-stone-600 flex items-center justify-between">
               <span>Subject Line</span>
               <span className="text-[10px] text-stone-400 font-normal">Supports variable replacement</span>
@@ -724,12 +724,12 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
               onFocus={() => setLastFocusedField('subject')}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Enter email subject line..."
-              className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-[#1F1B16] focus:outline-none focus:border-[#B85C38] focus:bg-white"
+              className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-[#2A211C] focus:outline-none focus:border-[#B08D57] focus:bg-white"
             />
           </div>
 
           {/* HTML / PLAIN TEXT TOGGLE TABS */}
-          <div className="bg-white rounded-2xl border border-[#C9B79C]/20 shadow-xs overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl border border-[#E5D2BC]/20 shadow-xs overflow-hidden flex flex-col">
             <div className="flex items-center justify-between border-b border-stone-200 px-4 bg-stone-50">
               <div className="flex">
                 <button
@@ -739,8 +739,8 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                   }}
                   className={`py-3 px-4 text-xs font-bold uppercase tracking-wider border-b-2 flex items-center gap-1.5 transition-all cursor-pointer ${
                     activeBodyTab === 'html'
-                      ? 'border-[#B85C38] text-[#B85C38] bg-white'
-                      : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                      ? 'border-[#B08D57] text-[#B08D57] bg-white'
+                      : 'border-transparent text-stone-500 hover:text-[#2A211C]'
                   }`}
                 >
                   <FileCode className="w-3.5 h-3.5" />
@@ -754,8 +754,8 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                   }}
                   className={`py-3 px-4 text-xs font-bold uppercase tracking-wider border-b-2 flex items-center gap-1.5 transition-all cursor-pointer ${
                     activeBodyTab === 'plain'
-                      ? 'border-[#B85C38] text-[#B85C38] bg-white'
-                      : 'border-transparent text-stone-500 hover:text-[#1F1B16]'
+                      ? 'border-[#B08D57] text-[#B08D57] bg-white'
+                      : 'border-transparent text-stone-500 hover:text-[#2A211C]'
                   }`}
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -777,7 +777,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                   onFocus={() => setLastFocusedField('html')}
                   onChange={(e) => setHtml(e.target.value)}
                   rows={20}
-                  className="w-full p-3.5 bg-stone-900 text-stone-100 font-mono text-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B85C38] leading-relaxed resize-y"
+                  className="w-full p-3.5 bg-stone-900 text-stone-100 font-mono text-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B08D57] leading-relaxed resize-y"
                   placeholder="<html><body>Enter HTML template source code...</body></html>"
                 />
               ) : (
@@ -787,7 +787,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                   onFocus={() => setLastFocusedField('plain')}
                   onChange={(e) => setPlainText(e.target.value)}
                   rows={20}
-                  className="w-full p-3.5 bg-stone-50 text-stone-800 font-mono text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#B85C38] leading-relaxed resize-y"
+                  className="w-full p-3.5 bg-stone-50 text-stone-800 font-mono text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#B08D57] leading-relaxed resize-y"
                   placeholder="Enter fallback plain text body..."
                 />
               )}
@@ -795,10 +795,10 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
           </div>
 
           {/* VARIABLES INJECTION PANEL */}
-          <div className="bg-white p-4 rounded-2xl border border-[#C9B79C]/20 shadow-xs space-y-3">
+          <div className="bg-white p-4 rounded-2xl border border-[#E5D2BC]/20 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-700">
-                <Tag className="w-3.5 h-3.5 text-[#B85C38]" />
+                <Tag className="w-3.5 h-3.5 text-[#B08D57]" />
                 <span>Available Variables</span>
               </div>
               <input
@@ -806,7 +806,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                 placeholder="Search variables..."
                 value={varSearch}
                 onChange={(e) => setVarSearch(e.target.value)}
-                className="px-2.5 py-1 bg-stone-50 border border-stone-200 rounded-lg text-[11px] text-[#1F1B16] focus:outline-none focus:border-[#B85C38]"
+                className="px-2.5 py-1 bg-stone-50 border border-stone-200 rounded-lg text-[11px] text-[#2A211C] focus:outline-none focus:border-[#B08D57]"
               />
             </div>
 
@@ -815,10 +815,10 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                 <button
                   key={v.name}
                   onClick={() => handleInsertVariable(v.name)}
-                  className="p-1.5 bg-stone-50 hover:bg-[#B85C38]/10 hover:border-[#B85C38]/30 border border-stone-200 rounded-lg text-left transition-colors cursor-pointer group flex flex-col justify-between"
+                  className="p-1.5 bg-stone-50 hover:bg-[#B08D57]/10 hover:border-[#B08D57]/30 border border-stone-200 rounded-lg text-left transition-colors cursor-pointer group flex flex-col justify-between"
                   title={`Click to insert {{${v.name}}} into ${lastFocusedField}`}
                 >
-                  <span className="font-mono text-[10px] font-bold text-[#1F1B16] group-hover:text-[#B85C38]">
+                  <span className="font-mono text-[10px] font-bold text-[#2A211C] group-hover:text-[#B08D57]">
                     {`{{${v.name}}}`}
                   </span>
                   <span className="text-[9px] text-stone-400 truncate">{v.label}</span>
@@ -830,10 +830,10 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
 
         {/* RIGHT COLUMN: LIVE PREVIEW (SPAN 5) */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-white p-4 rounded-2xl border border-[#C9B79C]/20 shadow-xs space-y-3 sticky top-4">
+          <div className="bg-white p-4 rounded-2xl border border-[#E5D2BC]/20 shadow-xs space-y-3 sticky top-4">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-700">
-                <Eye className="w-4 h-4 text-[#B85C38]" />
+                <Eye className="w-4 h-4 text-[#B08D57]" />
                 <span>Live Preview</span>
               </div>
 
@@ -842,7 +842,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                 <button
                   onClick={() => setPreviewDevice('desktop')}
                   className={`p-1 rounded-md transition-colors cursor-pointer ${
-                    previewDevice === 'desktop' ? 'bg-white text-[#B85C38] shadow-2xs' : 'hover:text-stone-900'
+                    previewDevice === 'desktop' ? 'bg-white text-[#B08D57] shadow-2xs' : 'hover:text-stone-900'
                   }`}
                   title="Desktop View"
                 >
@@ -852,7 +852,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                 <button
                   onClick={() => setPreviewDevice('mobile')}
                   className={`p-1 rounded-md transition-colors cursor-pointer ${
-                    previewDevice === 'mobile' ? 'bg-white text-[#B85C38] shadow-2xs' : 'hover:text-stone-900'
+                    previewDevice === 'mobile' ? 'bg-white text-[#B08D57] shadow-2xs' : 'hover:text-stone-900'
                   }`}
                   title="Mobile View (375px)"
                 >
@@ -872,7 +872,7 @@ const EmailTemplateEditorView: React.FC<EmailTemplateEditorViewProps> = ({
                 <button
                   onClick={() => setPreviewDevice('plain')}
                   className={`p-1 rounded-md transition-colors cursor-pointer ${
-                    previewDevice === 'plain' ? 'bg-white text-[#B85C38] shadow-2xs' : 'hover:text-stone-900'
+                    previewDevice === 'plain' ? 'bg-white text-[#B08D57] shadow-2xs' : 'hover:text-stone-900'
                   }`}
                   title="Plain Text View"
                 >
@@ -1009,12 +1009,12 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-[#C9B79C]/30 overflow-hidden animate-fade-in">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-[#E5D2BC]/30 overflow-hidden animate-fade-in">
         {/* MODAL HEADER */}
         <div className="p-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <History className="w-5 h-5 text-[#B85C38]" />
-            <h3 className="font-serif font-bold text-base text-[#1F1B16]">
+            <History className="w-5 h-5 text-[#B08D57]" />
+            <h3 className="font-serif font-bold text-base text-[#2A211C]">
               Version History — <span className="font-mono text-xs">{templateId}</span>
             </h3>
           </div>
@@ -1036,7 +1036,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
 
             {loading ? (
               <div className="py-8 text-center text-xs text-stone-400 flex flex-col items-center gap-2">
-                <RefreshCw className="w-4 h-4 animate-spin text-[#B85C38]" />
+                <RefreshCw className="w-4 h-4 animate-spin text-[#B08D57]" />
                 <span>Loading version timeline...</span>
               </div>
             ) : versions.length === 0 ? (
@@ -1048,12 +1048,12 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                   onClick={() => setSelectedVersion(v)}
                   className={`p-3 rounded-xl border transition-all cursor-pointer ${
                     selectedVersion?.version === v.version
-                      ? 'border-[#B85C38] bg-[#B85C38]/5 shadow-2xs'
+                      ? 'border-[#B08D57] bg-[#B08D57]/5 shadow-2xs'
                       : 'border-stone-200 hover:border-stone-300 bg-stone-50'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-xs text-[#1F1B16]">Version {v.version}</span>
+                    <span className="font-mono font-bold text-xs text-[#2A211C]">Version {v.version}</span>
                     <span className="text-[10px] text-stone-400">{new Date(v.created_at).toLocaleDateString()}</span>
                   </div>
                   <div className="text-[11px] text-stone-600 truncate mt-1">{v.subject}</div>
@@ -1069,7 +1069,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
               <>
                 <div className="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-200">
                   <div>
-                    <div className="font-mono font-bold text-xs text-[#1F1B16]">
+                    <div className="font-mono font-bold text-xs text-[#2A211C]">
                       Previewing Version {selectedVersion.version}
                     </div>
                     <div className="text-[11px] text-stone-500">
@@ -1080,7 +1080,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                   <button
                     onClick={() => handleRestore(selectedVersion.version)}
                     disabled={restoring}
-                    className="px-3 py-1.5 bg-[#B85C38] hover:bg-[#8C4328] text-white rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50"
+                    className="px-3 py-1.5 bg-[#B08D57] hover:bg-[#8C4328] text-white rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Restore Version</span>
@@ -1175,11 +1175,11 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-[#C9B79C]/30 space-y-4 animate-fade-in">
+      <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-[#E5D2BC]/30 space-y-4 animate-fade-in">
         <div className="flex items-center justify-between border-b border-stone-200 pb-3">
           <div className="flex items-center gap-2">
-            <Send className="w-5 h-5 text-[#B85C38]" />
-            <h3 className="font-serif font-bold text-base text-[#1F1B16]">Send Test Email</h3>
+            <Send className="w-5 h-5 text-[#B08D57]" />
+            <h3 className="font-serif font-bold text-base text-[#2A211C]">Send Test Email</h3>
           </div>
           <button
             onClick={onClose}
@@ -1199,7 +1199,7 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
               placeholder="e.g. admin@saandsha.com"
-              className="w-full px-3.5 py-2 bg-stone-50 border border-stone-200 rounded-xl font-medium text-[#1F1B16] focus:outline-none focus:border-[#B85C38]"
+              className="w-full px-3.5 py-2 bg-stone-50 border border-stone-200 rounded-xl font-medium text-[#2A211C] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
@@ -1215,7 +1215,7 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
                     type="text"
                     value={val}
                     onChange={(e) => setCustomVars({ ...customVars, [key]: e.target.value })}
-                    className="flex-1 px-2 py-1 bg-white border border-stone-200 rounded-md text-[11px] text-[#1F1B16]"
+                    className="flex-1 px-2 py-1 bg-white border border-stone-200 rounded-md text-[11px] text-[#2A211C]"
                   />
                 </div>
               ))}
@@ -1234,7 +1234,7 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
           <button
             onClick={handleSend}
             disabled={sending}
-            className="px-5 py-2 bg-[#B85C38] hover:bg-[#8C4328] text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-2xs"
+            className="px-5 py-2 bg-[#B08D57] hover:bg-[#8C4328] text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-2xs"
           >
             {sending ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             <span>Dispatch Test Email</span>

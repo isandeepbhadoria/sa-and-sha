@@ -386,7 +386,7 @@ export const TrackOrderPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#1F1B16] font-sans pt-6 pb-20 px-4 md:px-8">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#2A211C] font-sans pt-6 pb-20 px-4 md:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* 1. HERO HEADER */}
@@ -394,10 +394,10 @@ export const TrackOrderPage: React.FC = () => {
           <span className="inline-block text-[11px] font-bold tracking-[0.2em] uppercase text-[#8C6D53] bg-[#F5EFE6] px-3 font-mono py-1 rounded-full border border-[#E8DFD3]">
             Sa and Sha Artisanal Logistics
           </span>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#1F1B16] tracking-tight">
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#2A211C] tracking-tight">
             Track Your Order
           </h1>
-          <p className="font-sans text-sm md:text-base text-[#1F1B16]/70 max-w-lg mx-auto leading-relaxed">
+          <p className="font-sans text-sm md:text-base text-[#2A211C]/70 max-w-lg mx-auto leading-relaxed">
             Follow your Sa and Sha order from fabric crafting to your doorstep.
           </p>
         </div>
@@ -412,13 +412,13 @@ export const TrackOrderPage: React.FC = () => {
                 placeholder="Enter Tracking Token or Order ID (e.g. trk_... or ORD-10928)"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-[#FDFBF7] border border-[#E8DFD3] rounded-xl text-sm font-sans focus:outline-none focus:border-[#8C6D53] focus:bg-white transition-all text-[#1F1B16] placeholder:text-stone-400"
+                className="w-full pl-11 pr-4 py-3.5 bg-[#FDFBF7] border border-[#E8DFD3] rounded-xl text-sm font-sans focus:outline-none focus:border-[#8C6D53] focus:bg-white transition-all text-[#2A211C] placeholder:text-stone-400"
               />
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-6 py-3.5 bg-[#1F1B16] text-[#FDFBF7] font-sans font-medium text-sm rounded-xl hover:bg-[#38322B] transition-all flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
+              className="px-6 py-3.5 bg-[#2A211C] text-[#FDFBF7] font-sans font-medium text-sm rounded-xl hover:bg-[#38322B] transition-all flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
             >
               {isLoading ? (
                 <>
@@ -466,7 +466,7 @@ export const TrackOrderPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <h2 className="font-serif text-2xl font-bold text-[#1F1B16]">
+                  <h2 className="font-serif text-2xl font-bold text-[#2A211C]">
                     {verifiedDetails ? verifiedDetails.order_id : trackingData.order_number}
                   </h2>
                   <p className="text-xs text-stone-500 font-sans">
@@ -493,7 +493,7 @@ export const TrackOrderPage: React.FC = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm pt-1">
                 <div className="space-y-1">
                   <span className="text-xs text-stone-500 font-sans block">Estimated Delivery</span>
-                  <span className="font-medium text-[#1F1B16] font-sans flex items-center gap-1.5">
+                  <span className="font-medium text-[#2A211C] font-sans flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-[#8C6D53]" />
                     {trackingData.estimated_delivery}
                   </span>
@@ -501,7 +501,7 @@ export const TrackOrderPage: React.FC = () => {
 
                 <div className="space-y-1">
                   <span className="text-xs text-stone-500 font-sans block">Destination</span>
-                  <span className="font-medium text-[#1F1B16] font-sans flex items-center gap-1.5 truncate">
+                  <span className="font-medium text-[#2A211C] font-sans flex items-center gap-1.5 truncate">
                     <MapPin className="w-4 h-4 text-[#8C6D53] shrink-0" />
                     {trackingData.city && trackingData.state 
                       ? `${trackingData.city}, ${trackingData.state}` 
@@ -511,7 +511,7 @@ export const TrackOrderPage: React.FC = () => {
 
                 <div className="space-y-1">
                   <span className="text-xs text-stone-500 font-sans block">Total Items</span>
-                  <span className="font-medium text-[#1F1B16] font-sans flex items-center gap-1.5">
+                  <span className="font-medium text-[#2A211C] font-sans flex items-center gap-1.5">
                     <Package className="w-4 h-4 text-[#8C6D53]" />
                     {trackingData.total_items} {trackingData.total_items === 1 ? 'item' : 'items'}
                   </span>
@@ -519,7 +519,7 @@ export const TrackOrderPage: React.FC = () => {
 
                 <div className="space-y-1">
                   <span className="text-xs text-stone-500 font-sans block">Courier Partner</span>
-                  <span className="font-medium text-[#1F1B16] font-sans flex items-center gap-1.5">
+                  <span className="font-medium text-[#2A211C] font-sans flex items-center gap-1.5">
                     <Truck className="w-4 h-4 text-[#8C6D53]" />
                     {trackingData.courier_name || 'Preparing Dispatch'}
                   </span>
@@ -558,7 +558,7 @@ export const TrackOrderPage: React.FC = () => {
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif font-bold text-lg text-[#1F1B16]">Your order is being prepared</h3>
+                    <h3 className="font-serif font-bold text-lg text-[#2A211C]">Your order is being prepared</h3>
                     <p className="text-xs md:text-sm text-stone-600 font-sans">
                       We’ll add courier and live tracking details as soon as your order is dispatched from our Jaipur atelier.
                     </p>
@@ -575,18 +575,18 @@ export const TrackOrderPage: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-mono text-stone-500 uppercase tracking-wider block">Shipment Partner</span>
-                      <h3 className="font-serif font-bold text-xl text-[#1F1B16]">{trackingData.courier_name || 'Logistics Partner'}</h3>
+                      <h3 className="font-serif font-bold text-xl text-[#2A211C]">{trackingData.courier_name || 'Logistics Partner'}</h3>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <div className="text-left sm:text-right">
                       <span className="text-xs text-stone-500 font-sans block">AWB / Tracking Number</span>
-                      <span className="font-mono font-bold text-sm text-[#1F1B16]">{trackingData.tracking_number}</span>
+                      <span className="font-mono font-bold text-sm text-[#2A211C]">{trackingData.tracking_number}</span>
                     </div>
                     <button
                       onClick={() => handleCopyAwb(trackingData.tracking_number!)}
-                      className="p-2 text-stone-600 hover:text-[#1F1B16] border border-[#E8DFD3] hover:bg-[#FDFBF7] rounded-lg transition-all"
+                      className="p-2 text-stone-600 hover:text-[#2A211C] border border-[#E8DFD3] hover:bg-[#FDFBF7] rounded-lg transition-all"
                       title="Copy AWB Number"
                     >
                       {copiedAwb ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
@@ -603,7 +603,7 @@ export const TrackOrderPage: React.FC = () => {
                       href={trackingData.tracking_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1F1B16] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-medium font-sans transition-all shrink-0"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2A211C] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-medium font-sans transition-all shrink-0"
                     >
                       <span>View on Courier Website</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -615,7 +615,7 @@ export const TrackOrderPage: React.FC = () => {
 
             {/* ORDER STATUS TIMELINE */}
             <div className="bg-white border border-[#E8DFD3] rounded-2xl p-6 md:p-8 shadow-xs space-y-6">
-              <h3 className="font-serif font-bold text-xl text-[#1F1B16]">Shipment Progress</h3>
+              <h3 className="font-serif font-bold text-xl text-[#2A211C]">Shipment Progress</h3>
 
               <div className="relative pl-6 md:pl-8 space-y-8 before:absolute before:left-2.5 md:before:left-3.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#E8DFD3]">
                 {trackingData.timeline.map((step) => (
@@ -623,7 +623,7 @@ export const TrackOrderPage: React.FC = () => {
                     {/* Circle Icon */}
                     <div className={`absolute -left-6 md:-left-8 top-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-xs transition-all ${
                       step.isCompleted 
-                        ? 'bg-[#1F1B16] text-[#FDFBF7] ring-4 ring-stone-100' 
+                        ? 'bg-[#2A211C] text-[#FDFBF7] ring-4 ring-stone-100' 
                         : 'bg-white border-2 border-[#E8DFD3] text-stone-400'
                     }`}>
                       {step.isCompleted ? (
@@ -635,7 +635,7 @@ export const TrackOrderPage: React.FC = () => {
 
                     <div className="space-y-1 flex-grow">
                       <div className="flex items-center justify-between gap-2">
-                        <h4 className={`font-sans font-semibold text-sm ${step.isCompleted ? 'text-[#1F1B16]' : 'text-stone-400'}`}>
+                        <h4 className={`font-sans font-semibold text-sm ${step.isCompleted ? 'text-[#2A211C]' : 'text-stone-400'}`}>
                           {step.label}
                         </h4>
                         {step.timestamp && (
@@ -656,7 +656,7 @@ export const TrackOrderPage: React.FC = () => {
             {/* PURCHASED ITEMS SUMMARY */}
             <div className="bg-white border border-[#E8DFD3] rounded-2xl p-6 md:p-8 shadow-xs space-y-6">
               <div className="flex items-center justify-between border-b border-[#F0E8DD] pb-4">
-                <h3 className="font-serif font-bold text-xl text-[#1F1B16]">Items in this Order</h3>
+                <h3 className="font-serif font-bold text-xl text-[#2A211C]">Items in this Order</h3>
                 <span className="text-xs text-stone-500 font-sans">{trackingData.total_items} items</span>
               </div>
 
@@ -669,7 +669,7 @@ export const TrackOrderPage: React.FC = () => {
                       className="w-16 h-20 object-cover rounded-xl border border-[#E8DFD3] bg-[#FDFBF7] shrink-0" 
                     />
                     <div className="flex-grow space-y-1">
-                      <h4 className="font-serif font-bold text-base text-[#1F1B16]">{item.title}</h4>
+                      <h4 className="font-serif font-bold text-base text-[#2A211C]">{item.title}</h4>
                       <div className="flex flex-wrap gap-2 text-xs text-stone-500 font-sans">
                         {item.size && <span>Size: {item.size}</span>}
                         {item.size && item.color && <span>•</span>}
@@ -687,7 +687,7 @@ export const TrackOrderPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <span className="text-xs font-mono text-[#8C6D53] uppercase tracking-wider block">Shipping Destination</span>
-                  <p className="font-sans font-semibold text-base text-[#1F1B16]">
+                  <p className="font-sans font-semibold text-base text-[#2A211C]">
                     {verifiedDetails 
                       ? verifiedDetails.full_address 
                       : `Delivering to: ${trackingData.city}, ${trackingData.state} (${trackingData.pincode_masked})`}
@@ -702,7 +702,7 @@ export const TrackOrderPage: React.FC = () => {
                 {!verifiedDetails ? (
                   <button
                     onClick={() => setShowVerifyModal(true)}
-                    className="px-5 py-2.5 bg-[#F5EFE6] hover:bg-[#E8DFD3] border border-[#E8DFD3] text-[#1F1B16] font-sans text-xs font-semibold rounded-xl transition-all flex items-center gap-2 shrink-0"
+                    className="px-5 py-2.5 bg-[#F5EFE6] hover:bg-[#E8DFD3] border border-[#E8DFD3] text-[#2A211C] font-sans text-xs font-semibold rounded-xl transition-all flex items-center gap-2 shrink-0"
                   >
                     <Lock className="w-3.5 h-3.5 text-[#8C6D53]" />
                     <span>Verify to View Full Address & Invoice</span>
@@ -710,7 +710,7 @@ export const TrackOrderPage: React.FC = () => {
                 ) : (
                   <button
                     onClick={handleDownloadInvoice}
-                    className="px-5 py-2.5 bg-[#1F1B16] text-[#FDFBF7] hover:bg-[#38322B] font-sans text-xs font-medium rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+                    className="px-5 py-2.5 bg-[#2A211C] text-[#FDFBF7] hover:bg-[#38322B] font-sans text-xs font-medium rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download Official Invoice</span>
@@ -723,7 +723,7 @@ export const TrackOrderPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
               <Link
                 to={`/contact-support?token=${encodeURIComponent(trackingData.tracking_token)}`}
-                className="w-full sm:w-auto px-6 py-3.5 border border-[#E8DFD3] bg-white hover:bg-[#FDFBF7] text-[#1F1B16] font-sans text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3.5 border border-[#E8DFD3] bg-white hover:bg-[#FDFBF7] text-[#2A211C] font-sans text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <HelpCircle className="w-4 h-4 text-[#8C6D53]" />
                 <span>Need Help with this Order?</span>
@@ -731,7 +731,7 @@ export const TrackOrderPage: React.FC = () => {
 
               <Link
                 to="/shop"
-                className="w-full sm:w-auto px-6 py-3.5 bg-[#1F1B16] text-[#FDFBF7] hover:bg-[#38322B] font-sans text-xs font-medium rounded-xl transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3.5 bg-[#2A211C] text-[#FDFBF7] hover:bg-[#38322B] font-sans text-xs font-medium rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>Continue Shopping Sa and Sha</span>
@@ -761,7 +761,7 @@ export const TrackOrderPage: React.FC = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#F5EFE6] flex items-center justify-center text-[#8C6D53]">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-[#1F1B16]">Verify Customer Identity</h3>
+                  <h3 className="font-serif text-xl font-bold text-[#2A211C]">Verify Customer Identity</h3>
                   <p className="text-xs text-stone-600 font-sans leading-relaxed">
                     To protect your privacy, full address, prices, invoice, and order details require a quick 1-time verification code (OTP).
                   </p>
@@ -779,7 +779,7 @@ export const TrackOrderPage: React.FC = () => {
                           onClick={() => setOtpChannel('mobile')}
                           className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                             otpChannel === 'mobile'
-                              ? 'bg-[#1F1B16] text-[#FDFBF7] border-[#1F1B16]'
+                              ? 'bg-[#2A211C] text-[#FDFBF7] border-[#2A211C]'
                               : 'bg-[#FDFBF7] text-stone-700 border-[#E8DFD3] hover:border-[#8C6D53]'
                           }`}
                         >
@@ -792,7 +792,7 @@ export const TrackOrderPage: React.FC = () => {
                           onClick={() => setOtpChannel('email')}
                           className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                             otpChannel === 'email'
-                              ? 'bg-[#1F1B16] text-[#FDFBF7] border-[#1F1B16]'
+                              ? 'bg-[#2A211C] text-[#FDFBF7] border-[#2A211C]'
                               : 'bg-[#FDFBF7] text-stone-700 border-[#E8DFD3] hover:border-[#8C6D53]'
                           }`}
                         >
@@ -820,7 +820,7 @@ export const TrackOrderPage: React.FC = () => {
                         type="button"
                         onClick={() => handleSendOtp()}
                         disabled={isSendingOtp}
-                        className="flex-1 py-2.5 bg-[#1F1B16] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="flex-1 py-2.5 bg-[#2A211C] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                       >
                         {isSendingOtp ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>Send OTP Code</span>}
                       </button>
@@ -841,7 +841,7 @@ export const TrackOrderPage: React.FC = () => {
                         placeholder="e.g. 123456"
                         value={otpCode}
                         onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                        className="w-full text-center tracking-widest px-4 py-3 bg-[#FDFBF7] border border-[#E8DFD3] rounded-xl text-lg font-mono font-bold text-[#1F1B16] focus:outline-none focus:border-[#8C6D53]"
+                        className="w-full text-center tracking-widest px-4 py-3 bg-[#FDFBF7] border border-[#E8DFD3] rounded-xl text-lg font-mono font-bold text-[#2A211C] focus:outline-none focus:border-[#8C6D53]"
                         autoFocus
                       />
                     </div>
@@ -881,7 +881,7 @@ export const TrackOrderPage: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isVerifyingOtp}
-                        className="flex-1 py-2.5 bg-[#1F1B16] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="flex-1 py-2.5 bg-[#2A211C] text-[#FDFBF7] hover:bg-[#38322B] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                       >
                         {isVerifyingOtp ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>Verify & Unlock</span>}
                       </button>

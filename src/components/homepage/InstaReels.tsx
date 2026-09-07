@@ -155,26 +155,26 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
     <section
       id="homepage-insta-reels"
       aria-label="Insta Reels Showcase"
-      className="py-14 sm:py-16 bg-[#F5F1E8] border-t border-[#C9B79C]/25"
+      className="py-14 sm:py-16 bg-[#FBF6EE] border-t border-[#E5D2BC]/25"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Section Header - Center Aligned */}
         <div className="relative mb-10">
           <div className="text-center max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B85C38] uppercase">
+              <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase">
                 Movement & Texture
               </span>
               <span className="text-xs text-stone-400 font-sans">|</span>
-              <span className="text-xs font-sans font-semibold text-[#1F1B16]/75 flex items-center gap-1">
-                <Film className="w-3 h-3 text-[#B85C38]" />
+              <span className="text-xs font-sans font-semibold text-[#2A211C]/75 flex items-center gap-1">
+                <Film className="w-3 h-3 text-[#B08D57]" />
                 Portrait Series
               </span>
             </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F1B16] mt-2">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A211C] mt-2">
               Insta Reels
             </h2>
-            <p className="font-sans text-xs sm:text-sm text-[#1F1B16]/65 mt-2">
+            <p className="font-sans text-xs sm:text-sm text-[#2A211C]/65 mt-2">
               Witness the natural breathability, movement, and silhouette of certified European flax in motion.
             </p>
           </div>
@@ -185,7 +185,7 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
               onClick={() => scroll("left")}
               aria-label="Scroll Reels left"
               id="reels-scroll-left"
-              className="p-2.5 rounded-full border border-[#C9B79C]/40 bg-white hover:bg-[#1F1B16] hover:text-white text-[#1F1B16] transition-colors shadow-xs cursor-pointer"
+              className="p-2.5 rounded-full border border-[#E5D2BC]/40 bg-white hover:bg-[#2A211C] hover:text-white text-[#2A211C] transition-colors shadow-xs cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -193,7 +193,7 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
               onClick={() => scroll("right")}
               aria-label="Scroll Reels right"
               id="reels-scroll-right"
-              className="p-2.5 rounded-full border border-[#C9B79C]/40 bg-white hover:bg-[#1F1B16] hover:text-white text-[#1F1B16] transition-colors shadow-xs cursor-pointer"
+              className="p-2.5 rounded-full border border-[#E5D2BC]/40 bg-white hover:bg-[#2A211C] hover:text-white text-[#2A211C] transition-colors shadow-xs cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -215,7 +215,7 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
                 key={reel.id}
                 data-reel-id={reel.id}
                 id={`reel-card-${reel.id}`}
-                className="w-[220px] sm:w-[240px] lg:w-auto shrink-0 snap-start relative aspect-[9/16] rounded-xl overflow-hidden bg-stone-900 shadow-md border border-[#C9B79C]/35 group cursor-pointer"
+                className="w-[220px] sm:w-[240px] lg:w-auto shrink-0 snap-start relative aspect-[9/16] rounded-xl overflow-hidden bg-stone-900 shadow-md border border-[#E5D2BC]/35 group cursor-pointer"
                 onClick={(e) => togglePlay(reel.id, e)}
               >
                 {/* Poster Image (Always visible before play or when paused) */}
@@ -248,7 +248,7 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
                 {/* Top Badge (Reel Monogram & Audio Toggle) */}
                 <div className="absolute top-3 inset-x-3 flex items-center justify-between z-20 pointer-events-auto">
                   <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-xs border border-white/20 text-white text-[10px] font-sans font-bold">
-                    <Film className="w-3 h-3 text-[#C9B79C]" />
+                    <Film className="w-3 h-3 text-[#E5D2BC]" />
                     <span>REEL</span>
                   </div>
 
@@ -299,10 +299,10 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
                       handleRedirect(reel.redirectUrl);
                     }}
                     id={`reel-cta-${reel.id}`}
-                    className="w-full py-1.5 px-2.5 rounded bg-white/95 hover:bg-white text-[#1F1B16] font-sans text-[10px] font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                    className="w-full py-1.5 px-2.5 rounded bg-white/95 hover:bg-white text-[#2A211C] font-sans text-[10px] font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 transition-colors shadow-xs cursor-pointer"
                   >
                     <span>View Reel</span>
-                    <ExternalLink className="w-2.5 h-2.5 text-[#B85C38]" />
+                    <ExternalLink className="w-2.5 h-2.5 text-[#B08D57]" />
                   </button>
                 </div>
               </div>

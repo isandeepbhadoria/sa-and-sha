@@ -185,7 +185,7 @@ function renderEmailContent(
     case 'ACCOUNT_CREATED':
       return {
         subject: `Welcome to Sa and Sha™`,
-        html: buildSimpleEmailHTML(`Welcome to Sa and Sha`, `Dear ${name},<br><br>Thank you for creating an account with Sa and Sha. Explore our artisanal linen menswear collections craftily tailored in Jaipur.`)
+        html: buildSimpleEmailHTML(`Welcome to Sa and Sha`, `Dear ${name},<br><br>Thank you for creating an account with Sa and Sha. Explore our latest collections of dresses, tops, and more.`)
       };
     case 'LOYALTY_POINTS_EARNED':
       return {
@@ -210,7 +210,7 @@ function renderEmailContent(
     case 'REVIEW_REQUEST':
       return {
         subject: `How was your experience with Sa and Sha?`,
-        html: buildSimpleEmailHTML(`We'd Love Your Feedback`, `Dear ${name},<br><br>We hope you are enjoying your linen garments. Please share your feedback and review your recent purchase.`)
+        html: buildSimpleEmailHTML(`We'd Love Your Feedback`, `Dear ${name},<br><br>We hope you are enjoying your new pieces. Please share your feedback and review your recent purchase.`)
       };
     default:
       return {
@@ -224,15 +224,15 @@ function buildSimpleEmailHTML(heading: string, bodyText: string): string {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>${heading}</title></head>
-<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: sans-serif; color: #1F1B16;">
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: sans-serif; color: #2A211C;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding: 24px 12px;">
     <tr><td align="center">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; border: 1px solid #EAE5DC; overflow: hidden;">
-        <tr><td style="background-color: #1F1B16; padding: 20px; text-align: center; color: #F5F1E8;">
+        <tr><td style="background-color: #2A211C; padding: 20px; text-align: center; color: #FBF6EE;">
           <h1 style="margin: 0; font-family: serif; font-size: 20px; letter-spacing: 3px;">SA AND SHA™</h1>
         </td></tr>
         <tr><td style="padding: 24px;">
-          <h2 style="margin: 0 0 12px 0; color: #1F1B16; font-size: 18px;">${heading}</h2>
+          <h2 style="margin: 0 0 12px 0; color: #2A211C; font-size: 18px;">${heading}</h2>
           <p style="font-size: 14px; line-height: 1.6; color: #52473C;">${bodyText}</p>
         </td></tr>
       </table>
