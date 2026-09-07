@@ -744,7 +744,7 @@ export const CreateAccountPage: React.FC = () => {
                   className="mt-0.5 w-4 h-4 rounded text-stone-900 focus:ring-stone-900 border-stone-300"
                 />
                 <span className="text-xs text-stone-700 leading-snug">
-                  Subscribe to private collection drops, seasonal linen edits, and member events.
+                  Subscribe to private collection drops, seasonal edits, and member events.
                 </span>
               </label>
             </div>

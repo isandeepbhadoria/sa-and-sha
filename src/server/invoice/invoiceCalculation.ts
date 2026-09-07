@@ -272,7 +272,7 @@ export function buildGstInvoiceData(
       line_id: `line_${idx + 1}_${it.id || it.product_id || idx}`,
       product_id: String(it.product_id || it.id || `prod_${idx}`),
       sku: String(it.sku || it.id || `SKU-${idx + 1}`),
-      product_name: String(it.name || it.title || 'Linen Garment'),
+      product_name: String(it.name || it.title || 'Garment'),
       variant: [it.selectedSize || it.size ? `Size: ${it.selectedSize || it.size}` : '', it.color ? `Color: ${it.color}` : ''].filter(Boolean).join(' | '),
       quantity: qty,
       unit_price: unitPrice,

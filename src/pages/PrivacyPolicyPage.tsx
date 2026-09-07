@@ -84,7 +84,7 @@ export const PrivacyPolicyPage: React.FC = () => {
         <div className="pt-2 text-[11px] font-sans text-stone-500 flex items-center justify-center gap-4">
           <span><strong>Effective Date:</strong> August 5, 2026</span>
           <span>•</span>
-          <span><strong>Entity:</strong> Rajasthan Exports Overseas Pvt. Ltd.</span>
+          <span><strong>Entity:</strong> [Registered Legal Entity Name]</span>
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              This Privacy Policy applies to the website <strong className="text-[#2A211C]">https://saandsha.com</strong>, the Customer Portal, mobile web interfaces, checkout systems, and related digital services operated under the trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong>, owned and managed by <strong className="text-[#2A211C]">Rajasthan Exports Overseas Pvt. Ltd.</strong>, headquartered in Jaipur, Rajasthan, India.
+              This Privacy Policy applies to the website <strong className="text-[#2A211C]">https://saandsha.com</strong>, the Customer Portal, mobile web interfaces, checkout systems, and related digital services operated under the trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong>, owned and managed by [Registered Legal Entity Name], headquartered in [City, State, India].
             </p>
             <p>
               We adhere strictly to statutory data protection requirements under Indian law, including:
@@ -203,7 +203,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              To provide luxury linen apparel, process orders, manage deliveries, and secure your account, we collect specific categories of personal, transaction, and technical data:
+              To provide our apparel and services, process orders, manage deliveries, and secure your account, we collect specific categories of personal, transaction, and technical data:
             </p>
 
             <div className="space-y-3 pt-2">
@@ -328,7 +328,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </div>
               <div className="p-3 bg-stone-50 rounded border border-stone-200 space-y-1">
                 <strong className="text-[#2A211C] block font-bold">2. Customer Account & Authentication</strong>
-                <span className="text-stone-600 text-xs block">Verifying mobile OTPs, enabling seamless Google Sign-In, maintaining your saved addresses, and managing Kora Rewards store credit.</span>
+                <span className="text-stone-600 text-xs block">Verifying mobile OTPs, enabling seamless Google Sign-In, maintaining your saved addresses, and managing Sa and Sha Rewards store credit.</span>
               </div>
               <div className="p-3 bg-stone-50 rounded border border-stone-200 space-y-1">
                 <strong className="text-[#2A211C] block font-bold">3. Multi-Channel Notifications</strong>
@@ -519,11 +519,11 @@ export const PrivacyPolicyPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Entity:</strong> Rajasthan Exports Overseas Pvt. Ltd. (Brand: Sa and Sha)</span>
+                  <span><strong>Entity:</strong> [Registered Legal Entity Name] (Brand: Sa and Sha)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Address:</strong> H1-56, First Floor, RIICO Apparel Park, Mahal Road, Jagatpura, Jaipur, Rajasthan - 302020, India</span>
+                  <span><strong>Address:</strong> [Registered business address to be added]</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#B08D57]" />

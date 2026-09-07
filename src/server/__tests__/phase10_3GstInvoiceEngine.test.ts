@@ -318,8 +318,8 @@ describe('Phase 10.3.1A — GST Invoice Master-Data Safety Correction', () => {
       mockStore = {
         gst_invoices: {},
         orders: {
-          'KL-999001-LX': {
-            order_id: 'KL-999001-LX',
+          'SS-999001-LX': {
+            order_id: 'SS-999001-LX',
             customer_name: 'Pooja Hegde',
             customer_email: 'pooja@example.com',
             customer_phone: '+919988776655',
@@ -448,7 +448,7 @@ describe('Phase 10.3.1A — GST Invoice Master-Data Safety Correction', () => {
         tax_config_version: '2026.1'
       });
 
-      const res = await createOrFetchGstInvoice(mockDb, 'KL-999001-LX');
+      const res = await createOrFetchGstInvoice(mockDb, 'SS-999001-LX');
       expect(res.success).toBe(false);
       expect(res.code).toBe('SELLER_TAX_CONFIGURATION_REQUIRED');
     });
@@ -479,12 +479,12 @@ describe('Phase 10.3.1A — GST Invoice Master-Data Safety Correction', () => {
         status: 'ACTIVE'
       });
 
-      const res = await createOrFetchGstInvoice(mockDb, 'KL-999001-LX');
+      const res = await createOrFetchGstInvoice(mockDb, 'SS-999001-LX');
       expect(res.success).toBe(true);
-      expect(res.invoice?.invoice_number).toMatch(/^KL\/26-27\/000001$/);
+      expect(res.invoice?.invoice_number).toMatch(/^SS\/26-27\/000001$/);
 
       // Idempotent retry
-      const resRetry = await createOrFetchGstInvoice(mockDb, 'KL-999001-LX');
+      const resRetry = await createOrFetchGstInvoice(mockDb, 'SS-999001-LX');
       expect(resRetry.success).toBe(true);
       expect(resRetry.reused).toBe(true);
       expect(resRetry.invoice?.invoice_number).toBe(res.invoice?.invoice_number);

@@ -87,7 +87,7 @@ export const RewardsPolicySettings: React.FC<RewardsPolicySettingsProps> = ({ ad
         }
       }
     } catch (err: any) {
-      setError('Failed to load current Kora Rewards settings.');
+      setError('Failed to load current Sa and Sha Rewards settings.');
     } finally {
       setLoading(false);
     }
@@ -148,9 +148,9 @@ export const RewardsPolicySettings: React.FC<RewardsPolicySettingsProps> = ({ ad
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setError(data.error || 'Failed to save Kora Rewards policy.');
+        setError(data.error || 'Failed to save Sa and Sha Rewards policy.');
       } else {
-        setSuccessMsg('Kora Rewards Master Policy updated successfully and audit logged!');
+        setSuccessMsg('Sa and Sha Rewards Master Policy updated successfully and audit logged!');
         setTimeout(() => setSuccessMsg(null), 5000);
       }
     } catch (err: any) {
@@ -164,7 +164,7 @@ export const RewardsPolicySettings: React.FC<RewardsPolicySettingsProps> = ({ ad
     return (
       <div className="flex items-center justify-center py-16 text-stone-500">
         <Loader2 className="w-6 h-6 animate-spin mr-2" />
-        <span>Loading Kora Rewards Policy Settings...</span>
+        <span>Loading Sa and Sha Rewards Policy Settings...</span>
       </div>
     );
   }
@@ -177,7 +177,7 @@ export const RewardsPolicySettings: React.FC<RewardsPolicySettingsProps> = ({ ad
             <Award className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-serif font-bold text-stone-900">Kora Rewards Policy & Master Settings</h2>
+            <h2 className="text-xl font-serif font-bold text-stone-900">Sa and Sha Rewards Policy & Master Settings</h2>
             <p className="text-xs text-stone-600 mt-0.5">
               Configure points earning rates, 7-day return window holding period, tier thresholds, and redemption caps.
             </p>
@@ -453,12 +453,12 @@ export const RewardsPolicySettings: React.FC<RewardsPolicySettingsProps> = ({ ad
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Saving Kora Rewards Policy...</span>
+                <span>Saving Sa and Sha Rewards Policy...</span>
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                <span>Save Kora Rewards Policy</span>
+                <span>Save Sa and Sha Rewards Policy</span>
               </>
             )}
           </button>

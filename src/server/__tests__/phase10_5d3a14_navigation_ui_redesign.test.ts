@@ -92,8 +92,9 @@ describe('PHASE 10.5D.3A.14 — Navigation UI Redesign Verification', () => {
     // Subcategory filter options in CollectionPage should use canonical labels
     expect(collectionPageFile).not.toContain('Pure Linen Pants');
     expect(collectionPageFile).not.toContain('Cotton Linen Blend Pants');
-    expect(collectionPageFile).toContain('Pure Linen Trousers');
-    expect(collectionPageFile).toContain('Linen-Cotton Blend Trousers');
+    expect(collectionPageFile).not.toContain('Pure Linen Trousers');
+    expect(collectionPageFile).not.toContain('Linen-Cotton Blend Trousers');
+    expect(collectionPageFile).toContain('Trousers');
   });
 
   it('8. Canonical taxonomy route resolution delivers correct page metadata and counts', () => {

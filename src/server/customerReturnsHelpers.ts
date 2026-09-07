@@ -32,7 +32,7 @@ export interface CreateReturnRequestPayload {
 }
 
 /**
- * Generates sequential immutable RMA Number (e.g. KL-RMA-100001)
+ * Generates sequential immutable RMA Number (e.g. SS-RMA-100001)
  */
 export async function generateRmaNumber(adminDb: any): Promise<string> {
   try {
@@ -50,11 +50,11 @@ export async function generateRmaNumber(adminDb: any): Promise<string> {
     }, { merge: true });
 
     const padded = String(nextVal).padStart(6, "0");
-    return `KL-RMA-${padded}`;
+    return `SS-RMA-${padded}`;
   } catch (err) {
     console.warn("Falling back to timestamp RMA number generation:", err);
     const rand = Math.floor(1000 + Math.random() * 9000);
-    return `KL-RMA-${Date.now().toString().slice(-6)}${rand}`;
+    return `SS-RMA-${Date.now().toString().slice(-6)}${rand}`;
   }
 }
 

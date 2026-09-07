@@ -8,7 +8,7 @@ import { useSEO } from '../hooks/useSEO';
 export const WishlistPage: React.FC = () => {
   useSEO({
     title: 'My Wishlist | Sa and Sha',
-    description: 'View your handpicked selection of premium pure linen shirts, pants, and kurtas. Complete your purchase at Sa and Sha.',
+    description: 'View your handpicked selection of dresses, tops, and co-ord sets. Complete your purchase at Sa and Sha.',
     noindex: true
   });
 
@@ -53,7 +53,7 @@ export const WishlistPage: React.FC = () => {
           <div className="space-y-2">
             <h3 className="font-serif text-lg font-bold text-[#2A211C]">Your Drawer is Empty</h3>
             <p className="font-sans text-xs md:text-sm text-[#2A211C]/60 leading-relaxed font-medium">
-              You haven’t curated any linen styles yet. Browse our European flax shirts, trousers, and knit polos and tap the heart icon to save them here.
+              You haven’t saved any styles yet. Browse our collection and tap the heart icon to save your favorites here.
             </p>
           </div>
           <div className="pt-2">

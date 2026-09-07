@@ -36,7 +36,7 @@ export async function generateInvoiceNumberInTransaction(
     }
   }
 
-  const prefix = numConfig?.prefix || 'KL';
+  const prefix = numConfig?.prefix || 'SS';
   const sep = numConfig?.separator || '/';
   const padding = numConfig?.sequence_padding || 6;
 

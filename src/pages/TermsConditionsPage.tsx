@@ -77,12 +77,12 @@ export const TermsConditionsPage: React.FC = () => {
           Terms & Conditions
         </h1>
         <p className="font-sans text-xs md:text-sm text-stone-600 max-w-2xl mx-auto leading-relaxed">
-          Welcome to Sa and Sha. Please read these Terms & Conditions carefully before browsing our website, registering an account, or placing an order for pure European flax apparel.
+          Welcome to Sa and Sha. Please read these Terms & Conditions carefully before browsing our website, registering an account, or placing an order.
         </p>
         <div className="pt-2 text-[11px] font-sans text-stone-500 flex items-center justify-center gap-4">
           <span><strong>Effective Date:</strong> August 5, 2026</span>
           <span>•</span>
-          <span><strong>Brand:</strong> Sa and Sha (Rajasthan Exports Overseas Pvt. Ltd.)</span>
+          <span><strong>Brand:</strong> Sa and Sha ([Registered Legal Entity Name])</span>
         </div>
       </div>
 
@@ -91,10 +91,10 @@ export const TermsConditionsPage: React.FC = () => {
         <div className="bg-white p-4 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-1.5">
           <div className="flex items-center gap-2 text-[#B08D57]">
             <ShoppingBag className="w-4 h-4" />
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">100% Belgian Flax</span>
+            <span className="text-xs font-sans font-bold uppercase tracking-wider">Quality Fabrics</span>
           </div>
           <p className="text-[11px] text-stone-600 leading-normal">
-            Natural slubs & texture variations are inherent signatures of organic flax weaving, not defects.
+            Natural texture variations are inherent to the fabrics we use, not defects.
           </p>
         </div>
 
@@ -121,10 +121,10 @@ export const TermsConditionsPage: React.FC = () => {
         <div className="bg-white p-4 rounded-lg border border-[#E5D2BC]/30 shadow-sm space-y-1.5">
           <div className="flex items-center gap-2 text-[#B08D57]">
             <Gavel className="w-4 h-4" />
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">Jaipur Jurisdiction</span>
+            <span className="text-xs font-sans font-bold uppercase tracking-wider">Governing Law</span>
           </div>
           <p className="text-[11px] text-stone-600 leading-normal">
-            Governed by the laws of India. Courts in Jaipur, Rajasthan hold exclusive legal jurisdiction.
+            Governed by the laws of India. [Jurisdiction city], [State] courts hold exclusive legal jurisdiction.
           </p>
         </div>
       </div>
@@ -179,7 +179,7 @@ export const TermsConditionsPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              These Terms & Conditions constitute a legally binding agreement between you ("Customer", "User", "You") and <strong className="text-[#2A211C]">Rajasthan Exports Overseas Pvt. Ltd.</strong>, operating the ecommerce store and trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong> ("Company", "We", "Us", "Our"), accessible via <strong className="text-[#2A211C]">https://saandsha.com</strong>.
+              These Terms & Conditions constitute a legally binding agreement between you ("Customer", "User", "You") and <strong className="text-[#2A211C]">[Registered Legal Entity Name]</strong>, operating the ecommerce store and trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong> ("Company", "We", "Us", "Our"), accessible via <strong className="text-[#2A211C]">https://saandsha.com</strong>.
             </p>
             <p>
               By accessing, browsing, registering an account, or placing an order on Sa and Sha, you unequivocally agree to be bound by these Terms & Conditions, along with our <Link to="/privacy-policy" className="text-[#B08D57] font-semibold hover:underline">Privacy Policy</Link>, <Link to="/returns-exchanges" className="text-[#B08D57] font-semibold hover:underline">Returns & Exchanges Policy</Link>, and <Link to="/shipping-delivery" className="text-[#B08D57] font-semibold hover:underline">Shipping Policy</Link>.
@@ -275,7 +275,7 @@ export const TermsConditionsPage: React.FC = () => {
               </div>
               <div className="p-2.5 bg-[#FBF6EE]/40 rounded border border-[#E5D2BC]/20 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C98A82] shrink-0" />
-                <span>Accessing Kora Rewards loyalty store credits</span>
+                <span>Accessing Sa and Sha Rewards loyalty store credits</span>
               </div>
               <div className="p-2.5 bg-[#FBF6EE]/40 rounded border border-[#E5D2BC]/20 flex items-center gap-2 sm:col-span-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C98A82] shrink-0" />
@@ -296,14 +296,14 @@ export const TermsConditionsPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              Sa and Sha specializes in luxury menswear crafted from 100% organic European flax, including linen shirts, linen trousers, and premium chinos.
+              Sa and Sha specializes in ladies apparel including dresses, tops & shirts, shorts & skirts, co-ord sets, trousers, jackets, and bags & pouches.
             </p>
             <div className="p-3 bg-[#FBF6EE]/50 rounded border border-[#E5D2BC]/20 space-y-2">
               <strong className="text-[#2A211C] font-bold block text-xs uppercase tracking-wider">
-                🌿 Natural Flax Characteristics (Not Defects)
+                🌿 Natural Fabric Characteristics (Not Defects)
               </strong>
               <p className="text-stone-700 text-xs">
-                Pure linen is an organic, living fabric. Slubs, subtle weave variations, and slight texture variations are proof of authentic European flax weaving and are inherent characteristics of luxury linen, not manufacturing defects.
+                Depending on the fabric, minor weave variations and slight texture differences are proof of natural materials and are inherent characteristics, not manufacturing defects.
               </p>
             </div>
             <p>
@@ -372,7 +372,7 @@ export const TermsConditionsPage: React.FC = () => {
             <ul className="list-disc pl-5 space-y-1 text-stone-700">
               <li><strong>Free Delivery:</strong> Free standard shipping on all orders above <strong>₹1,999</strong> across India.</li>
               <li><strong>Standard Shipping Fee:</strong> A flat ₹99 shipping charge applies to orders up to ₹1,999.</li>
-              <li><strong>Order Processing:</strong> Orders are inspected and dispatched from our Jaipur hub within 1 to 2 business days.</li>
+              <li><strong>Order Processing:</strong> Orders are inspected and dispatched within 1 to 2 business days.</li>
               <li><strong>Delivery Timeline:</strong> Estimated delivery takes 3 to 7 business days depending on location across India.</li>
               <li><strong>Order Tracking:</strong> Real-time delivery status can be tracked at <Link to="/track-order" className="text-[#B08D57] hover:underline">https://saandsha.com/track-order</Link> using your order ID or phone number.</li>
             </ul>
@@ -392,7 +392,7 @@ export const TermsConditionsPage: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C98A82] shrink-0 mt-0.5" />
-                <span><strong>Eligibility:</strong> Items must be unused, unwashed, unaltered, and returned in original condition with all brand tags and linen care packaging intact.</span>
+                <span><strong>Eligibility:</strong> Items must be unused, unwashed, unaltered, and returned in original condition with all brand tags and packaging intact.</span>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C98A82] shrink-0 mt-0.5" />
@@ -400,7 +400,7 @@ export const TermsConditionsPage: React.FC = () => {
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C98A82] shrink-0 mt-0.5" />
-                <span><strong>Refund Modes:</strong> Prepaid orders are refunded directly to the original bank/card account within 5–7 business days after quality inspection at Jaipur hub. COD orders are refunded via instant Kora Store Credit or NEFT/UPI bank transfer.</span>
+                <span><strong>Refund Modes:</strong> Prepaid orders are refunded directly to the original bank/card account within 5–7 business days after quality inspection. COD orders are refunded via instant Sa and Sha Store Credit or NEFT/UPI bank transfer.</span>
               </div>
             </div>
           </section>
@@ -414,10 +414,10 @@ export const TermsConditionsPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              The Sa and Sha website, trademark logo, brand design, garment patterns, photography, studio imagery, product descriptions, copy, graphics, page layouts, database structures, software code, and underlying software are the exclusive intellectual property of <strong className="text-[#2A211C]">Rajasthan Exports Overseas Pvt. Ltd.</strong> and are protected under Indian Copyright and Trademark laws.
+              The Sa and Sha website, trademark logo, brand design, garment patterns, photography, studio imagery, product descriptions, copy, graphics, page layouts, database structures, software code, and underlying software are the exclusive intellectual property of <strong className="text-[#2A211C]">[Registered Legal Entity Name]</strong> and are protected under Indian Copyright and Trademark laws.
             </p>
             <p>
-              You are granted a limited, revocable, non-exclusive license to access and make personal, non-commercial use of the website. You are strictly prohibited from reproducing, duplicating, copying, selling, reselling, or exploiting any portion of the website without express written consent from Rajasthan Exports Overseas Pvt. Ltd.
+              You are granted a limited, revocable, non-exclusive license to access and make personal, non-commercial use of the website. You are strictly prohibited from reproducing, duplicating, copying, selling, reselling, or exploiting any portion of the website without express written consent from [Registered Legal Entity Name]
             </p>
           </section>
 
@@ -437,7 +437,7 @@ export const TermsConditionsPage: React.FC = () => {
               <li>Attempting to bypass security mechanisms, perform unauthorized API probing, or inject malicious code.</li>
               <li>Initiating false or fraudulent COD orders, credential stuffing, or abusing mobile OTP verification.</li>
               <li>Submitting defamatory, obscene, or fraudulent customer reviews or support communications.</li>
-              <li>Impersonating any person or legal entity, or misrepresenting affiliation with Rajasthan Exports Overseas Pvt. Ltd.</li>
+              <li>Impersonating any person or legal entity, or misrepresenting affiliation with [Registered Legal Entity Name]</li>
             </ul>
           </section>
 
@@ -450,7 +450,7 @@ export const TermsConditionsPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              By submitting product reviews, feedback, or customer photographs to Sa and Sha, you grant Rajasthan Exports Overseas Pvt. Ltd. a perpetual, worldwide, non-exclusive, royalty-free license to publish, display, and reproduce such reviews on our website and official communications.
+              By submitting product reviews, feedback, or customer photographs to Sa and Sha, you grant [Registered Legal Entity Name] a perpetual, worldwide, non-exclusive, royalty-free license to publish, display, and reproduce such reviews on our website and official communications.
             </p>
             <p>
               You guarantee that any review or photograph submitted represents your authentic personal experience and does not infringe upon any third-party intellectual property or privacy rights.
@@ -469,7 +469,7 @@ export const TermsConditionsPage: React.FC = () => {
               <strong className="text-[#2A211C]">Warranty Disclaimer:</strong> The website and products are provided on an "as is" and "as available" basis without warranties of any kind, whether express or implied, except as explicitly provided in our product descriptions.
             </p>
             <p>
-              <strong className="text-[#2A211C]">Limitation of Liability:</strong> In no event shall Rajasthan Exports Overseas Pvt. Ltd., its directors, officers, employees, or agents be liable for any indirect, incidental, special, or consequential damages arising out of your use of the website. Our total aggregate liability to you for any claim arising out of or related to an order shall not exceed the total amount actually paid by you for that specific order.
+              <strong className="text-[#2A211C]">Limitation of Liability:</strong> In no event shall [Registered Legal Entity Name], its directors, officers, employees, or agents be liable for any indirect, incidental, special, or consequential damages arising out of your use of the website. Our total aggregate liability to you for any claim arising out of or related to an order shall not exceed the total amount actually paid by you for that specific order.
             </p>
             <p>
               <strong className="text-[#2A211C]">Force Majeure:</strong> Sa and Sha shall not be held liable or responsible for any failure or delay in performance caused by events beyond our reasonable control, including acts of God, natural disasters (such as floods, earthquakes, or severe weather), strikes, labor unrest, government restrictions, courier disruptions, transport breakdowns, telecommunication failures, or civil unrest.
@@ -488,7 +488,7 @@ export const TermsConditionsPage: React.FC = () => {
               These Terms & Conditions shall be governed by and construed in accordance with the laws of <strong className="text-[#2A211C]">India</strong>.
             </p>
             <p>
-              Any legal proceedings, disputes, or claims arising out of or in connection with these Terms, the website, or purchases made on Sa and Sha shall be subject to the <strong className="text-[#2A211C]">exclusive jurisdiction of the competent courts in Jaipur, Rajasthan, India</strong>.
+              Any legal proceedings, disputes, or claims arising out of or in connection with these Terms, the website, or purchases made on Sa and Sha shall be subject to the <strong className="text-[#2A211C]">exclusive jurisdiction of the competent courts in [Jurisdiction City], [State], India</strong>.
             </p>
 
             <div className="p-4 bg-[#F4E6D7]/20 rounded-lg border border-[#E5D2BC]/30 space-y-3 pt-4">
@@ -498,11 +498,11 @@ export const TermsConditionsPage: React.FC = () => {
               <div className="space-y-1.5 text-xs text-[#2A211C] font-medium">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Company:</strong> Rajasthan Exports Overseas Pvt. Ltd. (Brand: Sa and Sha)</span>
+                  <span><strong>Company:</strong> [Registered Legal Entity Name] (Brand: Sa and Sha)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Registered Office:</strong> H1-56, First Floor, RIICO Apparel Park, Mahal Road, Jagatpura, Jaipur, Rajasthan - 302020, India</span>
+                  <span><strong>Registered Office:</strong> [Registered business address to be added]</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#B08D57]" />

@@ -474,7 +474,7 @@ export function buildNormalizedSearchFields(profile: Partial<CustomerProfileDoc>
   const customer_id = (profile.customer_id || "").trim();
   const customer_id_upper = customer_id.toUpperCase();
   const customer_id_lower = customer_id.toLowerCase();
-  const customer_id_num = customer_id.replace(/^KL-C/i, "");
+  const customer_id_num = customer_id.replace(/^SS-C/i, "");
   const gstin_lower = (profile.gstin || "").toLowerCase().trim();
   const business_name_lower = (profile.business_name || "").toLowerCase().trim();
   const health_status = profile.health_status || "active";
@@ -550,7 +550,7 @@ export function decodeCursor(cursorStr: string): QueryCursorPayload | null {
 /**
  * Atomic Customer ID Generator inside a Firestore Transaction
  * Reads global counter from `system_counters/customer_counter`, increments last_sequence,
- * and returns formatted Business Customer ID (e.g. "KL-C000001").
+ * and returns formatted Business Customer ID (e.g. "SS-C000001").
  */
 export async function generateNextCustomerIdInTransaction(
   transaction: any,
@@ -574,7 +574,7 @@ export async function generateNextCustomerIdInTransaction(
   }, { merge: true });
 
   const paddedSeq = String(nextSeq).padStart(6, "0");
-  return `KL-C${paddedSeq}`;
+  return `SS-C${paddedSeq}`;
 }
 
 /**
@@ -652,7 +652,7 @@ export async function runCustomerIdMigration(
 
     if (dryRun) {
       assigned += 1;
-      assignedIdsSample.push({ docId: docSnap.id, customerId: `KL-C(DRY_RUN_${assigned})` });
+      assignedIdsSample.push({ docId: docSnap.id, customerId: `SS-C(DRY_RUN_${assigned})` });
     } else {
       let generatedId = "";
       await adminDb.runTransaction(async (transaction: any) => {
@@ -1148,7 +1148,7 @@ export async function buildCustomerDataExport(
       compliance: "DPDP / GDPR Data Subject Access Request"
     },
     customer_info: {
-      customer_id: normalized.customer_id || `KL-CUST-${profileId.slice(0, 6).toUpperCase()}`,
+      customer_id: normalized.customer_id || `SS-CUST-${profileId.slice(0, 6).toUpperCase()}`,
       full_name: normalized.full_name,
       email: normalized.email,
       phone: profileData.normalized_phone || "",
@@ -1204,7 +1204,7 @@ export async function createAccountDeletionRequest(
   const requestDoc = {
     id: requestId,
     profile_id: profileId,
-    customer_id: profileData.customer_id || `KL-CUST-${profileId.slice(0, 6).toUpperCase()}`,
+    customer_id: profileData.customer_id || `SS-CUST-${profileId.slice(0, 6).toUpperCase()}`,
     email: profileData.email || "",
     phone: profileData.normalized_phone || "",
     requested_at: now.toISOString(),
@@ -1428,7 +1428,7 @@ export async function resolveVerifiedCustomerIdentity(
  * Scans customer_profiles and associated orders to fix:
  * - Missing or outdated GST details (gstin, business_name, gst_details, customer_type: BUSINESS)
  * - Missing or incorrect separate billing address and billing_same_as_shipping flag
- * - Missing or incorrect canonical customer_id on orders (setting customer_id to KL-C... and customer_profile_id to p_...)
+ * - Missing or incorrect canonical customer_id on orders (setting customer_id to SS-C... and customer_profile_id to p_...)
  */
 export async function repairCustomerProfilesAndOrders(
   adminDb: any,

@@ -62,7 +62,7 @@ export const CustomerRewardsSection: React.FC<Props> = ({ verificationToken, cus
     return (
       <div className="p-8 text-center text-stone-500 flex flex-col items-center gap-2">
         <RefreshCw className="w-5 h-5 animate-spin text-stone-400" />
-        <span className="text-xs tracking-wider uppercase">Loading Kora Rewards...</span>
+        <span className="text-xs tracking-wider uppercase">Loading Sa and Sha Rewards...</span>
       </div>
     );
   }
@@ -201,7 +201,7 @@ export const CustomerRewardsSection: React.FC<Props> = ({ verificationToken, cus
                 <Gift className="w-5 h-5 text-stone-800 shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs font-bold text-stone-900">{tier_info?.earning_multiplier}x Rewards Accumulation</div>
-                  <div className="text-[11px] text-stone-500 mt-0.5">Earn points faster on every European linen garment purchase.</div>
+                  <div className="text-[11px] text-stone-500 mt-0.5">Earn points faster on every purchase.</div>
                 </div>
               </div>
 

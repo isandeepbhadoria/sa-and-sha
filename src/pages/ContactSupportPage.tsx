@@ -21,8 +21,8 @@ import { useSEO } from '../hooks/useSEO';
 
 export const ContactSupportPage: React.FC = () => {
   useSEO({
-    title: 'Contact Support | Sa and Sha - Rajasthan Exports Overseas',
-    description: 'Get in touch with Sa and Sha customer support. Contact our Jaipur head office at shop@saandsha.com or +91 7688886661 for order tracking, size advice, and assistance.'
+    title: 'Contact Support | Sa and Sha',
+    description: 'Get in touch with Sa and Sha customer support at shop@saandsha.com for order tracking, size advice, and assistance.'
   });
 
   // Form State
@@ -178,7 +178,7 @@ export const ContactSupportPage: React.FC = () => {
             How May We Assist You?
           </h1>
           <p className="font-sans text-sm sm:text-base text-stone-600 leading-relaxed">
-            Whether you need assistance tracking an order, advice on linen care and custom sizing, or help with returns, our dedicated support team in Jaipur is at your service.
+            Whether you need assistance tracking an order, advice on fabric care and sizing, or help with returns, our dedicated support team is at your service.
           </p>
         </div>
 
@@ -271,17 +271,12 @@ export const ContactSupportPage: React.FC = () => {
                 <div>
                   <div className="text-xs font-sans font-bold text-stone-500 uppercase tracking-wider">Helpline & WhatsApp Support</div>
                   <div className="space-y-1 mt-1">
-                    <a 
-                      href="tel:+917688886661" 
+                    {/* TODO: replace with Sa and Sha's real support phone number(s) */}
+                    <a
+                      href="tel:+91XXXXXXXXXX"
                       className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block"
                     >
-                      +91 7688886661
-                    </a>
-                    <a 
-                      href="tel:+917688886662" 
-                      className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block"
-                    >
-                      +91 7688886662
+                      +91-XXXXXXXXXX
                     </a>
                   </div>
                   <p className="text-xs text-stone-500 mt-1">Available Mon–Sat from 10:00 AM to 7:00 PM IST.</p>
@@ -303,6 +298,7 @@ export const ContactSupportPage: React.FC = () => {
               </div>
 
               {/* Head Office Address */}
+              {/* TODO: replace with Sa and Sha's real registered address */}
               <div className="flex items-start gap-4 pt-2 border-t border-[#E5D2BC]/20">
                 <div className="w-10 h-10 rounded-full bg-[#FBF6EE] border border-[#E5D2BC]/30 flex items-center justify-center text-[#B08D57] shrink-0">
                   <MapPin className="w-5 h-5" />
@@ -313,59 +309,23 @@ export const ContactSupportPage: React.FC = () => {
                     Sa and Sha Head Office
                   </div>
                   <p className="text-xs text-stone-600 leading-relaxed">
-                    H1-56, First Floor, RIICO Apparel Park, Mahal Road, Jagatpura, Jaipur, Rajasthan - 302020, India
+                    [Registered business address to be added]
                   </p>
                 </div>
               </div>
 
               {/* Legal Trademark Notice */}
+              {/* TODO: replace with Sa and Sha's real registered legal entity name */}
               <div className="p-3.5 bg-[#FBF6EE]/60 rounded-xl border border-[#E5D2BC]/30 text-xs text-stone-600 space-y-1">
                 <div className="flex items-center gap-1.5 font-bold text-[#2A211C] uppercase tracking-wider text-[10px]">
                   <Building2 className="w-3.5 h-3.5 text-[#B08D57]" />
                   Legal Company Information
                 </div>
                 <p className="text-[11px] leading-relaxed">
-                  <strong>Sa and Sha</strong> is a Trademark Brand of <strong>Rajasthan Exports Overseas Pvt Ltd</strong>.
+                  <strong>Sa and Sha</strong> is a Trademark Brand of [Registered Legal Entity Name].
                 </p>
               </div>
 
-            </div>
-
-            {/* Google Maps Location Box */}
-            <div className="bg-white rounded-2xl border border-[#E5D2BC]/30 overflow-hidden shadow-sm space-y-3 p-4">
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#B08D57]" />
-                  <span className="font-serif font-bold text-sm text-[#2A211C]">Jaipur Head Office Location</span>
-                </div>
-                <a
-                  href="https://maps.google.com/maps?q=26.794677132093124,75.85846163777299"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-[#B08D57] font-bold hover:underline"
-                >
-                  Open in Maps
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              {/* Responsive Google Maps Embed */}
-              <div className="w-full h-64 rounded-xl overflow-hidden border border-[#E5D2BC]/30 relative bg-[#F4E6D7]/20">
-                <iframe
-                  title="Sa and Sha Jaipur Head Office Map"
-                  src="https://maps.google.com/maps?q=26.794677132093124,75.85846163777299&z=15&output=embed"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full"
-                ></iframe>
-              </div>
-              <p className="text-[11px] text-stone-500 text-center px-2">
-                Coordinates: 26.794677, 75.858461 (Apparel Park, Jagatpura, Jaipur)
-              </p>
             </div>
 
           </div>
@@ -448,7 +408,7 @@ export const ContactSupportPage: React.FC = () => {
                     Send Us a Message
                   </h2>
                   <p className="text-xs text-stone-500 mt-1">
-                    Fill out the form below and our Jaipur concierges will attend to your query promptly.
+                    Fill out the form below and our support team will attend to your query promptly.
                   </p>
                 </div>
 
@@ -537,7 +497,7 @@ export const ContactSupportPage: React.FC = () => {
                         name="orderId"
                         value={formData.orderId}
                         onChange={handleInputChange}
-                        placeholder="e.g. KL102548"
+                        placeholder="e.g. SS102548"
                         className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E5D2BC]/40 bg-[#FBF6EE]/10 text-[#2A211C] focus:outline-none focus:border-[#2A211C] transition-colors"
                       />
                     </div>
@@ -558,7 +518,7 @@ export const ContactSupportPage: React.FC = () => {
                       <option value="Shipping & Delivery">Shipping & Delivery Enquiries</option>
                       <option value="Return or Exchange Request">Return or Free Exchange Query</option>
                       <option value="Payment Related">Payment / Refund / Invoice Assistance</option>
-                      <option value="Product Information">Product Specifications & Linen Fabric Care</option>
+                      <option value="Product Information">Product Specifications & Fabric Care</option>
                       <option value="Size & Fit Advice">Size & Tailored Custom Fit Guidance</option>
                       <option value="Bulk / Corporate Order">Bulk / Custom Tailoring / Corporate Order</option>
                       <option value="Feedback / Suggestion">Feedback or Website Suggestion</option>

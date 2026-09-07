@@ -184,7 +184,7 @@ export function validateAndCalculateLoyaltyRedemption(
 
   return {
     valid: true,
-    message: `Applied ${points} Kora Rewards points (₹${discountRupees} discount).`,
+    message: `Applied ${points} Sa and Sha Rewards points (₹${discountRupees} discount).`,
     pointsToRedeem: points,
     discountRupees,
     discountPaise,

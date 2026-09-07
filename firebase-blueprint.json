@@ -71,7 +71,7 @@
     },
     "product": {
       "title": "Product",
-      "description": "A linen clothing product for Sa and Sha",
+      "description": "An apparel product for Sa and Sha",
       "type": "object",
       "properties": {
         "name": {

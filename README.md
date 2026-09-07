@@ -99,24 +99,84 @@ testimonials → Instagram feed). Specifically:
   (`src/server/invoice/invoicePdfGenerator.ts`,
   `.../creditNotePdfGenerator.ts` — filenames no longer say "Kora-Linen").
 
+## What the linen-copy sweep fixed
+
+A follow-up pass swept the rest of the app for leftover Kora Linen
+menswear branding beyond the Header/Footer/HomePage redesign — the
+`FAQPage` ("Linen Care Guide" → "Fabric Care Guide", care copy
+genericized), `AboutPage` (fully rewritten brand story), `CollectionPage`
+(subcategory/fabric filters, comparison copy, "Coming Soon" states),
+`AdminPage` (category/subcategory dropdowns actually matched the new
+Firestore `category` enum — this was a real bug that would have broken
+admin product creation), and the legal/support pages
+(`PrivacyPolicyPage`, `TermsConditionsPage`, `ContactSupportPage`), which
+had **fabricated real business data** — a physical RIICO Jaipur address,
+phone numbers, GPS coordinates, and "Rajasthan Exports Overseas Pvt.
+Ltd." as the legal entity — replaced with `[placeholder]` markers plus a
+`ContactSupportPage` Google Maps embed of that real address, removed
+entirely.
+
+It also found and fixed several functional bugs, not just copy, because
+the "KL"/"Kora Linen" prefix convention was baked into real business
+logic, not just display text:
+- The default GST invoice-numbering prefix (`invoiceNumberingConfig.ts`,
+  `sellerTaxConfig.ts`, `server.ts`, admin UI placeholders) defaulted to
+  `"KL"` — real Sa and Sha tax invoices would have been numbered
+  `KL/26-27/0001` unless an admin manually overrode it. Now defaults to
+  `"SS"`.
+- Business Customer IDs, RMA numbers, and order ID generation
+  (`customerProfileHelpers.ts`, `customerReturnsHelpers.ts`,
+  `loyaltyHelpers.ts`, `financialReturnsHelpers.ts`, `trackingHelpers.ts`,
+  `server.ts`, and others) all used a `KL-` prefix convention
+  (`KL-C000001`, `KL-RMA-100001`, `KL-<id>-LX`) — renamed to `SS-`
+  throughout, including the regexes/parsers that strip the prefix back
+  off.
+- The seeded promo codes in `server.ts` (`seedDefaultPromotionsIfEmpty`)
+  were still `KORA10` / `LINENLOVE`, while every customer-facing surface
+  (Header promo banner, `ShopContext.tsx`, checkout hints) had already
+  been renamed to `SANDSHA10` / `WELCOME20` — real customers typing the
+  advertised code would have had it rejected by the server. Both sides
+  now agree. Stray `KORA10` display text on `ProductCard`, `CartDrawer`,
+  and `ProductDetailPage` was fixed too.
+- `scripts/generate-seo-files.ts` (the build-time sitemap generator) and
+  a live `/sitemap.xml`-equivalent route table in `server.ts` both
+  hardcoded the old menswear category slugs (`shirts`, `linen-pants`,
+  `chinos`, `polos`, ...) — search engines would have been pointed at
+  routes that no longer exist. Both now list the real product-type/
+  collection routes.
+- "Kora Rewards" (the loyalty program's display name) was still shown to
+  customers and admins in `CustomerDashboardPage`, `CustomerRewardsPage`,
+  `CustomerRewardsSection`, `RewardsPolicySettings`, `AdminPage`,
+  `loyaltyPolicy.ts` (a transactional message string), Privacy/Terms
+  copy, and a "Kora Size Chart" modal heading — all renamed to
+  "Sa and Sha Rewards" / "Size Chart".
+- Demo/fallback order data shown to real customers who track a demo
+  order (`server.ts`'s seeded `KL102548` order for the track-order and
+  returns flows) referenced Kora Linen menswear products and the old ID
+  prefix — renamed to `SS102548` with ladies-apparel item names, and the
+  example order ID shown as placeholder text on `ContactSupportPage` /
+  `ReturnsExchangesPage` updated to match.
+
+`npm test` (541/543), `npm run lint` (`tsc --noEmit`), and
+`npm run build` were all re-verified green after this pass.
+
 ## Not yet done
 
-- Deeper page content still has scattered Kora Linen linen/menswear/Jaipur
-  copy that wasn't in scope for this pass (customer emails and invoices
-  were fixed since those reach real customers): `src/App.tsx` has a whole
-  "Linen Care Guide & FAQs" page that needs rewriting or removing for a
-  non-linen brand, and `src/pages/{CollectionPage,ProductDetailPage,
-  ContactSupportPage,PrivacyPolicyPage,TermsConditionsPage,WishlistPage,
-  TrackOrderPage,CustomerOrdersPage,CustomerDashboardPage,AdminPage}.tsx`,
-  `src/components/admin/HomepageMediaAdmin.tsx`, and
-  `src/types/homepageMedia.ts` all still contain some linen/Jaipur
-  references.
 - Product seed/sample data (`src/data.ts`) still reflects Kora Linen
   products (including its `COLOR_SWATCHES`, which describe linen fabric
-  colors) and needs replacing with real Sa and Sha inventory.
+  colors) and needs replacing with real Sa and Sha inventory. This is the
+  only place genuine Kora Linen menswear content remains, and it's
+  deliberately out of scope for a copy sweep since it's data, not code —
+  it needs a real product catalog, not a text rewrite.
 - Removed `src/server/catalogMigration.ts` and its test — it was a
   one-time script that migrated Kora Linen's specific 50 legacy products
   to the new taxonomy fields, which doesn't apply to a fresh catalog.
+- Internal-only `localStorage` key names (`kora_cart`, `kora_customer_auth_token`,
+  `kora_admin_logged_in`, etc.) and Firestore collection internals still
+  use a `kora_` namespace. These are never shown to users and were left
+  alone as out of scope for a copy sweep — rename only if you want full
+  internal consistency, and do it as one careful pass since the same key
+  string is read and written across many files.
 
 ## Test suite status
 

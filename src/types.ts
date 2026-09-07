@@ -1,39 +1,37 @@
 export type MerchandisingCollection =
-  | 'pure-linen'
-  | 'linen-cotton-blend'
-  | 'pure-cotton'
-  | 'chinos'
+  | 'apparel'
+  | 'accessories'
   | string;
 
 export type ProductType =
-  | 'shirts'
-  | 'trousers'
-  | 'shorts'
-  | 'pyjamas'
-  | 'kurtas'
+  | 'dresses'
+  | 'tops-shirts'
+  | 'shorts-skirts'
   | 'co-ord-sets'
-  | 'chinos'
+  | 'trousers'
+  | 'jackets'
+  | 'bags-pouches'
   | string;
 
 export type ProductSubType =
-  | 'full-sleeve-shirts'
-  | 'half-sleeve-shirts'
-  | 'casual-short-kurtas'
-  | 'smart-casual-long-kurtas'
+  | 'tops'
+  | 'shirts'
+  | 'shorts'
+  | 'skirts'
   | string;
 
 export type MaterialType =
-  | 'pure-linen'
+  | 'cotton'
   | 'linen-cotton-blend'
-  | 'pure-cotton'
+  | 'georgette'
   | 'other'
   | string;
 
 export interface Product {
   id: string;
   name: string;
-  category: 'shirts' | 'pants' | 'polos' | 'kurtas' | 'co-ord sets' | 'jackets' | 'accessories';
-  subCategory: 'linen-shirts' | 'cotton-linen-shirts' | 'linen-pants' | 'cotton-linen-pants' | 'chinos' | 'polos' | 'kurtas' | 'co-ord-sets' | 'jackets' | 'accessories';
+  category: string;
+  subCategory: string;
   collection?: MerchandisingCollection;
   productType?: ProductType;
   productSubType?: ProductSubType;

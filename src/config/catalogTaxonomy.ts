@@ -1,9 +1,9 @@
 /**
  * Sa and Sha — Centralized Catalog Merchandising Taxonomy
  *
- * Ported from Kora Linen's catalog taxonomy engine. Defines canonical
- * collections, product types, sub-types, material types, valid matrix
- * combinations, selectable tax class options, and validation rules.
+ * Defines canonical collections, product types, sub-types, material types,
+ * valid matrix combinations, selectable tax class options, and validation
+ * rules.
  *
  * Product categories reflect Sa and Sha's actual merchandising plan:
  * Dresses, Top & Shirts, Shorts & Skirts, Co-Ord Sets, Trousers, Jackets,

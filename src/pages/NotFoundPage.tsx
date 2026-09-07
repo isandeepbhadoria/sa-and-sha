@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 export const NotFoundPage: React.FC = () => {
   useSEO({
     title: 'Page Not Found | Sa and Sha',
-    description: 'The premium linen garment or page you are looking for does not exist. Explore Sa and Sha menswear and custom shirts on our homepage.',
+    description: 'The page you are looking for does not exist. Explore Sa and Sha on our homepage.',
     noindex: true
   });
 

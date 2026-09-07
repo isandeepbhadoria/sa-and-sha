@@ -2,481 +2,396 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.saandsha.com/</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/about</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/faq</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/contact-support</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/returns-exchanges</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/shipping-delivery</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/track-order</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://www.saandsha.com/shop/all</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/shop/bestsellers</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/shop/new-arrivals</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/collection/pure-linen</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/collection/apparel</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/collection/linen-cotton-blend</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/collection/accessories</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/collection/pure-cotton</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/dresses</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/collection/chinos</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/tops-shirts</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/product/shirts</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/trousers</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/chinos</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/shorts</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/pyjamas</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/kurtas</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/shorts-skirts</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/shop/product/co-ord-sets</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/product/shirts/full-sleeve</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/trousers</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/product/shirts/half-sleeve</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/jackets</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saandsha.com/shop/product/kurtas/casual-short</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/product/kurtas/smart-casual-long</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/collection/pure-linen/shirts</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/collection/pure-linen/trousers</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/collection/linen-cotton-blend/shirts</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.saandsha.com/shop/collection/linen-cotton-blend/trousers</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://www.saandsha.com/shop/product/bags-pouches</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/amalfi-pure-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/goa-mandarin-collar-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/terracotta-classic-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/sage-meadow-linen-stripe-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/kashmir-summer-mandarin-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/rajasthan-dusk-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/pondicherry-printed-resort-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/cochin-check-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/himalayan-breeze-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/deccan-charcoal-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/nilgiri-air-cotton-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/malabar-coastal-stripe-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/aravalli-utility-cotton-linen-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/munnar-mist-mandarin-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/bengal-block-checked-blend-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/coromandel-half-sleeve-printed</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/mumbai-club-slim-blend-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/thar-desert-sand-blend-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/kochi-harbour-yacht-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/shillong-forest-blend-shirt</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/calicut-pure-linen-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/varanasi-drawstring-trousers</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/jaipur-summer-tailored-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/kerala-breeze-linen-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/udaipur-royal-ivory-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/nalanda-earth-linen-trousers</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/galle-resort-drawstring-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/deccan-midnight-linen-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/shimla-ridge-linen-chino-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/thar-rock-charcoal-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/aravalli-cotton-linen-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/shimla-textured-knit-trousers</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/nilgiri-breeze-slim-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/kodaikanal-forest-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/chambal-safari-drawstring-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/mysore-royal-navy-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/darjeeling-autumn-slacks</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/coorg-meadow-green-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/malabar-mist-ivory-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/mumbai-club-charcoal-pants</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/bengal-premium-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/punjab-indigo-twill-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/desert-dunes-khaki-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/gwalior-forest-twill-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/thar-stone-charcoal-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/delhi-classic-bone-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/himalayan-ridge-sage-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/aravalli-brick-clay-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/deccan-indigo-sky-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.saandsha.com/product/thar-dune-rose-chinos</loc>
-    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/mahabaleshwar-linen-knit-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/udaipur-textured-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/kovalam-navy-club-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/ooty-fern-green-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/goa-coast-striped-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/deccan-charcoal-knit-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/jaipur-dusk-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/shimla-ridge-sage-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/cochin-sand-dunes-polo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.saandsha.com/product/munnar-rose-garden-polo</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

@@ -59,7 +59,7 @@ describe('Phase 10.5D.3A.5 — Tax Class Decoupling Foundation Tests', () => {
     registerProductTaxMetadata({
       tax_record_id: 'rule_category_shirts',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 12,
       rate_mode: 'FIXED',
@@ -157,7 +157,7 @@ describe('Phase 10.5D.3A.5 — Tax Class Decoupling Foundation Tests', () => {
     registerProductTaxMetadata({
       tax_record_id: 'rule_cat_pants',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_TROUSERS',
+      scope_value: 'TROUSERS',
       hsn_code: '6203',
       gst_rate: 12,
       rate_mode: 'FIXED',
@@ -238,7 +238,7 @@ describe('Phase 10.5D.3A.5 — Tax Class Decoupling Foundation Tests', () => {
     registerProductTaxMetadata({
       tax_record_id: 'old_cat_rule',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 5,
       rate_mode: 'FIXED',

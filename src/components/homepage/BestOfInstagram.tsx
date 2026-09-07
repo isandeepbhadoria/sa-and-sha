@@ -93,7 +93,7 @@ export const BestOfInstagram: React.FC<BestOfInstagramProps> = ({ initialConfig 
               Best of Instagram
             </h2>
             <p className="font-sans text-xs sm:text-sm text-[#2A211C]/65 mt-2">
-              Curated community moments, effortless draping, and everyday linen stories. Tag @_saandsha to be featured.
+              Curated community moments and everyday style stories. Tag @_saandsha to be featured.
             </p>
           </div>
 
@@ -144,7 +144,7 @@ export const BestOfInstagram: React.FC<BestOfInstagramProps> = ({ initialConfig 
                         _saandsha
                       </span>
                       <span className="text-[10px] font-sans text-stone-500">
-                        Pure European Flax
+                        Community Feature
                       </span>
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export const BestOfInstagram: React.FC<BestOfInstagramProps> = ({ initialConfig 
                     </p>
                   ) : (
                     <p className="text-xs font-sans text-stone-500 italic">
-                      Crafted in certified European flax.
+                      Styled with Sa and Sha.
                     </p>
                   )}
                   <div className="pt-1 flex items-center justify-between text-[11px] font-sans font-bold text-[#B08D57]">

@@ -460,7 +460,7 @@ async function seedDefaultPromotionsIfEmpty() {
     const adminDb = getAdminDb();
     const defaults = [
       {
-        code: 'KORA10',
+        code: 'SANDSHA10',
         discount_type: 'percentage',
         discount_value: 10,
         minimum_order_amount: 0,
@@ -496,7 +496,7 @@ async function seedDefaultPromotionsIfEmpty() {
         created_by: 'system_migration'
       },
       {
-        code: 'LINENLOVE',
+        code: 'WELCOME20',
         discount_type: 'percentage',
         discount_value: 20,
         minimum_order_amount: 0,
@@ -1336,11 +1336,11 @@ async function calculateAuthoritativeTotals(
 
     return {
       product_id: matched.id,
-      name: matched.name || item.name || 'Linen Apparel',
+      name: matched.name || item.name || 'Apparel',
       price: price, // strictly authoritative server price
       quantity,
       size: selectedSize,
-      color: matched.color || item.color || 'Natural Linen',
+      color: matched.color || item.color || 'Natural',
       image: (Array.isArray(matched.images) && matched.images[0]) || matched.image || item.image || '',
       category: matched.category || item.category || '',
       subCategory: matched.subCategory || item.subCategory || ''
@@ -1435,7 +1435,7 @@ function buildOrderTrackingResponse(order: any) {
     {
       step: "confirmed",
       label: "Order Confirmed",
-      description: "Allocated from Jaipur fulfillment center.",
+      description: "Allocated from our fulfillment center.",
       timestamp: currentRank >= 2 ? formatDateStr(createdAt, 2) : null,
       completed: currentRank >= 2,
       current: currentRank === 2
@@ -1475,7 +1475,7 @@ function buildOrderTrackingResponse(order: any) {
   ];
 
   return {
-    order_id: order.order_id || "KL102548",
+    order_id: order.order_id || "SS102548",
     customer_name: order.customer_name || "Customer",
     customer_email: order.customer_email || "",
     customer_phone: order.customer_phone || "",
@@ -1503,10 +1503,10 @@ function buildOrderTrackingResponse(order: any) {
     grand_total: order.grand_total || 0,
     items: (order.items && order.items.length > 0) ? order.items : [
       {
-        product_id: "ls-white-01",
-        name: "Classic White European Linen Shirt",
+        product_id: "sample-item-01",
+        name: "Order Item",
         size: "L",
-        color: "Off-White",
+        color: "-",
         quantity: 1,
         price: order.grand_total || 2999,
         image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80"
@@ -1535,14 +1535,13 @@ const VALID_ROOTS = [
 ];
 
 const VALID_CATEGORIES = [
-  "shirts",
-  "linen-shirts",
-  "cotton-linen-shirts",
-  "pants",
-  "linen-pants",
-  "cotton-linen-pants",
-  "chinos",
-  "polos",
+  "dresses",
+  "tops-shirts",
+  "shorts-skirts",
+  "co-ord-sets",
+  "trousers",
+  "jackets",
+  "bags-pouches",
   "bestsellers",
   "new-arrivals",
   "all"
@@ -1959,16 +1958,16 @@ async function startServer() {
         });
       }
 
-      // 1. Check Demo / Seed Orders (for prompt's example values e.g. KL102548, john@example.com, +91 9876543210)
+      // 1. Check Demo / Seed Orders (for prompt's example values e.g. SS102548, john@example.com, +91 9876543210)
       const normalizedOrderIdParam = orderIdParam.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
-      
-      const isDemoOrderId = normalizedOrderIdParam.includes("KL102548") || normalizedOrderIdParam.includes("102548");
+
+      const isDemoOrderId = normalizedOrderIdParam.includes("SS102548") || normalizedOrderIdParam.includes("102548");
       const isDemoEmail = emailParam === "john@example.com";
       const isDemoPhone = phoneParam.endsWith("9876543210");
 
       if (isDemoOrderId || isDemoEmail || isDemoPhone) {
         const demoOrderRaw = {
-          order_id: "KL102548",
+          order_id: "SS102548",
           customer_name: "John Doe",
           customer_email: "john@example.com",
           customer_phone: "+91 9876543210",
@@ -1989,17 +1988,17 @@ async function startServer() {
           grand_total: 4499,
           items: [
             {
-              product_id: "ls-white-01",
-              name: "Classic White European Linen Shirt",
+              product_id: "dr-white-01",
+              name: "Classic Ivory Dress",
               size: "L",
-              color: "Off-White",
+              color: "Ivory",
               quantity: 1,
               price: 2999,
               image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80"
             },
             {
-              product_id: "lp-navy-01",
-              name: "Tailored Navy Italian Linen Trouser",
+              product_id: "tr-navy-01",
+              name: "Tailored Navy Trouser",
               size: "32",
               color: "Navy Blue",
               quantity: 1,
@@ -5054,7 +5053,7 @@ async function startServer() {
       const csvContent = await generateLoyaltyExportCsv(adminDb);
 
       res.setHeader("Content-Type", "text/csv; charset=utf-8");
-      res.setHeader("Content-Disposition", `attachment; filename="kora_loyalty_export_${new Date().toISOString().slice(0, 10)}.csv"`);
+      res.setHeader("Content-Disposition", `attachment; filename="sa_and_sha_loyalty_export_${new Date().toISOString().slice(0, 10)}.csv"`);
       return res.status(200).send(csvContent);
     } catch (err: any) {
       console.error("Error generating loyalty CSV export:", err);
@@ -5062,7 +5061,7 @@ async function startServer() {
     }
   });
 
-  // GET /api/admin/loyalty/policy - Fetch current Kora Rewards policy settings
+  // GET /api/admin/loyalty/policy - Fetch current Sa and Sha Rewards policy settings
   app.get("/api/admin/loyalty/policy", async (req, res) => {
     try {
       const adminAuth = await verifyAdminRequest(req);
@@ -5079,7 +5078,7 @@ async function startServer() {
     }
   });
 
-  // POST /api/admin/loyalty/policy - Update Kora Rewards master policy settings
+  // POST /api/admin/loyalty/policy - Update Sa and Sha Rewards master policy settings
   app.post("/api/admin/loyalty/policy", async (req, res) => {
     try {
       const adminAuth = await verifyAdminRequest(req);
@@ -5151,9 +5150,9 @@ async function startServer() {
       const firestoreOrders = await fetchOrdersFromFirestore();
       const existingReturnRequests = await fetchReturnRequestsFromFirestore();
 
-      // Seed/Demo Order support for KL102548
+      // Seed/Demo Order support for SS102548
       const demoOrderRaw = {
-        order_id: "KL102548",
+        order_id: "SS102548",
         customer_name: "John Doe",
         customer_email: "john@example.com",
         customer_phone: "+91 9876543210",
@@ -5172,19 +5171,19 @@ async function startServer() {
         grand_total: 4499,
         items: [
           {
-            product_id: "ls-white-01",
-            sku: "KL-LS-WHT-L",
-            name: "Classic White European Linen Shirt",
+            product_id: "dr-white-01",
+            sku: "SS-DR-IVR-L",
+            name: "Classic Ivory Dress",
             size: "L",
-            color: "Off-White",
+            color: "Ivory",
             quantity: 1,
             price: 2999,
             image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80"
           },
           {
-            product_id: "lp-navy-01",
-            sku: "KL-LP-NVY-32",
-            name: "Tailored Navy Italian Linen Trouser",
+            product_id: "tr-navy-01",
+            sku: "SS-TR-NVY-32",
+            name: "Tailored Navy Trouser",
             size: "32",
             color: "Navy Blue",
             quantity: 1,
@@ -8766,7 +8765,7 @@ async function startServer() {
       return res.json({
         success: true,
         enquiryId,
-        message: "Your enquiry has been received successfully. Our Jaipur concierges will get back to you shortly.",
+        message: "Your enquiry has been received successfully. Our support team will get back to you shortly.",
         enquiry: enquiryPayload
       });
 
@@ -9289,7 +9288,7 @@ async function startServer() {
         }
 
         const randId = Math.floor(100000 + Math.random() * 900000);
-        order_id = `KL-${randId}-LX`;
+        order_id = `SS-${randId}-LX`;
 
         const cleanName = (customer_name || `${first_name || ''} ${last_name || ''}`).trim();
         orderPayload = {
@@ -9706,7 +9705,7 @@ async function startServer() {
         }
 
         const randId = Math.floor(100000 + Math.random() * 900000);
-        order_id = `KL-${randId}-LX`;
+        order_id = `SS-${randId}-LX`;
 
         const cleanName = (customer_name || `${first_name || ''} ${last_name || ''}`).trim();
         orderPayload = {
@@ -11047,7 +11046,7 @@ async function startServer() {
         success: true,
         profile: {
           ...normalized,
-          customer_id: normalized.customer_id || `KL-CUST-${profileId.slice(0, 6).toUpperCase()}`,
+          customer_id: normalized.customer_id || `SS-CUST-${profileId.slice(0, 6).toUpperCase()}`,
           first_name: rawData.first_name || normalized.full_name?.split(" ")[0] || "",
           last_name: rawData.last_name || normalized.full_name?.split(" ").slice(1).join(" ") || "",
           birthday: rawData.birthday || rawData.date_of_birth || "",
@@ -11166,7 +11165,7 @@ async function startServer() {
       const exportData = await buildCustomerDataExport(adminDb, authResult.profileId, authResult.profile);
 
       res.setHeader("Content-Type", "application/json");
-      res.setHeader("Content-Disposition", `attachment; filename="kora_linen_data_export_${authResult.profileId}.json"`);
+      res.setHeader("Content-Disposition", `attachment; filename="sa_and_sha_account_data_${authResult.profileId}.json"`);
       return res.json(exportData);
     } catch (err: any) {
       console.error("Error exporting customer data:", err);
@@ -12717,8 +12716,8 @@ async function startServer() {
         const searchLower = search.toLowerCase();
         const cleanPhone = search.replace(/\D/g, "");
 
-        if (searchUpper.startsWith("KL-C") || /^\d{6}$/.test(search)) {
-          const formattedId = searchUpper.startsWith("KL-C") ? searchUpper : `KL-C${searchUpper}`;
+        if (searchUpper.startsWith("SS-C") || /^\d{6}$/.test(search)) {
+          const formattedId = searchUpper.startsWith("SS-C") ? searchUpper : `SS-C${searchUpper}`;
           query = query.where("customer_id_upper", "==", formattedId);
         } else if (cleanPhone && cleanPhone.length >= 10) {
           query = query.where("normalized_phone", "==", cleanPhone);
@@ -14040,28 +14039,21 @@ async function startServer() {
         "/shop/bestsellers",
         "/shop/new-arrivals",
         // Collections
-        "/shop/collection/pure-linen",
-        "/shop/collection/linen-cotton-blend",
-        "/shop/collection/pure-cotton",
-        "/shop/collection/chinos",
+        "/shop/collection/apparel",
+        "/shop/collection/accessories",
         // Product Types
-        "/shop/product/shirts",
-        "/shop/product/trousers",
-        "/shop/product/chinos",
-        "/shop/product/shorts",
-        "/shop/product/pyjamas",
-        "/shop/product/kurtas",
+        "/shop/product/dresses",
+        "/shop/product/tops-shirts",
+        "/shop/product/shorts-skirts",
         "/shop/product/co-ord-sets",
+        "/shop/product/trousers",
+        "/shop/product/jackets",
+        "/shop/product/bags-pouches",
         // Subtypes
-        "/shop/product/shirts/full-sleeve",
-        "/shop/product/shirts/half-sleeve",
-        "/shop/product/kurtas/casual-short",
-        "/shop/product/kurtas/smart-casual-long",
-        // Collection + Product Types
-        "/shop/collection/pure-linen/shirts",
-        "/shop/collection/pure-linen/trousers",
-        "/shop/collection/linen-cotton-blend/shirts",
-        "/shop/collection/linen-cotton-blend/trousers",
+        "/shop/product/tops-shirts/tops",
+        "/shop/product/tops-shirts/shirts",
+        "/shop/product/shorts-skirts/shorts",
+        "/shop/product/shorts-skirts/skirts",
       ];
 
       const todayStr = new Date().toISOString().split("T")[0];
@@ -14169,7 +14161,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         country: sanitizeString(body.country, 100) || "India",
         support_email: sanitizeString(body.support_email, 200) || "shop@saandsha.com",
         support_phone: sanitizeString(body.support_phone, 50) || "+91 98765 43210",
-        invoice_prefix: sanitizeString(body.invoice_prefix, 10) || "KL",
+        invoice_prefix: sanitizeString(body.invoice_prefix, 10) || "SS",
         financial_year: calculateFinancialYear(new Date()),
         is_active: body.is_active !== false,
         status: body.status === "DRAFT" ? "DRAFT" : "ACTIVE",
@@ -14716,7 +14708,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
       const adminDb = getAdminDb();
       const body = req.body || {};
 
-      const prefix = sanitizeString(body.prefix, 10) || "KL";
+      const prefix = sanitizeString(body.prefix, 10) || "SS";
       const separator = sanitizeString(body.separator, 5) || "/";
       const sequence_padding = Number(body.sequence_padding || 6);
 

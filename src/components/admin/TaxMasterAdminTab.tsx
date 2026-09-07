@@ -121,7 +121,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
     country: 'India',
     support_email: 'shop@saandsha.com',
     support_phone: '+91 98765 43210',
-    invoice_prefix: 'KL',
+    invoice_prefix: 'SS',
     status: 'DRAFT',
     is_active: true
   });
@@ -148,7 +148,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
 
   // Invoice Numbering State
   const [numbering, setNumbering] = useState<InvoiceNumberingConfig>({
-    prefix: 'KL',
+    prefix: 'SS',
     separator: '/',
     sequence_padding: 6,
     reset_policy: 'ANNUAL_FY',
@@ -591,7 +591,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
                 )}
               </div>
               <p className="text-sm font-bold text-stone-900 mt-2">
-                Series: {readiness.summary.invoice_numbering.prefix || 'KL'}
+                Series: {readiness.summary.invoice_numbering.prefix || 'SS'}
               </p>
               <p className="text-xs text-stone-500 mt-0.5">
                 Rule 46 Compliant Format
@@ -948,7 +948,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
                 type="text"
                 value={seller.invoice_prefix}
                 onChange={(e) => setSeller({ ...seller, invoice_prefix: e.target.value.toUpperCase() })}
-                placeholder="KL"
+                placeholder="SS"
                 maxLength={10}
                 className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
@@ -1040,7 +1040,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
                 type="text"
                 value={numbering.prefix}
                 onChange={(e) => setNumbering({ ...numbering, prefix: e.target.value.toUpperCase() })}
-                placeholder="KL"
+                placeholder="SS"
                 maxLength={10}
                 className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />

@@ -336,7 +336,7 @@ export async function processOrderPointsEarning(
 
   const entryData: Omit<LoyaltyLedgerEntry, "id"> = {
     customer_profile_id: profileId,
-    customer_id: profileData.customer_id || "KL-C00000",
+    customer_id: profileData.customer_id || "SS-C00000",
     entry_type: isAvailableImmediately ? "earn_available" : "earn_pending",
     points: pointsEarned,
     balance_effect: isAvailableImmediately ? pointsEarned : 0,
@@ -830,7 +830,7 @@ export async function applyLoyaltyRedemptionInTransaction(
   const redemptionEntry: LoyaltyLedgerEntry = {
     id: redemptionEntryRef.id,
     customer_profile_id: profileId,
-    customer_id: pData.customer_id || "KL-C00000",
+    customer_id: pData.customer_id || "SS-C00000",
     entry_type: "redeem",
     points: -pointsToRedeem,
     balance_effect: -pointsToRedeem,
@@ -926,7 +926,7 @@ export async function applyStoreCreditRedemptionInTransaction(
   const redemptionEntry: StoreCreditLedgerEntry = {
     id: redemptionEntryRef.id,
     customer_profile_id: profileId,
-    customer_id: pData.customer_id || "KL-C00000",
+    customer_id: pData.customer_id || "SS-C00000",
     entry_type: "redemption",
     amount_paise: -requestedPaise,
     balance_effect_paise: -requestedPaise,
@@ -1005,7 +1005,7 @@ export async function reverseLoyaltyAndCreditForOrderCancellation(
     const idempotencyKey = generateLedgerIdempotencyKey("cancel_points_restore", orderId);
     const entryData: Omit<LoyaltyLedgerEntry, "id"> = {
       customer_profile_id: profileId,
-      customer_id: pData.customer_id || "KL-C00000",
+      customer_id: pData.customer_id || "SS-C00000",
       entry_type: "redeem_reversal",
       points: redeemedPoints,
       balance_effect: redeemedPoints,
@@ -1044,7 +1044,7 @@ export async function reverseLoyaltyAndCreditForOrderCancellation(
 
       const reversalEntry: Omit<LoyaltyLedgerEntry, "id"> = {
         customer_profile_id: profileId,
-        customer_id: pData.customer_id || "KL-C00000",
+        customer_id: pData.customer_id || "SS-C00000",
         entry_type: "order_cancel_reversal",
         points: -pointsToReverse,
         balance_effect: earnEntry.status === "available" ? -pointsToReverse : 0,
@@ -1071,7 +1071,7 @@ export async function reverseLoyaltyAndCreditForOrderCancellation(
     const creditIdempotency = generateLedgerIdempotencyKey("cancel_credit_restore", orderId);
     const creditEntryData: Omit<StoreCreditLedgerEntry, "id"> = {
       customer_profile_id: profileId,
-      customer_id: pData.customer_id || "KL-C00000",
+      customer_id: pData.customer_id || "SS-C00000",
       entry_type: "redemption_reversal",
       amount_paise: creditUsedPaise,
       balance_effect_paise: creditUsedPaise,
@@ -1199,7 +1199,7 @@ export async function processPartialRefundOrReturnPointsClawback(
   // 4. Create ledger entry
   const reversalEntry: Omit<LoyaltyLedgerEntry, "id"> = {
     customer_profile_id: profileId,
-    customer_id: pData.customer_id || "KL-C00000",
+    customer_id: pData.customer_id || "SS-C00000",
     entry_type: "order_partial_refund_reversal",
     points: -pointsToReverse,
     balance_effect: earnEntry.status === "available" ? -pointsToReverse : 0,
@@ -1506,7 +1506,7 @@ export async function adjustLoyaltyPointsManual(
 
   const entryData: Omit<LoyaltyLedgerEntry, "id"> = {
     customer_profile_id: profileId,
-    customer_id: pData.customer_id || "KL-C00000",
+    customer_id: pData.customer_id || "SS-C00000",
     entry_type: entryType,
     points: points,
     balance_effect: points,
@@ -1584,7 +1584,7 @@ export async function adjustStoreCreditManual(
 
   const entryData: Omit<StoreCreditLedgerEntry, "id"> = {
     customer_profile_id: profileId,
-    customer_id: pData.customer_id || "KL-C00000",
+    customer_id: pData.customer_id || "SS-C00000",
     entry_type: entryType,
     amount_paise: amountPaise,
     balance_effect_paise: amountPaise,

@@ -10,7 +10,7 @@ import {
   createMobileVerificationRequiredToken
 } from "./registrationHelpers";
 
-const SESSION_SECRET = process.env.CUSTOMER_VERIFICATION_TOKEN_SECRET || "kora_linen_customer_auth_secure_secret_2026";
+const SESSION_SECRET = process.env.CUSTOMER_VERIFICATION_TOKEN_SECRET || "sa_and_sha_customer_auth_secure_secret_2026";
 
 export interface GoogleAuthResult {
   success: boolean;

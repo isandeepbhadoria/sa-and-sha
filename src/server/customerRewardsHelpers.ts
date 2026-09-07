@@ -193,7 +193,7 @@ export async function getCustomerRewardsDashboard(
   const lastName = profileData.last_name || profileData.name?.split(" ").slice(1).join(" ") || "Member";
   const fullName = `${firstName} ${lastName}`.trim();
   const memberSince = profileData.created_at ? new Date(profileData.created_at).toISOString() : new Date().toISOString();
-  const businessCustId = profileData.customer_id || profileData.business_customer_id || `KL-CUST-${profileId.slice(0, 6).toUpperCase()}`;
+  const businessCustId = profileData.customer_id || profileData.business_customer_id || `SS-CUST-${profileId.slice(0, 6).toUpperCase()}`;
 
   // 3. Commerce stats & tier evaluation
   const commerceSummary = profileData.commerce_summary || {};
@@ -233,13 +233,13 @@ export async function getCustomerRewardsDashboard(
     {
       key: "earning_multiplier",
       label: `${tierConfig.earning_multiplier}x Earning Multiplier`,
-      description: `Earn ${tierConfig.earning_multiplier} points for every ₹100 spent on linen orders.`,
+      description: `Earn ${tierConfig.earning_multiplier} points for every ₹100 spent.`,
       applicable: true
     },
     {
       key: "early_access",
       label: "Exclusive Launch Access",
-      description: "Preview & shop new seasonal European linen drops 24 hours early.",
+      description: "Preview & shop new seasonal drops 24 hours early.",
       applicable: tierConfig.benefits?.early_access || false
     },
     {
@@ -394,7 +394,7 @@ export async function getCustomerRewardsDashboard(
     },
     {
       id: "journey_first_order",
-      title: "First European Linen Order",
+      title: "First Order",
       description: "Placed initial luxury order with custom artisan tailored garments.",
       date: totalOrders > 0 ? (crmEvents.find(e => e.event_type?.includes("order"))?.occurred_at || null) : null,
       status: totalOrders > 0 ? "completed" : "upcoming",
@@ -447,7 +447,7 @@ export async function getCustomerRewardsDashboard(
     {
       id: "ach_10_orders",
       title: "10 Orders Master",
-      description: "Complete 10 orders of artisan European linen.",
+      description: "Complete 10 orders with us.",
       unlocked: totalOrders >= 10,
       progress_text: totalOrders >= 10 ? "Unlocked" : `${totalOrders}/10 Orders`,
       icon: "award"
@@ -511,9 +511,9 @@ export async function getCustomerRewardsDashboard(
       completed: false
     },
     {
-      id: "rec_linen_shop",
-      title: "Shop Linen Collection",
-      description: "Explore summer trousers, resort shirts & tailored blazers.",
+      id: "rec_shop_new",
+      title: "Shop New Arrivals",
+      description: "Explore dresses, co-ord sets & the latest collection.",
       action_label: "Explore Collection",
       action_type: "shop",
       points_reward_text: `${tierConfig.earning_multiplier}x Points on Orders`,

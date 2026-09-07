@@ -278,7 +278,7 @@ export function buildWhatsAppTemplateParams(
     if (key === 'otpCode') return payload?.otpCode || '';
     if (key === 'reviewUrl') return payload?.reviewUrl || 'https://saandsha.com/reviews';
     if (key === 'cartUrl') return payload?.cartUrl || 'https://saandsha.com/cart';
-    if (key === 'productName') return payload?.productName || 'Linen Garment';
+    if (key === 'productName') return payload?.productName || 'Garment';
     if (key === 'productUrl') return payload?.productUrl || 'https://saandsha.com';
     if (key === 'newPrice') return `₹${(payload?.newPrice || 0).toLocaleString('en-IN')}`;
     if (key === 'giftCode') return payload?.giftCode || 'SPECIAL10';

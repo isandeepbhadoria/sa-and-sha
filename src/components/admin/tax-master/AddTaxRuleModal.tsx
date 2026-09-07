@@ -381,7 +381,7 @@ export const AddTaxRuleModal: React.FC<AddTaxRuleModalProps> = ({
                 type="text"
                 value={selectedSku}
                 onChange={(e) => setSelectedSku(e.target.value.toUpperCase())}
-                placeholder="e.g. KL-LS-WHT-M"
+                placeholder="e.g. SS-LS-WHT-M"
                 className="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-xs font-mono font-bold focus:ring-2 focus:ring-amber-600 focus:outline-none"
               />
               <p className="text-[11px] text-amber-800">

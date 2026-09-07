@@ -462,7 +462,7 @@ export const ReturnsExchangesPage: React.FC = () => {
                     <input
                       id="lookup-order-id"
                       type="text"
-                      placeholder="e.g. KL102548"
+                      placeholder="e.g. SS102548"
                       value={orderIdInput}
                       onChange={(e) => setOrderIdInput(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 text-sm bg-stone-50 text-[#2A211C] focus:outline-none focus:ring-2 focus:ring-[#B08D57]/20 focus:border-[#B08D57] transition-all font-mono"

@@ -402,7 +402,7 @@ export async function getAdminReturnDetail(adminDb: any, returnId: string) {
     if (cSnap.exists) {
       const cData = cSnap.data();
       customerContext = {
-        business_customer_id: cData.business_customer_id || `KL-C-${cSnap.id.slice(0, 6).toUpperCase()}`,
+        business_customer_id: cData.business_customer_id || `SS-C-${cSnap.id.slice(0, 6).toUpperCase()}`,
         tier: cData.admin_metadata?.customer_tier || "silver",
         total_orders: cData.total_orders || 1,
         lifetime_spend: cData.lifetime_spend || 0,

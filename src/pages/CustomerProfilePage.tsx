@@ -245,7 +245,7 @@ export const CustomerProfilePage: React.FC = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `kora_linen_account_data_${profileData?.customer_id || "export"}.json`;
+        a.download = `sa_and_sha_account_data_${profileData?.customer_id || "export"}.json`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -699,7 +699,7 @@ export const CustomerProfilePage: React.FC = () => {
             <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 flex items-center justify-between">
               <div>
                 <h4 className="text-xs font-bold text-stone-900">Marketing WhatsApp</h4>
-                <p className="text-[11px] text-stone-500">Exclusive priority drops & tailored linen alerts</p>
+                <p className="text-[11px] text-stone-500">Exclusive priority drops & new arrival alerts</p>
               </div>
               <input 
                 type="checkbox" 

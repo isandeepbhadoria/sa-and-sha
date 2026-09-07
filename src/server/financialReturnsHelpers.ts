@@ -261,7 +261,7 @@ export async function processReturnFinancials(
 
         const creditRes = await recordStoreCreditLedgerEntry(adminDb, {
           customer_profile_id: customerProfileId,
-          customer_id: rData.customer_id || "KL-C00000",
+          customer_id: rData.customer_id || "SS-C00000",
           entry_type: "return_credit",
           amount_paise: creditPaise,
           balance_effect_paise: creditPaise,
@@ -366,7 +366,7 @@ export async function processReturnFinancials(
 
         await recordStoreCreditLedgerEntry(adminDb, {
           customer_profile_id: customerProfileId,
-          customer_id: rData.customer_id || "KL-C00000",
+          customer_id: rData.customer_id || "SS-C00000",
           entry_type: "return_credit",
           amount_paise: creditPaise,
           balance_effect_paise: creditPaise,
@@ -394,7 +394,7 @@ export async function processReturnFinancials(
         const clawbackKey = generateLedgerIdempotencyKey("return_clawback", `${rmaNumber}_${pointsToClawBack}`);
         await recordLoyaltyLedgerEntry(adminDb, {
           customer_profile_id: customerProfileId,
-          customer_id: rData.customer_id || "KL-C00000",
+          customer_id: rData.customer_id || "SS-C00000",
           entry_type: "return_reversal",
           points: -pointsToClawBack,
           balance_effect: -pointsToClawBack,
@@ -417,7 +417,7 @@ export async function processReturnFinancials(
           const restoreKey = generateLedgerIdempotencyKey("return_restore_points", `${rmaNumber}_${pointsToRestore}`);
           await recordLoyaltyLedgerEntry(adminDb, {
             customer_profile_id: customerProfileId,
-            customer_id: rData.customer_id || "KL-C00000",
+            customer_id: rData.customer_id || "SS-C00000",
             entry_type: "return_reversal",
             points: pointsToRestore,
             balance_effect: pointsToRestore,

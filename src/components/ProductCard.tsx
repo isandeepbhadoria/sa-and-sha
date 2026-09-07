@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0;
 
-  // Best Price Offer with KORA10 (10% off coupon)
+  // Best Price Offer with SANDSHA10 (10% off coupon)
   const bestOfferPrice = Math.round(product.price * 0.9);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
@@ -177,7 +177,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
           {/* Best Price tag */}
           <p className="text-[10px] text-[#C98A82] font-sans font-medium mt-0.5 bg-[#C98A82]/5 px-1.5 py-0.5 rounded inline-block">
-            Best Price <span className="font-bold">₹{bestOfferPrice.toLocaleString('en-IN')}</span> with KORA10
+            Best Price <span className="font-bold">₹{bestOfferPrice.toLocaleString('en-IN')}</span> with SANDSHA10
           </p>
         </div>
       </div>

@@ -42,43 +42,43 @@ const ScrollToTop: React.FC = () => {
 // Help & FAQ Care Guide page
 const FAQPage: React.FC = () => {
   useSEO({
-    title: 'Linen Care Guide & FAQs | Sa and Sha',
-    description: 'Learn how to wash, iron, and care for premium pure linen apparel. Frequently asked questions about organic Belgian flax menswear at Sa and Sha.'
+    title: 'Fabric Care Guide & FAQs | Sa and Sha',
+    description: 'Learn how to wash, iron, and care for your Sa and Sha apparel. Frequently asked questions about sizing, fabric, and returns.'
   });
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 space-y-8 text-stone-800">
       <div className="text-center space-y-2 border-b border-[#E5D2BC]/20 pb-6">
-        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase">Premium Care</span>
-        <h1 className="font-serif text-3xl md:text-4xl font-bold">Linen Care & FAQs</h1>
+        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#B08D57] uppercase">Care Guide</span>
+        <h1 className="font-serif text-3xl md:text-4xl font-bold">Fabric Care & FAQs</h1>
         <p className="font-sans text-xs md:text-sm text-stone-500 max-w-lg mx-auto">
-          Linen is a living, breathing organic fabric. Learn how to wash, press, and cherish your Sa and Sha apparel to ensure it lasts for decades.
+          A little care goes a long way. Here's how to wash, press, and look after your Sa and Sha pieces so they last.
         </p>
       </div>
 
       <div className="space-y-6 font-sans text-xs md:text-sm leading-relaxed">
-        
+
         <div className="bg-[#F4E6D7]/20 p-6 rounded-lg border border-[#E5D2BC]/20 space-y-3">
-          <h2 className="font-serif text-base font-bold text-[#2A211C] uppercase tracking-wider">🌿 Wash and Care Guides</h2>
+          <h2 className="font-serif text-base font-bold text-[#2A211C] uppercase tracking-wider">🌿 Wash and Care Guide</h2>
           <ul className="list-decimal pl-4 space-y-2 text-[#2A211C]/80 font-medium">
-            <li><strong>Machine Wash:</strong> Wash on a gentle, cool cycle (maximum 30°C) with similar soft neutral colors using a mild organic liquid detergent.</li>
-            <li><strong>No Bleach:</strong> Never use bleach or fabric softeners. Synthetic softeners coat the natural flax fibers, reducing their native moisture-wicking and breathing powers.</li>
-            <li><strong>Drying:</strong> Hang-dry in shaded breeze. Avoid direct, high-intensity sunlight which can weaken fibers. Avoid machine tumble drying.</li>
-            <li><strong>Pressing:</strong> Linen looks best when slightly damp before ironing. Use a high-steam setting and press on the reverse side of the garment to secure natural slub texture.</li>
+            <li><strong>Machine Wash:</strong> Wash on a gentle, cool cycle (maximum 30°C) with similar colors using a mild liquid detergent.</li>
+            <li><strong>No Bleach:</strong> Never use bleach. Avoid fabric softeners on delicate or embellished pieces.</li>
+            <li><strong>Drying:</strong> Hang-dry in shade where possible. Avoid direct, high-intensity sunlight, which can fade colors. Avoid high-heat tumble drying.</li>
+            <li><strong>Pressing:</strong> Check the care label for the right iron setting for each fabric, and always press delicate prints or embellishments from the reverse side.</li>
           </ul>
         </div>
 
         <div className="space-y-4">
           <h2 className="font-serif text-lg font-bold text-[#2A211C] uppercase tracking-wider border-b border-[#E5D2BC]/10 pb-2">📦 Frequently Asked Questions</h2>
-          
+
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Does Sa and Sha shrink after washing?</h3>
-            <p className="text-stone-600">A: No! Every Kora garment is pre-washed and garment-shrunk at our local Jaipur facilities prior to packaging. This ensures your fit stays exact from the first wear to the hundredth.</p>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Will my order shrink after washing?</h3>
+            <p className="text-stone-600">A: Our garments are pre-washed where applicable to minimize shrinkage, but we still recommend following the care label for best results.</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Why are there tiny slubs or knots on my fabric?</h3>
-            <p className="text-stone-600">A: Tiny slubs and natural texture variations are the hallmark proof of 100% organic European flax. These are not defects; they represent the artisanal signature of natural weaving.</p>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Why does my fabric have slight texture variations?</h3>
+            <p className="text-stone-600">A: Depending on the fabric, minor texture variations are a natural characteristic of the material, not a defect.</p>
           </div>
 
           <div className="space-y-2">
@@ -87,8 +87,8 @@ const FAQPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: Are your linens made sustainably?</h3>
-            <p className="text-stone-600">A: Absolutely. Our Belgian flax is sourced with rainwater irrigation and zero chemical runoff, making it completely organic, biodegradable, and sustainable.</p>
+            <h3 className="font-serif font-bold text-sm text-[#2A211C]">Q: How do I choose the right size?</h3>
+            <p className="text-stone-600">A: Check the size guide on each product page. If you're between sizes, we generally recommend sizing up for a more comfortable fit.</p>
           </div>
         </div>
 
@@ -131,15 +131,12 @@ export default function App() {
               <Route path="/shop/product/:productTypeId" element={<CollectionPage />} />
               <Route path="/shop/product/:productTypeId/:subTypeSlug" element={<CollectionPage />} />
 
-              {/* Legacy Aliases & Redirects */}
-              <Route path="/shop/linen-shirts" element={<Navigate to="/shop/collection/pure-linen/shirts" replace />} />
-              <Route path="/shop/cotton-linen-shirts" element={<Navigate to="/shop/collection/linen-cotton-blend/shirts" replace />} />
-              <Route path="/shop/linen-pants" element={<Navigate to="/shop/collection/pure-linen/trousers" replace />} />
-              <Route path="/shop/cotton-linen-pants" element={<Navigate to="/shop/collection/linen-cotton-blend/trousers" replace />} />
-              <Route path="/shop/shirts" element={<Navigate to="/shop/product/shirts" replace />} />
-              <Route path="/shop/pants" element={<Navigate to="/shop/product/trousers" replace />} />
-              <Route path="/shop/chinos" element={<Navigate to="/shop/product/chinos" replace />} />
-              <Route path="/shop/polos" element={<Navigate to="/shop" replace />} />
+              {/* Convenience aliases to canonical product routes */}
+              <Route path="/shop/tops-shirts" element={<Navigate to="/shop/product/tops-shirts" replace />} />
+              <Route path="/shop/shorts-skirts" element={<Navigate to="/shop/product/shorts-skirts" replace />} />
+              <Route path="/shop/trousers" element={<Navigate to="/shop/product/trousers" replace />} />
+              <Route path="/shop/jackets" element={<Navigate to="/shop/product/jackets" replace />} />
+              <Route path="/shop/bags-pouches" element={<Navigate to="/shop/product/bags-pouches" replace />} />
 
               {/* Fallback category route */}
               <Route path="/shop/:categorySlug" element={<CollectionPage />} />

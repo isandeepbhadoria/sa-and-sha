@@ -227,7 +227,7 @@ export const CustomerDashboardPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Credit-Note-${order.order_number || identifier}.pdf`;
+      a.download = `Sa-and-Sha-Credit-Note-${order.order_number || identifier}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -923,7 +923,7 @@ export const CustomerDashboardPage: React.FC = () => {
             className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-2xs hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer group"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-medium tracking-wide text-stone-500 uppercase">Kora Rewards</span>
+              <span className="text-xs font-medium tracking-wide text-stone-500 uppercase">Sa and Sha Rewards</span>
               <div className="p-2 rounded-xl bg-amber-50 text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
                 <Sparkles className="w-4 h-4" />
               </div>
@@ -993,7 +993,7 @@ export const CustomerDashboardPage: React.FC = () => {
               className="flex items-center gap-2 p-3 rounded-xl border border-stone-100 bg-stone-50/80 text-stone-800 text-xs font-medium hover:bg-stone-900 hover:text-white transition-colors"
             >
               <ShoppingBag className="w-4 h-4 shrink-0 text-stone-500" />
-              <span>Shop Linen</span>
+              <span>Shop Now</span>
             </a>
             <Link
               to="/account/rewards"
@@ -1047,7 +1047,7 @@ export const CustomerDashboardPage: React.FC = () => {
                   <ShoppingBag className="w-10 h-10 text-stone-400 mx-auto" />
                   <h3 className="text-base font-serif text-stone-800">Your first order starts here</h3>
                   <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                    Explore our hand-crafted pure linen collection and begin your timeless wardrobe journey.
+                    Explore our latest collection and begin your wardrobe journey.
                   </p>
                   <a
                     href="/shop"

@@ -123,22 +123,19 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
       "https://www.saandsha.com/track-order",
     ];
 
-    const categories = [
-      "shirts",
-      "linen-shirts",
-      "cotton-linen-shirts",
-      "pants",
-      "linen-pants",
-      "cotton-linen-pants",
-      "chinos",
-      "polos",
-      "bestsellers",
-      "new-arrivals",
-      "all"
-    ];
+    const shopPages = ["all", "bestsellers", "new-arrivals"];
+    for (const page of shopPages) {
+      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/${page}`);
+    }
 
-    for (const cat of categories) {
-      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/${cat}`);
+    const collections = ["apparel", "accessories"];
+    for (const collectionId of collections) {
+      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/collection/${collectionId}`);
+    }
+
+    const productTypes = ["dresses", "tops-shirts", "shorts-skirts", "co-ord-sets", "trousers", "jackets", "bags-pouches"];
+    for (const productTypeId of productTypes) {
+      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/product/${productTypeId}`);
     }
 
     const locSet = new Set<string>();

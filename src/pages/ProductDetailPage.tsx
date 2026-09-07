@@ -83,8 +83,8 @@ export const ProductDetailPage: React.FC = () => {
   ] : undefined;
 
   useSEO({
-    title: product ? `${product.name} | Men's Linen Clothing | Sa and Sha` : 'Premium Linen Clothing | Sa and Sha',
-    description: product ? `${product.name} - ${product.fabric}. ${product.description}. Premium pure linen clothing for men at Sa and Sha.` : 'Shop premium 100% pure linen clothing for men at Sa and Sha.',
+    title: product ? `${product.name} | Sa and Sha` : 'Sa and Sha | Ladies Apparel',
+    description: product ? `${product.name} - ${product.fabric}. ${product.description}.` : 'Shop dresses, tops, co-ord sets, and more at Sa and Sha.',
     ogImage: product?.images?.[0],
     structuredData: productStructuredData
   });
@@ -190,7 +190,7 @@ export const ProductDetailPage: React.FC = () => {
     // Custom deliveries check
     if (pincode.startsWith('560')) {
       setPincodeMessage({
-        text: '⚡ Express premium delivery available in Jaipur & major cities! (Order within 3 hrs)',
+        text: '⚡ Express premium delivery available in major cities! (Order within 3 hrs)',
         success: true
       });
     } else if (pincode.startsWith('110') || pincode.startsWith('400') || pincode.startsWith('600')) {
@@ -315,7 +315,7 @@ export const ProductDetailPage: React.FC = () => {
             </div>
             
             <p className="text-xs font-sans text-[#C98A82] leading-relaxed font-semibold">
-              🎉 Flat 10% Extra Off with code <strong className="underline">KORA10</strong> (Best Price: ₹{Math.round(product.price * 0.9).toLocaleString('en-IN')})
+              🎉 Flat 10% Extra Off with code <strong className="underline">SANDSHA10</strong> (Best Price: ₹{Math.round(product.price * 0.9).toLocaleString('en-IN')})
             </p>
             <p className="text-[10px] text-[#2A211C]/50 leading-none">Price inclusive of all luxury taxes.</p>
           </div>
@@ -632,7 +632,7 @@ export const ProductDetailPage: React.FC = () => {
               id="size-guide-modal"
             >
               <div className="flex justify-between items-center border-b border-[#E5D2BC]/20 pb-3">
-                <h3 className="font-serif text-lg font-bold text-[#2A211C] uppercase tracking-wide">Kora Size Chart</h3>
+                <h3 className="font-serif text-lg font-bold text-[#2A211C] uppercase tracking-wide">Size Chart</h3>
                 <button
                   onClick={() => setIsSizeGuideOpen(false)}
                   className="p-1 hover:bg-[#F4E6D7] rounded-full"
@@ -735,7 +735,7 @@ export const ProductDetailPage: React.FC = () => {
               )}
 
               <div className="bg-[#C98A82]/10 p-3 rounded text-[11px] text-[#C98A82] font-semibold border border-[#C98A82]/25">
-                📏 Tips: If you are between sizes, we recommend picking the larger size. Linen fits more beautifully when allowed to drape with natural ease.
+                📏 Tips: If you are between sizes, we recommend picking the larger size for a more comfortable, relaxed fit.
               </div>
             </motion.div>
           </>

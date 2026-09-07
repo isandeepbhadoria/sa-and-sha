@@ -80,7 +80,7 @@ export function getSellerTaxConfig(): SellerTaxConfig {
     pan: derivedPan,
     support_email: (process.env.SELLER_SUPPORT_EMAIL || "shop@saandsha.com").trim(),
     support_phone: (process.env.SELLER_SUPPORT_PHONE || "+91 98765 43210").trim(),
-    invoice_prefix: (process.env.SELLER_INVOICE_PREFIX || "KL").trim(),
+    invoice_prefix: (process.env.SELLER_INVOICE_PREFIX || "SS").trim(),
     financial_year: calculateFinancialYear(new Date()),
     is_active: true,
     status: "ACTIVE"
@@ -233,7 +233,7 @@ export async function getSellerTaxConfigFromFirestore(db?: any): Promise<SellerT
           pan: derivedPan,
           support_email: (data.support_email || "shop@saandsha.com").trim(),
           support_phone: (data.support_phone || "+91 98765 43210").trim(),
-          invoice_prefix: (data.invoice_prefix || "KL").trim(),
+          invoice_prefix: (data.invoice_prefix || "SS").trim(),
           financial_year: calculateFinancialYear(new Date()),
           is_active: data.is_active !== false,
           status: data.status || "ACTIVE",

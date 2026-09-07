@@ -109,7 +109,7 @@ export const CustomerOrdersPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Tax-Invoice-${orderNumber}.pdf`;
+      a.download = `Sa-and-Sha-Tax-Invoice-${orderNumber}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -263,7 +263,7 @@ export const CustomerOrdersPage: React.FC = () => {
           <form onSubmit={handleSearchSubmit} className="md:col-span-2 relative">
             <input
               type="text"
-              placeholder="Search by Order ID (e.g. KL-123456-LX) or AWB..."
+              placeholder="Search by Order ID (e.g. SS-123456-LX) or AWB..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full text-xs bg-white border border-stone-200 rounded-xl py-2.5 pl-9 pr-4 focus:outline-hidden focus:border-stone-400 font-medium text-stone-900 shadow-xs"
@@ -304,7 +304,7 @@ export const CustomerOrdersPage: React.FC = () => {
               <p className="text-xs text-stone-500 max-w-sm mx-auto mt-1">
                 {searchQuery || activeTab !== "all"
                   ? "No orders match your current filter or search criteria."
-                  : "You haven't placed any orders yet. Explore our handcrafted pure linen collection."}
+                  : "You haven't placed any orders yet. Explore our latest collection."}
               </p>
             </div>
             <Link

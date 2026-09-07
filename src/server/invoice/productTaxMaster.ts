@@ -67,7 +67,7 @@ export function initDefaultTaxMasterStore(): void {
     scope_type: 'DEFAULT',
     scope_value: 'DEFAULT',
     hsn_code: '6205',
-    description: 'Default Linen Apparel Tax Rule',
+    description: 'Default Apparel Tax Rule',
     rate_mode: 'VALUE_BAND',
     value_bands: [
       { min_price: 0, max_price: 1000, gst_rate: 5 },
@@ -91,13 +91,13 @@ export function clearProductTaxMaster(): void {
 export function normalizeTaxCategory(cat?: string): string {
   if (!cat) return "";
   const cleaned = cat.trim().toUpperCase().replace(/[\s-]+/g, "_");
-  if (cleaned === "SHIRTS" || cleaned === "MEN_SHIRTS" || cleaned === "LINEN_SHIRTS" || cleaned === "LINEN_SHIRT") return "MEN_SHIRTS";
-  if (cleaned === "PANTS" || cleaned === "TROUSERS" || cleaned === "CHINOS" || cleaned === "MEN_PANTS" || cleaned === "MEN_TROUSERS" || cleaned === "LINEN_PANTS" || cleaned === "PREMIUM_CHINOS") return "MEN_TROUSERS";
-  if (cleaned === "POLOS" || cleaned === "MEN_POLOS" || cleaned === "POLO_SHIRTS") return "MEN_POLOS";
-  if (cleaned === "KURTAS" || cleaned === "MEN_KURTAS") return "KURTAS";
+  if (cleaned === "DRESSES" || cleaned === "DRESS") return "DRESSES";
+  if (cleaned === "TOPS_SHIRTS" || cleaned === "TOPS" || cleaned === "SHIRTS") return "TOPS_SHIRTS";
+  if (cleaned === "SHORTS_SKIRTS" || cleaned === "SHORTS" || cleaned === "SKIRTS") return "SHORTS_SKIRTS";
   if (cleaned === "CO_ORD_SETS" || cleaned === "COORD_SETS" || cleaned === "COORDS") return "CO_ORD_SETS";
-  if (cleaned === "JACKETS" || cleaned === "MEN_JACKETS") return "JACKETS";
-  if (cleaned === "ACCESSORIES") return "ACCESSORIES";
+  if (cleaned === "TROUSERS" || cleaned === "PANTS") return "TROUSERS";
+  if (cleaned === "JACKETS") return "JACKETS";
+  if (cleaned === "BAGS_POUCHES" || cleaned === "BAGS" || cleaned === "ACCESSORIES") return "BAGS_POUCHES";
   return cleaned;
 }
 

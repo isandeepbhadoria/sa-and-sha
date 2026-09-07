@@ -32,7 +32,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   // Test 3: Profile Lookup for Existing Verified Customer
   it("3. Profile normalization handles complete existing profile data", () => {
     const existingData = {
-      customer_id: "KL-C000015",
+      customer_id: "SS-C000015",
       full_name: "Anita Sharma",
       email: "anita@example.com",
       normalized_phone: "919876543210",
@@ -52,7 +52,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
     };
     const norm = migrateAndNormalizeProfile(existingData, "p_doc1");
     expect(norm.id).toBe("p_doc1");
-    expect(norm.customer_id).toBe("KL-C000015");
+    expect(norm.customer_id).toBe("SS-C000015");
     expect(norm.full_name).toBe("Anita Sharma");
     expect(norm.email).toBe("anita@example.com");
     expect(norm.addresses).toHaveLength(1);
@@ -79,14 +79,14 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
     };
     const mockDb = { collection: () => ({ doc: () => ({ id: "customer_counter" }) }) };
 
-    const existing = { customer_id: "KL-C000099", full_name: "Rohan Varma" };
+    const existing = { customer_id: "SS-C000099", full_name: "Rohan Varma" };
     const id = await ensureCustomerIdInTransaction(mockTransaction, mockDb, existing);
-    expect(id).toBe("KL-C000099");
+    expect(id).toBe("SS-C000099");
     expect(getCalled).toBe(false);
   });
 
   // Test 6: Sequential Customer ID Generation for New Customer
-  it("6. Generates sequential Customer ID KL-C000001 when transaction counter is unitialized", async () => {
+  it("6. Generates sequential Customer ID SS-C000001 when transaction counter is unitialized", async () => {
     let counterData: any = null;
     const mockTransaction = {
       get: async () => ({ exists: false, data: () => null }),
@@ -95,7 +95,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
     const mockDb = { collection: () => ({ doc: () => ({ id: "customer_counter" }) }) };
 
     const id = await ensureCustomerIdInTransaction(mockTransaction, mockDb, {});
-    expect(id).toBe("KL-C000001");
+    expect(id).toBe("SS-C000001");
     expect(counterData?.last_sequence).toBe(1);
   });
 
@@ -220,7 +220,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   it("13. Recalculates commerce summary correctly from matched orders", async () => {
     const mockOrders = [
       {
-        order_id: "KL-1001",
+        order_id: "SS-1001",
         customer_phone: "919876543210",
         customer_email: "anita@example.com",
         order_status: "paid",
@@ -229,7 +229,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
         created_at: "2026-01-10T10:00:00Z"
       },
       {
-        order_id: "KL-1002",
+        order_id: "SS-1002",
         customer_phone: "919876543210",
         customer_email: "anita@example.com",
         order_status: "placed",
@@ -258,7 +258,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   it("14. Excludes cancelled orders from completed orders count and lifetime spend", async () => {
     const mockOrders = [
       {
-        order_id: "KL-1003",
+        order_id: "SS-1003",
         customer_phone: "919876543210",
         order_status: "cancelled",
         payment_type: "razorpay",
@@ -286,7 +286,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   it("15. Includes delivered COD orders in lifetime spend calculation", async () => {
     const mockOrders = [
       {
-        order_id: "KL-1004",
+        order_id: "SS-1004",
         customer_phone: "919876543210",
         order_status: "delivered",
         payment_type: "cod",
@@ -444,7 +444,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   // Test 22: GDPR/DPDP Compliant Data Export Builder
   it("22. Builds GDPR/DPDP compliant customer data export stripping internal secrets", async () => {
     const rawProfile = {
-      customer_id: "KL-C000042",
+      customer_id: "SS-C000042",
       full_name: "Vikram Malhotra",
       email: "vikram@example.com",
       normalized_phone: "919811223344",
@@ -453,7 +453,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
 
     const mockOrders = [
       {
-        order_id: "KL-9901",
+        order_id: "SS-9901",
         customer_phone: "919811223344",
         customer_email: "vikram@example.com",
         created_at: "2026-02-01T00:00:00Z",
@@ -486,7 +486,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
 
     const dataExport = await buildCustomerDataExport(mockAdminDb, "p_vikram", rawProfile);
     expect(dataExport.export_metadata.compliance).toContain("DPDP");
-    expect(dataExport.customer_info.customer_id).toBe("KL-C000042");
+    expect(dataExport.customer_info.customer_id).toBe("SS-C000042");
     expect(dataExport.customer_info.full_name).toBe("Vikram Malhotra");
     expect(dataExport.orders_summary.recent_orders).toHaveLength(1);
   });
@@ -520,7 +520,7 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
       }
     };
 
-    const profileData = { customer_id: "KL-C000007", email: "user@example.com", normalized_phone: "919876543210" };
+    const profileData = { customer_id: "SS-C000007", email: "user@example.com", normalized_phone: "919876543210" };
     const request = await createAccountDeletionRequest(mockAdminDb, "p_user1", profileData, "User account closure");
 
     expect(request.grace_period_days).toBe(30);
@@ -533,15 +533,15 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   // Test 24: Search Tokens Generation for Fast Lookups
   it("24. Generates comprehensive search tokens indexing phone, name, email, and Customer ID", () => {
     const profile = {
-      customer_id: "KL-C000088",
+      customer_id: "SS-C000088",
       full_name: "Kavita Rao",
       email: "kavita.rao@example.com",
       normalized_phone: "919876543210"
     };
 
     const fields = buildNormalizedSearchFields(profile);
-    expect(fields.search_tokens).toContain("KL-C000088");
-    expect(fields.search_tokens).toContain("kl-c000088");
+    expect(fields.search_tokens).toContain("SS-C000088");
+    expect(fields.search_tokens).toContain("ss-c000088");
     expect(fields.search_tokens).toContain("kavita rao");
     expect(fields.search_tokens).toContain("kavita.rao@example.com");
     expect(fields.search_tokens).toContain("919876543210");

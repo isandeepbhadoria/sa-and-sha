@@ -236,7 +236,7 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
 
       expect(result.success).toBe(true);
       expect(result.return_request).toBeDefined();
-      expect(result.return_request.rma_number).toBe("KL-RMA-100001");
+      expect(result.return_request.rma_number).toBe("SS-RMA-100001");
       expect(result.return_request.status).toBe("requested");
       expect(result.return_request.return_shipping_fee).toBe(100);
       expect(result.return_request.estimated_refund_total).toBe(2899);
@@ -273,7 +273,7 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
       );
 
       expect(result.success).toBe(true);
-      expect(result.return_request.rma_number).toBe("KL-RMA-100001");
+      expect(result.return_request.rma_number).toBe("SS-RMA-100001");
       expect(result.return_request.status).toBe("requested");
       expect(result.return_request.customer_phone).toBe("+919876543210");
     });
@@ -363,7 +363,7 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
       });
 
       const contractRes = await executeProviderRefundServiceContract(db, {
-        rmaNumber: "KL-RMA-100001",
+        rmaNumber: "SS-RMA-100001",
         orderId: "ORD_TEST_100",
         amountRupees: 2899,
         adminEmail: "admin@saandsha.com",
@@ -392,7 +392,7 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
       const listRes = await getAdminReturnsList(db, {});
       expect(listRes.success).toBe(true);
       expect(listRes.items.length).toBe(1);
-      expect(listRes.items[0].rma_number).toBe("KL-RMA-100001");
+      expect(listRes.items[0].rma_number).toBe("SS-RMA-100001");
 
       const statsRes = await getAdminReturnStats(db);
       expect(statsRes.success).toBe(true);

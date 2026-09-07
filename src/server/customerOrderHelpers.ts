@@ -307,7 +307,7 @@ export async function getCustomerOrderDetail(
       // Items Snapshot
       items: (Array.isArray(orderData.items) ? orderData.items : []).map((i: any) => ({
         product_id: i.product_id || i.id || "",
-        name: i.name || i.title || "Linen Garment",
+        name: i.name || i.title || "Garment",
         quantity: i.quantity || 1,
         price: Number(i.price || 0),
         total_price: Number(i.quantity || 1) * Number(i.price || 0),

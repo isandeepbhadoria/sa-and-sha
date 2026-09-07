@@ -11,10 +11,10 @@ interface CsvBulkImportModalProps {
 }
 
 const SAMPLE_CSV = `scope_type,scope_value,hsn_code,gst_rate,rate_mode,effective_from,notes
-CATEGORY,shirts,6205,12,FIXED,2026-01-01,Category rule for linen shirts
-PRODUCT,ls-1,6205,5,FIXED,2026-01-01,Product override for Amalfi shirt
-SKU,KL-LS-WHT-M,6205,5,FIXED,2026-01-01,SKU override for white medium shirt
-DEFAULT,DEFAULT,6205,12,FIXED,2026-01-01,Global default fallback rule`;
+CATEGORY,dresses,6204,12,FIXED,2026-01-01,Category rule for dresses
+PRODUCT,dr-1,6204,5,FIXED,2026-01-01,Product override for floral dress
+SKU,SS-DR-PNK-M,6204,5,FIXED,2026-01-01,SKU override for pink medium dress
+DEFAULT,DEFAULT,6204,12,FIXED,2026-01-01,Global default fallback rule`;
 
 export const CsvBulkImportModal: React.FC<CsvBulkImportModalProps> = ({
   isOpen,

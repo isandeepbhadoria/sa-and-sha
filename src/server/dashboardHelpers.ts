@@ -173,7 +173,7 @@ export async function buildCustomerDashboard(
       items: Array.isArray(ord.items)
         ? ord.items.map((i: any) => ({
             product_id: i.product_id || i.id || "",
-            name: i.name || i.title || "Linen Garment",
+            name: i.name || i.title || "Garment",
             quantity: i.quantity || 1,
             price: i.price || 0,
             image: i.image || i.thumbnail || i.images?.[0] || "",

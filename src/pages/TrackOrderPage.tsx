@@ -246,7 +246,7 @@ export const TrackOrderPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Tax-Invoice-${verifiedDetails.order_id}.pdf`;
+      a.download = `Sa-and-Sha-Tax-Invoice-${verifiedDetails.order_id}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -560,7 +560,7 @@ export const TrackOrderPage: React.FC = () => {
                   <div>
                     <h3 className="font-serif font-bold text-lg text-[#2A211C]">Your order is being prepared</h3>
                     <p className="text-xs md:text-sm text-stone-600 font-sans">
-                      We’ll add courier and live tracking details as soon as your order is dispatched from our Jaipur atelier.
+                      We’ll add courier and live tracking details as soon as your order is dispatched.
                     </p>
                   </div>
                 </div>

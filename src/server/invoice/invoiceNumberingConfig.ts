@@ -12,7 +12,7 @@ export interface InvoiceNumberingConfig {
 
 export function getDefaultInvoiceNumberingConfig(): InvoiceNumberingConfig {
   return {
-    prefix: "KL",
+    prefix: "SS",
     separator: "/",
     financial_year_format: "YY-YY",
     sequence_padding: 6,
@@ -30,7 +30,7 @@ export async function getInvoiceNumberingConfigFromFirestore(db?: any): Promise<
       if (docSnap.exists) {
         const data = docSnap.data();
         return {
-          prefix: String(data.prefix || "KL").trim(),
+          prefix: String(data.prefix || "SS").trim(),
           separator: String(data.separator || "/").trim(),
           financial_year_format: String(data.financial_year_format || "YY-YY").trim(),
           sequence_padding: Number(data.sequence_padding || 6),

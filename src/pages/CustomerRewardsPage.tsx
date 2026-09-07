@@ -237,7 +237,7 @@ export const CustomerRewardsPage: React.FC = () => {
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-serif text-stone-900">Kora Rewards Summary</h2>
+                  <h2 className="text-lg font-serif text-stone-900">Sa and Sha Rewards Summary</h2>
                   <p className="text-[11px] text-stone-500">1 Point = ₹1 Discount on Checkout</p>
                 </div>
               </div>

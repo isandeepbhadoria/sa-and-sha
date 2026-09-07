@@ -239,7 +239,7 @@ async function runAllAdminRmaTests() {
 
   // A. requested -> under_review succeeds
   db.getCollection("return_requests").set("rma_sm_1", {
-    rma_number: "KL-RMA-000001",
+    rma_number: "SS-RMA-000001",
     status: "requested",
     customer_profile_id: "prof_1"
   });
@@ -250,7 +250,7 @@ async function runAllAdminRmaTests() {
 
   // B. requested -> approved succeeds with required approval data
   db.getCollection("return_requests").set("rma_sm_2", {
-    rma_number: "KL-RMA-000002",
+    rma_number: "SS-RMA-000002",
     status: "requested",
     resolution: "refund_source"
   });
@@ -261,7 +261,7 @@ async function runAllAdminRmaTests() {
 
   // C. requested -> refund_completed is rejected (illegal direct skip)
   db.getCollection("return_requests").set("rma_sm_3", {
-    rma_number: "KL-RMA-000003",
+    rma_number: "SS-RMA-000003",
     status: "requested"
   });
   const sm3 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_3", { targetStatus: "refund_completed" });
@@ -270,25 +270,25 @@ async function runAllAdminRmaTests() {
   console.log("  ✔ 2C. Direct transition requested -> refund_completed is strictly rejected.");
 
   // D. completed -> any status rejected
-  db.getCollection("return_requests").set("rma_sm_4", { rma_number: "KL-RMA-000004", status: "completed" });
+  db.getCollection("return_requests").set("rma_sm_4", { rma_number: "SS-RMA-000004", status: "completed" });
   const sm4 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_4", { targetStatus: "under_review" });
   assert.strictEqual(sm4.success, false);
   console.log("  ✔ 2D. Terminal state completed cannot transition further.");
 
   // E. rejected -> any status rejected
-  db.getCollection("return_requests").set("rma_sm_5", { rma_number: "KL-RMA-000005", status: "rejected" });
+  db.getCollection("return_requests").set("rma_sm_5", { rma_number: "SS-RMA-000005", status: "rejected" });
   const sm5 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_5", { targetStatus: "approved" });
   assert.strictEqual(sm5.success, false);
   console.log("  ✔ 2E. Terminal state rejected cannot transition further.");
 
   // F. cancelled -> any status rejected
-  db.getCollection("return_requests").set("rma_sm_6", { rma_number: "KL-RMA-000006", status: "cancelled" });
+  db.getCollection("return_requests").set("rma_sm_6", { rma_number: "SS-RMA-000006", status: "cancelled" });
   const sm6 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_6", { targetStatus: "under_review" });
   assert.strictEqual(sm6.success, false);
   console.log("  ✔ 2F. Terminal state cancelled cannot transition further.");
 
   // G & H. Stale current-status check & Idempotency
-  db.getCollection("return_requests").set("rma_sm_7", { rma_number: "KL-RMA-000007", status: "approved" });
+  db.getCollection("return_requests").set("rma_sm_7", { rma_number: "SS-RMA-000007", status: "approved" });
   const sm7 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_7", { targetStatus: "approved" });
   assert.strictEqual(sm7.success, true);
   assert.ok(sm7.message.includes("already in status"));
@@ -306,8 +306,8 @@ async function runAllAdminRmaTests() {
   console.log("\n--- 3. Approval Workflow Tests ---");
 
   db.getCollection("return_requests").set("rma_app_1", {
-    rma_number: "KL-RMA-APP01",
-    order_id: "KL-ORD-9001",
+    rma_number: "SS-RMA-APP01",
+    order_id: "SS-ORD-9001",
     customer_profile_id: "prof_app_1",
     status: "under_review",
     resolution: "refund_source",
@@ -349,7 +349,7 @@ async function runAllAdminRmaTests() {
   assert.strictEqual(appRes.success, true);
 
   const auditLogs = Array.from(db.getCollection("admin_audit_logs").values());
-  const appAudit = auditLogs.filter((a: any) => a.rma_number === "KL-RMA-APP01" && a.action === "rma_approved");
+  const appAudit = auditLogs.filter((a: any) => a.rma_number === "SS-RMA-APP01" && a.action === "rma_approved");
   assert.ok(appAudit.length >= 1, "Approval must create an audit log");
 
   console.log("  ✔ 3E - 3G. Audit log, CRM event, and notification center triggers verified.");
@@ -361,7 +361,7 @@ async function runAllAdminRmaTests() {
   console.log("\n--- 4. Rejection Workflow Tests ---");
 
   db.getCollection("return_requests").set("rma_rej_1", {
-    rma_number: "KL-RMA-REJ01",
+    rma_number: "SS-RMA-REJ01",
     status: "under_review",
     customer_profile_id: "prof_rej_1"
   });
@@ -393,7 +393,7 @@ async function runAllAdminRmaTests() {
   console.log("\n--- 5. Information Request Workflow Tests ---");
 
   db.getCollection("return_requests").set("rma_info_1", {
-    rma_number: "KL-RMA-INF01",
+    rma_number: "SS-RMA-INF01",
     status: "requested",
     customer_profile_id: "prof_info_1"
   });
@@ -425,8 +425,8 @@ async function runAllAdminRmaTests() {
   // ---------------------------------------------------------
   console.log("\n--- 6. Pickup Scheduling Tests ---");
 
-  db.getCollection("return_requests").set("rma_pik_1", { rma_number: "KL-RMA-PIK01", status: "requested" });
-  db.getCollection("return_requests").set("rma_pik_2", { rma_number: "KL-RMA-PIK02", status: "approved" });
+  db.getCollection("return_requests").set("rma_pik_1", { rma_number: "SS-RMA-PIK01", status: "requested" });
+  db.getCollection("return_requests").set("rma_pik_2", { rma_number: "SS-RMA-PIK02", status: "approved" });
 
   // A. Cannot schedule pickup directly from requested
   const pikFromReq = await scheduleReturnPickup(db, "admin@saandsha.com", "rma_pik_1", { courier: "BlueDart", pickup_date: "2026-08-05" });
@@ -452,7 +452,7 @@ async function runAllAdminRmaTests() {
   // ---------------------------------------------------------
   console.log("\n--- 7. Internal Notes Tests ---");
 
-  db.getCollection("return_requests").set("rma_note_1", { rma_number: "KL-RMA-NOT01", status: "under_review" });
+  db.getCollection("return_requests").set("rma_note_1", { rma_number: "SS-RMA-NOT01", status: "under_review" });
 
   // Empty note validation
   const emptyNote = await addReturnInternalNote(db, "admin@saandsha.com", "rma_note_1", { note: "   " });
@@ -476,7 +476,7 @@ async function runAllAdminRmaTests() {
   // ---------------------------------------------------------
   console.log("\n--- 8. Assignment, Priority & SLA Tests ---");
 
-  db.getCollection("return_requests").set("rma_sla_1", { rma_number: "KL-RMA-SLA01", status: "requested", priority: "normal" });
+  db.getCollection("return_requests").set("rma_sla_1", { rma_number: "SS-RMA-SLA01", status: "requested", priority: "normal" });
 
   // Assign staff
   const assignRes = await assignReturnStaff(db, "admin@saandsha.com", "rma_sla_1", { assigned_to_email: "pria@saandsha.com", assigned_to_name: "Priya S" });
@@ -538,8 +538,8 @@ async function runAllAdminRmaTests() {
   assert.strictEqual(sanitizeCsvField("StandardText"), "StandardText");
 
   // List Query & Bounded Limits
-  db.getCollection("return_requests").set("rma_q_1", { rma_number: "KL-RMA-Q01", created_at: "2026-08-01T10:00:00Z", status: "requested", customer_email: "test1@example.com", customer_phone: "9876543210" });
-  db.getCollection("return_requests").set("rma_q_2", { rma_number: "KL-RMA-Q02", created_at: "2026-08-01T11:00:00Z", status: "approved", customer_email: "test2@example.com", customer_phone: "9876543211" });
+  db.getCollection("return_requests").set("rma_q_1", { rma_number: "SS-RMA-Q01", created_at: "2026-08-01T10:00:00Z", status: "requested", customer_email: "test1@example.com", customer_phone: "9876543210" });
+  db.getCollection("return_requests").set("rma_q_2", { rma_number: "SS-RMA-Q02", created_at: "2026-08-01T11:00:00Z", status: "approved", customer_email: "test2@example.com", customer_phone: "9876543211" });
 
   const listRes = await getAdminReturnsList(db, { pageSize: 10 });
   assert.strictEqual(listRes.success, true);
@@ -555,7 +555,7 @@ async function runAllAdminRmaTests() {
 
   // Generate RMA Number
   const rmaNum = await generateRmaNumber(db);
-  assert.ok(rmaNum.startsWith("KL-RMA-"));
+  assert.ok(rmaNum.startsWith("SS-RMA-"));
 
   // Customer List own requests
   db.getCollection("return_requests").set("rma_cust_own", {

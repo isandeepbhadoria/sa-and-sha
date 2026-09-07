@@ -145,7 +145,7 @@ const COUNTRIES = [
 export const CheckoutPage: React.FC = () => {
   useSEO({
     title: 'Checkout | Sa and Sha',
-    description: 'Complete your purchase of premium pure linen menswear. Secure checkout for Sa and Sha shirts, trousers, and collections.',
+    description: 'Complete your purchase at Sa and Sha. Secure checkout for dresses, tops, and more.',
     noindex: true
   });
 
@@ -887,7 +887,7 @@ export const CheckoutPage: React.FC = () => {
       amount: orderData.amount,
       currency: orderData.currency,
       name: "Sa and Sha",
-      description: "Premium Linen Apparel Checkout",
+      description: "Sa and Sha Checkout",
       order_id: orderId,
       image: "https://www.saandsha.com/logo.png",
       handler: async function (response: any) {
@@ -932,7 +932,7 @@ export const CheckoutPage: React.FC = () => {
         <div className="space-y-1.5">
           <h2 className="font-serif text-2xl font-bold text-[#2A211C]">Your Shopping Bag is Empty</h2>
           <p className="font-sans text-xs text-[#2A211C]/60 max-w-sm mx-auto">
-            Add premium pre-shrunk European linen garments to your collection before proceeding to checkout.
+            Add items to your bag before proceeding to checkout.
           </p>
         </div>
         <div>
@@ -1002,7 +1002,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
             <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C] tracking-tight">Order Confirmed</h1>
             <p className="font-sans text-xs text-[#C98A82] uppercase tracking-widest font-bold">
-              Thank you for supporting sustainable flax!
+              Thank you for shopping with us!
             </p>
           </div>
 
@@ -1943,7 +1943,7 @@ export const CheckoutPage: React.FC = () => {
                         className="mt-0.5 w-4 h-4 rounded text-stone-900 focus:ring-stone-900 border-stone-300 cursor-pointer"
                       />
                       <span className="text-xs text-stone-700 leading-snug">
-                        Subscribe to private collection drops, seasonal linen edits, and member events.
+                        Subscribe to private collection drops, seasonal edits, and member events.
                       </span>
                     </label>
                   </div>
@@ -2230,8 +2230,8 @@ export const CheckoutPage: React.FC = () => {
                   </div>
                   <div className="space-y-1 bg-[#FBF6EE]/20 p-2.5 rounded border border-[#E5D2BC]/10">
                     <Sparkles className="w-5 h-5 mx-auto text-[#B08D57]" />
-                    <span className="block text-[9px] font-bold text-[#2A211C]/80 uppercase tracking-wider">100% Flax Linen</span>
-                    <span className="block text-[8px] text-[#2A211C]/50">Pre-shrunk Guarantee</span>
+                    <span className="block text-[9px] font-bold text-[#2A211C]/80 uppercase tracking-wider">Quality Guarantee</span>
+                    <span className="block text-[8px] text-[#2A211C]/50">Pre-shrunk where applicable</span>
                   </div>
                   <div className="space-y-1 bg-[#FBF6EE]/20 p-2.5 rounded border border-[#E5D2BC]/10">
                     <Truck className="w-5 h-5 mx-auto text-stone-500" />
@@ -2305,7 +2305,7 @@ export const CheckoutPage: React.FC = () => {
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="Coupon Code (e.g. KORA10)"
+                      placeholder="Coupon Code (e.g. SANDSHA10)"
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
                       className="flex-grow px-3 py-2 bg-stone-50 border border-stone-300 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-stone-900 focus:bg-white transition-all font-mono"
@@ -2319,7 +2319,7 @@ export const CheckoutPage: React.FC = () => {
                     </button>
                   </div>
                   {couponError && <span className="text-[11px] text-rose-500 mt-1 block font-medium">{couponError}</span>}
-                  <span className="text-[10px] text-stone-400 mt-1 block">Try: KORA10 (10%), FRESH15 (15%), LINENLOVE (20%)</span>
+                  <span className="text-[10px] text-stone-400 mt-1 block">Try: SANDSHA10 (10%), FRESH15 (15%), WELCOME20 (20%)</span>
                 </div>
               )}
 

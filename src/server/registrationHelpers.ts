@@ -4,7 +4,7 @@ function getSecret(): string {
   return (
     process.env.CUSTOMER_VERIFICATION_TOKEN_SECRET ||
     process.env.JWT_SECRET ||
-    "kora_linen_registration_secret_key_2026"
+    "sa_and_sha_registration_secret_key_2026"
   );
 }
 

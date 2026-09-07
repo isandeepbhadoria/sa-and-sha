@@ -161,7 +161,7 @@ function createMockAdminDb() {
   };
 }
 
-describe("Kora Rewards — Delivery + 7-Day Return Window Lifecycle", () => {
+describe("Sa and Sha Rewards — Delivery + 7-Day Return Window Lifecycle", () => {
   let mockAdminDb: any;
 
   beforeEach(() => {

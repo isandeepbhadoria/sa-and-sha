@@ -118,8 +118,8 @@ export const CollectionPage: React.FC = () => {
 
   // Determine current category flags
   const currentCategory = useMemo(() => {
-    const isShirts = routeInfo.filterProductType === 'shirts';
-    const isPants = routeInfo.filterProductType === 'trousers' || routeInfo.filterProductType === 'chinos';
+    const isShirts = routeInfo.filterProductType === 'tops-shirts';
+    const isPants = routeInfo.filterProductType === 'trousers';
     return {
       name: routeInfo.h1,
       isShirts,
@@ -313,41 +313,40 @@ export const CollectionPage: React.FC = () => {
 
   // Sub-category filters selection lists depending on context
   const subCategoryOptions = useMemo(() => {
-    if (routeInfo.filterProductType === 'shirts') {
+    if (routeInfo.filterProductType === 'tops-shirts') {
       return [
-        { id: 'linen-shirts', label: 'Pure Linen Shirts' },
-        { id: 'cotton-linen-shirts', label: 'Linen-Cotton Blend Shirts' }
+        { id: 'tops', label: 'Tops' },
+        { id: 'shirts', label: 'Shirts' }
       ];
     }
-    if (routeInfo.filterProductType === 'trousers') {
+    if (routeInfo.filterProductType === 'shorts-skirts') {
       return [
-        { id: 'linen-pants', label: 'Pure Linen Trousers' },
-        { id: 'cotton-linen-pants', label: 'Linen-Cotton Blend Trousers' }
+        { id: 'shorts', label: 'Shorts' },
+        { id: 'skirts', label: 'Skirts' }
       ];
     }
-    if (routeInfo.filterProductType === 'chinos' || routeInfo.filterCollection === 'chinos') {
+    if (routeInfo.filterCollection === 'apparel') {
       return [
-        { id: 'chinos', label: 'Chinos' }
-      ];
-    }
-    if (routeInfo.filterCollection === 'pure-linen') {
-      return [
-        { id: 'linen-shirts', label: 'Pure Linen Shirts' },
-        { id: 'linen-pants', label: 'Pure Linen Trousers' }
-      ];
-    }
-    if (routeInfo.filterCollection === 'linen-cotton-blend') {
-      return [
-        { id: 'cotton-linen-shirts', label: 'Linen-Cotton Blend Shirts' },
-        { id: 'cotton-linen-pants', label: 'Linen-Cotton Blend Trousers' }
+        { id: 'dresses', label: 'Dresses' },
+        { id: 'tops', label: 'Tops' },
+        { id: 'shirts', label: 'Shirts' },
+        { id: 'shorts', label: 'Shorts' },
+        { id: 'skirts', label: 'Skirts' },
+        { id: 'co-ord-sets', label: 'Co-Ord Sets' },
+        { id: 'trousers', label: 'Trousers' },
+        { id: 'jackets', label: 'Jackets' }
       ];
     }
     return [
-      { id: 'linen-shirts', label: 'Pure Linen Shirts' },
-      { id: 'cotton-linen-shirts', label: 'Linen-Cotton Blend Shirts' },
-      { id: 'linen-pants', label: 'Pure Linen Trousers' },
-      { id: 'cotton-linen-pants', label: 'Linen-Cotton Blend Trousers' },
-      { id: 'chinos', label: 'Chinos' }
+      { id: 'dresses', label: 'Dresses' },
+      { id: 'tops', label: 'Tops' },
+      { id: 'shirts', label: 'Shirts' },
+      { id: 'shorts', label: 'Shorts' },
+      { id: 'skirts', label: 'Skirts' },
+      { id: 'co-ord-sets', label: 'Co-Ord Sets' },
+      { id: 'trousers', label: 'Trousers' },
+      { id: 'jackets', label: 'Jackets' },
+      { id: 'bags-pouches', label: 'Bags & Pouches' }
     ];
   }, [routeInfo]);
 
@@ -365,7 +364,7 @@ export const CollectionPage: React.FC = () => {
   }, []);
 
   // Fabric list options
-  const fabricOptions = ['100% Pure Linen', 'Cotton-Linen Blend', 'Linen Twill', 'Organic Cotton'];
+  const fabricOptions = ['Cotton', 'Linen-Cotton Blend', 'Georgette', 'Other'];
 
   // Accordion FAQs dynamically selected based on slug
   const currentFAQs = useMemo(() => {
@@ -380,7 +379,7 @@ export const CollectionPage: React.FC = () => {
       title: routeInfo.h1,
       description: routeInfo.metaDescription,
       comparisonTitle: 'Why Sa and Sha Transcends Fast Fashion',
-      comparisonText: 'Every garment is crafted from 100% pure organic European flax or combed long-staple cotton-linen blends. Pre-washed for buttery softness and zero shrinkage.'
+      comparisonText: 'Every garment is made from quality fabrics with considered fits and finishing that hold up wear after wear.'
     };
   }, [routeInfo]);
 
@@ -424,7 +423,7 @@ export const CollectionPage: React.FC = () => {
             {searchParams.get('search') ? `Search results for: "${searchParams.get('search')}"` : routeInfo.h1}
           </h1>
           {searchParams.get('search') && (
-            <p className="text-xs font-sans text-[#2A211C]/60 mt-1 uppercase font-medium tracking-widest">Woven linen fiber search matches</p>
+            <p className="text-xs font-sans text-[#2A211C]/60 mt-1 uppercase font-medium tracking-widest">Search matches</p>
           )}
         </div>
         <span className="text-xs font-sans font-bold text-[#2A211C]/60 uppercase tracking-widest">
@@ -586,41 +585,41 @@ export const CollectionPage: React.FC = () => {
             <Sparkles className="w-8 h-8" />
           </div>
           <div className="space-y-2 max-w-md mx-auto">
-            <span className="text-[11px] font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase">Artisan Atelier In Craft</span>
+            <span className="text-[11px] font-sans font-bold tracking-[0.2em] text-[#B08D57] uppercase">Coming Soon</span>
             <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C]">{routeInfo.h1} — Coming Soon</h2>
             <p className="font-sans text-xs md:text-sm text-[#2A211C]/70 leading-relaxed pt-2">
-              {routeInfo.filterCollection === 'pure-cotton' && (
-                "Our artisans are currently sourcing and weaving exceptional long-staple organic cotton garments. Check back soon or explore our pure European flax linen collections."
+              {routeInfo.filterProductType === 'dresses' && (
+                "Our dresses collection is currently in the works. Check back soon or explore our other categories."
               )}
-              {routeInfo.filterProductType === 'shorts' && (
-                "Our tailored linen shorts collection for resort escapes and coastal warmth is currently in craftsmanship. Discover our tailored linen trousers and relaxed shirts while we prepare the drop."
-              )}
-              {routeInfo.filterProductType === 'pyjamas' && (
-                "Pure organic linen loungewear and sleepwear pyjamas designed for restorative comfort and natural coolness are coming soon to our atelier."
-              )}
-              {routeInfo.filterProductType === 'kurtas' && (
-                "Heritage craftsmanship meets modern minimal tailoring in our upcoming linen kurta collection."
+              {routeInfo.filterProductType === 'shorts-skirts' && (
+                "Our shorts and skirts collection for warm-weather styling is currently in the works."
               )}
               {routeInfo.filterProductType === 'co-ord-sets' && (
-                "Monochrome and tonal matching linen shirt and trouser sets are being curated for effortless summer luxury."
+                "Matching top and bottom co-ord sets are being curated for effortless styling."
               )}
-              {!['pure-cotton', 'shorts', 'pyjamas', 'kurtas', 'co-ord-sets'].includes(routeInfo.filterCollection || routeInfo.filterProductType || '') && (
-                "This curated category is currently being crafted by our artisans. Explore our active pure linen collections below."
+              {routeInfo.filterProductType === 'jackets' && (
+                "Our jackets and layering pieces are currently in the works."
+              )}
+              {routeInfo.filterProductType === 'bags-pouches' && (
+                "Our bags and pouches collection is currently in the works."
+              )}
+              {!['dresses', 'shorts-skirts', 'co-ord-sets', 'jackets', 'bags-pouches'].includes(routeInfo.filterProductType || '') && (
+                "This category is currently being prepared. Explore our other categories below."
               )}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
             <Link
-              to="/shop/collection/pure-linen"
+              to="/shop/all"
               className="w-full sm:w-auto bg-[#2A211C] hover:bg-[#B08D57] text-[#FBF6EE] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded transition-colors"
             >
-              Explore Pure Linen
+              Shop All Products
             </Link>
             <Link
-              to="/shop/all"
+              to="/shop/new-arrivals"
               className="w-full sm:w-auto bg-transparent hover:bg-[#2A211C]/5 text-[#2A211C] font-sans font-bold text-xs uppercase tracking-widest py-3 px-6 rounded border border-[#2A211C]/30 transition-colors"
             >
-              Shop All Products
+              New Arrivals
             </Link>
           </div>
         </div>
@@ -629,7 +628,7 @@ export const CollectionPage: React.FC = () => {
           <Info className="w-10 h-10 text-[#E5D2BC] mx-auto mb-3" />
           <h3 className="font-serif text-lg font-bold text-[#2A211C]">No Results Found</h3>
           <p className="font-sans text-xs text-[#2A211C]/60 mt-1 max-w-sm mx-auto leading-normal">
-            We couldn’t find any linen items matching your filter specifications. Try broadening your criteria or resetting filters.
+            We couldn’t find any items matching your filter specifications. Try broadening your criteria or resetting filters.
           </p>
           <button
             onClick={handleClearAll}
@@ -666,7 +665,7 @@ export const CollectionPage: React.FC = () => {
                 {isLoadingMore ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin text-[#B08D57]" />
-                    <span>Spinning Flax...</span>
+                    <span>Loading...</span>
                   </>
                 ) : (
                   <>
@@ -721,8 +720,8 @@ export const CollectionPage: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-[#E5D2BC]/20 bg-white">
                       <tr>
-                        <td className="p-3 font-semibold text-[#2A211C]">Fiber Airflow</td>
-                        <td className="p-3">Hollow flax fibers secure continuous 2x cooler skin ventilation.</td>
+                        <td className="p-3 font-semibold text-[#2A211C]">Breathability</td>
+                        <td className="p-3">Natural fibers keep you cool and comfortable all day.</td>
                         <td className="p-3">Synthetic solid fibers trap body heat and humidity.</td>
                       </tr>
                       <tr>

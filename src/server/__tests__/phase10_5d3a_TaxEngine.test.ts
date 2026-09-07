@@ -28,12 +28,12 @@ describe('Phase 10.5D.3A — Product Tax Master Category/Rule Engine', () => {
   });
 
   // 1. Category Resolution
-  it('1. Category-level tax lookup correctly resolves for SKU belonging to category (e.g. Linen Shirt -> MEN_SHIRTS rule)', () => {
+  it('1. Category-level tax lookup correctly resolves for SKU belonging to category (e.g. Shirts -> TOPS_SHIRTS rule)', () => {
     registerProductTaxMetadata({
       tax_record_id: 'rule_cat_shirts',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
-      category: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
+      category: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 5,
       rate_mode: 'FIXED',
@@ -44,7 +44,7 @@ describe('Phase 10.5D.3A — Product Tax Master Category/Rule Engine', () => {
     const res = lookupProductTaxMetadata({
       sku: 'SHIRT-BLUE-M',
       product_id: 'prod_shirt_1',
-      category: 'Linen Shirts'
+      category: 'Shirts'
     });
 
     expect(res.success).toBe(true);
@@ -205,12 +205,12 @@ describe('Phase 10.5D.3A — Product Tax Master Category/Rule Engine', () => {
   });
 
   // 7. Category Normalization
-  it('7. Category normalization correctly maps variations ("shirts", "Linen Shirts", "MEN_SHIRTS")', () => {
-    expect(normalizeTaxCategory('shirts')).toBe('MEN_SHIRTS');
-    expect(normalizeTaxCategory('Linen Shirts')).toBe('MEN_SHIRTS');
-    expect(normalizeTaxCategory('MEN_SHIRTS')).toBe('MEN_SHIRTS');
-    expect(normalizeTaxCategory('polos')).toBe('MEN_POLOS');
-    expect(normalizeTaxCategory('chinos')).toBe('MEN_TROUSERS');
+  it('7. Category normalization correctly maps variations ("shirts", "Tops Shirts", "TOPS_SHIRTS")', () => {
+    expect(normalizeTaxCategory('shirts')).toBe('TOPS_SHIRTS');
+    expect(normalizeTaxCategory('Tops Shirts')).toBe('TOPS_SHIRTS');
+    expect(normalizeTaxCategory('TOPS_SHIRTS')).toBe('TOPS_SHIRTS');
+    expect(normalizeTaxCategory('skirts')).toBe('SHORTS_SKIRTS');
+    expect(normalizeTaxCategory('pants')).toBe('TROUSERS');
   });
 
   // 8. Missing Tax Rule Fail-Closed
@@ -348,7 +348,7 @@ describe('Phase 10.5D.3A — Product Tax Master Category/Rule Engine', () => {
     registerProductTaxMetadata({
       tax_record_id: 'rule_cat_shirts',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 5,
       status: 'ACTIVE'
@@ -395,7 +395,7 @@ SKU,SHIRT-01,6205,150,FIXED`;
     registerProductTaxMetadata({
       tax_record_id: 'rule_cat_shirts',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 5,
       status: 'ACTIVE'
@@ -416,8 +416,8 @@ SKU,SHIRT-01,6205,150,FIXED`;
           id: 'prod_1',
           product_id: 'prod_1',
           sku: 'SHIRT-M',
-          name: 'Classic Linen Shirt',
-          category: 'Linen Shirts',
+          name: 'Classic Shirt',
+          category: 'Shirts',
           quantity: 1,
           unit_price: 2000
         }
@@ -440,7 +440,7 @@ SKU,SHIRT-01,6205,150,FIXED`;
     registerProductTaxMetadata({
       tax_record_id: 'rule_cat_shirts_new',
       scope_type: 'CATEGORY',
-      scope_value: 'MEN_SHIRTS',
+      scope_value: 'TOPS_SHIRTS',
       hsn_code: '6205',
       gst_rate: 12,
       status: 'ACTIVE'

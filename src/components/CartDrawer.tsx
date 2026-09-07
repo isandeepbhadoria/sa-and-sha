@@ -101,7 +101,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                   </div>
                   <h3 className="font-serif text-lg text-[#2A211C] mb-1">Your bag is empty</h3>
                   <p className="font-sans text-xs text-[#2A211C]/60 max-w-xs mb-6">
-                    Our premium organic linen menswear is waiting. Explore our shirts, trousers, and chinos to fill your closet with comfort.
+                    Your favorite pieces are waiting. Explore our dresses, tops, and co-ord sets to fill your closet with style.
                   </p>
                   <button
                     onClick={onClose}
@@ -228,7 +228,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                     <Tag className="absolute left-2.5 top-2.5 w-4 h-4 text-[#2A211C]/40" />
                     <input
                       type="text"
-                      placeholder="Promo Code (KORA10, FRESH15)"
+                      placeholder="Promo Code (SANDSHA10, FRESH15)"
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
                       className="w-full pl-8 pr-3 py-2 border border-[#E5D2BC]/40 rounded text-xs font-sans focus:outline-none focus:border-[#2A211C] bg-[#FBF6EE]/50 uppercase"

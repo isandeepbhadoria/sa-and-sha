@@ -1,7 +1,5 @@
 // Sa and Sha placeholder wordmark. This is a plain text logotype standing in
 // until real brand artwork (from the frontend design pass) replaces it.
-// Keeps the same prop shape as the Kora Linen logo component it replaces
-// so callers don't need to change.
 
 export interface SaAndShaLogoProps {
   className?: string;

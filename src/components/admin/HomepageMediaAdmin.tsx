@@ -521,11 +521,11 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                   const newSlide: HeroSlide = {
                     id: `hero_slide_${Date.now()}`,
                     image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=2400&q=80",
-                    altText: "Artisanal Pure Linen Collection",
+                    altText: "Sa and Sha collection",
                     heading: "New Editorial Collection",
-                    subheading: "Artisanal European Flax",
+                    subheading: "Just In",
                     ctaLabel: "Shop The Look",
-                    redirectUrl: "/shop/shirts",
+                    redirectUrl: "/shop/all",
                     sortOrder: heroConfig.slides.length + 1,
                     enabled: true,
                     width: 2400,
@@ -871,7 +871,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                               )
                             }));
                           }}
-                          placeholder="e.g. Summer Solace in Pure Linen"
+                          placeholder="e.g. Effortless Elegance, Everyday"
                           className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
@@ -893,7 +893,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                               )
                             }));
                           }}
-                          placeholder="e.g. Artisanal European Flax"
+                          placeholder="e.g. New Collection"
                           className="w-full px-3 py-2 border border-stone-300 rounded text-xs focus:ring-1 focus:ring-[#B08D57] focus:border-[#B08D57]"
                         />
                       </div>
@@ -1008,9 +1008,9 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                 const newItem: InstagramMediaItem = {
                   id: `insta_item_${Date.now()}`,
                   image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1080&q=80",
-                  altText: "Customer styled in pure linen shirt",
-                  caption: "Relaxed European flax tailored for tropical warmth. @saandsha",
-                  redirectUrl: "/shop/shirts",
+                  altText: "Customer styled in Sa and Sha apparel",
+                  caption: "Styled by our community. @saandsha",
+                  redirectUrl: "/shop/all",
                   sortOrder: instagramConfig.items.length + 1,
                   enabled: true,
                   width: 1080,
@@ -1224,7 +1224,7 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                               )
                             }));
                           }}
-                          placeholder="e.g. Classic linen tailoring. @saandsha"
+                          placeholder="e.g. Effortless everyday style. @saandsha"
                           className="w-full px-2 py-1.5 border border-stone-300 rounded text-xs"
                         />
                       </div>
@@ -1290,8 +1290,8 @@ export const HomepageMediaAdmin: React.FC<HomepageMediaAdminProps> = ({ getAdmin
                   id: `reel_item_${Date.now()}`,
                   videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                   posterUrl: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1080&q=80",
-                  title: "Linen in Motion: The Pure Linen Shirt",
-                  caption: "Unmatched tropical breathability engineered into every stitch.",
+                  title: "Sa and Sha in Motion",
+                  caption: "Considered fits, made for everyday elegance.",
                   redirectUrl: "/shop/shirts",
                   sortOrder: reelsConfig.items.length + 1,
                   enabled: true,

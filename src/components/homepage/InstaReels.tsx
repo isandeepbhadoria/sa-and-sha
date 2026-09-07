@@ -175,7 +175,7 @@ export const InstaReels: React.FC<InstaReelsProps> = ({ initialConfig }) => {
               Insta Reels
             </h2>
             <p className="font-sans text-xs sm:text-sm text-[#2A211C]/65 mt-2">
-              Witness the natural breathability, movement, and silhouette of certified European flax in motion.
+              See the movement, drape, and silhouette of our pieces in motion.
             </p>
           </div>
 

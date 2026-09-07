@@ -116,7 +116,7 @@ export const CustomerOrderDetailsPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Credit-Note-${(cnNumber || cnId).replace(/[\/\\]/g, '-')}.pdf`;
+      a.download = `Sa-and-Sha-Credit-Note-${(cnNumber || cnId).replace(/[\/\\]/g, '-')}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -146,7 +146,7 @@ export const CustomerOrderDetailsPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Tax-Invoice-${orderId}.pdf`;
+      a.download = `Sa-and-Sha-Tax-Invoice-${orderId}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

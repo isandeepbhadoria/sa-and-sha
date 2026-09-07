@@ -164,7 +164,7 @@ export const CustomerReturnsPage: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Kora-Linen-Credit-Note-${identifier.replace(/[\/\\]/g, '-')}.pdf`;
+      a.download = `Sa-and-Sha-Credit-Note-${identifier.replace(/[\/\\]/g, '-')}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1189,7 +1189,7 @@ export const CustomerReturnsPage: React.FC = () => {
                           className="mt-1 accent-stone-900"
                         />
                         <div>
-                          <p className="font-bold text-stone-900">Instant Kora Store Credit Wallet</p>
+                          <p className="font-bold text-stone-900">Instant Sa and Sha Store Credit Wallet</p>
                           <p className="text-stone-500">
                             Credited instantly to your account wallet upon pickup verification.
                           </p>

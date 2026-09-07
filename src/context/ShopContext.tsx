@@ -290,9 +290,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!isMounted) return;
         let fallbackDisc = 0;
         const upper = couponCode.toUpperCase();
-        if (upper === 'KORA10') fallbackDisc = Math.round(cartSubtotal * 0.10);
+        if (upper === 'SANDSHA10') fallbackDisc = Math.round(cartSubtotal * 0.10);
         else if (upper === 'FRESH15') fallbackDisc = Math.round(cartSubtotal * 0.15);
-        else if (upper === 'LINENLOVE') fallbackDisc = Math.round(cartSubtotal * 0.20);
+        else if (upper === 'WELCOME20') fallbackDisc = Math.round(cartSubtotal * 0.20);
         setAppliedDiscount(fallbackDisc);
       });
 
@@ -338,15 +338,15 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.warn('Promo validation endpoint error. Falling back to local check:', err);
       let fallbackMsg = '';
       let fallbackDisc = 0;
-      if (cleanCode === 'KORA10') {
+      if (cleanCode === 'SANDSHA10') {
         fallbackDisc = Math.round(cartSubtotal * 0.10);
-        fallbackMsg = 'Coupon "KORA10" applied successfully!';
+        fallbackMsg = 'Coupon "SANDSHA10" applied successfully!';
       } else if (cleanCode === 'FRESH15') {
         fallbackDisc = Math.round(cartSubtotal * 0.15);
         fallbackMsg = 'Coupon "FRESH15" applied successfully!';
-      } else if (cleanCode === 'LINENLOVE') {
+      } else if (cleanCode === 'WELCOME20') {
         fallbackDisc = Math.round(cartSubtotal * 0.20);
-        fallbackMsg = 'Coupon "LINENLOVE" applied successfully!';
+        fallbackMsg = 'Coupon "WELCOME20" applied successfully!';
       } else {
         return { success: false, message: 'Invalid promo code.' };
       }

@@ -2854,7 +2854,7 @@ export const AdminCustomersTab: React.FC<AdminCustomersTabProps> = ({ adminToken
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
-              Assign sequential business Customer IDs (e.g. <span className="font-mono font-bold text-stone-800">KL-C000001</span>) to customer profiles that do not currently have one assigned.
+              Assign sequential business Customer IDs (e.g. <span className="font-mono font-bold text-stone-800">SS-C000001</span>) to customer profiles that do not currently have one assigned.
             </p>
 
             {migrationError && (

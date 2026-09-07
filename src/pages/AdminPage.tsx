@@ -374,8 +374,8 @@ export const AdminPage: React.FC = () => {
   const [formName, setFormName] = useState('');
   const [formSlug, setFormSlug] = useState('');
   const [formPreviousSlugs, setFormPreviousSlugs] = useState<string[]>([]);
-  const [formCategory, setFormCategory] = useState<'shirts' | 'pants' | 'kurtas' | 'co-ord sets' | 'jackets' | 'accessories'>('shirts');
-  const [formSubCategory, setFormSubCategory] = useState<'linen-shirts' | 'cotton-linen-shirts' | 'linen-pants' | 'cotton-linen-pants' | 'chinos' | 'kurtas' | 'co-ord-sets' | 'jackets' | 'accessories'>('linen-shirts');
+  const [formCategory, setFormCategory] = useState<'dresses' | 'tops-shirts' | 'shorts-skirts' | 'co-ord-sets' | 'trousers' | 'jackets' | 'bags-pouches'>('dresses');
+  const [formSubCategory, setFormSubCategory] = useState<'dresses' | 'tops' | 'shirts' | 'shorts' | 'skirts' | 'co-ord-sets' | 'trousers' | 'jackets' | 'bags-pouches'>('dresses');
   const [formCollection, setFormCollection] = useState<string>('');
   const [formProductType, setFormProductType] = useState<string>('');
   const [formProductSubType, setFormProductSubType] = useState<string>('');
@@ -1265,8 +1265,8 @@ export const AdminPage: React.FC = () => {
       setFormName('');
       setFormSlug('');
       setFormPreviousSlugs([]);
-      setFormCategory('shirts');
-      setFormSubCategory('linen-shirts');
+      setFormCategory('dresses');
+      setFormSubCategory('dresses');
       setFormCollection('');
       setFormProductType('');
       setFormProductSubType('');
@@ -1482,13 +1482,13 @@ export const AdminPage: React.FC = () => {
         tax_class: formTaxClass ? formTaxClass.trim() : undefined,
         price: Number(formPrice),
         compareAtPrice: formCompareAtPrice ? Number(formCompareAtPrice) : 0,
-        fabric: formFabric || 'Premium Linen Flax Blend',
+        fabric: formFabric || 'Premium Fabric',
         fit: formFit,
         color: formColor || 'Natural',
         colorHex: formColorHex || '#FBF6EE',
         sizes: formSizes,
-        collar: (formCategory === 'shirts' ? formCollar : undefined) as any,
-        sleeve: (formCategory === 'shirts' ? formSleeve : undefined) as any,
+        collar: (formCategory === 'tops-shirts' ? formCollar : undefined) as any,
+        sleeve: (formCategory === 'tops-shirts' ? formSleeve : undefined) as any,
         pattern: formPattern,
         images: finalImages,
         rating: editingProduct ? editingProduct.rating : 4.5,
@@ -1967,7 +1967,7 @@ export const AdminPage: React.FC = () => {
               id="admin-tab-rewards-policy"
             >
               <Award className="w-4 h-4" />
-              <span>Kora Rewards Settings</span>
+              <span>Sa and Sha Rewards Settings</span>
             </button>
             <button
               onClick={() => setActiveTab('credit-notes')}
@@ -2407,7 +2407,7 @@ export const AdminPage: React.FC = () => {
                           type="text"
                           value={formSlug}
                           onChange={(e) => setFormSlug(slugify(e.target.value))}
-                          placeholder={slugify(formName) || "e.g. amalfi-pure-linen-shirt"}
+                          placeholder={slugify(formName) || "e.g. floral-wrap-midi-dress"}
                           className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                         <p className="text-[10px] text-stone-400">Canonical URL: /product/{formSlug || slugify(formName) || "..."}</p>
@@ -2420,7 +2420,7 @@ export const AdminPage: React.FC = () => {
                             type="text"
                             value={formSku}
                             onChange={(e) => setFormSku(e.target.value)}
-                            placeholder="e.g. KL-SH-004"
+                            placeholder="e.g. SS-SH-004"
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                           />
                         </div>
@@ -2560,21 +2560,19 @@ export const AdminPage: React.FC = () => {
                               onChange={(e) => {
                                 const cat = e.target.value as any;
                                 setFormCategory(cat);
-                                if (cat === 'shirts') setFormSubCategory('linen-shirts');
-                                else if (cat === 'pants') setFormSubCategory('linen-pants');
-                                else if (cat === 'kurtas') setFormSubCategory('kurtas');
-                                else if (cat === 'co-ord sets') setFormSubCategory('co-ord-sets');
-                                else if (cat === 'jackets') setFormSubCategory('jackets');
-                                else if (cat === 'accessories') setFormSubCategory('accessories');
+                                if (cat === 'tops-shirts') setFormSubCategory('tops');
+                                else if (cat === 'shorts-skirts') setFormSubCategory('shorts');
+                                else setFormSubCategory(cat);
                               }}
                               className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
-                              <option value="shirts">Shirts</option>
-                              <option value="pants">Pants/Trousers</option>
-                              <option value="kurtas">Kurtas</option>
-                              <option value="co-ord sets">Co-ord Sets</option>
+                              <option value="dresses">Dresses</option>
+                              <option value="tops-shirts">Top & Shirts</option>
+                              <option value="shorts-skirts">Shorts & Skirts</option>
+                              <option value="co-ord-sets">Co-Ord Sets</option>
+                              <option value="trousers">Trousers</option>
                               <option value="jackets">Jackets</option>
-                              <option value="accessories">Accessories</option>
+                              <option value="bags-pouches">Bags & Pouches</option>
                             </select>
                           </div>
 
@@ -2585,23 +2583,23 @@ export const AdminPage: React.FC = () => {
                               onChange={(e) => setFormSubCategory(e.target.value as any)}
                               className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
-                              {formCategory === 'shirts' && (
+                              {formCategory === 'dresses' && <option value="dresses">Dresses</option>}
+                              {formCategory === 'tops-shirts' && (
                                 <>
-                                  <option value="linen-shirts">100% Pure Linen Shirts</option>
-                                  <option value="cotton-linen-shirts">Cotton Linen Blend Shirts</option>
+                                  <option value="tops">Tops</option>
+                                  <option value="shirts">Shirts</option>
                                 </>
                               )}
-                              {formCategory === 'pants' && (
+                              {formCategory === 'shorts-skirts' && (
                                 <>
-                                  <option value="linen-pants">Pure Linen Pants</option>
-                                  <option value="cotton-linen-pants">Cotton Linen Pants</option>
-                                  <option value="chinos">Tailored Chinos</option>
+                                  <option value="shorts">Shorts</option>
+                                  <option value="skirts">Skirts</option>
                                 </>
                               )}
-                              {formCategory === 'kurtas' && <option value="kurtas">Linen Kurtas</option>}
-                              {formCategory === 'co-ord sets' && <option value="co-ord-sets">Linen Co-ord Sets</option>}
-                              {formCategory === 'jackets' && <option value="jackets">Linen Jackets & Blazers</option>}
-                              {formCategory === 'accessories' && <option value="accessories">Premium Accessories</option>}
+                              {formCategory === 'co-ord-sets' && <option value="co-ord-sets">Co-Ord Sets</option>}
+                              {formCategory === 'trousers' && <option value="trousers">Trousers</option>}
+                              {formCategory === 'jackets' && <option value="jackets">Jackets</option>}
+                              {formCategory === 'bags-pouches' && <option value="bags-pouches">Bags & Pouches</option>}
                             </select>
                           </div>
                         </div>
@@ -2624,7 +2622,7 @@ export const AdminPage: React.FC = () => {
                           rows={4}
                           value={formDetails}
                           onChange={(e) => setFormDetails(e.target.value)}
-                          placeholder="e.g. Crafted in Belgian Highlands flax linen&#10;Breathable open linen weave&#10;Pre-washed for signature soft feel"
+                          placeholder="e.g. Soft, breathable fabric&#10;Flattering relaxed fit&#10;Pre-washed for lasting comfort"
                           className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800 font-mono text-[11px]"
                         />
                       </div>
@@ -2645,7 +2643,7 @@ export const AdminPage: React.FC = () => {
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Linen Price (INR) *</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Price (INR) *</label>
                           <input
                             type="number"
                             required
@@ -2676,7 +2674,7 @@ export const AdminPage: React.FC = () => {
                           type="text"
                           value={formFabric}
                           onChange={(e) => setFormFabric(e.target.value)}
-                          placeholder="e.g. 100% Pure Belgian Linen, 180 GSM"
+                          placeholder="e.g. 100% Cotton, lightweight weave"
                           className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                         />
                       </div>
@@ -2688,7 +2686,7 @@ export const AdminPage: React.FC = () => {
                             type="text"
                             value={formColor}
                             onChange={(e) => setFormColor(e.target.value)}
-                            placeholder="e.g. Sage Green, Flax Ecru"
+                            placeholder="e.g. Blush Pink, Ivory"
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
                         </div>
@@ -2713,7 +2711,7 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {formCategory === 'shirts' && (
+                      {formCategory === 'tops-shirts' && (
                         <div className="grid grid-cols-2 gap-4 border border-[#E5D2BC]/10 p-3 rounded-lg bg-stone-50">
                           <div className="space-y-1">
                             <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Collar Style</label>
@@ -2744,8 +2742,8 @@ export const AdminPage: React.FC = () => {
                         <p className="text-[10px] text-stone-400">Check size to enable it, then specify available stock units.</p>
                         
                         <div className="grid grid-cols-3 gap-3">
-                          {(formCategory === 'pants' 
-                            ? ['30', '32', '34', '36', '38'] 
+                          {(formCategory === 'trousers'
+                            ? ['30', '32', '34', '36', '38']
                             : ['S', 'M', 'L', 'XL', 'XXL', '3XL']
                           ).map((size) => {
                             const isChecked = formSizes.includes(size);
@@ -3478,7 +3476,7 @@ export const AdminPage: React.FC = () => {
                               <div>
                                 <span className="font-bold text-stone-900 block">{item.name}</span>
                                 <span className="text-[10px] text-stone-400 block font-medium">
-                                  Size: <strong className="text-stone-700">{item.size}</strong> • Color: <strong className="text-stone-700">{item.color || 'Linen Regular'}</strong>
+                                  Size: <strong className="text-stone-700">{item.size}</strong> • Color: <strong className="text-stone-700">{item.color || 'Standard'}</strong>
                                 </span>
                               </div>
                             </div>
@@ -3502,7 +3500,7 @@ export const AdminPage: React.FC = () => {
                     </div>
                     {Number(selectedOrder.discount) > 0 && (
                       <div className="flex justify-between text-red-600">
-                        <span>Linen Code Coupon Discount</span>
+                        <span>Coupon Discount</span>
                         <span>-₹{Number(selectedOrder.discount).toLocaleString('en-IN')}</span>
                       </div>
                     )}

@@ -143,7 +143,7 @@ export async function ensureOrderTrackingToken(adminDb: Firestore, orderData: an
  * Mask string values for public display (e.g., PII protection)
  */
 export function maskOrderNumber(orderId: string): string {
-  if (!orderId) return 'KL-*****';
+  if (!orderId) return 'SS-*****';
   if (orderId.length <= 6) return orderId;
   const prefix = orderId.slice(0, 4);
   const suffix = orderId.slice(-4);
