@@ -157,20 +157,59 @@ logic, not just display text:
   example order ID shown as placeholder text on `ContactSupportPage` /
   `ReturnsExchangesPage` updated to match.
 
-`npm test` (541/543), `npm run lint` (`tsc --noEmit`), and
-`npm run build` were all re-verified green after this pass.
+`npm test`, `npm run lint` (`tsc --noEmit`), and `npm run build` were all
+re-verified green after this pass.
+
+## Product catalog
+
+`src/data.ts`'s 60 mock Kora Linen menswear products have been fully
+removed. The catalog now starts with one real Sa and Sha product (a
+Block Print Maxi Dress) and is meant to grow incrementally as real
+product data comes in — there's no more placeholder inventory to strip
+out later.
+
+To add a new real product, add an entry to the `products` array in
+`src/data.ts` with the full taxonomy field set from
+`src/config/catalogTaxonomy.ts`:
+`category`/`subCategory` (legacy, kept for the Firestore rules and admin
+form), `collection` (`apparel` | `accessories`), `productType` (one of
+the 7 canonical types), `productSubType` (only for `tops-shirts` and
+`shorts-skirts`), `materialType`, and `tax_class` (from
+`SELECTABLE_TAX_CLASSES`). A few things that only apply once real
+products exist:
+
+- **Photos**: the one real product currently uses generic stock-photo
+  placeholders (clearly reused Unsplash URLs already elsewhere in the
+  app) — real photography still needs uploading per-product via the
+  Admin panel's image upload flow.
+- **Reviews**: `rating`/`reviewCount` should be `0` for a genuinely new
+  product — don't invent numbers. `ProductCard` and `ProductDetailPage`
+  now show a "New" / "Be the first to review" state instead of a
+  fabricated star rating when `reviewCount` is `0`.
+- **"Coming Soon" tiles**: the homepage category tiles and
+  `getTaxonomyRouteInfo()` (`src/config/catalogTaxonomy.ts`) now compute
+  "Coming Soon" dynamically from whether `products` has any live
+  (non-draft, non-archived, non-decommissioned) item for that
+  collection/product type/sub-type — no more manual flags to flip as
+  inventory is added.
+- **`categoryFAQs`** (`src/data.ts`) is keyed by product type; add a
+  category's real FAQs there and `CollectionPage.tsx` will pick them up
+  automatically.
+
+The previous homepage "What They Say" testimonial carousel (`mockReviews`
+in `src/data.ts`) has been removed rather than replaced — it was
+fabricated reviews attributed to named "Verified Patron" customers, which
+is the same kind of fake business/social-proof data this rebrand has
+been removing elsewhere. Re-add the section once there are real customer
+reviews to show.
+
+`src/server/__tests__/phase10_5d3a12_shirt_subtype_reconciliation.test.ts`
+was removed — like the already-removed `catalogMigration.ts`, it only
+verified exact legacy Kora Linen shirt/polo product IDs and counts, which
+don't apply to a fresh catalog.
 
 ## Not yet done
 
-- Product seed/sample data (`src/data.ts`) still reflects Kora Linen
-  products (including its `COLOR_SWATCHES`, which describe linen fabric
-  colors) and needs replacing with real Sa and Sha inventory. This is the
-  only place genuine Kora Linen menswear content remains, and it's
-  deliberately out of scope for a copy sweep since it's data, not code —
-  it needs a real product catalog, not a text rewrite.
-- Removed `src/server/catalogMigration.ts` and its test — it was a
-  one-time script that migrated Kora Linen's specific 50 legacy products
-  to the new taxonomy fields, which doesn't apply to a fresh catalog.
 - Internal-only `localStorage` key names (`kora_cart`, `kora_customer_auth_token`,
   `kora_admin_logged_in`, etc.) and Firestore collection internals still
   use a `kora_` namespace. These are never shown to users and were left
@@ -180,7 +219,7 @@ logic, not just display text:
 
 ## Test suite status
 
-`npm test` passes 541/543 inherited tests. The 2 remaining failures
+`npm test` passes 535/537 inherited tests. The 2 remaining failures
 (`customerPortalAuth.test.ts`, `phase10_5a_returns_consolidation.test.ts`)
 fail identically on the original Kora Linen repo in this environment —
 they need live `MSG91_WIDGET_ID` / `RAZORPAY_KEY_ID` credentials to pass

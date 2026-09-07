@@ -17,6 +17,8 @@
  * 4. Legacy fields (category, subCategory) remain supported for backward compatibility.
  */
 
+import { products } from '../data';
+
 export type MerchandisingCollectionId =
   | 'apparel'
   | 'accessories';
@@ -316,6 +318,18 @@ export interface TaxonomyRouteInfo {
 const SITE_BASE_URL = 'https://www.saandsha.com';
 const SITE_NAME = 'Sa and Sha';
 
+function isProductLive(p: { status?: string; isDecommissioned?: boolean }): boolean {
+  return p.status !== 'archived' && p.status !== 'draft' && !p.isDecommissioned;
+}
+
+function hasActiveInventoryForProductType(productTypeId: string): boolean {
+  return products.some(p => p.productType === productTypeId && isProductLive(p));
+}
+
+function hasActiveInventoryForCollection(collectionId: string): boolean {
+  return products.some(p => p.collection === collectionId && isProductLive(p));
+}
+
 export function getTaxonomyRouteInfo(params: {
   collectionId?: string;
   productTypeId?: string;
@@ -397,8 +411,9 @@ export function getTaxonomyRouteInfo(params: {
     const collItem = CANONICAL_COLLECTIONS.find(c => c.id === collectionId)!;
     const typeItem = CANONICAL_PRODUCT_TYPES.find(p => p.id === productTypeId)!;
 
-    // Placeholder: mark everything as coming soon until real inventory is loaded.
-    const hasActiveInventory = false;
+    const hasActiveInventory = products.some(
+      p => p.collection === collectionId && p.productType === productTypeId && isProductLive(p)
+    );
 
     const h1 = `${collItem.label} ${typeItem.label}`;
     const title = `${h1} | ${SITE_NAME}`;
@@ -438,8 +453,7 @@ export function getTaxonomyRouteInfo(params: {
     }
 
     const collItem = CANONICAL_COLLECTIONS.find(c => c.id === collectionId)!;
-    // Placeholder: mark everything as coming soon until real inventory is loaded.
-    const isComingSoon = true;
+    const isComingSoon = !hasActiveInventoryForCollection(collectionId);
 
     const title = `${collItem.label} | ${SITE_NAME}`;
     const h1 = collItem.label;
@@ -498,7 +512,9 @@ export function getTaxonomyRouteInfo(params: {
     const h1 = subTypeItem.label;
     const title = `${subTypeItem.label} | ${SITE_NAME}`;
     const metaDescription = `Explore our collection of ${subTypeItem.label.toLowerCase()} designed for everyday elegance.`;
-    const isComingSoon = true;
+    const isComingSoon = !products.some(
+      p => p.productType === productTypeId && p.productSubType === resolvedSubType && isProductLive(p)
+    );
 
     return {
       isValid: true,
@@ -535,8 +551,7 @@ export function getTaxonomyRouteInfo(params: {
     }
 
     const typeItem = CANONICAL_PRODUCT_TYPES.find(p => p.id === productTypeId)!;
-    // Placeholder: mark everything as coming soon until real inventory is loaded.
-    const hasActiveInventory = false;
+    const hasActiveInventory = hasActiveInventoryForProductType(productTypeId);
 
     const h1 = typeItem.label;
     const title = `${typeItem.label} | ${SITE_NAME}`;

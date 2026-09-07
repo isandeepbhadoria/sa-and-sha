@@ -280,20 +280,26 @@ export const ProductDetailPage: React.FC = () => {
             </h1>
             
             {/* Reviews summary */}
-            <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'
-                    }`}
-                  />
-                ))}
+            {product.reviewCount > 0 ? (
+              <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center text-amber-500">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs font-sans font-bold text-[#2A211C]">{product.rating.toFixed(1)}</span>
+                <span className="text-xs font-sans text-[#2A211C]/50">({product.reviewCount} Patron Reviews)</span>
               </div>
-              <span className="text-xs font-sans font-bold text-[#2A211C]">{product.rating.toFixed(1)}</span>
-              <span className="text-xs font-sans text-[#2A211C]/50">({product.reviewCount} Patron Reviews)</span>
-            </div>
+            ) : (
+              <div className="mt-2">
+                <span className="text-xs font-sans font-bold text-[#B08D57] uppercase tracking-wide">New Arrival — Be the first to review</span>
+              </div>
+            )}
           </div>
 
           {/* Price blocks */}

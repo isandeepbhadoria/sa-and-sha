@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { products, mockReviews } from '../data';
+import { products } from '../data';
 import {
-  Star,
   ArrowRight,
   Package,
   Truck,
@@ -25,49 +24,49 @@ const categoryTiles = [
     name: 'Dresses',
     subtitle: 'Day to Evening',
     link: '/shop/product/dresses',
-    isComingSoon: true,
+    productTypeId: 'dresses',
     image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80',
   },
   {
     name: 'Top & Shirts',
     subtitle: 'Everyday Essentials',
     link: '/shop/product/tops-shirts',
-    isComingSoon: true,
+    productTypeId: 'tops-shirts',
     image: 'https://images.unsplash.com/photo-1551803091-e20673f15770?w=600&q=80',
   },
   {
     name: 'Shorts & Skirts',
     subtitle: 'Warm-Weather Silhouettes',
     link: '/shop/product/shorts-skirts',
-    isComingSoon: true,
+    productTypeId: 'shorts-skirts',
     image: 'https://images.unsplash.com/photo-1583496661160-fb5886a13d77?w=600&q=80',
   },
   {
     name: 'Co-Ord Sets',
     subtitle: 'Matching Duos',
     link: '/shop/product/co-ord-sets',
-    isComingSoon: true,
+    productTypeId: 'co-ord-sets',
     image: 'https://images.unsplash.com/photo-1614251056216-f748f76cd228?w=600&q=80',
   },
   {
     name: 'Trousers',
     subtitle: 'Tailored & Relaxed',
     link: '/shop/product/trousers',
-    isComingSoon: true,
+    productTypeId: 'trousers',
     image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80',
   },
   {
     name: 'Jackets',
     subtitle: 'Layers for Every Season',
     link: '/shop/product/jackets',
-    isComingSoon: true,
+    productTypeId: 'jackets',
     image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',
   },
   {
     name: 'Bags & Pouches',
     subtitle: 'Finishing Touches',
     link: '/shop/product/bags-pouches',
-    isComingSoon: true,
+    productTypeId: 'bags-pouches',
     image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80',
   },
 ];
@@ -109,8 +108,15 @@ export const HomePage: React.FC = () => {
   });
 
   const navigate = useNavigate();
-  const [reviewIndex, setReviewIndex] = useState(0);
   const bestsellers = products.filter(p => p.bestseller).slice(0, 12);
+  const categoryTilesWithStatus = useMemo(() => {
+    return categoryTiles.map(tile => ({
+      ...tile,
+      isComingSoon: !products.some(
+        p => p.productType === tile.productTypeId && p.status !== 'archived' && p.status !== 'draft' && !p.isDecommissioned
+      )
+    }));
+  }, []);
   const newArrivals = products.filter(p => p.newArrival).slice(0, 12);
 
   const orgSchema = {
@@ -143,7 +149,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
-          {categoryTiles.map((tile) => (
+          {categoryTilesWithStatus.map((tile) => (
             <div
               key={tile.name}
               onClick={() => navigate(tile.link)}
@@ -243,44 +249,6 @@ export const HomePage: React.FC = () => {
             >
               Learn Our Story
             </Link>
-          </div>
-        </div>
-      </section>
-
-
-      {/* 7. CUSTOMERS TESTIMONIALS */}
-      <section className="max-w-4xl mx-auto px-4 text-center">
-        <span className="text-xs font-sans font-bold tracking-[0.25em] text-[#E5D2BC] uppercase">Sartorial Feedback</span>
-        <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C] mt-1 mb-8">What They Say</h2>
-
-        <div className="bg-[#F4E6D7]/25 p-8 md:p-12 rounded-xl border border-[#E5D2BC]/20 relative">
-          <div className="flex justify-center text-amber-500 mb-4 gap-0.5">
-            {[...Array(mockReviews[reviewIndex].rating)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 fill-current" />
-            ))}
-          </div>
-
-          <p className="font-serif text-base md:text-lg text-[#2A211C] leading-relaxed italic mb-6">
-            "{mockReviews[reviewIndex].comment}"
-          </p>
-
-          <div className="font-sans text-xs font-bold uppercase tracking-widest text-[#2A211C]">
-            {mockReviews[reviewIndex].userName} <span className="text-[#C98A82] text-[10px] font-semibold tracking-normal lowercase ml-1.5">• Verified Patron</span>
-          </div>
-
-          {/* Dots Navigation */}
-          <div className="flex justify-center gap-2 mt-6">
-            {mockReviews.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setReviewIndex(idx)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  reviewIndex === idx ? 'bg-[#B08D57] w-5' : 'bg-[#2A211C]/20 hover:bg-[#2A211C]'
-                }`}
-                id={`review-dot-${idx}`}
-                aria-label={`Go to review ${idx + 1}`}
-              />
-            ))}
           </div>
         </div>
       </section>

@@ -346,10 +346,10 @@ describe('Phase 10.5D.3A — Product Tax Master Category/Rule Engine', () => {
   // 14. Tax Coverage Summary
   it('14. Tax coverage summary correctly calculates covered vs uncovered catalog products', () => {
     registerProductTaxMetadata({
-      tax_record_id: 'rule_cat_shirts',
+      tax_record_id: 'rule_cat_dresses',
       scope_type: 'CATEGORY',
-      scope_value: 'TOPS_SHIRTS',
-      hsn_code: '6205',
+      scope_value: 'DRESSES',
+      hsn_code: '6204',
       gst_rate: 5,
       status: 'ACTIVE'
     });

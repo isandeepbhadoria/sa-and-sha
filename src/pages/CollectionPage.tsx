@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { products, categoryFAQs, seoContent, COLOR_SWATCHES } from '../data';
+import { products, categoryFAQs, COLOR_SWATCHES } from '../data';
 import { ProductCard } from '../components/ProductCard';
 import { useShop } from '../context/ShopContext';
 import { SlidersHorizontal, Grid2X2, Grid3X3, X, ChevronDown, ChevronUp, RefreshCw, Star, Info, HelpCircle, Sparkles } from 'lucide-react';
@@ -366,12 +366,13 @@ export const CollectionPage: React.FC = () => {
   // Fabric list options
   const fabricOptions = ['Cotton', 'Linen-Cotton Blend', 'Georgette', 'Other'];
 
-  // Accordion FAQs dynamically selected based on slug
+  // Accordion FAQs dynamically selected based on the resolved product type
   const currentFAQs = useMemo(() => {
-    if (currentCategory.isShirts) return categoryFAQs.shirts;
-    if (currentCategory.isPants) return categoryFAQs.pants;
-    return [...categoryFAQs.shirts, ...categoryFAQs.pants].slice(0, 5);
-  }, [currentCategory]);
+    if (routeInfo.filterProductType && categoryFAQs[routeInfo.filterProductType]) {
+      return categoryFAQs[routeInfo.filterProductType];
+    }
+    return Object.values(categoryFAQs).flat().slice(0, 5);
+  }, [routeInfo]);
 
   // Current SEO descriptions
   const currentSeo = useMemo(() => {
