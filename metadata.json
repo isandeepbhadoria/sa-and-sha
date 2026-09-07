@@ -1,6 +1,6 @@
 {
   "name": "Sa and Sha",
-  "description": "Ladies apparel brand specialising in women's dresses, tops, and ethnic wear.",
+  "description": "Ladies apparel brand offering dresses, tops & shirts, shorts & skirts, co-ord sets, trousers, jackets, and bags & pouches.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

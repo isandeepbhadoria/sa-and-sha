@@ -22,7 +22,7 @@ service cloud.firestore {
 
     function isValidProduct(data) {
       return data.name is string && data.name.size() > 0 && data.name.size() <= 200
-          && data.category is string && data.category in ['dresses', 'tops', 'bottoms', 'kurtas', 'sarees', 'co-ord sets', 'jackets', 'accessories']
+          && data.category is string && data.category in ['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets', 'bags-pouches']
           && data.subCategory is string && data.subCategory.size() > 0 && data.subCategory.size() <= 100
           && data.price is number && data.price >= 0
           && data.fabric is string && data.fabric.size() <= 200

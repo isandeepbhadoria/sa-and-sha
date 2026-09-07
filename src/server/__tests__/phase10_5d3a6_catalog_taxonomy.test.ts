@@ -33,20 +33,16 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
   // 1. CANONICAL MERCHANDISING COLLECTIONS
   // -------------------------------------------------------------------------
   describe('Canonical Merchandising Collections', () => {
-    it('defines the 4 required canonical collections with stable IDs and descriptive labels', () => {
+    it('defines the 2 required canonical collections with stable IDs and descriptive labels', () => {
       const collectionIds = CANONICAL_COLLECTIONS.map(c => c.id);
-      expect(collectionIds).toContain('ethnic-wear');
-      expect(collectionIds).toContain('western-wear');
-      expect(collectionIds).toContain('co-ord-sets');
-      expect(collectionIds).toContain('winter-wear');
-      expect(CANONICAL_COLLECTIONS).toHaveLength(4);
+      expect(collectionIds).toContain('apparel');
+      expect(collectionIds).toContain('accessories');
+      expect(CANONICAL_COLLECTIONS).toHaveLength(2);
     });
 
     it('validates collection IDs using isValidCollection()', () => {
-      expect(isValidCollection('ethnic-wear')).toBe(true);
-      expect(isValidCollection('western-wear')).toBe(true);
-      expect(isValidCollection('co-ord-sets')).toBe(true);
-      expect(isValidCollection('winter-wear')).toBe(true);
+      expect(isValidCollection('apparel')).toBe(true);
+      expect(isValidCollection('accessories')).toBe(true);
 
       expect(isValidCollection('silk-collection')).toBe(false);
       expect(isValidCollection('')).toBe(false);
@@ -63,12 +59,12 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
       expect(typeIds).toEqual(
         expect.arrayContaining([
           'dresses',
-          'tops',
-          'bottoms',
-          'kurtas',
-          'sarees',
+          'tops-shirts',
+          'shorts-skirts',
           'co-ord-sets',
-          'jackets'
+          'trousers',
+          'jackets',
+          'bags-pouches'
         ])
       );
     });
@@ -77,10 +73,10 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
       const subTypeIds = CANONICAL_PRODUCT_SUB_TYPES.map(st => st.id);
       expect(subTypeIds).toEqual(
         expect.arrayContaining([
-          'maxi-dresses',
-          'midi-dresses',
-          'straight-kurtas',
-          'a-line-kurtas'
+          'tops',
+          'shirts',
+          'shorts',
+          'skirts'
         ])
       );
     });
@@ -102,50 +98,33 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
   // 3. COLLECTION × PRODUCT TYPE MATRIX
   // -------------------------------------------------------------------------
   describe('Collection × Product Type Matrix Validation', () => {
-    it('ethnic-wear supports kurtas, sarees, and co-ord-sets', () => {
-      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['ethnic-wear'];
-      expect(allowed).toEqual(['kurtas', 'sarees', 'co-ord-sets']);
+    it('apparel supports dresses, tops-shirts, shorts-skirts, co-ord-sets, trousers, and jackets', () => {
+      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['apparel'];
+      expect(allowed).toEqual(['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets']);
 
-      expect(isValidCollectionProductType('ethnic-wear', 'kurtas')).toBe(true);
-      expect(isValidCollectionProductType('ethnic-wear', 'sarees')).toBe(true);
-      expect(isValidCollectionProductType('ethnic-wear', 'co-ord-sets')).toBe(true);
-      expect(isValidCollectionProductType('ethnic-wear', 'dresses')).toBe(false);
+      expect(isValidCollectionProductType('apparel', 'dresses')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'tops-shirts')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'shorts-skirts')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'co-ord-sets')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'trousers')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'jackets')).toBe(true);
+      expect(isValidCollectionProductType('apparel', 'bags-pouches')).toBe(false);
     });
 
-    it('western-wear supports dresses, tops, bottoms, and co-ord-sets', () => {
-      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['western-wear'];
-      expect(allowed).toEqual(['dresses', 'tops', 'bottoms', 'co-ord-sets']);
+    it('accessories collection supports only the bags-pouches product type', () => {
+      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['accessories'];
+      expect(allowed).toEqual(['bags-pouches']);
 
-      expect(isValidCollectionProductType('western-wear', 'dresses')).toBe(true);
-      expect(isValidCollectionProductType('western-wear', 'tops')).toBe(true);
-      expect(isValidCollectionProductType('western-wear', 'bottoms')).toBe(true);
-      expect(isValidCollectionProductType('western-wear', 'co-ord-sets')).toBe(true);
-      expect(isValidCollectionProductType('western-wear', 'sarees')).toBe(false);
-      expect(isValidCollectionProductType('western-wear', 'kurtas')).toBe(false);
-    });
-
-    it('co-ord-sets collection supports only the co-ord-sets product type', () => {
-      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['co-ord-sets'];
-      expect(allowed).toEqual(['co-ord-sets']);
-
-      expect(isValidCollectionProductType('co-ord-sets', 'co-ord-sets')).toBe(true);
-      expect(isValidCollectionProductType('co-ord-sets', 'dresses')).toBe(false);
-    });
-
-    it('winter-wear supports jackets product type', () => {
-      const allowed = COLLECTION_PRODUCT_TYPE_MATRIX['winter-wear'];
-      expect(allowed).toEqual(['jackets']);
-
-      expect(isValidCollectionProductType('winter-wear', 'jackets')).toBe(true);
-      expect(isValidCollectionProductType('winter-wear', 'dresses')).toBe(false);
+      expect(isValidCollectionProductType('accessories', 'bags-pouches')).toBe(true);
+      expect(isValidCollectionProductType('accessories', 'dresses')).toBe(false);
     });
 
     it('returns filtered product types for collection in admin dropdown helper', () => {
-      const ethnicTypes = getAvailableProductTypesForCollection('ethnic-wear').map(t => t.id);
-      expect(ethnicTypes).toEqual(['kurtas', 'sarees', 'co-ord-sets']);
+      const apparelTypes = getAvailableProductTypesForCollection('apparel').map(t => t.id);
+      expect(apparelTypes).toEqual(['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets']);
 
-      const winterTypes = getAvailableProductTypesForCollection('winter-wear').map(t => t.id);
-      expect(winterTypes).toEqual(['jackets']);
+      const accessoryTypes = getAvailableProductTypesForCollection('accessories').map(t => t.id);
+      expect(accessoryTypes).toEqual(['bags-pouches']);
 
       const unassignedTypes = getAvailableProductTypesForCollection(undefined);
       expect(unassignedTypes.length).toBe(CANONICAL_PRODUCT_TYPES.length);
@@ -156,27 +135,27 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
   // 4. PRODUCT TYPE × SUB-TYPE MATRIX
   // -------------------------------------------------------------------------
   describe('Product Type × Sub-Type Matrix Validation', () => {
-    it('dresses support maxi-dresses and midi-dresses', () => {
-      expect(isValidProductSubTypeForType('dresses', 'maxi-dresses')).toBe(true);
-      expect(isValidProductSubTypeForType('dresses', 'midi-dresses')).toBe(true);
-      expect(isValidProductSubTypeForType('dresses', 'straight-kurtas')).toBe(false);
+    it('tops-shirts support tops and shirts', () => {
+      expect(isValidProductSubTypeForType('tops-shirts', 'tops')).toBe(true);
+      expect(isValidProductSubTypeForType('tops-shirts', 'shirts')).toBe(true);
+      expect(isValidProductSubTypeForType('tops-shirts', 'shorts')).toBe(false);
       // Optional sub-type
-      expect(isValidProductSubTypeForType('dresses', undefined)).toBe(true);
-      expect(isValidProductSubTypeForType('dresses', '')).toBe(true);
+      expect(isValidProductSubTypeForType('tops-shirts', undefined)).toBe(true);
+      expect(isValidProductSubTypeForType('tops-shirts', '')).toBe(true);
     });
 
-    it('kurtas support straight-kurtas and a-line-kurtas', () => {
-      expect(isValidProductSubTypeForType('kurtas', 'straight-kurtas')).toBe(true);
-      expect(isValidProductSubTypeForType('kurtas', 'a-line-kurtas')).toBe(true);
-      expect(isValidProductSubTypeForType('kurtas', 'maxi-dresses')).toBe(false);
+    it('shorts-skirts support shorts and skirts', () => {
+      expect(isValidProductSubTypeForType('shorts-skirts', 'shorts')).toBe(true);
+      expect(isValidProductSubTypeForType('shorts-skirts', 'skirts')).toBe(true);
+      expect(isValidProductSubTypeForType('shorts-skirts', 'tops')).toBe(false);
     });
 
     it('returns available sub-types for product type helper', () => {
-      const dressSubTypes = getAvailableSubTypesForProductType('dresses').map(s => s.id);
-      expect(dressSubTypes).toEqual(['maxi-dresses', 'midi-dresses']);
+      const topsShirtsSubTypes = getAvailableSubTypesForProductType('tops-shirts').map(s => s.id);
+      expect(topsShirtsSubTypes).toEqual(['tops', 'shirts']);
 
-      const topsSubTypes = getAvailableSubTypesForProductType('tops').map(s => s.id);
-      expect(topsSubTypes).toEqual([]);
+      const dressSubTypes = getAvailableSubTypesForProductType('dresses').map(s => s.id);
+      expect(dressSubTypes).toEqual([]);
     });
   });
 
@@ -199,11 +178,11 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
 
     it('validates a complete new taxonomy product', () => {
       const newTaxonomyProduct = {
-        collection: 'western-wear',
-        productType: 'dresses',
-        productSubType: 'maxi-dresses',
+        collection: 'apparel',
+        productType: 'tops-shirts',
+        productSubType: 'tops',
         materialType: 'cotton',
-        tax_class: 'womens_dress'
+        tax_class: 'womens_top_shirt'
       };
 
       const result = validateProductTaxonomy(newTaxonomyProduct);
@@ -221,8 +200,8 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
 
     it('rejects invalid collection × product type combination', () => {
       const result = validateProductTaxonomy({
-        collection: 'western-wear',
-        productType: 'sarees' // western-wear only allows dresses, tops, bottoms, co-ord-sets
+        collection: 'accessories',
+        productType: 'dresses' // accessories only allows bags-pouches
       });
       expect(result.valid).toBe(false);
       expect(result.errors[0]).toContain('not valid within collection');
@@ -230,12 +209,12 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
 
     it('rejects mismatched product sub-type', () => {
       const result = validateProductTaxonomy({
-        collection: 'western-wear',
-        productType: 'dresses',
-        productSubType: 'straight-kurtas'
+        collection: 'apparel',
+        productType: 'tops-shirts',
+        productSubType: 'shorts'
       });
       expect(result.valid).toBe(false);
-      expect(result.errors[0]).toContain('not valid for product type "dresses"');
+      expect(result.errors[0]).toContain('not valid for product type "tops-shirts"');
     });
   });
 
@@ -246,12 +225,12 @@ describe('Phase 10.5D.3A.6 — Normalized Catalog Taxonomy & Admin Architecture'
     it('contains all required stable classification keys', () => {
       const keys = SELECTABLE_TAX_CLASSES.map(t => t.id);
       expect(keys).toContain('womens_dress');
-      expect(keys).toContain('womens_top');
-      expect(keys).toContain('womens_bottom');
-      expect(keys).toContain('womens_kurta');
-      expect(keys).toContain('womens_saree');
+      expect(keys).toContain('womens_top_shirt');
+      expect(keys).toContain('womens_shorts_skirt');
       expect(keys).toContain('womens_coord_set');
+      expect(keys).toContain('womens_trouser');
       expect(keys).toContain('womens_jacket');
+      expect(keys).toContain('bags_pouches');
     });
 
     it('ensures tax classes have NO statutory HSN or GST rates hardcoded into their definitions', () => {

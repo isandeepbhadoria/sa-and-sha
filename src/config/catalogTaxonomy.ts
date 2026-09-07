@@ -5,10 +5,10 @@
  * collections, product types, sub-types, material types, valid matrix
  * combinations, selectable tax class options, and validation rules.
  *
- * NOTE: The specific collection/product-type/material values below are a
- * starter placeholder for a ladies apparel catalog. Adjust them to match
- * Sa and Sha's real merchandising plan before going live — the validation
- * logic itself does not need to change.
+ * Product categories reflect Sa and Sha's actual merchandising plan:
+ * Dresses, Top & Shirts, Shorts & Skirts, Co-Ord Sets, Trousers, Jackets,
+ * Bags & Pouches. "Top & Shirts" and "Shorts & Skirts" are further split
+ * into sub-types (tops/shirts, shorts/skirts) for filtering.
  *
  * CRITICAL INVARIANTS:
  * 1. Merchandising taxonomy is independent from statutory GST classification.
@@ -18,25 +18,23 @@
  */
 
 export type MerchandisingCollectionId =
-  | 'ethnic-wear'
-  | 'western-wear'
-  | 'co-ord-sets'
-  | 'winter-wear';
+  | 'apparel'
+  | 'accessories';
 
 export type ProductTypeId =
   | 'dresses'
-  | 'tops'
-  | 'bottoms'
-  | 'kurtas'
-  | 'sarees'
+  | 'tops-shirts'
+  | 'shorts-skirts'
   | 'co-ord-sets'
-  | 'jackets';
+  | 'trousers'
+  | 'jackets'
+  | 'bags-pouches';
 
 export type ProductSubTypeId =
-  | 'maxi-dresses'
-  | 'midi-dresses'
-  | 'straight-kurtas'
-  | 'a-line-kurtas';
+  | 'tops'
+  | 'shirts'
+  | 'shorts'
+  | 'skirts';
 
 export type MaterialTypeId =
   | 'cotton'
@@ -56,28 +54,16 @@ export interface TaxonomyItem<T extends string = string> {
 // ---------------------------------------------------------------------------
 export const CANONICAL_COLLECTIONS: readonly TaxonomyItem<MerchandisingCollectionId>[] = [
   {
-    id: 'ethnic-wear',
-    label: 'Ethnic Wear',
-    shortLabel: 'Ethnic Wear',
-    description: 'Kurtas, sarees, and traditional silhouettes for festive and everyday wear'
+    id: 'apparel',
+    label: 'Apparel',
+    shortLabel: 'Apparel',
+    description: 'Dresses, tops, shirts, shorts, skirts, co-ord sets, trousers, and jackets'
   },
   {
-    id: 'western-wear',
-    label: 'Western Wear',
-    shortLabel: 'Western Wear',
-    description: 'Dresses, tops, and bottoms for contemporary everyday style'
-  },
-  {
-    id: 'co-ord-sets',
-    label: 'Co-Ord Sets',
-    shortLabel: 'Co-Ord Sets',
-    description: 'Matching top and bottom sets for effortless styling'
-  },
-  {
-    id: 'winter-wear',
-    label: 'Winter Wear',
-    shortLabel: 'Winter Wear',
-    description: 'Jackets and layering pieces for cooler weather'
+    id: 'accessories',
+    label: 'Accessories',
+    shortLabel: 'Accessories',
+    description: 'Bags and pouches'
   }
 ] as const;
 
@@ -86,22 +72,22 @@ export const CANONICAL_COLLECTIONS: readonly TaxonomyItem<MerchandisingCollectio
 // ---------------------------------------------------------------------------
 export const CANONICAL_PRODUCT_TYPES: readonly TaxonomyItem<ProductTypeId>[] = [
   { id: 'dresses', label: 'Dresses' },
-  { id: 'tops', label: 'Tops' },
-  { id: 'bottoms', label: 'Bottoms' },
-  { id: 'kurtas', label: 'Kurtas' },
-  { id: 'sarees', label: 'Sarees' },
+  { id: 'tops-shirts', label: 'Top & Shirts' },
+  { id: 'shorts-skirts', label: 'Shorts & Skirts' },
   { id: 'co-ord-sets', label: 'Co-Ord Sets' },
-  { id: 'jackets', label: 'Jackets' }
+  { id: 'trousers', label: 'Trousers' },
+  { id: 'jackets', label: 'Jackets' },
+  { id: 'bags-pouches', label: 'Bags & Pouches' }
 ] as const;
 
 // ---------------------------------------------------------------------------
 // 3. CANONICAL PRODUCT SUB-TYPES
 // ---------------------------------------------------------------------------
 export const CANONICAL_PRODUCT_SUB_TYPES: readonly TaxonomyItem<ProductSubTypeId>[] = [
-  { id: 'maxi-dresses', label: 'Maxi Dresses' },
-  { id: 'midi-dresses', label: 'Midi Dresses' },
-  { id: 'straight-kurtas', label: 'Straight Kurtas' },
-  { id: 'a-line-kurtas', label: 'A-Line Kurtas' }
+  { id: 'tops', label: 'Tops' },
+  { id: 'shirts', label: 'Shirts' },
+  { id: 'shorts', label: 'Shorts' },
+  { id: 'skirts', label: 'Skirts' }
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -118,18 +104,16 @@ export const CANONICAL_MATERIAL_TYPES: readonly TaxonomyItem<MaterialTypeId>[] =
 // 5. VALID COLLECTION × PRODUCT TYPE MATRIX
 // ---------------------------------------------------------------------------
 export const COLLECTION_PRODUCT_TYPE_MATRIX: Record<MerchandisingCollectionId, readonly ProductTypeId[]> = {
-  'ethnic-wear': ['kurtas', 'sarees', 'co-ord-sets'],
-  'western-wear': ['dresses', 'tops', 'bottoms', 'co-ord-sets'],
-  'co-ord-sets': ['co-ord-sets'],
-  'winter-wear': ['jackets']
+  'apparel': ['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets'],
+  'accessories': ['bags-pouches']
 } as const;
 
 // ---------------------------------------------------------------------------
 // 6. VALID PRODUCT TYPE × SUB-TYPE MATRIX
 // ---------------------------------------------------------------------------
 export const PRODUCT_TYPE_SUBTYPES_MATRIX: Partial<Record<ProductTypeId, readonly ProductSubTypeId[]>> = {
-  'dresses': ['maxi-dresses', 'midi-dresses'],
-  'kurtas': ['straight-kurtas', 'a-line-kurtas']
+  'tops-shirts': ['tops', 'shirts'],
+  'shorts-skirts': ['shorts', 'skirts']
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -143,12 +127,12 @@ export interface TaxClassOption {
 
 export const SELECTABLE_TAX_CLASSES: readonly TaxClassOption[] = [
   { id: 'womens_dress', label: "Women's Dress (womens_dress)" },
-  { id: 'womens_top', label: "Women's Top (womens_top)" },
-  { id: 'womens_bottom', label: "Women's Bottom (womens_bottom)" },
-  { id: 'womens_kurta', label: "Women's Kurta (womens_kurta)" },
-  { id: 'womens_saree', label: "Women's Saree (womens_saree)" },
+  { id: 'womens_top_shirt', label: "Women's Top / Shirt (womens_top_shirt)" },
+  { id: 'womens_shorts_skirt', label: "Women's Shorts / Skirt (womens_shorts_skirt)" },
   { id: 'womens_coord_set', label: "Women's Co-ord Set (womens_coord_set)" },
+  { id: 'womens_trouser', label: "Women's Trouser (womens_trouser)" },
   { id: 'womens_jacket', label: "Women's Jacket (womens_jacket)" },
+  { id: 'bags_pouches', label: "Bags & Pouches (bags_pouches)" },
   { id: 'accessories_general', label: "Accessories / General (accessories_general)" }
 ] as const;
 
@@ -296,25 +280,19 @@ export function validateProductTaxonomy(data: {
 // 9. SUBTYPE URL SLUG MAPPINGS
 // ---------------------------------------------------------------------------
 export function resolveSubtypeFromSlug(productType: string, subTypeSlug: string): ProductSubTypeId | null {
-  if (productType === 'dresses') {
-    if (subTypeSlug === 'maxi' || subTypeSlug === 'maxi-dresses') return 'maxi-dresses';
-    if (subTypeSlug === 'midi' || subTypeSlug === 'midi-dresses') return 'midi-dresses';
+  if (productType === 'tops-shirts') {
+    if (subTypeSlug === 'tops') return 'tops';
+    if (subTypeSlug === 'shirts') return 'shirts';
   }
-  if (productType === 'kurtas') {
-    if (subTypeSlug === 'straight' || subTypeSlug === 'straight-kurtas') return 'straight-kurtas';
-    if (subTypeSlug === 'a-line' || subTypeSlug === 'a-line-kurtas') return 'a-line-kurtas';
+  if (productType === 'shorts-skirts') {
+    if (subTypeSlug === 'shorts') return 'shorts';
+    if (subTypeSlug === 'skirts') return 'skirts';
   }
   return null;
 }
 
 export function getSubtypeUrlSlug(productSubType: ProductSubTypeId): string {
-  switch (productSubType) {
-    case 'maxi-dresses': return 'maxi';
-    case 'midi-dresses': return 'midi';
-    case 'straight-kurtas': return 'straight';
-    case 'a-line-kurtas': return 'a-line';
-    default: return productSubType;
-  }
+  return productSubType;
 }
 
 // ---------------------------------------------------------------------------
@@ -354,7 +332,7 @@ export function getTaxonomyRouteInfo(params: {
         isComingSoon: false,
         title: `Shop All Women's Apparel | ${SITE_NAME}`,
         h1: "Shop All Products",
-        metaDescription: `Explore the complete ${SITE_NAME} collection of women's dresses, tops, ethnic wear, and co-ord sets.`,
+        metaDescription: `Explore the complete ${SITE_NAME} collection of dresses, tops & shirts, shorts & skirts, co-ord sets, trousers, jackets, and bags & pouches.`,
         canonicalPath: "/shop/all",
         canonicalUrl: `${SITE_BASE_URL}/shop/all`,
         breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Shop All' }],
@@ -367,7 +345,7 @@ export function getTaxonomyRouteInfo(params: {
         isComingSoon: false,
         title: `Bestselling Women's Apparel | ${SITE_NAME}`,
         h1: "Bestsellers",
-        metaDescription: `Discover our most-loved dresses, tops, and ethnic wear, favored by ${SITE_NAME} customers.`,
+        metaDescription: `Discover our most-loved dresses, tops, and co-ord sets, favored by ${SITE_NAME} customers.`,
         canonicalPath: "/shop/bestsellers",
         canonicalUrl: `${SITE_BASE_URL}/shop/bestsellers`,
         breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Bestsellers' }],
@@ -380,7 +358,7 @@ export function getTaxonomyRouteInfo(params: {
         isComingSoon: false,
         title: `New Arrivals | ${SITE_NAME}`,
         h1: "Fresh Arrivals",
-        metaDescription: "Explore the newest seasonal arrivals across dresses, ethnic wear, and co-ord sets.",
+        metaDescription: "Explore the newest seasonal arrivals across dresses, co-ord sets, and jackets.",
         canonicalPath: "/shop/new-arrivals",
         canonicalUrl: `${SITE_BASE_URL}/shop/new-arrivals`,
         breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'New Arrivals' }],
@@ -424,7 +402,7 @@ export function getTaxonomyRouteInfo(params: {
 
     const h1 = `${collItem.label} ${typeItem.label}`;
     const title = `${h1} | ${SITE_NAME}`;
-    const metaDescription = `Explore our collection of ${collItem.label.toLowerCase()} ${typeItem.label.toLowerCase()}, designed for everyday elegance.`;
+    const metaDescription = `Explore our collection of ${typeItem.label.toLowerCase()}, designed for everyday elegance.`;
 
     return {
       isValid: true,
@@ -463,7 +441,7 @@ export function getTaxonomyRouteInfo(params: {
     // Placeholder: mark everything as coming soon until real inventory is loaded.
     const isComingSoon = true;
 
-    const title = `${collItem.label} Collection | ${SITE_NAME}`;
+    const title = `${collItem.label} | ${SITE_NAME}`;
     const h1 = collItem.label;
     const metaDescription = collItem.description;
 
@@ -561,7 +539,7 @@ export function getTaxonomyRouteInfo(params: {
     const hasActiveInventory = false;
 
     const h1 = typeItem.label;
-    const title = `Women's ${typeItem.label} | ${SITE_NAME}`;
+    const title = `${typeItem.label} | ${SITE_NAME}`;
     const metaDescription = `Explore our collection of ${typeItem.label.toLowerCase()} designed for everyday elegance.`;
 
     return {
@@ -587,7 +565,7 @@ export function getTaxonomyRouteInfo(params: {
     isComingSoon: false,
     title: `Shop All Women's Apparel | ${SITE_NAME}`,
     h1: "Shop All Products",
-    metaDescription: `Explore the complete ${SITE_NAME} collection of women's dresses, tops, ethnic wear, and co-ord sets.`,
+    metaDescription: `Explore the complete ${SITE_NAME} collection of dresses, tops & shirts, shorts & skirts, co-ord sets, trousers, jackets, and bags & pouches.`,
     canonicalPath: "/shop/all",
     canonicalUrl: `${SITE_BASE_URL}/shop/all`,
     breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Shop All' }],

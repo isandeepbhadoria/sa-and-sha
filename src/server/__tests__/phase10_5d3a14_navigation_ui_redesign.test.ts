@@ -107,23 +107,23 @@ describe('PHASE 10.5D.3A.14 — Navigation UI Redesign Verification', () => {
   });
 
   it('8. Canonical taxonomy route resolution delivers correct page metadata and counts', () => {
-    const ethnicWearRoute = getTaxonomyRouteInfo({ collectionId: 'ethnic-wear' });
-    expect(ethnicWearRoute.isValid).toBe(true);
-    expect(ethnicWearRoute.h1).toBe('Ethnic Wear');
+    const apparelRoute = getTaxonomyRouteInfo({ collectionId: 'apparel' });
+    expect(apparelRoute.isValid).toBe(true);
+    expect(apparelRoute.h1).toBe('Apparel');
 
-    const winterWearRoute = getTaxonomyRouteInfo({ collectionId: 'winter-wear' });
-    expect(winterWearRoute.isValid).toBe(true);
-    expect(winterWearRoute.isComingSoon).toBe(true);
+    const accessoriesRoute = getTaxonomyRouteInfo({ collectionId: 'accessories' });
+    expect(accessoriesRoute.isValid).toBe(true);
+    expect(accessoriesRoute.isComingSoon).toBe(true);
 
-    const bottomsRoute = getTaxonomyRouteInfo({ productTypeId: 'bottoms' });
-    expect(bottomsRoute.isValid).toBe(true);
-    expect(bottomsRoute.isComingSoon).toBe(true);
+    const trousersRoute = getTaxonomyRouteInfo({ productTypeId: 'trousers' });
+    expect(trousersRoute.isValid).toBe(true);
+    expect(trousersRoute.isComingSoon).toBe(true);
 
-    const maxiDressRoute = getTaxonomyRouteInfo({
-      productTypeId: 'dresses',
-      subTypeSlug: 'maxi',
+    const topsRoute = getTaxonomyRouteInfo({
+      productTypeId: 'tops-shirts',
+      subTypeSlug: 'tops',
     });
-    expect(maxiDressRoute.isValid).toBe(true);
-    expect(maxiDressRoute.filterProductSubType).toBe('maxi-dresses');
+    expect(topsRoute.isValid).toBe(true);
+    expect(topsRoute.filterProductSubType).toBe('tops');
   });
 });

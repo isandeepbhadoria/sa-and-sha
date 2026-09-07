@@ -47,9 +47,11 @@ identity, catalog categories, and secrets/config are new.
   for real Sa and Sha artwork once you have it
 - `src/config/catalogTaxonomy.ts` and the Firestore product `category`
   enum were changed from menswear-linen categories (shirts, trousers,
-  chinos, kurtas) to a ladies-apparel placeholder (dresses, tops, bottoms,
-  kurtas, sarees, co-ord sets, jackets) — **treat this as a starting
-  point**, not a final catalog decision
+  chinos, kurtas) to Sa and Sha's real product categories: Dresses,
+  Top & Shirts, Shorts & Skirts, Co-Ord Sets, Trousers, Jackets, and
+  Bags & Pouches, grouped under two collections (Apparel, Accessories).
+  "Top & Shirts" and "Shorts & Skirts" have sub-types (tops/shirts,
+  shorts/skirts) for filtering.
 - `firebase-applet-config.json` had Kora Linen's live Firebase project
   credentials stripped and replaced with placeholders — you need your own
   Firebase project for Sa and Sha (see below)
@@ -78,7 +80,7 @@ identity, catalog categories, and secrets/config are new.
 
 ## Test suite status
 
-`npm test` passes 543/545 inherited tests. The 2 remaining failures
+`npm test` passes 541/543 inherited tests. The 2 remaining failures
 (`customerPortalAuth.test.ts`, `phase10_5a_returns_consolidation.test.ts`)
 fail identically on the original Kora Linen repo in this environment —
 they need live `MSG91_WIDGET_ID` / `RAZORPAY_KEY_ID` credentials to pass
