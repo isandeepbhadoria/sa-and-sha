@@ -7,6 +7,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import { products as staticProducts } from "./src/data";
 import { sendOrderTransactionalEmails, sendStatusUpdateEmail, OrderData } from "./src/server/email";
+import { isEmailConfigured } from "./src/server/mailer";
 import {
   publishNotification,
   retryNotification,
@@ -1632,7 +1633,7 @@ function isValidRoute(urlPath: string, activeProducts: any[] = []): boolean {
 async function startServer() {
   const app = express();
   app.set("trust proxy", 1);
-  const PORT = 3000;
+  const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
   // Middleware to parse JSON payloads with raw body capture for webhook signature verification
   app.use(express.json({
@@ -6048,7 +6049,7 @@ async function startServer() {
         dbProviders[doc.id] = { id: doc.id, ...doc.data() };
       });
 
-      const isResendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim());
+      const isSmtpConfigured = isEmailConfigured();
       const isMsg91Auth = Boolean(process.env.MSG91_AUTH_KEY && process.env.MSG91_AUTH_KEY.trim());
       const isSmsWidgetConfigured = Boolean(process.env.VITE_MSG91_WIDGET_ID && process.env.VITE_MSG91_WIDGET_ID.trim());
       const isSmsConfigured = isMsg91Auth || isSmsWidgetConfigured;
@@ -6060,13 +6061,13 @@ async function startServer() {
       const providers = {
         email: {
           channel: "email",
-          provider: dbProviders.email?.provider || "Resend",
-          status: isResendConfigured ? "Active" : "Not Configured",
-          verified: isResendConfigured,
+          provider: dbProviders.email?.provider || "SMTP",
+          status: isSmtpConfigured ? "Active" : "Not Configured",
+          verified: isSmtpConfigured,
           from_name: dbProviders.email?.from_name || "Sa and Sha",
-          from_email: dbProviders.email?.from_email || "orders@orders.saandsha.com",
+          from_email: dbProviders.email?.from_email || process.env.SMTP_FROM_EMAIL || "orders@sa-and-sha.com",
           reply_to: dbProviders.email?.reply_to || "support@saandsha.com",
-          domain: dbProviders.email?.domain || "orders.saandsha.com",
+          domain: dbProviders.email?.domain || "sa-and-sha.com",
           updated_at: dbProviders.email?.updated_at || nowIso
         },
         whatsapp: {
@@ -9934,7 +9935,7 @@ async function startServer() {
     }
   });
 
-  // Server Transactional Email Dispatch Endpoint (Resend SDK) with Strict Verification & Idempotency
+  // Server Transactional Email Dispatch Endpoint (SMTP) with Strict Verification & Idempotency
   const activeEmailProcessingLocks = new Set<string>();
 
   app.post("/api/orders/send-email", async (req, res) => {
@@ -10019,23 +10020,23 @@ async function startServer() {
           });
         }
 
-        const isResendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim());
-        console.log(`[EMAIL] RESEND_API_KEY configured: ${isResendConfigured}`);
+        const isSmtpConfigured = isEmailConfigured();
+        console.log(`[EMAIL] SMTP configured: ${isSmtpConfigured}`);
 
-        // Check if RESEND_API_KEY environment variable is configured
-        if (!isResendConfigured) {
-          console.warn(`[EMAIL DISPATCH] RESEND_API_KEY environment variable is missing on server. Email dispatch skipped safely for order #${targetOrderId}.`);
-          
+        // Check if SMTP environment variables are configured
+        if (!isSmtpConfigured) {
+          console.warn(`[EMAIL DISPATCH] SMTP is not configured on server. Email dispatch skipped safely for order #${targetOrderId}.`);
+
           await updateOrderEmailStatusInFirestore(targetOrderId, {
             confirmationSent: false,
             adminNotified: false,
-            confirmationError: "Resend API key unconfigured on server",
+            confirmationError: "SMTP unconfigured on server",
             attemptedAt: new Date().toISOString()
           }, matchedOrder._docName);
 
           return res.json({
             success: false,
-            message: "Order email notification deferred: RESEND_API_KEY is not configured on the server.",
+            message: "Order email notification deferred: SMTP is not configured on the server.",
             skipped: true
           });
         }

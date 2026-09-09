@@ -85,7 +85,7 @@ export async function publishNotification(
           console.log(`[NOTIF ENGINE] Skipping duplicate notification dispatch for ${logId} (Status: ${existingData.status})`);
           const skippedRes = {
             success: true,
-            provider: channel === 'email' ? 'resend' : 'msg91_whatsapp',
+            provider: channel === 'email' ? 'smtp' : 'msg91_whatsapp',
             channel,
             providerMessageId: existingData.provider_message_id,
             metadata: { skipped: true }
@@ -113,7 +113,7 @@ export async function publishNotification(
         event: event,
         event_type: event,
         channel,
-        provider: channel === 'email' ? 'resend' : 'msg91_whatsapp',
+        provider: channel === 'email' ? 'smtp' : 'msg91_whatsapp',
         template: templateName,
         payload_hash: payloadHash,
         recipient,
@@ -138,7 +138,7 @@ export async function publishNotification(
       if (!errorList.includes(logErrMsg)) errorList.push(logErrMsg);
       const failRes = {
         success: false,
-        provider: channel === 'email' ? 'resend' : 'msg91_whatsapp',
+        provider: channel === 'email' ? 'smtp' : 'msg91_whatsapp',
         channel,
         error: logErrMsg
       };
@@ -190,7 +190,7 @@ export async function publishNotification(
     } catch (err: any) {
       res = {
         success: false,
-        provider: channel === 'email' ? 'resend' : 'msg91_whatsapp',
+        provider: channel === 'email' ? 'smtp' : 'msg91_whatsapp',
         channel,
         error: err.message || `Unhandled exception sending ${channel} notification`
       };
@@ -250,7 +250,7 @@ export async function publishNotification(
       if (!dispatchResults[channel]) {
         dispatchResults[channel] = {
           success: false,
-          provider: channel === 'email' ? 'resend' : channel === 'whatsapp' ? 'msg91_whatsapp' : 'unknown',
+          provider: channel === 'email' ? 'smtp' : channel === 'whatsapp' ? 'msg91_whatsapp' : 'unknown',
           channel,
           error: errMsg
         };

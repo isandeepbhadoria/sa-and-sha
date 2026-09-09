@@ -523,7 +523,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                     <div>
                       <h3 className="font-bold text-[#2A211C] text-sm">Email Provider</h3>
                       <p className="text-[11px] text-stone-500">
-                        {providers.email?.provider || 'Resend API'}
+                        {providers.email?.provider || 'SMTP'}
                       </p>
                     </div>
                   </div>
@@ -928,7 +928,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   </label>
                   <input
                     type="text"
-                    value={emailProviderForm.provider || 'Resend'}
+                    value={emailProviderForm.provider || 'SMTP'}
                     onChange={(e) =>
                       setEmailProviderForm((p) => ({ ...p, provider: e.target.value }))
                     }
@@ -1417,7 +1417,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                 <div className="space-y-2">
                   <input
                     type="text"
-                    placeholder="Email Template ID (e.g. resend_tpl_order_conf)"
+                    placeholder="Email Template ID (e.g. tpl_order_conf)"
                     value={editingEvent.template_ids?.email || ''}
                     onChange={(e) =>
                       setEditingEvent((prev) =>

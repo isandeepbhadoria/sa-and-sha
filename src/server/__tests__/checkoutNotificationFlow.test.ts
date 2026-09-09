@@ -40,7 +40,10 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
   beforeEach(() => {
     vi.clearAllMocks();
     mockFirestoreDocs = {};
-    delete process.env.RESEND_API_KEY;
+    delete process.env.SMTP_HOST;
+    delete process.env.SMTP_PORT;
+    delete process.env.SMTP_USER;
+    delete process.env.SMTP_PASSWORD;
     process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
     process.env.MSG91_WHATSAPP_MOCK_MODE = 'true';
     process.env.MSG91_AUTH_KEY = 'test_auth_key_123456';
@@ -172,7 +175,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
       // Verify email provider execution
       expect(result.results.email).toBeDefined();
       expect(result.results.email.success).toBe(true);
-      expect(result.results.email.provider).toContain('resend');
+      expect(result.results.email.provider).toContain('smtp');
 
       // Verify whatsapp provider execution
       expect(result.results.whatsapp).toBeDefined();

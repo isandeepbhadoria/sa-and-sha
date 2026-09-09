@@ -11,7 +11,8 @@ identity, catalog categories, and secrets/config are new.
 - **Backend:** Express (`server.ts`) running alongside Vite, Firebase Admin SDK
 - **Data:** Firestore (rules in `firestore.rules`, indexes in `firestore.indexes.json`)
 - **Payments:** Razorpay
-- **Email:** Resend
+- **Email:** SMTP (`src/server/mailer.ts`, via `nodemailer`) — send from
+  any mailbox on your own domain, no third-party email API required
 - **SMS/WhatsApp OTP:** MSG91
 - **PDF generation:** PDFKit (invoices, credit notes)
 - **Cloud Functions:** `functions/` (Firebase Functions)
@@ -246,12 +247,17 @@ and aren't a rebrand regression.
 1. Create a new Firebase project for Sa and Sha (Firestore + Auth +
    Storage + Functions), and fill in `firebase-applet-config.json` and the
    `FIREBASE_ADMIN_*` variables in `.env` (copy from `.env.example`).
-2. Create a Razorpay account/keys, a Resend API key, and an MSG91 account
-   (for OTP/WhatsApp) for Sa and Sha, and fill those into `.env`.
+2. Create an MSG91 account (for OTP/WhatsApp), set up SMTP on a mailbox
+   on your own domain (for email — see `.env.example`'s `SMTP_*`
+   variables), and fill those into `.env`. Razorpay can be added later —
+   checkout works as Cash-on-Delivery-only until then.
 3. `npm install`
 4. `npm run dev` — runs the Express server + Vite dev server together.
 5. Deploy Firestore rules/indexes and Cloud Functions with the Firebase
    CLI once the project is set up.
+
+For deploying to a live domain on Hostinger (or adapting to another
+host), see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 ## Scripts
 

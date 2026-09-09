@@ -1,20 +1,12 @@
-import { Resend } from 'resend';
 import {
   NotificationEventType,
   CustomerTarget,
   ProviderDispatchResult
 } from '../types';
 import { sendStatusUpdateEmail, sendOrderTransactionalEmails, generateCustomerConfirmationHTML, OrderData } from '../../email';
+import { sendMail, isEmailConfigured, getDefaultFromAddress } from '../../mailer';
 
-function getResendClient(): Resend | null {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey || !apiKey.trim()) {
-    return null;
-  }
-  return new Resend(apiKey.trim());
-}
-
-const FROM_ADDRESS = 'Sa and Sha <orders@orders.saandsha.com>';
+const FROM_ADDRESS = getDefaultFromAddress();
 const REPLY_TO_ADDRESS = 'shop@saandsha.com';
 
 export interface EmailProvider {
@@ -26,7 +18,7 @@ export interface EmailProvider {
   ): Promise<ProviderDispatchResult>;
 }
 
-export class ResendEmailProvider implements EmailProvider {
+export class SmtpEmailProvider implements EmailProvider {
   async dispatch(
     event: NotificationEventType,
     customer: CustomerTarget,
@@ -38,7 +30,7 @@ export class ResendEmailProvider implements EmailProvider {
     if (!toEmail) {
       return {
         success: false,
-        provider: 'resend',
+        provider: 'smtp',
         channel: 'email',
         error: 'No email address available for customer target.'
       };
@@ -47,12 +39,11 @@ export class ResendEmailProvider implements EmailProvider {
     // 1. Map order placement & status emails directly to sendOrderTransactionalEmails / sendStatusUpdateEmail
     if (order && order.order_id) {
       if (event === 'ORDER_PLACED' || event === 'PAYMENT_RECEIVED') {
-        const resend = getResendClient();
-        if (!resend) {
-          console.warn(`[EMAIL PROVIDER] RESEND_API_KEY not configured. Simulating order email dispatch for ${event} to ${toEmail}`);
+        if (!isEmailConfigured()) {
+          console.warn(`[EMAIL PROVIDER] SMTP not configured. Simulating order email dispatch for ${event} to ${toEmail}`);
           return {
             success: true,
-            provider: 'resend_mock',
+            provider: 'smtp_mock',
             channel: 'email',
             providerMessageId: `mock_order_msg_${Date.now()}_${Math.random().toString(36).substring(7)}`,
             metadata: { simulated: true, event, orderId: order.order_id }
@@ -61,7 +52,7 @@ export class ResendEmailProvider implements EmailProvider {
         const res = await sendOrderTransactionalEmails(order);
         return {
           success: res.customerSuccess || res.adminSuccess,
-          provider: 'resend',
+          provider: 'smtp',
           channel: 'email',
           providerMessageId: res.customerProviderId || res.adminProviderId,
           error: res.error,
@@ -81,7 +72,7 @@ export class ResendEmailProvider implements EmailProvider {
         const res = await sendStatusUpdateEmail(order, statusKey);
         return {
           success: res.success,
-          provider: 'resend',
+          provider: 'smtp',
           channel: 'email',
           providerMessageId: res.providerId,
           error: res.error,
@@ -90,13 +81,12 @@ export class ResendEmailProvider implements EmailProvider {
       }
     }
 
-    // 2. Custom/General Email dispatch via Resend
-    const resend = getResendClient();
-    if (!resend) {
-      console.warn(`[EMAIL PROVIDER] RESEND_API_KEY not configured. Simulating dispatch for ${event} to ${toEmail}`);
+    // 2. Custom/General Email dispatch via SMTP
+    if (!isEmailConfigured()) {
+      console.warn(`[EMAIL PROVIDER] SMTP not configured. Simulating dispatch for ${event} to ${toEmail}`);
       return {
         success: true,
-        provider: 'resend_mock',
+        provider: 'smtp_mock',
         channel: 'email',
         providerMessageId: `mock_msg_${Date.now()}_${Math.random().toString(36).substring(7)}`,
         metadata: { simulated: true, event }
@@ -105,43 +95,34 @@ export class ResendEmailProvider implements EmailProvider {
 
     const { subject, html } = renderEmailContent(event, customer.name, order, payload);
 
-    try {
-      const res = await resend.emails.send({
-        from: FROM_ADDRESS,
-        to: [toEmail],
-        replyTo: REPLY_TO_ADDRESS,
-        subject,
-        html
-      });
+    const res = await sendMail({
+      from: FROM_ADDRESS,
+      to: [toEmail],
+      replyTo: REPLY_TO_ADDRESS,
+      subject,
+      html
+    });
 
-      if (res.error) {
-        return {
-          success: false,
-          provider: 'resend',
-          channel: 'email',
-          error: res.error.message || 'Resend API error'
-        };
-      }
-
-      return {
-        success: true,
-        provider: 'resend',
-        channel: 'email',
-        providerMessageId: res.data?.id,
-        metadata: { subject }
-      };
-    } catch (err: any) {
+    if (!res.success) {
       return {
         success: false,
-        provider: 'resend',
+        provider: 'smtp',
         channel: 'email',
-        error: err.message || 'Failed to execute Resend email send'
+        error: res.error || 'SMTP send error'
       };
     }
+
+    return {
+      success: true,
+      provider: 'smtp',
+      channel: 'email',
+      providerMessageId: res.providerId,
+      metadata: { subject }
+    };
   }
 }
 
-export const emailProvider = new ResendEmailProvider();
+export const emailProvider = new SmtpEmailProvider();
 
 export async function sendEmailNotification(options: {
   to: string;

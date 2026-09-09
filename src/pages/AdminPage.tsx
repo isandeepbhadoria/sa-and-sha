@@ -1111,7 +1111,7 @@ export const AdminPage: React.FC = () => {
         const emailInfo = data.emailResult?.alreadySent
           ? '(Email was previously sent)'
           : data.emailResult?.success
-          ? '(Transactional email sent via Resend)'
+          ? '(Transactional email sent via SMTP)'
           : data.emailResult?.error
           ? `(Email error: ${data.emailResult.error})`
           : '';
@@ -3375,7 +3375,7 @@ export const AdminPage: React.FC = () => {
                         Transactional Email & Idempotency Audit
                       </span>
                       <span className="text-[10px] font-mono text-stone-400">
-                        Resend Provider Tracking
+                        SMTP Provider Tracking
                       </span>
                     </div>
 
@@ -4605,7 +4605,7 @@ export const AdminPage: React.FC = () => {
                     <div className="p-3.5 bg-stone-50 border border-stone-200 rounded-lg text-stone-700 space-y-1">
                       <p className="font-bold text-stone-900">Automatic Customer Notification</p>
                       <p className="text-stone-500 leading-relaxed">
-                        Updating status to <strong className="uppercase text-[#B08D57]">{statusUpdateModal.targetStatus.replace('_', ' ')}</strong> will execute backend validation and trigger a transactional email to <strong>{statusUpdateModal.order.customer_email}</strong> via Resend.
+                        Updating status to <strong className="uppercase text-[#B08D57]">{statusUpdateModal.targetStatus.replace('_', ' ')}</strong> will execute backend validation and trigger a transactional email to <strong>{statusUpdateModal.order.customer_email}</strong> via SMTP.
                       </p>
                     </div>
 

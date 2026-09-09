@@ -371,7 +371,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 <strong>Cloud Infrastructure & Identity Authentication:</strong> Google Cloud Platform hosts our secure database (Firestore) in regional Indian data centers. Google Sign-In uses Firebase Authentication strictly for identity verification. Google Sign-In does not mean Google shares all customer data with Sa and Sha, nor do we access your private Google account files or emails.
               </li>
               <li>
-                <strong>Communication Services:</strong> Email dispatch is handled via secure SMTP/Resend providers. Order tracking updates on WhatsApp and SMS are transmitted through official meta-approved business API gateways.
+                <strong>Communication Services:</strong> Email dispatch is handled via secure SMTP. Order tracking updates on WhatsApp and SMS are transmitted through official meta-approved business API gateways.
               </li>
               <li>
                 <strong>Legal & Regulatory Authorities:</strong> We may disclose information if required by Indian law, search warrant, court subpoena, or statutory tax audit by Indian government authorities.

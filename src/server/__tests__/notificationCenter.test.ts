@@ -142,7 +142,7 @@ describe('Omnichannel Notification Center — Unit Tests', () => {
         event: 'ORDER_PLACED',
         event_type: 'ORDER_PLACED',
         channel: 'email',
-        provider: 'resend',
+        provider: 'smtp',
         recipient: 'test@example.com',
         status: 'PROCESSING',
         queued_at: new Date().toISOString(),

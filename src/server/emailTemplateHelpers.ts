@@ -1,5 +1,5 @@
 import { getAdminDb } from './firebaseAdmin';
-import { Resend } from 'resend';
+import { sendMail, getDefaultFromAddress } from './mailer';
 import sanitizeHtml from 'sanitize-html';
 import {
   EmailTemplate,
@@ -102,14 +102,6 @@ export function validateEmailTemplateInput(input: {
   }
 
   return { valid: true };
-}
-
-function getResendClient(): Resend | null {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey || !apiKey.trim()) {
-    return null;
-  }
-  return new Resend(apiKey.trim());
 }
 
 // Helper generator for HTML template wrapper
@@ -924,30 +916,23 @@ export async function sendTestEmailHelper(
 
   const cleanRecipient = recipientEmail.trim();
 
-  const resend = getResendClient();
-  let delivered = false;
-
-  if (resend) {
-    try {
-      const fromAddr = 'Sa and Sha Orders <orders@orders.saandsha.com>';
-      await resend.emails.send({
-        from: fromAddr,
-        to: [cleanRecipient],
-        subject: finalSubject,
-        html: sanitizedRenderedHtml,
-        text: renderedPlain
-      });
-      delivered = true;
-    } catch (err: any) {
-      console.warn('[TEST EMAIL] Resend execution warning:', err?.message || err);
-    }
+  const sendRes = await sendMail({
+    from: getDefaultFromAddress(),
+    to: [cleanRecipient],
+    subject: finalSubject,
+    html: sanitizedRenderedHtml,
+    text: renderedPlain
+  });
+  const delivered = sendRes.success;
+  if (!delivered) {
+    console.warn('[TEST EMAIL] SMTP send warning:', sendRes.error);
   }
 
   return {
     success: true,
     message: delivered
       ? `Test email sent successfully to ${cleanRecipient}.`
-      : `Test email rendered successfully. (Preview mode generated - set RESEND_API_KEY for live inbox delivery).`,
+      : `Test email rendered successfully. (Preview mode generated - configure SMTP_HOST/USER/PASSWORD for live inbox delivery).`,
     renderedSubject: finalSubject,
     renderedHtml: sanitizedRenderedHtml,
     delivered

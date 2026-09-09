@@ -1,18 +1,8 @@
-import { Resend } from 'resend';
 import fs from 'fs';
 import path from 'path';
+import { sendMail, isEmailConfigured, getDefaultFromAddress } from './mailer';
 
-// Helper to safely get Resend instance
-function getResendClient(): Resend | null {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey || !apiKey.trim()) {
-    console.warn('[EMAIL] RESEND_API_KEY is not configured in process.env. Email sending will be skipped safely.');
-    return null;
-  }
-  return new Resend(apiKey.trim());
-}
-
-const FROM_ADDRESS = 'Sa and Sha Orders <orders@orders.saandsha.com>';
+const FROM_ADDRESS = getDefaultFromAddress();
 const REPLY_TO_ADDRESS = 'shop@saandsha.com';
 const ADMIN_NOTIFICATION_EMAIL = 'shop@saandsha.com';
 
@@ -413,17 +403,14 @@ export async function sendOrderTransactionalEmails(order: OrderData): Promise<{
   adminProviderId?: string;
   error?: string;
 }> {
-  const isKeyConfigured = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim());
-  console.log(`[EMAIL] RESEND_API_KEY configured: ${isKeyConfigured}`);
+  console.log(`[EMAIL] SMTP configured: ${isEmailConfigured()}`);
 
-  const resend = getResendClient();
-
-  if (!resend) {
-    console.warn(`[EMAIL] Resend client unconfigured for Order #${order.order_id}. Skipping email dispatch.`);
+  if (!isEmailConfigured()) {
+    console.warn(`[EMAIL] SMTP unconfigured for Order #${order.order_id}. Skipping email dispatch.`);
     return {
       customerSuccess: false,
       adminSuccess: false,
-      error: 'RESEND_API_KEY is missing on server environment.',
+      error: 'SMTP is not configured on the server environment.',
     };
   }
 
@@ -440,7 +427,7 @@ export async function sendOrderTransactionalEmails(order: OrderData): Promise<{
     const customerHtml = generateCustomerConfirmationHTML(order);
     const customerSubject = `Order Confirmed — ${order.order_id} | Sa and Sha`;
 
-    const customerRes = await resend.emails.send({
+    const customerRes = await sendMail({
       from: FROM_ADDRESS,
       to: [order.customer_email],
       replyTo: REPLY_TO_ADDRESS,
@@ -448,16 +435,13 @@ export async function sendOrderTransactionalEmails(order: OrderData): Promise<{
       html: customerHtml,
     });
 
-    if (customerRes.error) {
-      customerError = customerRes.error.message || 'Resend customer email error';
+    if (!customerRes.success) {
+      customerError = customerRes.error || 'SMTP customer email error';
       console.warn(`[EMAIL] customer confirmation failed for ${order.order_id}: ${customerError}`);
-    } else if (customerRes.data && customerRes.data.id) {
-      customerSuccess = true;
-      customerProviderId = customerRes.data.id;
-      console.log(`[EMAIL] customer confirmation accepted by provider for ${order.order_id} (ID: ${customerProviderId})`);
     } else {
-      customerError = 'Resend returned no provider message ID';
-      console.warn(`[EMAIL] customer confirmation failed for ${order.order_id}: ${customerError}`);
+      customerSuccess = true;
+      customerProviderId = customerRes.providerId;
+      console.log(`[EMAIL] customer confirmation accepted by provider for ${order.order_id} (ID: ${customerProviderId})`);
     }
   } catch (err: any) {
     customerError = err?.message || 'Error sending customer email';
@@ -470,7 +454,7 @@ export async function sendOrderTransactionalEmails(order: OrderData): Promise<{
     const adminHtml = generateAdminNotificationHTML(order);
     const adminSubject = `New Paid Order — ${order.order_id} — ₹${(order.grand_total || 0).toLocaleString('en-IN')}`;
 
-    const adminRes = await resend.emails.send({
+    const adminRes = await sendMail({
       from: FROM_ADDRESS,
       to: [ADMIN_NOTIFICATION_EMAIL],
       replyTo: REPLY_TO_ADDRESS,
@@ -478,16 +462,13 @@ export async function sendOrderTransactionalEmails(order: OrderData): Promise<{
       html: adminHtml,
     });
 
-    if (adminRes.error) {
-      adminError = adminRes.error.message || 'Resend admin email error';
+    if (!adminRes.success) {
+      adminError = adminRes.error || 'SMTP admin email error';
       console.warn(`[EMAIL] admin notification failed for ${order.order_id}: ${adminError}`);
-    } else if (adminRes.data && adminRes.data.id) {
-      adminSuccess = true;
-      adminProviderId = adminRes.data.id;
-      console.log(`[EMAIL] admin notification accepted by provider for ${order.order_id} (ID: ${adminProviderId})`);
     } else {
-      adminError = 'Resend returned no provider message ID';
-      console.warn(`[EMAIL] admin notification failed for ${order.order_id}: ${adminError}`);
+      adminSuccess = true;
+      adminProviderId = adminRes.providerId;
+      console.log(`[EMAIL] admin notification accepted by provider for ${order.order_id} (ID: ${adminProviderId})`);
     }
   } catch (err: any) {
     adminError = err?.message || 'Error sending admin email';
@@ -799,11 +780,10 @@ export async function sendStatusUpdateEmail(
   subject?: string;
   error?: string;
 }> {
-  const resend = getResendClient();
-  if (!resend) {
+  if (!isEmailConfigured()) {
     return {
       success: false,
-      error: 'RESEND_API_KEY is not configured on the server.',
+      error: 'SMTP is not configured on the server.',
     };
   }
 
@@ -840,24 +820,17 @@ export async function sendStatusUpdateEmail(
       return { success: false, error: `No email template defined for status '${targetStatus}'` };
   }
 
-  try {
-    const res = await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: [order.customer_email],
-      replyTo: REPLY_TO_ADDRESS,
-      subject,
-      html,
-    });
+  const res = await sendMail({
+    from: FROM_ADDRESS,
+    to: [order.customer_email],
+    replyTo: REPLY_TO_ADDRESS,
+    subject,
+    html,
+  });
 
-    if (res.error) {
-      return { success: false, error: res.error.message || 'Resend provider error', subject };
-    }
-    if (res.data?.id) {
-      return { success: true, providerId: res.data.id, subject };
-    }
-    return { success: false, error: 'Resend returned no provider message ID', subject };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to dispatch email', subject };
+  if (!res.success) {
+    return { success: false, error: res.error || 'SMTP provider error', subject };
   }
+  return { success: true, providerId: res.providerId, subject };
 }
 

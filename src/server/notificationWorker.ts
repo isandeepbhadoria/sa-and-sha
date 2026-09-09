@@ -230,7 +230,7 @@ export async function dispatchQueueJob(
       isSuccess = Boolean(emailRes.success);
       errorMessage = emailRes.error || null;
       dispatchResult = {
-        provider: emailRes.provider || 'resend',
+        provider: emailRes.provider || 'smtp',
         channel: 'email',
         provider_message_id: emailRes.providerMessageId || null,
         metadata: emailRes.metadata || null,

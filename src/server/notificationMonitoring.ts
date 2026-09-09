@@ -1,6 +1,7 @@
 import { Firestore } from 'firebase-admin/firestore';
 import { NotificationQueueJob } from './notificationQueue';
 import { WorkerHeartbeatStatus, isNotificationQueueEnabled } from './notificationWorker';
+import { isEmailConfigured } from './mailer';
 
 export const QUEUE_LATENCY_WARNING_MS = 5 * 60 * 1000; // 5 minutes
 export const QUEUE_LATENCY_CRITICAL_MS = 15 * 60 * 1000; // 15 minutes
@@ -229,8 +230,8 @@ export async function getChannelPerformance(db: Firestore) {
       execDurationCount: 0,
       latestSuccessAt: null as string | null,
       latestFailedAt: null as string | null,
-      configuredProvider: 'resend',
-      isConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim())
+      configuredProvider: 'smtp',
+      isConfigured: isEmailConfigured()
     },
     whatsapp: {
       channel: 'whatsapp',
