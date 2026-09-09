@@ -49,7 +49,7 @@ export async function getCustomerOrders(
         adminDb.collection("orders").where("customer_phone", "==", cleanPhone).limit(30).get()
       );
     }
-    if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+    if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
       fallbackQueries.push(
         adminDb.collection("orders").where("customer_email", "==", cleanEmail).limit(30).get()
       );
@@ -235,7 +235,7 @@ export async function getCustomerOrderDetail(
 
   const matchProfile = oProfileId && oProfileId === profileId;
   const matchPhone = cleanUserPhone && cleanOrderPhone && cleanUserPhone === cleanOrderPhone;
-  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@saandsha.com" && cleanOrderEmail === cleanUserEmail;
+  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@sa-and-sha.com" && cleanOrderEmail === cleanUserEmail;
 
   if (!matchProfile && !matchPhone && !matchEmail) {
     return { success: false, statusCode: 404, error: "Order not found." }; // Safe 404 to avoid enumeration
@@ -539,7 +539,7 @@ export async function cancelCustomerOrder(
 
   const matchProfile = oProfileId && oProfileId === profileId;
   const matchPhone = cleanUserPhone && cleanOrderPhone && cleanUserPhone === cleanOrderPhone;
-  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@saandsha.com" && cleanOrderEmail === cleanUserEmail;
+  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@sa-and-sha.com" && cleanOrderEmail === cleanUserEmail;
 
   if (!matchProfile && !matchPhone && !matchEmail) {
     return { success: false, statusCode: 404, error: "Order not found." };

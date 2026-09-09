@@ -85,14 +85,14 @@ export async function buildCustomerDashboard(
   });
 
   // Fallback targeted queries by phone/email if no orders were linked directly by customer_profile_id
-  if (ordersDocs.length === 0 && (cleanPhone || (cleanEmail && cleanEmail !== "shop@saandsha.com"))) {
+  if (ordersDocs.length === 0 && (cleanPhone || (cleanEmail && cleanEmail !== "shop@sa-and-sha.com"))) {
     const fallbackQueries: Promise<any>[] = [];
     if (cleanPhone) {
       fallbackQueries.push(
         adminDb.collection("orders").where("customer_phone", "==", cleanPhone).limit(20).get()
       );
     }
-    if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+    if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
       fallbackQueries.push(
         adminDb.collection("orders").where("customer_email", "==", cleanEmail).limit(20).get()
       );
@@ -215,7 +215,7 @@ export async function buildCustomerDashboard(
   if (notificationLogs.length === 0) {
     try {
       const fallbackPromises: Promise<any>[] = [];
-      if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+      if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
         fallbackPromises.push(adminDb.collection("notification_logs").where("recipient", "==", cleanEmail).limit(10).get());
       }
       if (cleanPhone) {

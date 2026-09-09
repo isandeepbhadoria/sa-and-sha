@@ -308,7 +308,7 @@ export const CheckoutPage: React.FC = () => {
       setUser(currentUser);
       if (currentUser && currentUser.email) {
         const authEmail = currentUser.email.trim().toLowerCase();
-        if (authEmail && authEmail !== 'shop@saandsha.com') {
+        if (authEmail && authEmail !== 'shop@sa-and-sha.com') {
           setForm(prev => ({ ...prev, email: prev.email || authEmail }));
         }
       }
@@ -889,7 +889,7 @@ export const CheckoutPage: React.FC = () => {
       name: "Sa and Sha",
       description: "Sa and Sha Checkout",
       order_id: orderId,
-      image: "https://www.saandsha.com/logo.png",
+      image: "https://www.sa-and-sha.com/logo.png",
       handler: async function (response: any) {
         await handleServerOrderCreation('razorpay', {
           razorpay_order_id: response.razorpay_order_id,
@@ -1055,7 +1055,7 @@ export const CheckoutPage: React.FC = () => {
                 <>
                   <span className="font-bold uppercase tracking-wider text-[10px]">Email Confirmation Dispatched</span>
                   <p className="text-[#2A211C]/70 leading-relaxed text-[11px]">
-                    A receipt and package tracking estimate have been successfully sent to <strong className="text-stone-900">{completedOrder?.customer_email}</strong>. Our staff has also sent a copy to <strong className="text-stone-900">shop@saandsha.com</strong> to coordinate packing.
+                    A receipt and package tracking estimate have been successfully sent to <strong className="text-stone-900">{completedOrder?.customer_email}</strong>. Our staff has also sent a copy to <strong className="text-stone-900">shop@sa-and-sha.com</strong> to coordinate packing.
                   </p>
                 </>
               ) : (
@@ -1406,7 +1406,7 @@ export const CheckoutPage: React.FC = () => {
                                 }
 
                                 let profileEmail = (p.email || '').trim().toLowerCase();
-                                if (profileEmail === 'shop@saandsha.com') {
+                                if (profileEmail === 'shop@sa-and-sha.com') {
                                   profileEmail = '';
                                 }
 

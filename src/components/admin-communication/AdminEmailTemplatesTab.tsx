@@ -1126,7 +1126,7 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
   onClose,
   onSuccess
 }) => {
-  const [recipient, setRecipient] = useState<string>('test@saandsha.com');
+  const [recipient, setRecipient] = useState<string>('test@sa-and-sha.com');
   const [sending, setSending] = useState<boolean>(false);
   const [customVars, setCustomVars] = useState<Record<string, string>>(MOCK_TEST_VARIABLES);
 
@@ -1198,7 +1198,7 @@ const SendTestEmailModal: React.FC<SendTestEmailModalProps> = ({
               type="email"
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
-              placeholder="e.g. admin@saandsha.com"
+              placeholder="e.g. admin@sa-and-sha.com"
               className="w-full px-3.5 py-2 bg-stone-50 border border-stone-200 rounded-xl font-medium text-[#2A211C] focus:outline-none focus:border-[#B08D57]"
             />
           </div>

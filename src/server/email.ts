@@ -3,8 +3,8 @@ import path from 'path';
 import { sendMail, isEmailConfigured, getDefaultFromAddress } from './mailer';
 
 const FROM_ADDRESS = getDefaultFromAddress();
-const REPLY_TO_ADDRESS = 'shop@saandsha.com';
-const ADMIN_NOTIFICATION_EMAIL = 'shop@saandsha.com';
+const REPLY_TO_ADDRESS = 'shop@sa-and-sha.com';
+const ADMIN_NOTIFICATION_EMAIL = 'shop@sa-and-sha.com';
 
 export interface OrderItem {
   product_id: string;
@@ -294,7 +294,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
           <!-- CTA Button -->
           <tr>
             <td style="padding: 0 28px 32px 28px; text-align: center;">
-              <a href="https://saandsha.com" target="_blank" style="display: inline-block; background-color: #2A211C; color: #FBF6EE; padding: 14px 32px; text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+              <a href="https://sa-and-sha.com" target="_blank" style="display: inline-block; background-color: #2A211C; color: #FBF6EE; padding: 14px 32px; text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
                 Visit Sa and Sha
               </a>
             </td>
@@ -305,7 +305,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
             <td style="background-color: #FAF8F5; padding: 24px; text-align: center; border-top: 1px solid #EAE5DC;">
               <div style="font-size: 12px; color: #7A6C5D; line-height: 1.5;">
                 Need assistance with your order? Reply directly to this email or write to us at 
-                <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: none; font-weight: 600;">shop@saandsha.com</a>.
+                <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: none; font-weight: 600;">shop@sa-and-sha.com</a>.
               </div>
               <div style="font-size: 10px; color: #A39587; margin-top: 16px; letter-spacing: 1px; text-transform: uppercase;">
                 © 2026 Sa and Sha. All Rights Reserved.
@@ -321,7 +321,7 @@ export function generateCustomerConfirmationHTML(order: OrderData): string {
 </html>`;
 }
 
-// Generate Internal New Order Alert HTML Email for shop@saandsha.com
+// Generate Internal New Order Alert HTML Email for shop@sa-and-sha.com
 export function generateAdminNotificationHTML(order: OrderData): string {
   const itemsText = (order.items || [])
     .map(
@@ -388,7 +388,7 @@ export function generateAdminNotificationHTML(order: OrderData): string {
     </div>
 
     <div style="margin-top: 20px; padding: 12px; background-color: #B08D57; color: #FFFFFF; font-weight: bold; font-size: 12px; text-align: center; border-radius: 4px;">
-      ACTION REQUIRED: Please check https://saandsha.com/admin to prepare shipment and generate courier AWB.
+      ACTION REQUIRED: Please check https://sa-and-sha.com/admin to prepare shipment and generate courier AWB.
     </div>
   </div>
 </body>
@@ -544,7 +544,7 @@ export function generateProcessingEmailHTML(order: OrderData): string {
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
             You will receive a dispatch notification with your tracking details as soon as your parcel is handed over to our courier partner.<br><br>
-            For any queries, reach us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B08D57; text-decoration: underline;">saandsha.com</a>.
+            For any queries, reach us at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a> or visit <a href="https://sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -558,7 +558,7 @@ export function generateProcessingEmailHTML(order: OrderData): string {
 export function generateDispatchedEmailHTML(order: OrderData): string {
   const courier = order.courier_name || 'Courier / Delivery Partner';
   const awb = order.tracking_number || 'N/A';
-  const trackUrl = order.tracking_url || 'https://saandsha.com/track-order';
+  const trackUrl = order.tracking_url || 'https://sa-and-sha.com/track-order';
   const dispatchDate = order.dispatch_date || new Date().toLocaleDateString('en-IN');
   const estDelivery = order.estimated_delivery_date || '3-5 Business Days';
 
@@ -596,7 +596,7 @@ export function generateDispatchedEmailHTML(order: OrderData): string {
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you need assistance with your delivery, contact us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
+            If you need assistance with your delivery, contact us at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -631,7 +631,7 @@ export function generateDeliveredEmailHTML(order: OrderData): string {
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            Thank you for choosing Sa and Sha. For care instructions or support, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a> or visit <a href="https://saandsha.com" style="color: #B08D57; text-decoration: underline;">saandsha.com</a>.
+            Thank you for choosing Sa and Sha. For care instructions or support, reach out to us at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a> or visit <a href="https://sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -678,7 +678,7 @@ export function generateCancellationEmailHTML(order: OrderData): string {
             ${renderItemsRows(order.items)}
           </table>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you have questions regarding this cancellation, contact customer care at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
+            If you have questions regarding this cancellation, contact customer care at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -718,7 +718,7 @@ export function generateRefundInitiatedEmailHTML(order: OrderData): string {
             </table>
           </div>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            If you need further details, please contact our support desk at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
+            If you need further details, please contact our support desk at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>
@@ -760,7 +760,7 @@ export function generateRefundCompletedEmailHTML(order: OrderData): string {
             </table>
           </div>
           <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52473C;">
-            Thank you for your patience. For any further assistance, reach out to us at <a href="mailto:shop@saandsha.com" style="color: #B08D57; text-decoration: underline;">shop@saandsha.com</a>.
+            Thank you for your patience. For any further assistance, reach out to us at <a href="mailto:shop@sa-and-sha.com" style="color: #B08D57; text-decoration: underline;">shop@sa-and-sha.com</a>.
           </p>
         </td></tr>
       </table>

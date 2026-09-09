@@ -26,7 +26,7 @@ export const TermsConditionsPage: React.FC = () => {
   useSEO({
     title: 'Terms & Conditions | Sa and Sha',
     description: 'Read the official Terms & Conditions of Sa and Sha. Information on customer accounts, order processing, Razorpay payments, GST billing, shipping, 7-day returns, intellectual property, and governing law in India.',
-    canonical: 'https://saandsha.com/terms-and-conditions',
+    canonical: 'https://sa-and-sha.com/terms-and-conditions',
     noindex: false,
     structuredData: {
       '@context': 'https://schema.org',
@@ -36,13 +36,13 @@ export const TermsConditionsPage: React.FC = () => {
           '@type': 'ListItem',
           'position': 1,
           'name': 'Home',
-          'item': 'https://saandsha.com'
+          'item': 'https://sa-and-sha.com'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': 'Terms & Conditions',
-          'item': 'https://saandsha.com/terms-and-conditions'
+          'item': 'https://sa-and-sha.com/terms-and-conditions'
         }
       ]
     }
@@ -179,7 +179,7 @@ export const TermsConditionsPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              These Terms & Conditions constitute a legally binding agreement between you ("Customer", "User", "You") and <strong className="text-[#2A211C]">[Registered Legal Entity Name]</strong>, operating the ecommerce store and trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong> ("Company", "We", "Us", "Our"), accessible via <strong className="text-[#2A211C]">https://saandsha.com</strong>.
+              These Terms & Conditions constitute a legally binding agreement between you ("Customer", "User", "You") and <strong className="text-[#2A211C]">[Registered Legal Entity Name]</strong>, operating the ecommerce store and trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong> ("Company", "We", "Us", "Our"), accessible via <strong className="text-[#2A211C]">https://sa-and-sha.com</strong>.
             </p>
             <p>
               By accessing, browsing, registering an account, or placing an order on Sa and Sha, you unequivocally agree to be bound by these Terms & Conditions, along with our <Link to="/privacy-policy" className="text-[#B08D57] font-semibold hover:underline">Privacy Policy</Link>, <Link to="/returns-exchanges" className="text-[#B08D57] font-semibold hover:underline">Returns & Exchanges Policy</Link>, and <Link to="/shipping-delivery" className="text-[#B08D57] font-semibold hover:underline">Shipping Policy</Link>.
@@ -227,7 +227,7 @@ export const TermsConditionsPage: React.FC = () => {
               <strong className="text-[#2A211C]">Session Control:</strong> You can review active device logins at any time in your Customer Portal (<code className="bg-stone-100 px-1 rounded">/account</code>) and revoke stale or unrecognized device sessions in 1 click.
             </p>
             <p>
-              <strong className="text-[#2A211C]">Account Deletion:</strong> You may request deletion by contacting support at <a href="mailto:support@saandsha.com" className="text-[#B08D57] hover:underline font-semibold">support@saandsha.com</a> or via our <Link to="/contact-support" className="text-[#B08D57] hover:underline font-semibold">Support Portal</Link>.
+              <strong className="text-[#2A211C]">Account Deletion:</strong> You may request deletion by contacting support at <a href="mailto:support@sa-and-sha.com" className="text-[#B08D57] hover:underline font-semibold">support@sa-and-sha.com</a> or via our <Link to="/contact-support" className="text-[#B08D57] hover:underline font-semibold">Support Portal</Link>.
             </p>
             <p>
               Sa and Sha reserves the right to refuse service, suspend accounts, terminate access, or cancel orders at our sole discretion if fraudulent or abusive activity is detected.
@@ -374,7 +374,7 @@ export const TermsConditionsPage: React.FC = () => {
               <li><strong>Standard Shipping Fee:</strong> A flat ₹99 shipping charge applies to orders up to ₹1,999.</li>
               <li><strong>Order Processing:</strong> Orders are inspected and dispatched within 1 to 2 business days.</li>
               <li><strong>Delivery Timeline:</strong> Estimated delivery takes 3 to 7 business days depending on location across India.</li>
-              <li><strong>Order Tracking:</strong> Real-time delivery status can be tracked at <Link to="/track-order" className="text-[#B08D57] hover:underline">https://saandsha.com/track-order</Link> using your order ID or phone number.</li>
+              <li><strong>Order Tracking:</strong> Real-time delivery status can be tracked at <Link to="/track-order" className="text-[#B08D57] hover:underline">https://sa-and-sha.com/track-order</Link> using your order ID or phone number.</li>
             </ul>
           </section>
 
@@ -506,11 +506,11 @@ export const TermsConditionsPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Customer Support Email:</strong> <a href="mailto:support@saandsha.com" className="text-[#B08D57] hover:underline">support@saandsha.com</a></span>
+                  <span><strong>Customer Support Email:</strong> <a href="mailto:support@sa-and-sha.com" className="text-[#B08D57] hover:underline">support@sa-and-sha.com</a></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <HelpCircle className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Support Helpdesk:</strong> <Link to="/contact-support" className="text-[#B08D57] hover:underline">https://saandsha.com/contact-support</Link></span>
+                  <span><strong>Support Helpdesk:</strong> <Link to="/contact-support" className="text-[#B08D57] hover:underline">https://sa-and-sha.com/contact-support</Link></span>
                 </div>
               </div>
             </div>

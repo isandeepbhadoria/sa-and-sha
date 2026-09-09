@@ -40,7 +40,7 @@ export const ProductDetailPage: React.FC = () => {
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock",
         "itemCondition": "https://schema.org/NewCondition",
-        "url": `https://www.saandsha.com/product/${canonicalProductSlug}`,
+        "url": `https://www.sa-and-sha.com/product/${canonicalProductSlug}`,
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "applicableCountry": "IN",
@@ -64,19 +64,19 @@ export const ProductDetailPage: React.FC = () => {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://www.saandsha.com"
+          "item": "https://www.sa-and-sha.com"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": product.category ? product.category.charAt(0).toUpperCase() + product.category.slice(1) : "Shop",
-          "item": `https://www.saandsha.com/shop/${product.category || "all"}`
+          "item": `https://www.sa-and-sha.com/shop/${product.category || "all"}`
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": product.name,
-          "item": `https://www.saandsha.com/product/${canonicalProductSlug}`
+          "item": `https://www.sa-and-sha.com/product/${canonicalProductSlug}`
         }
       ]
     }

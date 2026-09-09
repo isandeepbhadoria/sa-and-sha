@@ -48,7 +48,7 @@ export const CollectionPage: React.FC = () => {
           h1: "Garment Not Found",
           metaDescription: "The polo category is no longer available in our active catalog.",
           canonicalPath: "/shop",
-          canonicalUrl: "https://www.saandsha.com/shop",
+          canonicalUrl: "https://www.sa-and-sha.com/shop",
           breadcrumbs: [{ name: 'Home', url: '/' }]
         };
       }
@@ -59,7 +59,7 @@ export const CollectionPage: React.FC = () => {
         h1: "Garment Not Found",
         metaDescription: "The requested category is not found in our catalog.",
         canonicalPath: "/404",
-        canonicalUrl: "https://www.saandsha.com/404",
+        canonicalUrl: "https://www.sa-and-sha.com/404",
         breadcrumbs: [{ name: 'Home', url: '/' }]
       };
     }
@@ -134,7 +134,7 @@ export const CollectionPage: React.FC = () => {
       "@type": "ListItem",
       "position": idx + 1,
       "name": b.name,
-      ...(b.url ? { "item": `https://www.saandsha.com${b.url}` } : {})
+      ...(b.url ? { "item": `https://www.sa-and-sha.com${b.url}` } : {})
     }));
 
     return {

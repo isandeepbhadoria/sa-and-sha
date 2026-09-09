@@ -315,7 +315,7 @@ export interface TaxonomyRouteInfo {
   curatedType?: 'all' | 'bestsellers' | 'new-arrivals';
 }
 
-const SITE_BASE_URL = 'https://www.saandsha.com';
+const SITE_BASE_URL = 'https://www.sa-and-sha.com';
 const SITE_NAME = 'Sa and Sha';
 
 function isProductLive(p: { status?: string; isDecommissioned?: boolean }): boolean {

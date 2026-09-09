@@ -142,7 +142,7 @@ export async function calculateEligibleMetrics(
 
       const emailMatch =
         cleanEmail &&
-        cleanEmail !== "shop@saandsha.com" &&
+        cleanEmail !== "shop@sa-and-sha.com" &&
         orderEmail === cleanEmail;
 
       if (phoneMatch || emailMatch) {
@@ -1064,7 +1064,7 @@ export async function runTimelineBackfill(
           pOrders.forEach((oSnap: any) => matchedOrdersMap.set(oSnap.id, { id: oSnap.id, ...oSnap.data() }));
         }
 
-        if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+        if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
           const eOrders = await adminDb.collection("orders").where("customer_email", "==", cleanEmail).limit(50).get();
           eOrders.forEach((oSnap: any) => matchedOrdersMap.set(oSnap.id, { id: oSnap.id, ...oSnap.data() }));
         }

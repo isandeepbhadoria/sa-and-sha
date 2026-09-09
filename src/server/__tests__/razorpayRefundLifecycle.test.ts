@@ -324,7 +324,7 @@ describe('Phase 10.3.2C.2 — Razorpay Refund Lifecycle & Idempotency Safety Mat
         reason: 'Customer requested cancellation',
         order_id: 'ORD5005',
         internal_refund_id: 'KLREF_ORD5005_1',
-        admin_id: 'admin@saandsha.com'
+        admin_id: 'admin@sa-and-sha.com'
       },
       receipt: 'KLREF_ORD5005_1'
     };

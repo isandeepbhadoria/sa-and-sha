@@ -38,7 +38,7 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
   });
 
   it("3 & 4. Proves Unknown Email and Mobile do not issue a login challenge (so sendOtp is never called)", async () => {
-    const emailRes = await checkCustomerLoginEligibility(mockAdminDb, "email", "nonexistent@saandsha.com");
+    const emailRes = await checkCustomerLoginEligibility(mockAdminDb, "email", "nonexistent@sa-and-sha.com");
     expect(emailRes.eligible).toBe(false);
     expect((emailRes as any).loginChallenge).toBeUndefined();
 
@@ -51,8 +51,8 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
     const mockProfile = {
       id: "p_existing_123",
       customer_id: "KL-C100001",
-      email: "rahul@saandsha.com",
-      email_lower: "rahul@saandsha.com",
+      email: "rahul@sa-and-sha.com",
+      email_lower: "rahul@sa-and-sha.com",
       phone: "+919876543210",
       normalized_phone: "919876543210",
       status: "active"
@@ -71,7 +71,7 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
       })
     };
 
-    const emailRes = await checkCustomerLoginEligibility(mockDbWithUser as any, "email", "rahul@saandsha.com");
+    const emailRes = await checkCustomerLoginEligibility(mockDbWithUser as any, "email", "rahul@sa-and-sha.com");
     expect(emailRes.success).toBe(true);
     expect(emailRes.eligible).toBe(true);
     expect(emailRes.loginChallenge).toBeDefined();
@@ -98,7 +98,7 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
     let authView = 'account_setup_required';
     let showOtpScreen = false;
     let formError: string | null = 'Account setup required';
-    const savedEmailInput = 'corrected@saandsha.com';
+    const savedEmailInput = 'corrected@sa-and-sha.com';
     const savedMobileInput = '9876543210';
 
     // Simulate Try Again handler
@@ -109,12 +109,12 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
     expect(authView).toBe('login');
     expect(showOtpScreen).toBe(false);
     expect(formError).toBeNull();
-    expect(savedEmailInput).toBe('corrected@saandsha.com');
+    expect(savedEmailInput).toBe('corrected@sa-and-sha.com');
     expect(savedMobileInput).toBe('9876543210');
   });
 
   it("7, 8 & 9. Proves Create Account opens registration flow with prefilled normalized identifier", () => {
-    const accountSetupTargetEmail = { channel: 'email' as const, identifier: 'newuser@saandsha.com' };
+    const accountSetupTargetEmail = { channel: 'email' as const, identifier: 'newuser@sa-and-sha.com' };
     const accountSetupTargetMobile = { channel: 'mobile' as const, identifier: '9876543210' };
 
     // Test Email Create Account action
@@ -125,7 +125,7 @@ describe("PHASE 9C.5.1 — Account Setup Required UX & Eligibility Tests", () =>
 
     expect(authView).toBe('registration');
     expect(regChannel).toBe('email');
-    expect(regIdentifier).toBe('newuser@saandsha.com');
+    expect(regIdentifier).toBe('newuser@sa-and-sha.com');
     expect(regOptionalContact).toBe('');
 
     // Test Mobile Create Account action

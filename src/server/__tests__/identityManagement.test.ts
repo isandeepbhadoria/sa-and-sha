@@ -216,7 +216,7 @@ describe("Phase 9C.2 — Admin Identity Management Unit Tests", () => {
         conflictId,
         canonicalProfileId: "prof_a",
         confirmationText: "MERGE CUSTOMER PROFILES",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         reason: "Test merge"
       })
     ).rejects.toThrow("VERIFIED_PHONE_CONFLICT");
@@ -274,7 +274,7 @@ describe("Phase 9C.2 — Admin Identity Management Unit Tests", () => {
       conflictId,
       canonicalProfileId: "prof_c1",
       confirmationText: "MERGE CUSTOMER PROFILES",
-      adminEmail: "admin@saandsha.com",
+      adminEmail: "admin@sa-and-sha.com",
       reason: "Manual customer consolidation"
     });
 
@@ -321,7 +321,7 @@ describe("Phase 9C.2 — Admin Identity Management Unit Tests", () => {
         canonicalProfileId: "p_stale1",
         expectedStatus: "under_review",
         confirmationText: "MERGE CUSTOMER PROFILES",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         reason: "Stale merge"
       })
     ).rejects.toThrow();

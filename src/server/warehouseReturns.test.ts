@@ -215,7 +215,7 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const res = await receiveWarehouseParcel(db, returnId, "warehouse@saandsha.com", {
+    const res = await receiveWarehouseParcel(db, returnId, "warehouse@sa-and-sha.com", {
       warehouse_location: "BLR-WH-A01",
       carrier_name: "Delhivery Surface",
       tracking_number: "DEL123456789",
@@ -232,7 +232,7 @@ async function runTestSuite() {
     const updated = (await db.collection("return_requests").doc(returnId).get()).data();
     assert.strictEqual(updated.status, "warehouse_received");
     assert.strictEqual(updated.receiving_info.warehouse_location, "BLR-WH-A01");
-    assert.strictEqual(updated.receiving_info.received_by, "warehouse@saandsha.com");
+    assert.strictEqual(updated.receiving_info.received_by, "warehouse@sa-and-sha.com");
     assert.ok(updated.receiving_info.received_at, "Received timestamp should be populated");
 
     // Check audit log created
@@ -253,7 +253,7 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const res = await receiveWarehouseParcel(db, returnId, "warehouse@saandsha.com", {
+    const res = await receiveWarehouseParcel(db, returnId, "warehouse@sa-and-sha.com", {
       warehouse_location: "BLR-WH-A01",
       carrier_name: "BlueDart",
       tracking_number: "BD987654321",
@@ -276,13 +276,13 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const res = await startWarehouseInspection(db, returnId, "inspector.jane@saandsha.com");
+    const res = await startWarehouseInspection(db, returnId, "inspector.jane@sa-and-sha.com");
     assert.strictEqual(res.success, true);
     assert.strictEqual(res.status, "inspection_in_progress");
 
     const updated = (await db.collection("return_requests").doc(returnId).get()).data();
     assert.strictEqual(updated.status, "inspection_in_progress");
-    assert.strictEqual(updated.inspection_assigned_to, "inspector.jane@saandsha.com");
+    assert.strictEqual(updated.inspection_assigned_to, "inspector.jane@sa-and-sha.com");
     assert.ok(updated.inspection_started_at);
   });
 
@@ -296,7 +296,7 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const res = await startWarehouseInspection(db, returnId, "inspector.jane@saandsha.com");
+    const res = await startWarehouseInspection(db, returnId, "inspector.jane@sa-and-sha.com");
     assert.strictEqual(res.success, false);
     assert.ok((res as any).error?.includes("Cannot start inspection from status 'inspection_in_progress'"));
   });
@@ -333,7 +333,7 @@ async function runTestSuite() {
       ]
     };
 
-    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@saandsha.com", inspectionPayload);
+    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@sa-and-sha.com", inspectionPayload);
     assert.strictEqual(res.success, true);
     assert.strictEqual((res as any).recommended_next_status, "inspection_passed");
     assert.strictEqual(res.status, "inspection_passed");
@@ -380,7 +380,7 @@ async function runTestSuite() {
       ]
     };
 
-    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@saandsha.com", inspectionPayload);
+    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@sa-and-sha.com", inspectionPayload);
     assert.strictEqual(res.success, true);
     assert.strictEqual((res as any).recommended_next_status, "manager_review");
     assert.strictEqual(res.status, "manager_review");
@@ -400,7 +400,7 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@saandsha.com", {
+    const res = await completeWarehouseInspection(db, returnId, "inspector.jane@sa-and-sha.com", {
       overall_condition_grade: "A_grade_resellable",
       items_inspection: [
         {
@@ -437,8 +437,8 @@ async function runTestSuite() {
       created_at: new Date().toISOString()
     });
 
-    const uploadRes = await uploadWarehousePhoto(db, returnId, "inspector.jane@saandsha.com", {
-      url: "https://storage.saandsha.com/warehouse/photo1.jpg",
+    const uploadRes = await uploadWarehousePhoto(db, returnId, "inspector.jane@sa-and-sha.com", {
+      url: "https://storage.sa-and-sha.com/warehouse/photo1.jpg",
       photo_type: "item_defect",
       caption: "Stain on right collar"
     });
@@ -448,9 +448,9 @@ async function runTestSuite() {
 
     const doc = (await db.collection("return_requests").doc(returnId).get()).data();
     assert.strictEqual(doc.warehouse_photos.length, 1);
-    assert.strictEqual(doc.warehouse_photos[0].url, "https://storage.saandsha.com/warehouse/photo1.jpg");
+    assert.strictEqual(doc.warehouse_photos[0].url, "https://storage.sa-and-sha.com/warehouse/photo1.jpg");
     assert.strictEqual(doc.warehouse_photos[0].photo_type, "item_defect");
-    assert.strictEqual(doc.warehouse_photos[0].uploaded_by, "inspector.jane@saandsha.com");
+    assert.strictEqual(doc.warehouse_photos[0].uploaded_by, "inspector.jane@sa-and-sha.com");
   });
 
   // --- SECTION 5: WAREHOUSE INTERNAL NOTES ISOLATION TESTS ---
@@ -467,7 +467,7 @@ async function runTestSuite() {
     const res = await addWarehouseInternalNote(
       db,
       returnId,
-      "manager.bob@saandsha.com",
+      "manager.bob@sa-and-sha.com",
       "Customer called support demanding instant replacement without inspection."
     );
 
@@ -483,7 +483,7 @@ async function runTestSuite() {
     const subNotes = (await db.collection(`return_requests/${returnId}/warehouse_notes`).get()).docs;
     assert.strictEqual(subNotes.length, 1, "Note must be in subcollection");
     assert.strictEqual(subNotes[0].data().note, "Customer called support demanding instant replacement without inspection.");
-    assert.strictEqual(subNotes[0].data().author_email, "manager.bob@saandsha.com");
+    assert.strictEqual(subNotes[0].data().author_email, "manager.bob@sa-and-sha.com");
   });
 
   // --- SECTION 6: WAREHOUSE QUEUE & PAGINATION TESTS ---

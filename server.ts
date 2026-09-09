@@ -858,7 +858,7 @@ async function saveCustomerProfileFromOrder(
   try {
     const adminDb = getAdminDb();
     const cleanEmail = (customerEmail || "").trim().toLowerCase();
-    const finalEmailForSummary = cleanEmail === "shop@saandsha.com" ? "" : cleanEmail;
+    const finalEmailForSummary = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
     const summary = await recalculateCustomerCommerceSummary(adminDb, targetPhone, finalEmailForSummary);
 
     const docId = getCustomerProfileDocId(targetPhone);
@@ -869,8 +869,8 @@ async function saveCustomerProfileFromOrder(
       const normalizedProfile = migrateAndNormalizeProfile(existingData, docId);
       const customerId = await ensureCustomerIdInTransaction(transaction, adminDb, existingData);
 
-      let finalEmail = cleanEmail === "shop@saandsha.com" ? "" : cleanEmail;
-      if (!finalEmail && normalizedProfile.email && normalizedProfile.email !== "shop@saandsha.com") {
+      let finalEmail = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
+      if (!finalEmail && normalizedProfile.email && normalizedProfile.email !== "shop@sa-and-sha.com") {
         finalEmail = normalizedProfile.email;
       }
 
@@ -1155,7 +1155,7 @@ async function validatePromotionServer(
     const perCustomerLimit = typeof promoDoc.per_customer_limit === 'number' && promoDoc.per_customer_limit > 0 ? promoDoc.per_customer_limit : null;
     if (perCustomerLimit !== null) {
       let cleanEmail = (customerEmail || '').trim().toLowerCase();
-      if (cleanEmail === 'shop@saandsha.com') {
+      if (cleanEmail === 'shop@sa-and-sha.com') {
         cleanEmail = '';
       }
       const cleanPhone = (customerPhone || '').trim().replace(/\D/g, '');
@@ -1654,9 +1654,9 @@ async function startServer() {
   // Technical SEO Redirects: HTTPS, www, and Trailing Slash Normalization
   app.use((req, res, next) => {
     const host = req.headers.host || "";
-    const isProductionHost = host.includes("saandsha.com");
+    const isProductionHost = host.includes("sa-and-sha.com");
     if (isProductionHost && !host.startsWith("www.")) {
-      return res.redirect(301, `https://www.saandsha.com${req.originalUrl}`);
+      return res.redirect(301, `https://www.sa-and-sha.com${req.originalUrl}`);
     }
 
     if (req.path !== "/" && req.path.endsWith("/")) {
@@ -3316,7 +3316,7 @@ async function startServer() {
         return res.status(404).json({ success: false, error: "Conflict not found." });
       }
 
-      const adminEmail = (req as any).adminUser?.email || "shop@saandsha.com";
+      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
       const nowIso = new Date().toISOString();
 
       await conflictRef.update({
@@ -3361,7 +3361,7 @@ async function startServer() {
         return res.status(404).json({ success: false, error: "Conflict not found." });
       }
 
-      const adminEmail = (req as any).adminUser?.email || "shop@saandsha.com";
+      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
       const nowIso = new Date().toISOString();
 
       await conflictRef.update({
@@ -3401,7 +3401,7 @@ async function startServer() {
 
       const preview = await generateMergePreview(adminDb, req.params.id, canonical_profile_id);
 
-      const adminEmail = (req as any).adminUser?.email || "shop@saandsha.com";
+      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
       await recordIdentityAudit(adminDb, {
         action: "preview_generated",
         conflict_id: req.params.id,
@@ -3442,7 +3442,7 @@ async function startServer() {
       }
 
       const adminDb = getAdminDb();
-      const adminEmail = (req as any).adminUser?.email || "shop@saandsha.com";
+      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
 
       const result = await executeProfileMergeTransaction(adminDb, {
         conflictId: req.params.id,
@@ -4552,7 +4552,7 @@ async function startServer() {
 
       await adminDb.collection("admin_audit_logs").add({
         action: "TRACKING_TOKENS_BACKFILL",
-        admin_email: adminAuth.email || "shop@saandsha.com",
+        admin_email: adminAuth.email || "shop@sa-and-sha.com",
         processed_count: snap.size,
         updated_count: updatedCount,
         next_cursor: nextCursor,
@@ -4768,7 +4768,7 @@ async function startServer() {
       }
 
       const adminDb = getAdminDb();
-      const adminEmail = (req.body.admin_email || "admin@saandsha.com").toString().trim();
+      const adminEmail = (req.body.admin_email || "admin@sa-and-sha.com").toString().trim();
 
       const result = await adjustLoyaltyPointsManual(adminDb, id, pts, reason.trim(), adminEmail);
 
@@ -4799,7 +4799,7 @@ async function startServer() {
       }
 
       const adminDb = getAdminDb();
-      const adminEmail = (req.body.admin_email || "admin@saandsha.com").toString().trim();
+      const adminEmail = (req.body.admin_email || "admin@sa-and-sha.com").toString().trim();
 
       const result = await adjustStoreCreditManual(adminDb, id, amt, reason.trim(), adminEmail, expiresAt);
 
@@ -5417,7 +5417,7 @@ async function startServer() {
     }
   });
 
-  // Admin authorization helper verifying Firebase Auth token for shop@saandsha.com
+  // Admin authorization helper verifying Firebase Auth token for shop@sa-and-sha.com
   async function verifyAdminRequest(req: express.Request): Promise<{ authorized: boolean; email?: string; error?: string }> {
     try {
       const authHeader = req.headers.authorization;
@@ -5426,10 +5426,10 @@ async function startServer() {
         if (token) {
           try {
             const decoded = await getAdminAuth().verifyIdToken(token);
-            if (decoded.email && decoded.email.toLowerCase() === "shop@saandsha.com") {
+            if (decoded.email && decoded.email.toLowerCase() === "shop@sa-and-sha.com") {
               return { authorized: true, email: decoded.email };
             } else {
-              return { authorized: false, error: "Unauthorized email. Only shop@saandsha.com is granted admin access." };
+              return { authorized: false, error: "Unauthorized email. Only shop@sa-and-sha.com is granted admin access." };
             }
           } catch (authErr: any) {
             console.warn("[ADMIN AUTH] Firebase Auth token verification failed:", authErr.message);
@@ -5441,7 +5441,7 @@ async function startServer() {
       const adminKey = req.headers["x-admin-key"] || req.headers["x-admin-token"];
       const totpSecret = process.env.ADMIN_TOTP_SECRET || "";
       if (adminKey && totpSecret && adminKey === totpSecret) {
-        return { authorized: true, email: "shop@saandsha.com" };
+        return { authorized: true, email: "shop@sa-and-sha.com" };
       }
 
       return { authorized: false, error: "Missing or invalid Firebase Auth admin session token." };
@@ -5629,7 +5629,7 @@ async function startServer() {
         applicable_categories: appCats,
         created_at: nowIso,
         updated_at: nowIso,
-        created_by: adminAuth.email || "shop@saandsha.com"
+        created_by: adminAuth.email || "shop@sa-and-sha.com"
       };
 
       try {
@@ -6066,7 +6066,7 @@ async function startServer() {
           verified: isSmtpConfigured,
           from_name: dbProviders.email?.from_name || "Sa and Sha",
           from_email: dbProviders.email?.from_email || process.env.SMTP_FROM_EMAIL || "orders@sa-and-sha.com",
-          reply_to: dbProviders.email?.reply_to || "support@saandsha.com",
+          reply_to: dbProviders.email?.reply_to || "support@sa-and-sha.com",
           domain: dbProviders.email?.domain || "sa-and-sha.com",
           updated_at: dbProviders.email?.updated_at || nowIso
         },
@@ -6504,7 +6504,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'cancel_single',
-        admin_email: adminAuth.email || 'shop@saandsha.com',
+        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
         target_type: 'job',
         target_ids: [jobId],
         successful_ids: [jobId],
@@ -6807,7 +6807,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'retry_single',
-        admin_email: adminAuth.email || 'shop@saandsha.com',
+        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
         target_type: 'job',
         target_ids: [jobId],
         successful_ids: [jobId],
@@ -6905,7 +6905,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'requeue_single',
-        admin_email: adminAuth.email || 'shop@saandsha.com',
+        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
         target_type: 'dead_letter',
         target_ids: [deadLetterId],
         successful_ids: [deadLetterId],
@@ -6942,7 +6942,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@saandsha.com";
+      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
       const result = await bulkRetryFailedJobs(adminDb, jobIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -6973,7 +6973,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@saandsha.com";
+      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
       const result = await bulkCancelQueuedJobs(adminDb, jobIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -7004,7 +7004,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@saandsha.com";
+      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
       const result = await bulkRequeueDeadLetterJobs(adminDb, deadLetterIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -7479,7 +7479,7 @@ async function startServer() {
         status: newStatus,
         previousStatus: currentStatus,
         timestamp: new Date().toISOString(),
-        updatedBy: adminAuth.email || "shop@saandsha.com",
+        updatedBy: adminAuth.email || "shop@sa-and-sha.com",
         notes: adminNotes || ""
       };
 
@@ -8760,7 +8760,7 @@ async function startServer() {
 
       await saveEnquiryToFirestore(enquiryPayload);
 
-      console.log(`[EMAIL DISPATCH] Transactional notification sent to ADMIN (shop@saandsha.com) for Ticket #${enquiryId}`);
+      console.log(`[EMAIL DISPATCH] Transactional notification sent to ADMIN (shop@sa-and-sha.com) for Ticket #${enquiryId}`);
       console.log(`[EMAIL DISPATCH] Confirmation receipt sent to CUSTOMER (${cleanEmail}) for Ticket #${enquiryId}`);
 
       return res.json({
@@ -8772,7 +8772,7 @@ async function startServer() {
 
     } catch (err: any) {
       console.error("Error processing contact submission:", err);
-      return res.status(500).json({ success: false, error: "An unexpected error occurred. Please try again or email shop@saandsha.com directly." });
+      return res.status(500).json({ success: false, error: "An unexpected error occurred. Please try again or email shop@sa-and-sha.com directly." });
     }
   });
 
@@ -11995,7 +11995,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await exportReturnsToCsv(adminDb, adminAuth.email || "admin@saandsha.com", req.query);
+      const result = await exportReturnsToCsv(adminDb, adminAuth.email || "admin@sa-and-sha.com", req.query);
       if (!result.success) {
         return res.status(400).json(result);
       }
@@ -12036,7 +12036,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { status, note, reason } = req.body || {};
-      const result = await transitionReturnStatus(adminDb, adminAuth.email || "admin@saandsha.com", req.params.id, { targetStatus: status, note, reason });
+      const result = await transitionReturnStatus(adminDb, adminAuth.email || "admin@sa-and-sha.com", req.params.id, { targetStatus: status, note, reason });
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12055,7 +12055,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await approveReturnRequest(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", req.body || {});
+      const result = await approveReturnRequest(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12075,7 +12075,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { reason, internalNote } = req.body || {};
-      const result = await rejectReturnRequest(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", { rejection_reason: reason, internal_note: internalNote });
+      const result = await rejectReturnRequest(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", { rejection_reason: reason, internal_note: internalNote });
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12095,7 +12095,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { requestedFields, note } = req.body || {};
-      const result = await requestMoreInfoForReturn(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", { details: requestedFields, note });
+      const result = await requestMoreInfoForReturn(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", { details: requestedFields, note });
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12114,7 +12114,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await scheduleReturnPickup(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", req.body || {});
+      const result = await scheduleReturnPickup(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12133,7 +12133,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await scheduleReturnPickup(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", req.body || {});
+      const result = await scheduleReturnPickup(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12153,7 +12153,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { staffEmail, staffName } = req.body || {};
-      const result = await assignReturnStaff(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", { assigned_to_email: staffEmail, assigned_to_name: staffName });
+      const result = await assignReturnStaff(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", { assigned_to_email: staffEmail, assigned_to_name: staffName });
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12173,7 +12173,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { priority } = req.body || {};
-      const result = await updateReturnPriority(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", priority);
+      const result = await updateReturnPriority(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", priority);
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12212,7 +12212,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { note } = req.body || {};
-      const result = await addReturnInternalNote(adminDb, req.params.id, adminAuth.email || "admin@saandsha.com", note);
+      const result = await addReturnInternalNote(adminDb, req.params.id, adminAuth.email || "admin@sa-and-sha.com", note);
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12270,7 +12270,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await receiveWarehouseParcel(adminDb, req.params.id, adminAuth.email || "warehouse@saandsha.com", req.body || {});
+      const result = await receiveWarehouseParcel(adminDb, req.params.id, adminAuth.email || "warehouse@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status((result as any).statusCode || 400).json(result);
       }
@@ -12289,7 +12289,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await startWarehouseInspection(adminDb, req.params.id, adminAuth.email || "warehouse@saandsha.com");
+      const result = await startWarehouseInspection(adminDb, req.params.id, adminAuth.email || "warehouse@sa-and-sha.com");
       if (!result.success) {
         return res.status((result as any).statusCode || 400).json(result);
       }
@@ -12308,7 +12308,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await completeWarehouseInspection(adminDb, req.params.id, adminAuth.email || "warehouse@saandsha.com", req.body || {});
+      const result = await completeWarehouseInspection(adminDb, req.params.id, adminAuth.email || "warehouse@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status((result as any).statusCode || 400).json(result);
       }
@@ -12327,7 +12327,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await uploadWarehousePhoto(adminDb, req.params.id, adminAuth.email || "warehouse@saandsha.com", req.body || {});
+      const result = await uploadWarehousePhoto(adminDb, req.params.id, adminAuth.email || "warehouse@sa-and-sha.com", req.body || {});
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12347,7 +12347,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { note } = req.body || {};
-      const result = await addWarehouseInternalNote(adminDb, req.params.id, adminAuth.email || "warehouse@saandsha.com", note);
+      const result = await addWarehouseInternalNote(adminDb, req.params.id, adminAuth.email || "warehouse@sa-and-sha.com", note);
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12370,7 +12370,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await processReturnFinancials(adminDb, adminAuth.email || "finance@saandsha.com", req.params.id, req.body || {});
+      const result = await processReturnFinancials(adminDb, adminAuth.email || "finance@sa-and-sha.com", req.params.id, req.body || {});
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12389,7 +12389,7 @@ async function startServer() {
     }
     try {
       const adminDb = getAdminDb();
-      const result = await retryReturnFinancials(adminDb, adminAuth.email || "finance@saandsha.com", req.params.id);
+      const result = await retryReturnFinancials(adminDb, adminAuth.email || "finance@sa-and-sha.com", req.params.id);
       if (!result.success) {
         return res.status(result.statusCode || 400).json(result);
       }
@@ -12534,7 +12534,7 @@ async function startServer() {
     try {
       const adminDb = getAdminDb();
       const { action, rmaNumbers, payload } = req.body || {};
-      const result = await executeControlTowerBulkAction(adminDb, adminAuth.email || "admin@saandsha.com", action, rmaNumbers, payload);
+      const result = await executeControlTowerBulkAction(adminDb, adminAuth.email || "admin@sa-and-sha.com", action, rmaNumbers, payload);
       return res.json(result);
     } catch (err: any) {
       console.error("Error in POST /api/admin/returns/control-tower/bulk-action:", err);
@@ -12865,7 +12865,7 @@ async function startServer() {
       // Log server-side audit event for contact unmasking (without PII)
       await adminDb.collection("admin_audit_logs").add({
         timestamp: new Date().toISOString(),
-        admin_email: adminAuth.email || "admin@saandsha.com",
+        admin_email: adminAuth.email || "admin@sa-and-sha.com",
         action: "customer_contact_unmasked",
         customer_profile_id: profileSnap.id,
         business_customer_id: customer.customer_id || "Not assigned",
@@ -12939,7 +12939,7 @@ async function startServer() {
           orderPhoneDigits.endsWith(cleanPhoneDigits) ||
           cleanPhoneDigits.endsWith(orderPhoneDigits)
         );
-        const emailMatch = cleanEmail && cleanEmail !== "shop@saandsha.com" && orderEmail === cleanEmail;
+        const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && orderEmail === cleanEmail;
 
         if (phoneMatch || emailMatch) {
           matchedOrders.push({
@@ -12971,7 +12971,7 @@ async function startServer() {
           retPhoneDigits.endsWith(cleanPhoneDigits) ||
           cleanPhoneDigits.endsWith(retPhoneDigits)
         );
-        const emailMatch = cleanEmail && cleanEmail !== "shop@saandsha.com" && retEmail === cleanEmail;
+        const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && retEmail === cleanEmail;
 
         if (phoneMatch || emailMatch) {
           matchedReturns.push({
@@ -13073,7 +13073,7 @@ async function startServer() {
       if (!["csv", "xlsx", "pdf"].includes(format)) {
         await getAdminDb().collection("admin_audit_logs").add({
           timestamp: new Date().toISOString(),
-          admin_email: adminAuth.email || "admin@saandsha.com",
+          admin_email: adminAuth.email || "admin@sa-and-sha.com",
           action: "export_customers",
           format,
           preset,
@@ -13129,7 +13129,7 @@ async function startServer() {
       // Audit Log Entry
       await adminDb.collection("admin_audit_logs").add({
         timestamp: new Date().toISOString(),
-        admin_email: adminAuth.email || "admin@saandsha.com",
+        admin_email: adminAuth.email || "admin@sa-and-sha.com",
         action: "export_customers",
         format,
         preset,
@@ -13191,7 +13191,7 @@ async function startServer() {
           </html>
         `;
         res.setHeader("Content-Type", "text/html");
-        res.setHeader("Content-Disposition", `attachment; filename="saandsha_customers_${preset}_report_${Date.now()}.html"`);
+        res.setHeader("Content-Disposition", `attachment; filename="sa-and-sha_customers_${preset}_report_${Date.now()}.html"`);
         return res.send(reportHtml);
       }
 
@@ -13260,7 +13260,7 @@ async function startServer() {
       }
 
       const csvString = csvRows.join("\n");
-      const filename = `saandsha_customers_${preset}_export_${new Date().toISOString().split("T")[0]}.${format === 'xlsx' ? 'xlsx' : 'csv'}`;
+      const filename = `sa-and-sha_customers_${preset}_export_${new Date().toISOString().split("T")[0]}.${format === 'xlsx' ? 'xlsx' : 'csv'}`;
 
       res.setHeader("Content-Type", format === 'xlsx' ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : "text/csv; charset=utf-8");
       res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
@@ -13444,7 +13444,7 @@ async function startServer() {
         description: sanitizeString(description || "", 250),
         filters: filters || {},
         sort_by: sort_by || "last_order_at",
-        created_by: adminAuth.email || "admin@saandsha.com",
+        created_by: adminAuth.email || "admin@sa-and-sha.com",
         created_at: now,
         updated_at: now,
         is_system: false
@@ -13455,7 +13455,7 @@ async function startServer() {
       // Log audit
       await adminDb.collection("admin_audit_logs").add({
         timestamp: now,
-        admin_email: adminAuth.email || "admin@saandsha.com",
+        admin_email: adminAuth.email || "admin@sa-and-sha.com",
         action: "segment_created",
         segment_id: segId,
         segment_name: cleanName,
@@ -13661,13 +13661,13 @@ async function startServer() {
         "Promoted to VIP Tier",
         `Admin promoted customer to VIP status.`,
         "admin",
-        { relatedAdminEmail: adminAuth.email || "admin@saandsha.com" }
+        { relatedAdminEmail: adminAuth.email || "admin@sa-and-sha.com" }
       );
 
       // Audit log
       await adminDb.collection("admin_audit_logs").add({
         timestamp: now,
-        admin_email: adminAuth.email || "admin@saandsha.com",
+        admin_email: adminAuth.email || "admin@sa-and-sha.com",
         action: "tier_changed",
         customer_id: id,
         new_tier: "vip",
@@ -13749,7 +13749,7 @@ async function startServer() {
         customer_profile_id: id,
         note: cleanNote,
         note_type: note_type || "general",
-        created_by: adminAuth.email || "admin@saandsha.com",
+        created_by: adminAuth.email || "admin@sa-and-sha.com",
         created_at: now
       };
 
@@ -13763,7 +13763,7 @@ async function startServer() {
         "Customer Service Note Added",
         `[${(note_type || "general").toUpperCase()}] ${cleanNote.substring(0, 100)}...`,
         "admin",
-        { relatedAdminEmail: adminAuth.email || "admin@saandsha.com" }
+        { relatedAdminEmail: adminAuth.email || "admin@sa-and-sha.com" }
       );
 
       return res.json({
@@ -13965,7 +13965,7 @@ async function startServer() {
         `Tag Accepted: ${cleanTag}`,
         `Accepted suggested tag '${cleanTag}'.`,
         "admin",
-        { relatedAdminEmail: adminAuth.email || "admin@saandsha.com" }
+        { relatedAdminEmail: adminAuth.email || "admin@sa-and-sha.com" }
       );
 
       return res.json({
@@ -14065,7 +14065,7 @@ async function startServer() {
       // 1. Static & Informational Pages
       for (const page of canonicalStaticPages) {
         xml += `  <url>\n`;
-        xml += `    <loc>https://www.saandsha.com${page.path}</loc>\n`;
+        xml += `    <loc>https://www.sa-and-sha.com${page.path}</loc>\n`;
         xml += `    <lastmod>${todayStr}</lastmod>\n`;
         xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
         xml += `    <priority>${page.priority}</priority>\n`;
@@ -14075,7 +14075,7 @@ async function startServer() {
       // 2. Canonical Category & Collection Pages
       for (const catPath of canonicalCategoryPages) {
         xml += `  <url>\n`;
-        xml += `    <loc>https://www.saandsha.com${catPath}</loc>\n`;
+        xml += `    <loc>https://www.sa-and-sha.com${catPath}</loc>\n`;
         xml += `    <lastmod>${todayStr}</lastmod>\n`;
         xml += `    <changefreq>weekly</changefreq>\n`;
         xml += `    <priority>0.8</priority>\n`;
@@ -14085,7 +14085,7 @@ async function startServer() {
       // 3. Active Storefront Products (Excludes archived/decommissioned polos)
       for (const prod of activeProducts) {
         xml += `  <url>\n`;
-        xml += `    <loc>https://www.saandsha.com/product/${prod.slug || prod.id}</loc>\n`;
+        xml += `    <loc>https://www.sa-and-sha.com/product/${prod.slug || prod.id}</loc>\n`;
         xml += `    <lastmod>${todayStr}</lastmod>\n`;
         xml += `    <changefreq>weekly</changefreq>\n`;
         xml += `    <priority>0.9</priority>\n`;
@@ -14110,7 +14110,7 @@ Disallow: /checkout
 Disallow: /admin
 Disallow: /wishlist
 
-Sitemap: https://www.saandsha.com/sitemap.xml`;
+Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
     res.header("Content-Type", "text/plain");
     res.send(robots);
   });
@@ -14160,14 +14160,14 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         state_code: sanitizeString(body.state_code, 10),
         pincode: sanitizeString(body.pincode, 10),
         country: sanitizeString(body.country, 100) || "India",
-        support_email: sanitizeString(body.support_email, 200) || "shop@saandsha.com",
+        support_email: sanitizeString(body.support_email, 200) || "shop@sa-and-sha.com",
         support_phone: sanitizeString(body.support_phone, 50) || "+91 98765 43210",
         invoice_prefix: sanitizeString(body.invoice_prefix, 10) || "SS",
         financial_year: calculateFinancialYear(new Date()),
         is_active: body.is_active !== false,
         status: body.status === "DRAFT" ? "DRAFT" : "ACTIVE",
         updated_at: new Date().toISOString(),
-        updated_by: adminAuth.email || "admin@saandsha.com"
+        updated_by: adminAuth.email || "admin@sa-and-sha.com"
       };
 
       // Validate config if activating
@@ -14196,8 +14196,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_id: "seller_gst",
         before_summary: beforeData,
         after_summary: newConfig,
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(body.reason, 200) || "Admin updated seller GST master configuration."
       });
 
@@ -14350,9 +14350,9 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         source: "MANUAL",
         notes,
         created_at: new Date().toISOString(),
-        created_by: adminAuth.email || "admin@saandsha.com",
+        created_by: adminAuth.email || "admin@sa-and-sha.com",
         updated_at: new Date().toISOString(),
-        updated_by: adminAuth.email || "admin@saandsha.com"
+        updated_by: adminAuth.email || "admin@sa-and-sha.com"
       };
 
       await adminDb.collection("product_tax_master").doc(tax_record_id).set(recordPayload);
@@ -14366,8 +14366,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_type: "product_tax",
         entity_id: tax_record_id,
         after_summary: recordPayload,
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(body.reason, 200) || `Created product tax record for ${scope_type} ${scope_value}.`
       });
 
@@ -14456,7 +14456,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         status,
         notes: typeof body.notes === "string" ? sanitizeString(body.notes, 500) : existingData.notes,
         updated_at: new Date().toISOString(),
-        updated_by: adminAuth.email || "admin@saandsha.com"
+        updated_by: adminAuth.email || "admin@sa-and-sha.com"
       };
 
       await docRef.set(updatedPayload, { merge: true });
@@ -14471,8 +14471,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_id: id,
         before_summary: existingData,
         after_summary: updatedPayload,
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(body.reason, 200) || `Updated product tax record '${id}'.`
       });
 
@@ -14578,9 +14578,9 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
           source: "BULK_IMPORT",
           notes: d.notes,
           created_at: new Date().toISOString(),
-          created_by: adminAuth.email || "admin@saandsha.com",
+          created_by: adminAuth.email || "admin@sa-and-sha.com",
           updated_at: new Date().toISOString(),
-          updated_by: adminAuth.email || "admin@saandsha.com"
+          updated_by: adminAuth.email || "admin@sa-and-sha.com"
         };
         batch.set(docRef, payload);
         createdIds.push(tax_record_id);
@@ -14597,8 +14597,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_type: "product_tax",
         entity_id: `bulk_import_${Date.now()}`,
         after_summary: { imported_count: validRows.length, record_ids: createdIds },
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(reason, 200) || `Bulk imported ${validRows.length} product tax master rules via CSV.`
       });
 
@@ -14648,7 +14648,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         status: body.status === "DRAFT" ? "DRAFT" : "ACTIVE",
         version: (body.version || 1) + 1,
         updated_at: new Date().toISOString(),
-        updated_by: adminAuth.email || "admin@saandsha.com"
+        updated_by: adminAuth.email || "admin@sa-and-sha.com"
       };
 
       if (newConfig.status === "ACTIVE" && newConfig.enabled) {
@@ -14669,8 +14669,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_id: "default",
         before_summary: beforeData,
         after_summary: newConfig,
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(body.reason, 200) || "Updated shipping tax master configuration."
       });
 
@@ -14726,7 +14726,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         is_active: body.is_active !== false,
         status: body.status === "DRAFT" ? "DRAFT" : "ACTIVE",
         updated_at: new Date().toISOString(),
-        updated_by: adminAuth.email || "admin@saandsha.com"
+        updated_by: adminAuth.email || "admin@sa-and-sha.com"
       };
 
       const beforeSnap = await adminDb.collection("invoice_number_config").doc("default").get();
@@ -14740,8 +14740,8 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         entity_id: "default",
         before_summary: beforeData,
         after_summary: newConfig,
-        admin_id: adminAuth.email || "admin@saandsha.com",
-        email: adminAuth.email || "admin@saandsha.com",
+        admin_id: adminAuth.email || "admin@sa-and-sha.com",
+        email: adminAuth.email || "admin@sa-and-sha.com",
         reason: sanitizeString(body.reason, 200) || "Updated invoice numbering configuration."
       });
 
@@ -14889,7 +14889,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveHeroSliderConfig(adminDb, req.body, adminAuth.email || "shop@saandsha.com");
+      const result = await saveHeroSliderConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }
@@ -14908,7 +14908,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveBestOfInstagramConfig(adminDb, req.body, adminAuth.email || "shop@saandsha.com");
+      const result = await saveBestOfInstagramConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }
@@ -14927,7 +14927,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveInstaReelsConfig(adminDb, req.body, adminAuth.email || "shop@saandsha.com");
+      const result = await saveInstaReelsConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }

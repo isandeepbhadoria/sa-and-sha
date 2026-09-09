@@ -309,7 +309,7 @@ describe("Phase 10.5B.2 — GST Credit Note Reporting Status & Hardening Suite",
       creditNoteId: cnId,
       gstReportingStatus: "REPORTED",
       gstReportingPeriod: "082026",
-      updatedBy: "tax_admin@saandsha.com"
+      updatedBy: "tax_admin@sa-and-sha.com"
     });
 
     expect(repRes.success).toBe(true);
@@ -323,7 +323,7 @@ describe("Phase 10.5B.2 — GST Credit Note Reporting Status & Hardening Suite",
       creditNoteId: cnId,
       gstReportingStatus: "ADJUSTED",
       gstAdjustmentReference: "GSTR3B-SEP2026-REF123",
-      updatedBy: "tax_admin@saandsha.com"
+      updatedBy: "tax_admin@sa-and-sha.com"
     });
 
     expect(adjRes.success).toBe(true);

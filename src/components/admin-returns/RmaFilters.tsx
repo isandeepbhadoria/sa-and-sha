@@ -147,7 +147,7 @@ export const RmaFilters: React.FC<RmaFiltersProps> = ({
         >
           <option value="all">All Staff Assignments</option>
           <option value="unassigned">Unassigned Only</option>
-          <option value="shop@saandsha.com">Assigned to shop@saandsha.com</option>
+          <option value="shop@sa-and-sha.com">Assigned to shop@sa-and-sha.com</option>
         </select>
       </div>
     </div>

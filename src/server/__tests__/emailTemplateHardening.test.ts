@@ -62,14 +62,14 @@ describe('Email Template Security & Hardening Tests (Phase 9B.2.1)', () => {
               <td align="right">₹4,999</td>
             </tr>
           </table>
-          <a href="https://saandsha.com/orders/123" style="color: #b85c38;">View Order</a>
+          <a href="https://sa-and-sha.com/orders/123" style="color: #b85c38;">View Order</a>
         </div>
       `;
       const sanitized = sanitizeEmailHtml(validEmailHtml);
       expect(sanitized).toContain('Order Confirmation');
       expect(sanitized).toContain('background-color:#f8f8f8');
       expect(sanitized).toContain('<table');
-      expect(sanitized).toContain('href="https://saandsha.com/orders/123"');
+      expect(sanitized).toContain('href="https://sa-and-sha.com/orders/123"');
     });
   });
 
@@ -97,7 +97,7 @@ describe('Email Template Security & Hardening Tests (Phase 9B.2.1)', () => {
     });
 
     it('validates recipient email address for test emails', () => {
-      expect(validateEmailTemplateInput({ recipientEmail: 'admin@saandsha.com' }).valid).toBe(true);
+      expect(validateEmailTemplateInput({ recipientEmail: 'admin@sa-and-sha.com' }).valid).toBe(true);
       expect(validateEmailTemplateInput({ recipientEmail: 'invalid-email' }).valid).toBe(false);
       expect(validateEmailTemplateInput({ recipientEmail: '' }).valid).toBe(false);
     });

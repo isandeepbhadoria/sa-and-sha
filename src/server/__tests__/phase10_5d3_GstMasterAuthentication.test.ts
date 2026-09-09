@@ -17,10 +17,10 @@ describe('Phase 10.5D.3 — GST Master Admin Authentication & Token Verification
           try {
             if (mockVerifyIdToken) {
               const decoded = await mockVerifyIdToken(token);
-              if (decoded.email && decoded.email.toLowerCase() === "shop@saandsha.com") {
+              if (decoded.email && decoded.email.toLowerCase() === "shop@sa-and-sha.com") {
                 return { authorized: true, email: decoded.email };
               } else {
-                return { authorized: false, error: "Unauthorized email. Only shop@saandsha.com is granted admin access." };
+                return { authorized: false, error: "Unauthorized email. Only shop@sa-and-sha.com is granted admin access." };
               }
             }
           } catch (authErr: any) {
@@ -32,22 +32,22 @@ describe('Phase 10.5D.3 — GST Master Admin Authentication & Token Verification
       const adminKey = req.headers["x-admin-key"] || req.headers["x-admin-token"];
       const totpSecret = process.env.ADMIN_TOTP_SECRET || "";
       if (adminKey && totpSecret && adminKey === totpSecret) {
-        return { authorized: true, email: "shop@saandsha.com" };
+        return { authorized: true, email: "shop@sa-and-sha.com" };
       }
 
       return { authorized: false, error: "Missing or invalid Firebase Auth admin session token." };
     };
 
-    it('1.1. Authorizes valid Firebase ID token for shop@saandsha.com', async () => {
+    it('1.1. Authorizes valid Firebase ID token for shop@sa-and-sha.com', async () => {
       const mockVerify = async (token: string) => {
-        if (token === 'valid_admin_token') return { email: 'shop@saandsha.com' };
+        if (token === 'valid_admin_token') return { email: 'shop@sa-and-sha.com' };
         throw new Error('Invalid token');
       };
 
       const req = { headers: { authorization: 'Bearer valid_admin_token' } };
       const res = await verifyAdminRequestMock(req, mockVerify);
       expect(res.authorized).toBe(true);
-      expect(res.email).toBe('shop@saandsha.com');
+      expect(res.email).toBe('shop@sa-and-sha.com');
     });
 
     it('1.2. Rejects request with missing Authorization header', async () => {
@@ -77,7 +77,7 @@ describe('Phase 10.5D.3 — GST Master Admin Authentication & Token Verification
       const req = { headers: { authorization: 'Bearer customer_token' } };
       const res = await verifyAdminRequestMock(req, mockVerify);
       expect(res.authorized).toBe(false);
-      expect(res.error).toBe('Unauthorized email. Only shop@saandsha.com is granted admin access.');
+      expect(res.error).toBe('Unauthorized email. Only shop@sa-and-sha.com is granted admin access.');
     });
 
     it('1.5. Accepts valid TOTP secret header in preview/dev environment', async () => {
@@ -85,7 +85,7 @@ describe('Phase 10.5D.3 — GST Master Admin Authentication & Token Verification
       const req = { headers: { 'x-admin-token': 'secret_totp_key_123' } };
       const res = await verifyAdminRequestMock(req);
       expect(res.authorized).toBe(true);
-      expect(res.email).toBe('shop@saandsha.com');
+      expect(res.email).toBe('shop@sa-and-sha.com');
       delete process.env.ADMIN_TOTP_SECRET;
     });
   });
@@ -154,7 +154,7 @@ describe('Phase 10.5D.3 — GST Master Admin Authentication & Token Verification
         state_code: '27',
         pincode: '400093',
         country: 'India',
-        support_email: 'shop@saandsha.com',
+        support_email: 'shop@sa-and-sha.com',
         support_phone: '+91 98765 43210',
         invoice_prefix: 'KL',
         financial_year: '25-26',

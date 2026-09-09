@@ -102,17 +102,17 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
   // Test 7: Non-Destructive Field Merging (Does NOT overwrite valid values with empty)
   it("7. Non-destructive merging retains existing valid email when order email is blank or placeholder", () => {
     const existing = {
-      email: "pria@saandsha.com",
+      email: "pria@sa-and-sha.com",
       full_name: "Pria Kapur"
     };
     const norm = migrateAndNormalizeProfile(existing, "p_pria");
-    expect(norm.email).toBe("pria@saandsha.com");
+    expect(norm.email).toBe("pria@sa-and-sha.com");
 
     // Placeholder shop email check
-    const cleanEmail = "shop@saandsha.com".trim().toLowerCase();
-    const finalEmail = cleanEmail === "shop@saandsha.com" ? "" : cleanEmail;
+    const cleanEmail = "shop@sa-and-sha.com".trim().toLowerCase();
+    const finalEmail = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
     const mergedEmail = finalEmail || norm.email;
-    expect(mergedEmail).toBe("pria@saandsha.com");
+    expect(mergedEmail).toBe("pria@sa-and-sha.com");
   });
 
   // Test 8: Address Input Validation

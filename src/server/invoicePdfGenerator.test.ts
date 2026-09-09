@@ -25,7 +25,7 @@ function createMockInvoice(overrides: Partial<GstInvoice> = {}): GstInvoice {
       pincode: '400069',
       country: 'India',
       pan: 'AAAAA0000A',
-      support_email: 'support@saandsha.com',
+      support_email: 'support@sa-and-sha.com',
       support_phone: '+919876543210'
     },
     buyer_snapshot: {

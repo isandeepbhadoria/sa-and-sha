@@ -44,7 +44,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
     delete process.env.SMTP_PORT;
     delete process.env.SMTP_USER;
     delete process.env.SMTP_PASSWORD;
-    process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+    process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
     process.env.MSG91_WHATSAPP_MOCK_MODE = 'true';
     process.env.MSG91_AUTH_KEY = 'test_auth_key_123456';
     process.env.MSG91_WHATSAPP_NUMBER = '917688886662';

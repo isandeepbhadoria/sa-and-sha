@@ -74,7 +74,7 @@ export async function publishNotification(
   // 2. Process active target channels concurrently with isolated error boundaries and idempotency
   const channelPromises = routedChannels.map(async (channel) => {
     const logId = `${notificationId}_${channel}`;
-    const recipient = channel === 'email' ? (customerTarget.email || 'no-email@saandsha.com') : (customerTarget.phone || 'no-phone');
+    const recipient = channel === 'email' ? (customerTarget.email || 'no-email@sa-and-sha.com') : (customerTarget.phone || 'no-phone');
 
     // Idempotency check: prevent sending duplicate notification if already sent/delivered for this channel
     try {

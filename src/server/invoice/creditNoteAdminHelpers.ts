@@ -39,7 +39,7 @@ export async function handleGetCreditNoteEligibility(req: any, res: any, adminDb
 
 export async function handleIssueCreditNote(req: any, res: any, adminDb: any) {
   const body = req.body || {};
-  const adminEmail = (req as any).adminUser?.email || "admin@saandsha.com";
+  const adminEmail = (req as any).adminUser?.email || "admin@sa-and-sha.com";
 
   if (!body.orderId && !body.rmaNumber && !body.returnRequestId && !body.invoiceId) {
     return res.status(400).json({
@@ -132,7 +132,7 @@ export async function handleUpdateCreditNoteGstReportingStatus(req: any, res: an
   }
 
   const body = req.body || {};
-  const adminEmail = (req as any).adminUser?.email || "admin@saandsha.com";
+  const adminEmail = (req as any).adminUser?.email || "admin@sa-and-sha.com";
 
   if (!body.gstReportingStatus) {
     return res.status(400).json({

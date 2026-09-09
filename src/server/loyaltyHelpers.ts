@@ -1698,7 +1698,7 @@ export async function runLoyaltyBackfill(
         pOrders.forEach((oSnap: any) => matchedOrders.set(oSnap.id, oSnap.data()));
       }
 
-      if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+      if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
         const eOrders = await adminDb.collection("orders").where("customer_email", "==", cleanEmail).get();
         eOrders.forEach((oSnap: any) => matchedOrders.set(oSnap.id, oSnap.data()));
       }

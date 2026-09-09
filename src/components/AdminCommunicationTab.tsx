@@ -533,8 +533,8 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   </span>
                 </div>
                 <div className="pt-2 border-t border-stone-100 text-xs text-stone-600 space-y-1 font-mono">
-                  <p>From: {providers.email?.from_email || 'orders@saandsha.com'}</p>
-                  <p>Domain: {providers.email?.domain || 'saandsha.com'} (Verified)</p>
+                  <p>From: {providers.email?.from_email || 'orders@sa-and-sha.com'}</p>
+                  <p>Domain: {providers.email?.domain || 'sa-and-sha.com'} (Verified)</p>
                 </div>
               </div>
 
@@ -956,7 +956,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   </label>
                   <input
                     type="email"
-                    value={emailProviderForm.from_email || 'orders@saandsha.com'}
+                    value={emailProviderForm.from_email || 'orders@sa-and-sha.com'}
                     onChange={(e) =>
                       setEmailProviderForm((p) => ({ ...p, from_email: e.target.value }))
                     }
@@ -970,7 +970,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   </label>
                   <input
                     type="email"
-                    value={emailProviderForm.reply_to || 'support@saandsha.com'}
+                    value={emailProviderForm.reply_to || 'support@sa-and-sha.com'}
                     onChange={(e) =>
                       setEmailProviderForm((p) => ({ ...p, reply_to: e.target.value }))
                     }
@@ -984,7 +984,7 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
                   </label>
                   <input
                     type="text"
-                    value={emailProviderForm.domain || 'saandsha.com'}
+                    value={emailProviderForm.domain || 'sa-and-sha.com'}
                     onChange={(e) =>
                       setEmailProviderForm((p) => ({ ...p, domain: e.target.value }))
                     }

@@ -225,7 +225,7 @@ async function runAllAdminRmaTests() {
     status: "under_review"
   };
   db.getCollection("return_requests").set("rma_100", mockRmaWithNotes);
-  db.getCollection("return_requests/rma_100/notes").set("note_1", { note: "INTERNAL DAMAGE DETECTED", created_by: "admin@saandsha.com" });
+  db.getCollection("return_requests/rma_100/notes").set("note_1", { note: "INTERNAL DAMAGE DETECTED", created_by: "admin@sa-and-sha.com" });
 
   const custDetail = await getCustomerReturnRequestById(db, "prof_cust_1", "", "jane@example.com", "rma_100");
   assert.strictEqual(custDetail.success, true);
@@ -243,7 +243,7 @@ async function runAllAdminRmaTests() {
     status: "requested",
     customer_profile_id: "prof_1"
   });
-  const sm1 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_1", { targetStatus: "under_review" });
+  const sm1 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_1", { targetStatus: "under_review" });
   assert.strictEqual(sm1.success, true);
   assert.strictEqual(sm1.status, "under_review");
   console.log("  ✔ 2A. requested -> under_review transition succeeds.");
@@ -254,7 +254,7 @@ async function runAllAdminRmaTests() {
     status: "requested",
     resolution: "refund_source"
   });
-  const sm2 = await approveReturnRequest(db, "admin@saandsha.com", "rma_sm_2", { resolution: "refund_source", note: "Valid approval" });
+  const sm2 = await approveReturnRequest(db, "admin@sa-and-sha.com", "rma_sm_2", { resolution: "refund_source", note: "Valid approval" });
   assert.strictEqual(sm2.success, true);
   assert.strictEqual(sm2.status, "approved");
   console.log("  ✔ 2B. requested -> approved succeeds with required approval data.");
@@ -264,38 +264,38 @@ async function runAllAdminRmaTests() {
     rma_number: "SS-RMA-000003",
     status: "requested"
   });
-  const sm3 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_3", { targetStatus: "refund_completed" });
+  const sm3 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_3", { targetStatus: "refund_completed" });
   assert.strictEqual(sm3.success, false);
   assert.strictEqual(sm3.statusCode, 400);
   console.log("  ✔ 2C. Direct transition requested -> refund_completed is strictly rejected.");
 
   // D. completed -> any status rejected
   db.getCollection("return_requests").set("rma_sm_4", { rma_number: "SS-RMA-000004", status: "completed" });
-  const sm4 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_4", { targetStatus: "under_review" });
+  const sm4 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_4", { targetStatus: "under_review" });
   assert.strictEqual(sm4.success, false);
   console.log("  ✔ 2D. Terminal state completed cannot transition further.");
 
   // E. rejected -> any status rejected
   db.getCollection("return_requests").set("rma_sm_5", { rma_number: "SS-RMA-000005", status: "rejected" });
-  const sm5 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_5", { targetStatus: "approved" });
+  const sm5 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_5", { targetStatus: "approved" });
   assert.strictEqual(sm5.success, false);
   console.log("  ✔ 2E. Terminal state rejected cannot transition further.");
 
   // F. cancelled -> any status rejected
   db.getCollection("return_requests").set("rma_sm_6", { rma_number: "SS-RMA-000006", status: "cancelled" });
-  const sm6 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_6", { targetStatus: "under_review" });
+  const sm6 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_6", { targetStatus: "under_review" });
   assert.strictEqual(sm6.success, false);
   console.log("  ✔ 2F. Terminal state cancelled cannot transition further.");
 
   // G & H. Stale current-status check & Idempotency
   db.getCollection("return_requests").set("rma_sm_7", { rma_number: "SS-RMA-000007", status: "approved" });
-  const sm7 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_7", { targetStatus: "approved" });
+  const sm7 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_7", { targetStatus: "approved" });
   assert.strictEqual(sm7.success, true);
   assert.ok(sm7.message.includes("already in status"));
   console.log("  ✔ 2G & 2H. Identical transition is idempotent and safely handled.");
 
   // I. Arbitrary status strings rejected
-  const sm8 = await transitionReturnStatus(db, "admin@saandsha.com", "rma_sm_7", { targetStatus: "INVALID_CUSTOM_STATUS" });
+  const sm8 = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_sm_7", { targetStatus: "INVALID_CUSTOM_STATUS" });
   assert.strictEqual(sm8.success, false);
   assert.strictEqual(sm8.statusCode, 400);
   console.log("  ✔ 2I. Arbitrary client status strings are rejected.");
@@ -345,7 +345,7 @@ async function runAllAdminRmaTests() {
   console.log("  ✔ 3A - 3D. Approval item & resolution validation verified.");
 
   // Audit log & notification side effect checks
-  const appRes = await approveReturnRequest(db, "admin@saandsha.com", "rma_app_1", { resolution: "refund_source", note: "Approved in full" });
+  const appRes = await approveReturnRequest(db, "admin@sa-and-sha.com", "rma_app_1", { resolution: "refund_source", note: "Approved in full" });
   assert.strictEqual(appRes.success, true);
 
   const auditLogs = Array.from(db.getCollection("admin_audit_logs").values());
@@ -367,12 +367,12 @@ async function runAllAdminRmaTests() {
   });
 
   // Rejection requires reason
-  const rejNoReason = await rejectReturnRequest(db, "admin@saandsha.com", "rma_rej_1", { rejection_reason: "" });
+  const rejNoReason = await rejectReturnRequest(db, "admin@sa-and-sha.com", "rma_rej_1", { rejection_reason: "" });
   assert.strictEqual(rejNoReason.success, false);
   assert.strictEqual(rejNoReason.statusCode, 400);
 
   // Valid Rejection
-  const rejValid = await rejectReturnRequest(db, "admin@saandsha.com", "rma_rej_1", {
+  const rejValid = await rejectReturnRequest(db, "admin@sa-and-sha.com", "rma_rej_1", {
     rejection_reason: "item_used",
     customer_explanation: "Garment shows clear signs of wash and wear.",
     internal_note: "Tag missing, perfume scent present."
@@ -399,11 +399,11 @@ async function runAllAdminRmaTests() {
   });
 
   // Missing details
-  const infoNoDetails = await requestMoreInfoForReturn(db, "admin@saandsha.com", "rma_info_1", { details: "" });
+  const infoNoDetails = await requestMoreInfoForReturn(db, "admin@sa-and-sha.com", "rma_info_1", { details: "" });
   assert.strictEqual(infoNoDetails.success, false);
 
   // Valid info request
-  const infoValid = await requestMoreInfoForReturn(db, "admin@saandsha.com", "rma_info_1", {
+  const infoValid = await requestMoreInfoForReturn(db, "admin@sa-and-sha.com", "rma_info_1", {
     details: "Please attach clear photo of tag and care label.",
     due_days: 3
   });
@@ -414,7 +414,7 @@ async function runAllAdminRmaTests() {
   assert.ok(infoDoc.info_due_at, "Due date must be set");
 
   // Transition back to under_review after response
-  const infoResp = await transitionReturnStatus(db, "admin@saandsha.com", "rma_info_1", { targetStatus: "under_review", reason: "Customer provided photos" });
+  const infoResp = await transitionReturnStatus(db, "admin@sa-and-sha.com", "rma_info_1", { targetStatus: "under_review", reason: "Customer provided photos" });
   assert.strictEqual(infoResp.success, true);
   assert.strictEqual(infoResp.status, "under_review");
 
@@ -429,11 +429,11 @@ async function runAllAdminRmaTests() {
   db.getCollection("return_requests").set("rma_pik_2", { rma_number: "SS-RMA-PIK02", status: "approved" });
 
   // A. Cannot schedule pickup directly from requested
-  const pikFromReq = await scheduleReturnPickup(db, "admin@saandsha.com", "rma_pik_1", { courier: "BlueDart", pickup_date: "2026-08-05" });
+  const pikFromReq = await scheduleReturnPickup(db, "admin@sa-and-sha.com", "rma_pik_1", { courier: "BlueDart", pickup_date: "2026-08-05" });
   assert.strictEqual(pikFromReq.success, false, "Cannot schedule pickup from requested state");
 
   // B & C. Pickup from approved state with courier and date
-  const pikFromApp = await scheduleReturnPickup(db, "admin@saandsha.com", "rma_pik_2", {
+  const pikFromApp = await scheduleReturnPickup(db, "admin@sa-and-sha.com", "rma_pik_2", {
     courier: "Delhivery",
     pickup_date: "2026-08-05",
     time_window: "10:00 AM - 02:00 PM",
@@ -455,14 +455,14 @@ async function runAllAdminRmaTests() {
   db.getCollection("return_requests").set("rma_note_1", { rma_number: "SS-RMA-NOT01", status: "under_review" });
 
   // Empty note validation
-  const emptyNote = await addReturnInternalNote(db, "admin@saandsha.com", "rma_note_1", { note: "   " });
+  const emptyNote = await addReturnInternalNote(db, "admin@sa-and-sha.com", "rma_note_1", { note: "   " });
   assert.strictEqual(emptyNote.success, false);
 
   // Add valid note
-  const validNote = await addReturnInternalNote(db, "admin@saandsha.com", "rma_note_1", { note: "Customer verified over phone." });
+  const validNote = await addReturnInternalNote(db, "admin@sa-and-sha.com", "rma_note_1", { note: "Customer verified over phone." });
   assert.strictEqual(validNote.success, true);
   assert.ok(validNote.note_id);
-  assert.strictEqual(validNote.note.created_by, "admin@saandsha.com");
+  assert.strictEqual(validNote.note.created_by, "admin@sa-and-sha.com");
 
   // Fetch internal notes
   const notesRes = await getReturnInternalNotes(db, "rma_note_1");
@@ -479,14 +479,14 @@ async function runAllAdminRmaTests() {
   db.getCollection("return_requests").set("rma_sla_1", { rma_number: "SS-RMA-SLA01", status: "requested", priority: "normal" });
 
   // Assign staff
-  const assignRes = await assignReturnStaff(db, "admin@saandsha.com", "rma_sla_1", { assigned_to_email: "pria@saandsha.com", assigned_to_name: "Priya S" });
+  const assignRes = await assignReturnStaff(db, "admin@sa-and-sha.com", "rma_sla_1", { assigned_to_email: "pria@sa-and-sha.com", assigned_to_name: "Priya S" });
   assert.strictEqual(assignRes.success, true);
 
   // Update Priority
-  const prioValid = await updateReturnPriority(db, "admin@saandsha.com", "rma_sla_1", "urgent");
+  const prioValid = await updateReturnPriority(db, "admin@sa-and-sha.com", "rma_sla_1", "urgent");
   assert.strictEqual(prioValid.success, true);
 
-  const prioInvalid = await updateReturnPriority(db, "admin@saandsha.com", "rma_sla_1", "invalid_prio" as any);
+  const prioInvalid = await updateReturnPriority(db, "admin@sa-and-sha.com", "rma_sla_1", "invalid_prio" as any);
   assert.strictEqual(prioInvalid.success, false);
 
   // Calculate SLA States
@@ -530,7 +530,7 @@ async function runAllAdminRmaTests() {
   console.log("\n--- 10. Query, Pagination & PII Masking Tests ---");
 
   // PII Masking
-  assert.strictEqual(maskPii("sandeep@saandsha.com", "email"), "sa***@saandsha.com");
+  assert.strictEqual(maskPii("sandeep@sa-and-sha.com", "email"), "sa***@sa-and-sha.com");
   assert.strictEqual(maskPii("9876543210", "phone"), "987****210");
 
   // CSV Defense

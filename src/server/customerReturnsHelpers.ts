@@ -95,7 +95,7 @@ export async function getCustomerReturnRequests(
     if (cleanPhone) {
       fallbackPromises.push(adminDb.collection("return_requests").where("customer_phone", "==", cleanPhone).limit(30).get());
     }
-    if (cleanEmail && cleanEmail !== "shop@saandsha.com") {
+    if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
       fallbackPromises.push(adminDb.collection("return_requests").where("customer_email", "==", cleanEmail).limit(30).get());
     }
 
@@ -185,7 +185,7 @@ export async function getCustomerReturnRequestById(
 
   const matchProfile = rProfileId && rProfileId === profileId;
   const matchPhone = cleanUserPhone && cleanReturnPhone && cleanUserPhone === cleanReturnPhone;
-  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@saandsha.com" && cleanReturnEmail && cleanUserEmail === cleanReturnEmail;
+  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@sa-and-sha.com" && cleanReturnEmail && cleanUserEmail === cleanReturnEmail;
 
   if (!matchProfile && !matchPhone && !matchEmail) {
     return { success: false, statusCode: 403, error: "Access denied. You do not have permission to view this return request." };
@@ -230,7 +230,7 @@ export async function validateOrderReturnEligibility(
 
   const matchProfile = oProfileId && oProfileId === profileId;
   const matchPhone = cleanUserPhone && cleanOrderPhone && cleanUserPhone === cleanOrderPhone;
-  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@saandsha.com" && cleanOrderEmail === cleanOrderEmail;
+  const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@sa-and-sha.com" && cleanOrderEmail === cleanOrderEmail;
 
   if (!matchProfile && !matchPhone && !matchEmail) {
     return { eligible: false, reason: "Order does not belong to this account." };
@@ -599,7 +599,7 @@ export async function getCustomerCreditNote(
 
       const matchProfile = cnProfileId && cnProfileId === profileId;
       const matchPhone = cleanUserPhone && cnPhone && cleanUserPhone === cnPhone;
-      const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@saandsha.com" && cnEmail === cleanUserEmail;
+      const matchEmail = cleanUserEmail && cleanUserEmail !== "shop@sa-and-sha.com" && cnEmail === cleanUserEmail;
 
       if (!matchProfile && !matchPhone && !matchEmail) {
         return {

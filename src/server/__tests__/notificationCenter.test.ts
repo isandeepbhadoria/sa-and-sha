@@ -76,7 +76,7 @@ describe('Omnichannel Notification Center — Unit Tests', () => {
   describe('2. WhatsApp Template Mapping', () => {
     it('maps ORDER_PLACED event to kl_order_placed_v1 with formatted params', () => {
       const origBaseUrl = process.env.PUBLIC_BASE_URL;
-      process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+      process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
 
       const mapping = WHATSAPP_TEMPLATES['ORDER_PLACED'];
       expect(mapping.templateName).toBe('kl_order_placed_v1');
@@ -91,7 +91,7 @@ describe('Omnichannel Notification Center — Unit Tests', () => {
       expect(params[0]).toBe('Rohan Sharma');
       expect(params[1]).toBe('ORD-90210');
       expect(params[2]).toBe('5–7 business days');
-      expect(params[3]).toBe('https://www.saandsha.com/track-order/trk_0123456789abcdef0123456789abcdef');
+      expect(params[3]).toBe('https://www.sa-and-sha.com/track-order/trk_0123456789abcdef0123456789abcdef');
 
       process.env.PUBLIC_BASE_URL = origBaseUrl;
     });

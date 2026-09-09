@@ -119,7 +119,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
     state_code: '27',
     pincode: '',
     country: 'India',
-    support_email: 'shop@saandsha.com',
+    support_email: 'shop@sa-and-sha.com',
     support_phone: '+91 98765 43210',
     invoice_prefix: 'SS',
     status: 'DRAFT',
@@ -278,7 +278,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
         authErrorMessage = sellerRes.data?.error || 'Missing or invalid Firebase Auth admin session token.';
       } else if (sellerRes.errorCategory === 'ADMIN_UNAUTHORIZED') {
         hasAuthError = true;
-        authErrorMessage = sellerRes.data?.error || 'Unauthorized email. Only shop@saandsha.com is granted admin access.';
+        authErrorMessage = sellerRes.data?.error || 'Unauthorized email. Only shop@sa-and-sha.com is granted admin access.';
       }
 
       if (productsRes.ok && productsRes.data) {
@@ -922,7 +922,7 @@ export const TaxMasterAdminTab: React.FC<TaxMasterAdminTabProps> = ({ adminToken
                 type="email"
                 value={seller.support_email}
                 onChange={(e) => setSeller({ ...seller, support_email: e.target.value })}
-                placeholder="shop@saandsha.com"
+                placeholder="shop@sa-and-sha.com"
                 className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-700"
               />
             </div>

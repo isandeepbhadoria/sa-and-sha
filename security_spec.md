@@ -2,7 +2,7 @@
 
 ## 1. Data Invariants
 - Anyone (unauthenticated and authenticated) can read products.
-- Only the specific Admin user with the email `shop@saandsha.com` can create, update, or delete products. Since we cannot check email directly in rules without authenticating, the admin must be logged in. The security rules will check if the user is signed in as an admin.
+- Only the specific Admin user with the email `shop@sa-and-sha.com` can create, update, or delete products. Since we cannot check email directly in rules without authenticating, the admin must be logged in. The security rules will check if the user is signed in as an admin.
 - Any product must have a valid non-empty string name, positive price, and valid enum values for category, fit, etc.
 
 ## 2. The "Dirty Dozen" Payloads

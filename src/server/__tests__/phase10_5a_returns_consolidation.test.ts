@@ -366,7 +366,7 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
         rmaNumber: "SS-RMA-100001",
         orderId: "ORD_TEST_100",
         amountRupees: 2899,
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         paymentMethod: "razorpay"
       });
 
@@ -413,10 +413,10 @@ describe("Phase 10.5A — Returns Architecture Consolidation & Safety Tests", ()
       const rmaNum = retDoc.return_request.rma_number;
 
       // Approve return first
-      const approveRes = await approveReturnRequest(db, "admin@saandsha.com", rmaNum, { approved_items: retDoc.return_request.items });
+      const approveRes = await approveReturnRequest(db, "admin@sa-and-sha.com", rmaNum, { approved_items: retDoc.return_request.items });
 
       // Schedule pickup
-      const pickupRes = await scheduleReturnPickup(db, "admin@saandsha.com", rmaNum, {
+      const pickupRes = await scheduleReturnPickup(db, "admin@sa-and-sha.com", rmaNum, {
         courier: "Delhivery",
         awb_number: "DEL123456789",
         pickup_date: "2026-08-12"

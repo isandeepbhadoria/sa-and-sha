@@ -120,7 +120,7 @@ describe("PHASE 10.5D.2 — Atomic Razorpay Refund Concurrency Lock Hardening", 
         rmaNumber: "KL-RMA-CONC-001",
         requestedAmount: 1000,
         reason: "Defective item",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         getRazorpayFn: mockRazorpayFn
       }),
       executeHardenedRazorpayRefund({
@@ -129,7 +129,7 @@ describe("PHASE 10.5D.2 — Atomic Razorpay Refund Concurrency Lock Hardening", 
         rmaNumber: "KL-RMA-CONC-001",
         requestedAmount: 1000,
         reason: "Defective item",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         getRazorpayFn: mockRazorpayFn
       })
     ]);
@@ -202,7 +202,7 @@ describe("PHASE 10.5D.2 — Atomic Razorpay Refund Concurrency Lock Hardening", 
         rmaNumber: "KL-RMA-CONC-A",
         requestedAmount: 1000,
         reason: "Return Item A",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         getRazorpayFn: mockRazorpayFn
       }),
       executeHardenedRazorpayRefund({
@@ -211,7 +211,7 @@ describe("PHASE 10.5D.2 — Atomic Razorpay Refund Concurrency Lock Hardening", 
         rmaNumber: "KL-RMA-CONC-B",
         requestedAmount: 1000,
         reason: "Return Item B",
-        adminEmail: "admin@saandsha.com",
+        adminEmail: "admin@sa-and-sha.com",
         getRazorpayFn: mockRazorpayFn
       })
     ]);

@@ -92,8 +92,8 @@ export function useSEO({
       }
     }
 
-    // 7. Canonical URL Enforcement (Preferred: www.saandsha.com without query/tracking parameters)
-    const baseCanonical = canonical || `https://www.saandsha.com${window.location.pathname.replace(/\/$/, '') || '/'}`;
+    // 7. Canonical URL Enforcement (Preferred: www.sa-and-sha.com without query/tracking parameters)
+    const baseCanonical = canonical || `https://www.sa-and-sha.com${window.location.pathname.replace(/\/$/, '') || '/'}`;
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement('link');

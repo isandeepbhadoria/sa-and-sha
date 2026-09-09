@@ -64,7 +64,7 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
       json: async () => ({
         success: true,
         message: "Email verified successfully.",
-        email: "customer@saandsha.com",
+        email: "customer@sa-and-sha.com",
         sessionToken: "sess_mock_email_token_456",
         profile: { id: "p_email_456", email_verified: true }
       })
@@ -73,11 +73,11 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
     try {
       const res = await verifyMsg91AccessTokenOnServer({
         accessToken: "msg91_email_token_456",
-        email: "customer@saandsha.com"
+        email: "customer@sa-and-sha.com"
       });
 
       expect(res.success).toBe(true);
-      expect(res.email).toBe("customer@saandsha.com");
+      expect(res.email).toBe("customer@sa-and-sha.com");
       expect(res.sessionToken).toBe("sess_mock_email_token_456");
       expect(res.profile).toBeDefined();
     } finally {
@@ -263,14 +263,14 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
       const win = await ensureMsg91Initialized({ hideMethod: "mobile" });
 
       // 2. Dispatch OTP via sendOtp exactly once
-      win.sendOtp("customer@saandsha.com", vi.fn(), vi.fn());
+      win.sendOtp("customer@sa-and-sha.com", vi.fn(), vi.fn());
 
       // Confirm initSendOTP was called without identifier
       expect(mockInitSendOTP).toHaveBeenCalled();
       expect(mockInitSendOTP.mock.calls[0][0].identifier).toBeUndefined();
       // Confirm window.sendOtp was called with target identifier
       expect(mockSendOtp).toHaveBeenCalledTimes(1);
-      expect(mockSendOtp.mock.calls[0][0]).toBe("customer@saandsha.com");
+      expect(mockSendOtp.mock.calls[0][0]).toBe("customer@sa-and-sha.com");
     } finally {
       globalThis.fetch = originalFetch;
       delete (globalThis as any).window;
@@ -319,7 +319,7 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
 
       const res = await checkAndRecordOtpSendRateLimit({
         channel: "email",
-        identifier: "customer@saandsha.com"
+        identifier: "customer@sa-and-sha.com"
       });
 
       expect(res.allowed).toBe(true);
@@ -328,7 +328,7 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
       expect(url).toBe("/api/otp/rate-limit-send");
       const body = JSON.parse(opts.body);
       expect(body.channel).toBe("email");
-      expect(body.email).toBe("customer@saandsha.com");
+      expect(body.email).toBe("customer@sa-and-sha.com");
       expect(body.phone).toBeUndefined();
     } finally {
       globalThis.fetch = originalFetch;
@@ -375,7 +375,7 @@ describe("Customer Portal Auth & Unified MSG91 Mobile + Email OTP Widget", () =>
 
       const res = await checkAndRecordOtpSendRateLimit({
         channel: "email",
-        identifier: "blocked@saandsha.com"
+        identifier: "blocked@sa-and-sha.com"
       });
 
       expect(res.allowed).toBe(false);

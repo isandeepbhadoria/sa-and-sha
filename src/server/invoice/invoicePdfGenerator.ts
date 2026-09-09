@@ -131,7 +131,7 @@ export async function generateGstInvoicePdfBuffer(invoice: GstInvoice): Promise<
       y += 11;
       doc.text(`GSTIN: ${seller.gstin || 'N/A'}${seller.pan ? ' | PAN: ' + seller.pan : ''}`, 30, y);
       y += 11;
-      doc.text(`State: ${seller.state || 'N/A'} (Code: ${seller.state_code || 'N/A'}) | Email: ${seller.support_email || 'support@saandsha.com'}`, 30, y);
+      doc.text(`State: ${seller.state || 'N/A'} (Code: ${seller.state_code || 'N/A'}) | Email: ${seller.support_email || 'support@sa-and-sha.com'}`, 30, y);
 
       y += 16;
       doc.strokeColor(BORDER).lineWidth(0.75).moveTo(30, y).lineTo(565, y).stroke();

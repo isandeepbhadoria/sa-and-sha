@@ -57,7 +57,7 @@ describe('Phase 9B.4 — Notification Retry, DLQ & Bulk Operations Unit Tests', 
 
   describe('3. Privacy Controls & Sanitization', () => {
     it('masks email addresses accurately', () => {
-      expect(maskEmail('customer@saandsha.com')).toBe('c***r@saandsha.com');
+      expect(maskEmail('customer@sa-and-sha.com')).toBe('c***r@sa-and-sha.com');
     });
 
     it('masks phone numbers accurately', () => {

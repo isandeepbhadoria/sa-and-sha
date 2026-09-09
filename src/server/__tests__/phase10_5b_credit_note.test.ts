@@ -155,7 +155,7 @@ describe("Phase 10.5B — GST Credit Note Engine Test Suite", () => {
       pincode: "302003",
       country: "India",
       pan: "AAAAA0000A",
-      support_email: "support@saandsha.com",
+      support_email: "support@sa-and-sha.com",
       support_phone: "+911410000000",
       invoice_prefix: "KL",
       status: "ACTIVE",
@@ -294,7 +294,7 @@ describe("Phase 10.5B — GST Credit Note Engine Test Suite", () => {
       orderId: "ORD-1001",
       rmaNumber: "RMA-1001",
       reason: "GOODS_RETURNED",
-      createdBy: "admin@saandsha.com"
+      createdBy: "admin@sa-and-sha.com"
     });
 
     expect(result.success).toBe(true);

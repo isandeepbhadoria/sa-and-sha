@@ -52,7 +52,7 @@ describe("Phase 10.5D.3A.16B: Production Hardening & Cloud Storage Suite", () =>
           }
         ],
         updatedAt: new Date().toISOString(),
-        updatedBy: "admin@saandsha.com"
+        updatedBy: "admin@sa-and-sha.com"
       };
 
       const mockDb = {
@@ -206,9 +206,9 @@ describe("Phase 10.5D.3A.16B: Production Hardening & Cloud Storage Suite", () =>
             }
           ],
           updatedAt: "2026-09-01T00:00:00.000Z",
-          updatedBy: "admin@saandsha.com"
+          updatedBy: "admin@sa-and-sha.com"
         },
-        "admin@saandsha.com"
+        "admin@sa-and-sha.com"
       );
 
       expect(result.success).toBe(true);

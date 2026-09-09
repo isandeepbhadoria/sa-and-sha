@@ -481,7 +481,7 @@ export async function getAdminReturnDetail(adminDb: any, returnId: string) {
 }
 
 function parseReturnArgs(arg2: any, arg3: any): { returnId: string; adminEmail: string } {
-  let email = "admin@saandsha.com";
+  let email = "admin@sa-and-sha.com";
   let returnId = "";
 
   if (typeof arg2 === "string" && arg2.includes("@")) {
@@ -492,7 +492,7 @@ function parseReturnArgs(arg2: any, arg3: any): { returnId: string; adminEmail: 
     returnId = String(arg2 || "");
   } else {
     returnId = String(arg2 || "");
-    email = String(arg3 || "admin@saandsha.com");
+    email = String(arg3 || "admin@sa-and-sha.com");
   }
 
   return { returnId, adminEmail: email };

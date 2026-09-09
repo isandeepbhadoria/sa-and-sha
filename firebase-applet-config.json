@@ -1,12 +1,12 @@
 {
-  "projectId": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID",
-  "appId": "REPLACE_WITH_YOUR_FIREBASE_APP_ID",
-  "apiKey": "REPLACE_WITH_YOUR_FIREBASE_WEB_API_KEY",
-  "authDomain": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID.firebaseapp.com",
+  "projectId": "sa-and-sha",
+  "appId": "1:424513263313:web:59c6b3c0221e58d8dcd7f0",
+  "apiKey": "AIzaSyAl56s2Zlb73z4jMQEKnlJdF18hFMeUKoE",
+  "authDomain": "sa-and-sha.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
-  "storageBucket": "REPLACE_WITH_YOUR_FIREBASE_PROJECT_ID.firebasestorage.app",
-  "messagingSenderId": "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
-  "measurementId": "",
+  "storageBucket": "sa-and-sha.firebasestorage.app",
+  "messagingSenderId": "424513263313",
+  "measurementId": "G-0BHP23T8NR",
   "oAuthClientId": "REPLACE_WITH_YOUR_OAUTH_CLIENT_ID",
   "recaptchaSiteKey": ""
 }

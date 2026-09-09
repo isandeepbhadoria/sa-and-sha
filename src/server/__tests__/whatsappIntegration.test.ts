@@ -66,7 +66,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
 
     it('maps all six core templates to exact expected variable counts and builders', () => {
       const origBaseUrl = process.env.PUBLIC_BASE_URL;
-      process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+      process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
 
       // 1. Order Placed (4 vars: customerName, orderId, estimatedDelivery, trackingUrl)
       const p1 = buildWhatsAppTemplateParams('ORDER_PLACED', 'Aarav Sharma', {
@@ -77,7 +77,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
       expect(p1[0]).toBe('Aarav Sharma');
       expect(p1[1]).toBe('ORD-101');
       expect(p1[2]).toBe('5–7 business days');
-      expect(p1[3]).toBe('https://www.saandsha.com/track-order/trk_0123456789abcdef0123456789abcdef');
+      expect(p1[3]).toBe('https://www.sa-and-sha.com/track-order/trk_0123456789abcdef0123456789abcdef');
 
       // 2. Payment Received (3 vars: customerName, orderId, amountPaid)
       const p2 = buildWhatsAppTemplateParams('PAYMENT_RECEIVED', 'Aarav Sharma', { order_id: 'ORD-101', grand_total: 4500 });
@@ -109,7 +109,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
         toPhone: '919876543210',
         templateName: 'kl_order_placed_v1',
         language: 'en',
-        bodyParams: ['Vikram Sharma', 'ORD-10928', '5–7 business days', 'https://www.saandsha.com/account/orders/ORD-10928'],
+        bodyParams: ['Vikram Sharma', 'ORD-10928', '5–7 business days', 'https://www.sa-and-sha.com/account/orders/ORD-10928'],
         integratedNumber: '917688886662',
         namespace: 'e05e342e_f402_47f4_8d19_76c1e20d8dce'
       });
@@ -128,13 +128,13 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
         body_1: { type: 'text', value: 'Vikram Sharma' },
         body_2: { type: 'text', value: 'ORD-10928' },
         body_3: { type: 'text', value: '5–7 business days' },
-        body_4: { type: 'text', value: 'https://www.saandsha.com/account/orders/ORD-10928' }
+        body_4: { type: 'text', value: 'https://www.sa-and-sha.com/account/orders/ORD-10928' }
       });
     });
 
     it('proves body_3 is estimated delivery (not amount) and body_4 is tracking URL with customer-friendly fallback', () => {
       const origBaseUrl = process.env.PUBLIC_BASE_URL;
-      process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+      process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
 
       // With custom estimated delivery
       const params1 = buildWhatsAppTemplateParams('ORDER_PLACED', 'Sandeep Bhadoria', {
@@ -145,7 +145,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
       expect(params1[0]).toBe('Sandeep Bhadoria');
       expect(params1[1]).toBe('KL-698782-LX');
       expect(params1[2]).toBe('Aug 5 - Aug 8');
-      expect(params1[3]).toBe('https://www.saandsha.com/track-order/trk_0123456789abcdef0123456789abcdef');
+      expect(params1[3]).toBe('https://www.sa-and-sha.com/track-order/trk_0123456789abcdef0123456789abcdef');
 
       // With fallback estimated delivery
       const params2 = buildWhatsAppTemplateParams('ORDER_PLACED', 'Sandeep Bhadoria', {
@@ -154,7 +154,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
         estimated_delivery: 'N/A'
       });
       expect(params2[2]).toBe('5–7 business days');
-      expect(params2[3]).toBe('https://www.saandsha.com/track-order/trk_0123456789abcdef0123456789abcdef');
+      expect(params2[3]).toBe('https://www.sa-and-sha.com/track-order/trk_0123456789abcdef0123456789abcdef');
 
       process.env.PUBLIC_BASE_URL = origBaseUrl;
     });
@@ -183,7 +183,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
     });
 
     it('proves no undefined or empty parameters are present in output params', () => {
-      process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+      process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
       const params = buildWhatsAppTemplateParams('ORDER_PLACED', '', {
         order_id: '',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef'
@@ -192,7 +192,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
       expect(params[0]).toBe('Valued Customer');
       expect(params[1]).toBe('N/A');
       expect(params[2]).toBe('5–7 business days');
-      expect(params[3]).toMatch(/^https:\/\/www\.saandsha\.com\/track-order\/trk_[a-f0-9]{32}$/);
+      expect(params[3]).toMatch(/^https:\/\/www\.sa-and-sha\.com\/track-order\/trk_[a-f0-9]{32}$/);
     });
   });
 

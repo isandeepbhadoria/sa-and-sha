@@ -22,7 +22,7 @@ import { useSEO } from '../hooks/useSEO';
 export const ContactSupportPage: React.FC = () => {
   useSEO({
     title: 'Contact Support | Sa and Sha',
-    description: 'Get in touch with Sa and Sha customer support at shop@saandsha.com for order tracking, size advice, and assistance.'
+    description: 'Get in touch with Sa and Sha customer support at shop@sa-and-sha.com for order tracking, size advice, and assistance.'
   });
 
   // Form State
@@ -254,10 +254,10 @@ export const ContactSupportPage: React.FC = () => {
                 <div>
                   <div className="text-xs font-sans font-bold text-stone-500 uppercase tracking-wider">Email Support</div>
                   <a 
-                    href="mailto:shop@saandsha.com" 
+                    href="mailto:shop@sa-and-sha.com" 
                     className="font-serif font-bold text-[#2A211C] text-base hover:text-[#B08D57] transition-colors block mt-0.5"
                   >
-                    shop@saandsha.com
+                    shop@sa-and-sha.com
                   </a>
                   <p className="text-xs text-stone-500 mt-0.5">We respond to all emails within 2 to 4 business hours.</p>
                 </div>

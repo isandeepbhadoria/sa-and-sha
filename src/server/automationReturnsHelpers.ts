@@ -32,10 +32,10 @@ export async function autoAssignRma(db: any, rmaNumber: string, options: { force
 
     // Available team pool
     const teamPool = [
-      { email: "returns.lead@saandsha.com", role: "team_lead", load: 0, region: "NORTH" },
-      { email: "returns.agent1@saandsha.com", role: "agent", load: 0, region: "WEST" },
-      { email: "returns.agent2@saandsha.com", role: "agent", load: 0, region: "SOUTH" },
-      { email: "warehouse.qc@saandsha.com", role: "inspector", load: 0, region: "CENTRAL" }
+      { email: "returns.lead@sa-and-sha.com", role: "team_lead", load: 0, region: "NORTH" },
+      { email: "returns.agent1@sa-and-sha.com", role: "agent", load: 0, region: "WEST" },
+      { email: "returns.agent2@sa-and-sha.com", role: "agent", load: 0, region: "SOUTH" },
+      { email: "warehouse.qc@sa-and-sha.com", role: "inspector", load: 0, region: "CENTRAL" }
     ];
 
     // Query current open workload for each staff member
@@ -73,7 +73,7 @@ export async function autoAssignRma(db: any, rmaNumber: string, options: { force
 
     await logAdminReturnAudit(
       db,
-      "system.automation@saandsha.com",
+      "system.automation@sa-and-sha.com",
       "AUTO_ASSIGN",
       rmaNumber,
       `Auto-assigned to ${chosenMember.email} based on workload (${chosenMember.load} active RMAs)`,
@@ -133,14 +133,14 @@ export async function runSlaMonitoringWorker(db: any): Promise<{ monitored: numb
         // Check if escalation is required
         if (slaDetail.is_overdue && slaDetail.hours_overdue >= 24) {
           let newEscalationLevel = "team_lead";
-          let assignEmail = "returns.lead@saandsha.com";
+          let assignEmail = "returns.lead@sa-and-sha.com";
 
           if (slaDetail.hours_overdue >= 72) {
             newEscalationLevel = "critical_ops";
-            assignEmail = "ops.head@saandsha.com";
+            assignEmail = "ops.head@sa-and-sha.com";
           } else if (slaDetail.hours_overdue >= 48) {
             newEscalationLevel = "ops_manager";
-            assignEmail = "ops.manager@saandsha.com";
+            assignEmail = "ops.manager@sa-and-sha.com";
           }
 
           if (rData.escalation_level !== newEscalationLevel) {
@@ -166,7 +166,7 @@ export async function runSlaMonitoringWorker(db: any): Promise<{ monitored: numb
             // Audit log
             await logAdminReturnAudit(
               db,
-              "system.automation@saandsha.com",
+              "system.automation@sa-and-sha.com",
               "AUTO_ESCALATION",
               rmaNumber,
               `SLA breach (${slaDetail.hours_overdue}h overdue). Escalated to ${newEscalationLevel}.`,
@@ -265,7 +265,7 @@ export async function runReminderWorker(db: any): Promise<{ reminders_sent: numb
         try {
           await publishNotification(db, {
             event: "ORDER_RETURN_REQUESTED",
-            recipientEmail: "warehouse.qc@saandsha.com",
+            recipientEmail: "warehouse.qc@sa-and-sha.com",
             payload: {
               title: `Warehouse Inspection Pending: RMA #${rmaNumber}`,
               message: `Parcel received ${Math.round(ageHours)} hours ago for RMA #${rmaNumber}. Please perform QC inspection.`,
@@ -308,7 +308,7 @@ export async function runRetryWorker(db: any): Promise<{ retries_executed: numbe
 
       if (retryCount < 3) {
         try {
-          const result = await retryReturnFinancials(db, "system.retry_worker@saandsha.com", rmaNumber);
+          const result = await retryReturnFinancials(db, "system.retry_worker@sa-and-sha.com", rmaNumber);
           if (result.success) {
             retries_executed++;
           } else {
@@ -622,7 +622,7 @@ export async function executeControlTowerBulkAction(
         await ref.update({
           escalation_level: "ops_manager",
           priority: "urgent",
-          assigned_staff_email: "ops.manager@saandsha.com",
+          assigned_staff_email: "ops.manager@sa-and-sha.com",
           updated_at: nowIso
         });
         await logAdminReturnAudit(db, adminEmail, "BULK_ESCALATION", rmaNumber, "Escalated to Operations Manager", {});

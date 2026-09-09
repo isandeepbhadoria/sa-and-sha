@@ -23,7 +23,7 @@ const mockSellerConfig: SellerTaxConfig = {
   address_line_2: 'Nariman Point',
   pincode: '400001',
   country: 'India',
-  support_email: 'support@saandsha.com',
+  support_email: 'support@sa-and-sha.com',
   support_phone: '+91 98765 43210',
   invoice_prefix: 'KL',
   financial_year: '26-27',

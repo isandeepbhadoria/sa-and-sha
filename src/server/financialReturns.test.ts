@@ -208,7 +208,7 @@ async function runFinancialTests() {
   console.log("RUNNING PHASE 7B.4 FINANCIAL SETTLEMENT TEST SUITE");
   console.log("=================================================\n");
 
-  const adminEmail = "finance.manager@saandsha.com";
+  const adminEmail = "finance.manager@sa-and-sha.com";
 
   // --- TEST 1: FULL REFUND EXECUTION ---
   await (async () => {

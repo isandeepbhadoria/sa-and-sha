@@ -156,8 +156,8 @@ describe("PHASE 10.2 — Checkout OTP Regression Fix & Existing Customer Autofil
       first_name: "Aarav",
       last_name: "Sharma",
       full_name: "Aarav Sharma",
-      email: "aarav@saandsha.com",
-      email_lower: "aarav@saandsha.com",
+      email: "aarav@sa-and-sha.com",
+      email_lower: "aarav@sa-and-sha.com",
       phone: "+919876543210",
       normalized_phone: "919876543210",
       business_name: "Kora Textiles Pvt Ltd",
@@ -180,7 +180,7 @@ describe("PHASE 10.2 — Checkout OTP Regression Fix & Existing Customer Autofil
     expect(profile.customer_type).toBe("BUSINESS");
     expect(profile.first_name).toBe("Aarav");
     expect(profile.last_name).toBe("Sharma");
-    expect(profile.email).toBe("aarav@saandsha.com");
+    expect(profile.email).toBe("aarav@sa-and-sha.com");
     expect(profile.gstin).toBe("27AAAAA0000A1Z5");
     expect(mockProfilesStore.size).toBe(1); // No duplicate created
   });
@@ -196,7 +196,7 @@ describe("PHASE 10.2 — Checkout OTP Regression Fix & Existing Customer Autofil
       first_name: "Diya",
       last_name: "Patel",
       full_name: "Diya Patel",
-      email: "diya@saandsha.com",
+      email: "diya@sa-and-sha.com",
       phone: "+919876543211",
       normalized_phone: "919876543211",
       business_name: "Linen Crafts India",
@@ -259,7 +259,7 @@ describe("PHASE 10.2 — Checkout OTP Regression Fix & Existing Customer Autofil
 
     expect(mappedForm.firstName).toBe("Diya");
     expect(mappedForm.lastName).toBe("Patel");
-    expect(mappedForm.email).toBe("diya@saandsha.com");
+    expect(mappedForm.email).toBe("diya@sa-and-sha.com");
     expect(mappedForm.addressLine1).toBe("Suite 401, Textile Tower");
     expect(mappedForm.city).toBe("Mumbai");
     expect(mappedForm.gstin).toBe("27BBBBB1111B1Z6");

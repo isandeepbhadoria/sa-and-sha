@@ -7,7 +7,7 @@ export const AboutPage: React.FC = () => {
   useSEO({
     title: 'About Sa and Sha | Ladies Apparel',
     description: 'Discover Sa and Sha and our approach to everyday elegance, quality fabrics, thoughtful design, and timeless style.',
-    canonical: 'https://www.saandsha.com/about',
+    canonical: 'https://www.sa-and-sha.com/about',
     noindex: false,
     structuredData: {
       '@context': 'https://schema.org',
@@ -17,13 +17,13 @@ export const AboutPage: React.FC = () => {
           '@type': 'ListItem',
           'position': 1,
           'name': 'Home',
-          'item': 'https://www.saandsha.com'
+          'item': 'https://www.sa-and-sha.com'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': 'About Sa and Sha',
-          'item': 'https://www.saandsha.com/about'
+          'item': 'https://www.sa-and-sha.com/about'
         }
       ]
     }

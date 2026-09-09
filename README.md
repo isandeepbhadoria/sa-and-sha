@@ -40,7 +40,7 @@ identity, catalog categories, and secrets/config are new.
 ## What changed from Kora Linen
 
 - All brand strings, domains, and emails rebranded (`Kora Linen` →
-  `Sa and Sha`, `koralinen.com` → `saandsha.com`, admin/role email domains
+  `Sa and Sha`, `koralinen.com` → `sa-and-sha.com`, admin/role email domains
   updated to match)
 - Kora Linen's trademarked logo/favicon image files were **removed**
   (they're that brand's IP) and replaced with a plain text placeholder

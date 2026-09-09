@@ -28,7 +28,7 @@ export const PrivacyPolicyPage: React.FC = () => {
   useSEO({
     title: 'Privacy Policy | Sa and Sha',
     description: 'Read the official Privacy Policy of Sa and Sha. Learn how we protect your personal data, customer account info, orders, payment processing, and security events in full compliance with Indian privacy laws.',
-    canonical: 'https://saandsha.com/privacy-policy',
+    canonical: 'https://sa-and-sha.com/privacy-policy',
     noindex: false,
     structuredData: {
       '@context': 'https://schema.org',
@@ -38,13 +38,13 @@ export const PrivacyPolicyPage: React.FC = () => {
           '@type': 'ListItem',
           'position': 1,
           'name': 'Home',
-          'item': 'https://saandsha.com'
+          'item': 'https://sa-and-sha.com'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': 'Privacy Policy',
-          'item': 'https://saandsha.com/privacy-policy'
+          'item': 'https://sa-and-sha.com/privacy-policy'
         }
       ]
     }
@@ -126,7 +126,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             <span className="text-xs font-sans font-bold uppercase tracking-wider">Account Deletion</span>
           </div>
           <p className="text-[11px] text-stone-600 leading-normal">
-            You may request deletion by contacting support at support@saandsha.com.
+            You may request deletion by contacting support at support@sa-and-sha.com.
           </p>
         </div>
       </div>
@@ -178,7 +178,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              This Privacy Policy applies to the website <strong className="text-[#2A211C]">https://saandsha.com</strong>, the Customer Portal, mobile web interfaces, checkout systems, and related digital services operated under the trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong>, owned and managed by [Registered Legal Entity Name], headquartered in [City, State, India].
+              This Privacy Policy applies to the website <strong className="text-[#2A211C]">https://sa-and-sha.com</strong>, the Customer Portal, mobile web interfaces, checkout systems, and related digital services operated under the trademark brand <strong className="text-[#2A211C]">Sa and Sha</strong>, owned and managed by [Registered Legal Entity Name], headquartered in [City, State, India].
             </p>
             <p>
               We adhere strictly to statutory data protection requirements under Indian law, including:
@@ -450,7 +450,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </div>
               <div className="p-3 bg-stone-50 rounded border border-stone-200">
                 <strong className="text-[#2A211C] font-bold block">• Right to Revoke Consent & Delete Account:</strong>
-                <span>You may request deletion by contacting support at <a href="mailto:support@saandsha.com" className="text-[#B08D57] hover:underline font-semibold">support@saandsha.com</a> or via our <Link to="/contact-support" className="text-[#B08D57] hover:underline font-semibold">Support Portal</Link>. Upon receiving your request, non-statutory personal data will be processed for erasure within 30 days. Statutory GST and accounting records will be retained as required by Indian tax laws.</span>
+                <span>You may request deletion by contacting support at <a href="mailto:support@sa-and-sha.com" className="text-[#B08D57] hover:underline font-semibold">support@sa-and-sha.com</a> or via our <Link to="/contact-support" className="text-[#B08D57] hover:underline font-semibold">Support Portal</Link>. Upon receiving your request, non-statutory personal data will be processed for erasure within 30 days. Statutory GST and accounting records will be retained as required by Indian tax laws.</span>
               </div>
               <div className="p-3 bg-stone-50 rounded border border-stone-200">
                 <strong className="text-[#2A211C] font-bold block">• Marketing Opt-Out:</strong>
@@ -489,7 +489,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               </h2>
             </div>
             <p>
-              Our website and products are designed for adults aged 18 and above. Sa and Sha does not knowingly request or collect personal information from individuals under the age of 18. If a parent or legal guardian discovers that a minor has created an account without consent, please contact us immediately at <strong className="text-[#2A211C]">support@saandsha.com</strong> to have the profile removed.
+              Our website and products are designed for adults aged 18 and above. Sa and Sha does not knowingly request or collect personal information from individuals under the age of 18. If a parent or legal guardian discovers that a minor has created an account without consent, please contact us immediately at <strong className="text-[#2A211C]">support@sa-and-sha.com</strong> to have the profile removed.
             </p>
           </section>
 
@@ -527,11 +527,11 @@ export const PrivacyPolicyPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Email:</strong> <a href="mailto:support@saandsha.com" className="text-[#B08D57] hover:underline">support@saandsha.com</a></span>
+                  <span><strong>Email:</strong> <a href="mailto:support@sa-and-sha.com" className="text-[#B08D57] hover:underline">support@sa-and-sha.com</a></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <HelpCircle className="w-4 h-4 text-[#B08D57]" />
-                  <span><strong>Support Portal:</strong> <Link to="/contact-support" className="text-[#B08D57] hover:underline">https://saandsha.com/contact-support</Link></span>
+                  <span><strong>Support Portal:</strong> <Link to="/contact-support" className="text-[#B08D57] hover:underline">https://sa-and-sha.com/contact-support</Link></span>
                 </div>
               </div>
               <p className="text-[11px] text-stone-500 pt-1 border-t border-[#E5D2BC]/20">

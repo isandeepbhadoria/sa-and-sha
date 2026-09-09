@@ -4,4 +4,4 @@ Disallow: /checkout
 Disallow: /admin
 Disallow: /wishlist
 
-Sitemap: https://www.saandsha.com/sitemap.xml
+Sitemap: https://www.sa-and-sha.com/sitemap.xml

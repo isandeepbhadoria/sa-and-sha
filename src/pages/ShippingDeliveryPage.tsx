@@ -18,7 +18,7 @@ export const ShippingDeliveryPage: React.FC = () => {
   useSEO({
     title: 'Shipping & Delivery | Sa and Sha',
     description: 'Learn about Sa and Sha shipping charges, order processing and delivery timelines across India. Free shipping on orders above ₹1,999.',
-    canonical: 'https://www.saandsha.com/shipping-delivery',
+    canonical: 'https://www.sa-and-sha.com/shipping-delivery',
     noindex: false,
     structuredData: {
       '@context': 'https://schema.org',
@@ -28,13 +28,13 @@ export const ShippingDeliveryPage: React.FC = () => {
           '@type': 'ListItem',
           'position': 1,
           'name': 'Home',
-          'item': 'https://www.saandsha.com'
+          'item': 'https://www.sa-and-sha.com'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': 'Shipping & Delivery',
-          'item': 'https://www.saandsha.com/shipping-delivery'
+          'item': 'https://www.sa-and-sha.com/shipping-delivery'
         }
       ]
     }

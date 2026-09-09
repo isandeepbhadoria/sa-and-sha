@@ -117,7 +117,7 @@ describe('Phase 10.5C - GST Credit Note PDF & Access Control Engine', () => {
       city: 'Mumbai',
       pincode: '400001',
       country: 'India',
-      support_email: 'support@saandsha.com',
+      support_email: 'support@sa-and-sha.com',
       support_phone: '1800-123-4567'
     },
     buyer_snapshot: {
@@ -203,7 +203,7 @@ describe('Phase 10.5C - GST Credit Note PDF & Access Control Engine', () => {
     status: 'ISSUED',
     currency: 'INR',
     created_at: '2026-04-15T12:00:00.000Z',
-    created_by: 'admin@saandsha.com',
+    created_by: 'admin@sa-and-sha.com',
     version: 1,
     pdf_status: 'NOT_GENERATED',
     pdf_generated_at: null,

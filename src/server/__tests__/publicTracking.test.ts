@@ -134,7 +134,7 @@ describe('Phase 8B.1 — Sa and Sha Branded Public Order Tracking Tests', () => 
     const origBaseUrl = process.env.PUBLIC_BASE_URL;
 
     beforeEach(() => {
-      process.env.PUBLIC_BASE_URL = 'https://www.saandsha.com';
+      process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
     });
 
     afterEach(() => {
@@ -153,7 +153,7 @@ describe('Phase 8B.1 — Sa and Sha Branded Public Order Tracking Tests', () => 
       expect(params[0]).toBe('Vikram Sharma');
       expect(params[1]).toBe('ORD-10928');
       expect(params[2]).toBe('5–7 business days');
-      expect(params[3]).toBe('https://www.saandsha.com/track-order/trk_a1b2c3d4e5f607182930415263748596');
+      expect(params[3]).toBe('https://www.sa-and-sha.com/track-order/trk_a1b2c3d4e5f607182930415263748596');
     });
 
     it('rejects notification dispatch if tracking_token is missing or invalid', () => {

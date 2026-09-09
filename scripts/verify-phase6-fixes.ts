@@ -41,7 +41,7 @@ console.log('==================================================');
 // Test 1: Masking
 console.log('\n--- Test 1: Customer PII Masking ---');
 const phone = '+919876543210';
-const email = 'shop@saandsha.com';
+const email = 'shop@sa-and-sha.com';
 const maskedPhone = maskPhone(phone);
 const maskedEmail = maskEmail(email);
 

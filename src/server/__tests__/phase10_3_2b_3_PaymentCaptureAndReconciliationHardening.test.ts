@@ -30,7 +30,7 @@ function createMockAdminDb(initialData?: {
     state_code: '27',
     pincode: '400001',
     country: 'India',
-    support_email: 'support@saandsha.com',
+    support_email: 'support@sa-and-sha.com',
     support_phone: '+919876543210',
     invoice_prefix: 'KL',
     status: 'ACTIVE'

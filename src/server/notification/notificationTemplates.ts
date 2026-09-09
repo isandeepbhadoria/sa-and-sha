@@ -274,12 +274,12 @@ export function buildWhatsAppTemplateParams(
     if (key === 'remainingBalance') return `${payload?.remainingBalance || 0}`;
     if (key === 'newTier') return payload?.newTier || 'Member';
     if (key === 'currentTier') return payload?.currentTier || 'Member';
-    if (key === 'loginUrl') return payload?.loginUrl || 'https://saandsha.com/login';
+    if (key === 'loginUrl') return payload?.loginUrl || 'https://sa-and-sha.com/login';
     if (key === 'otpCode') return payload?.otpCode || '';
-    if (key === 'reviewUrl') return payload?.reviewUrl || 'https://saandsha.com/reviews';
-    if (key === 'cartUrl') return payload?.cartUrl || 'https://saandsha.com/cart';
+    if (key === 'reviewUrl') return payload?.reviewUrl || 'https://sa-and-sha.com/reviews';
+    if (key === 'cartUrl') return payload?.cartUrl || 'https://sa-and-sha.com/cart';
     if (key === 'productName') return payload?.productName || 'Garment';
-    if (key === 'productUrl') return payload?.productUrl || 'https://saandsha.com';
+    if (key === 'productUrl') return payload?.productUrl || 'https://sa-and-sha.com';
     if (key === 'newPrice') return `₹${(payload?.newPrice || 0).toLocaleString('en-IN')}`;
     if (key === 'giftCode') return payload?.giftCode || 'SPECIAL10';
     if (key === 'rewardAmount') return `₹${(payload?.rewardAmount || 0).toLocaleString('en-IN')}`;

@@ -104,7 +104,7 @@ Disallow: /checkout
 Disallow: /admin
 Disallow: /wishlist
 
-Sitemap: https://www.saandsha.com/sitemap.xml`;
+Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
 
   fs.writeFileSync(path.join(publicDir, "robots.txt"), robotsTxt, "utf-8");
   console.log("Successfully generated public/robots.txt");
@@ -114,28 +114,28 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
     const { merged: activeProducts, staticCount, firestoreCount, duplicatesRemoved } = await getAllProducts();
 
     const staticAndCategoryUrls: string[] = [
-      "https://www.saandsha.com/",
-      "https://www.saandsha.com/about",
-      "https://www.saandsha.com/faq",
-      "https://www.saandsha.com/contact-support",
-      "https://www.saandsha.com/returns-exchanges",
-      "https://www.saandsha.com/shipping-delivery",
-      "https://www.saandsha.com/track-order",
+      "https://www.sa-and-sha.com/",
+      "https://www.sa-and-sha.com/about",
+      "https://www.sa-and-sha.com/faq",
+      "https://www.sa-and-sha.com/contact-support",
+      "https://www.sa-and-sha.com/returns-exchanges",
+      "https://www.sa-and-sha.com/shipping-delivery",
+      "https://www.sa-and-sha.com/track-order",
     ];
 
     const shopPages = ["all", "bestsellers", "new-arrivals"];
     for (const page of shopPages) {
-      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/${page}`);
+      staticAndCategoryUrls.push(`https://www.sa-and-sha.com/shop/${page}`);
     }
 
     const collections = ["apparel", "accessories"];
     for (const collectionId of collections) {
-      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/collection/${collectionId}`);
+      staticAndCategoryUrls.push(`https://www.sa-and-sha.com/shop/collection/${collectionId}`);
     }
 
     const productTypes = ["dresses", "tops-shirts", "shorts-skirts", "co-ord-sets", "trousers", "jackets", "bags-pouches"];
     for (const productTypeId of productTypes) {
-      staticAndCategoryUrls.push(`https://www.saandsha.com/shop/product/${productTypeId}`);
+      staticAndCategoryUrls.push(`https://www.sa-and-sha.com/shop/product/${productTypeId}`);
     }
 
     const locSet = new Set<string>();
@@ -152,7 +152,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
       }
       locSet.add(urlStr);
 
-      const isHome = urlStr === "https://www.saandsha.com/";
+      const isHome = urlStr === "https://www.sa-and-sha.com/";
       const isShop = urlStr.includes("/shop/");
       const priority = isHome ? "1.0" : (isShop ? "0.8" : "0.7");
       const changefreq = isHome ? "daily" : (isShop ? "weekly" : "monthly");
@@ -167,7 +167,7 @@ Sitemap: https://www.saandsha.com/sitemap.xml`;
     let productUrlsCount = 0;
     for (const prod of activeProducts) {
       const targetSlug = prod.slug || slugify(prod.name);
-      const prodUrl = `https://www.saandsha.com/product/${targetSlug}`;
+      const prodUrl = `https://www.sa-and-sha.com/product/${targetSlug}`;
       if (locSet.has(prodUrl)) {
         duplicateSitemapUrlsCount++;
         continue;

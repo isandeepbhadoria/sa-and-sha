@@ -190,7 +190,7 @@ async function runAutomationTests() {
     const updatedSnap = await db.collection("return_requests").doc(testRmaId).get();
     const updatedData = updatedSnap.data();
 
-    if (assignRes.success && updatedData.assigned_staff_email === "returns.lead@saandsha.com") {
+    if (assignRes.success && updatedData.assigned_staff_email === "returns.lead@sa-and-sha.com") {
       console.log("  ✓ PASSED: Intelligent Assignment Engine (VIP Routing to Team Lead)");
     } else {
       throw new Error(`Assignment failed: ${JSON.stringify(assignRes)}`);
@@ -293,7 +293,7 @@ async function runAutomationTests() {
 
     const bulkRes = await executeControlTowerBulkAction(
       db,
-      "admin@saandsha.com",
+      "admin@sa-and-sha.com",
       "priority",
       [bulkRma1, bulkRma2],
       { priority: "urgent" }

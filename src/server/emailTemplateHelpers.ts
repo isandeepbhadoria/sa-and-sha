@@ -179,7 +179,7 @@ export function getDefaultTemplatesList(): EmailTemplate[] {
           <p style="margin: 6px 0 0 0; font-size: 13px; color: #4A443C;">Enjoy {{discount}} off on your first order with us.</p>
         </div>
         <div class="button-container">
-          <a href="https://saandsha.com" class="btn">Explore Collection</a>
+          <a href="https://sa-and-sha.com" class="btn">Explore Collection</a>
         </div>
       `),
       plain_text: `Hello {{customer_name}},
@@ -189,7 +189,7 @@ Welcome to {{company_name}}!
 We are thrilled to welcome you. Enjoy your exclusive welcome voucher:
 Code: {{coupon_code}} ({{discount}} off)
 
-Shop now: https://saandsha.com
+Shop now: https://sa-and-sha.com
 
 Best regards,
 The {{company_name}} Team`
@@ -563,7 +563,7 @@ Replacement shipment details will follow.
 
 Your account with {{company_name}} is ready!
 
-Manage orders: https://saandsha.com`
+Manage orders: https://sa-and-sha.com`
     },
     {
       template_id: 'password_reset',
@@ -583,14 +583,14 @@ Manage orders: https://saandsha.com`
         <h2 class="title">Reset Your Password</h2>
         <p class="body-text">Hi {{first_name}}, we received a request to reset your password. Click the button below to set a new password.</p>
         <div class="button-container">
-          <a href="https://saandsha.com/reset-password" class="btn">Reset Password</a>
+          <a href="https://sa-and-sha.com/reset-password" class="btn">Reset Password</a>
         </div>
         <p class="body-text" style="font-size: 13px; color: #8C8275;">If you did not request this, please ignore this email.</p>
       `),
       plain_text: `Hi {{first_name}},
 
 Reset your password using the link below:
-https://saandsha.com/reset-password
+https://sa-and-sha.com/reset-password
 
 If you did not request this, ignore this message.`
     },

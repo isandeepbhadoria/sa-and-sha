@@ -155,7 +155,7 @@ export const TrackOrderPage: React.FC = () => {
   useSEO({
     title: 'Track Your Order | Sa and Sha',
     description: 'Track your Sa and Sha order status, shipment timeline, and delivery estimated date in real time.',
-    canonical: 'https://www.saandsha.com/track-order'
+    canonical: 'https://www.sa-and-sha.com/track-order'
   });
 
   // Ensure noindex meta tag dynamically
@@ -440,7 +440,7 @@ export const TrackOrderPage: React.FC = () => {
               <div>
                 <p className="font-semibold">{errorMsg}</p>
                 <p className="text-xs text-rose-700 mt-1">
-                  Need assistance? Contact our Customer Care team at <a href="mailto:support@saandsha.com" className="underline font-medium">support@saandsha.com</a>.
+                  Need assistance? Contact our Customer Care team at <a href="mailto:support@sa-and-sha.com" className="underline font-medium">support@sa-and-sha.com</a>.
                 </p>
               </div>
             </div>

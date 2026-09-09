@@ -80,10 +80,10 @@ export const HomePage: React.FC = () => {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Sa and Sha",
-        "url": "https://www.saandsha.com",
+        "url": "https://www.sa-and-sha.com",
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://www.saandsha.com/shop/all?search={search_term_string}",
+          "target": "https://www.sa-and-sha.com/shop/all?search={search_term_string}",
           "query-input": "required name=search_term_string"
         }
       },
@@ -91,8 +91,8 @@ export const HomePage: React.FC = () => {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Sa and Sha",
-        "url": "https://www.saandsha.com",
-        "logo": "https://www.saandsha.com/logo.png",
+        "url": "https://www.sa-and-sha.com",
+        "logo": "https://www.sa-and-sha.com/logo.png",
         "sameAs": [
           "https://instagram.com",
           "https://facebook.com",
@@ -123,8 +123,8 @@ export const HomePage: React.FC = () => {
     "@context": "https://schema.org/",
     "@type": "Organization",
     "name": "Sa and Sha",
-    "url": "https://www.saandsha.com",
-    "logo": "https://www.saandsha.com/logo.png"
+    "url": "https://www.sa-and-sha.com",
+    "logo": "https://www.sa-and-sha.com/logo.png"
   };
 
   return (

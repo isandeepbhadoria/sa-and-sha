@@ -28,7 +28,7 @@ function createMockAdminDb(initialData?: {
     state_code: '27',
     pincode: '400001',
     country: 'India',
-    support_email: 'support@saandsha.com',
+    support_email: 'support@sa-and-sha.com',
     support_phone: '+919876543210',
     invoice_prefix: 'KL',
     status: 'ACTIVE'
@@ -366,7 +366,7 @@ describe('PHASE 10.3.2B — Production GST Invoice Finalization Lifecycle Matrix
         payment_verification_source: 'razorpay_api',
         payment_id: 'pay_rzp_1004',
         status: 'processing',
-        customer_email: 'buyer@saandsha.com',
+        customer_email: 'buyer@sa-and-sha.com',
         customer_name: 'Ananya Sharma',
         shipping_address: { state: 'Maharashtra' },
         items: sampleOrderItems,
