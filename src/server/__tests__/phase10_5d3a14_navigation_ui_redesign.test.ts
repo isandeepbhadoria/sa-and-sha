@@ -104,11 +104,11 @@ describe('PHASE 10.5D.3A.14 — Navigation UI Redesign Verification', () => {
 
     const accessoriesRoute = getTaxonomyRouteInfo({ collectionId: 'accessories' });
     expect(accessoriesRoute.isValid).toBe(true);
-    expect(accessoriesRoute.isComingSoon).toBe(true);
+    expect(accessoriesRoute.isComingSoon).toBe(false);
 
     const trousersRoute = getTaxonomyRouteInfo({ productTypeId: 'trousers' });
     expect(trousersRoute.isValid).toBe(true);
-    expect(trousersRoute.isComingSoon).toBe(true);
+    expect(trousersRoute.isComingSoon).toBe(false);
 
     const topsRoute = getTaxonomyRouteInfo({
       productTypeId: 'tops-shirts',

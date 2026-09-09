@@ -163,10 +163,26 @@ re-verified green after this pass.
 ## Product catalog
 
 `src/data.ts`'s 60 mock Kora Linen menswear products have been fully
-removed. The catalog now starts with one real Sa and Sha product (a
-Block Print Maxi Dress) and is meant to grow incrementally as real
-product data comes in — there's no more placeholder inventory to strip
-out later.
+removed. The catalog has one real Sa and Sha product so far (a Block
+Print Maxi Dress under Dresses) plus, at the owner's explicit request,
+one clearly-labeled `[Placeholder]` product per remaining category
+(Top & Shirts has two — one Top, one Shirt — same for Shorts & Skirts)
+so every category page and the homepage tiles have something to preview
+before real inventory exists everywhere. Each placeholder:
+
+- is named `[Placeholder] <Category>` so it can't be mistaken for a real
+  listing in the storefront or admin product list
+- uses a generic stock photo (reused from URLs already elsewhere in this
+  app) and dummy price/fabric/description text
+- has `rating: 0, reviewCount: 0, bestseller: false, newArrival: false`
+  — it won't appear in Bestsellers/New Arrivals and shows the "New" /
+  "Be the first to review" state, not a fabricated rating
+
+Replace each placeholder's `name`, `price`, `fabric`, `sizes`,
+`description`, `details`, `careInstructions`, and `images` with the real
+product — the taxonomy fields (`category`, `collection`, `productType`,
+etc.) are already correct as a template. The catalog is meant to keep
+growing incrementally like this as real product data comes in.
 
 To add a new real product, add an entry to the `products` array in
 `src/data.ts` with the full taxonomy field set from

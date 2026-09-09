@@ -10,6 +10,21 @@ const dressImages = {
   ]
 };
 
+// PLACEHOLDER catalog images — one generic stock photo per category, used
+// only until real product photography replaces them. Every product using
+// these is named "[Placeholder] ..." for the same reason: obviously not
+// real inventory yet.
+const placeholderImages = {
+  top: ['https://images.unsplash.com/photo-1551803091-e20673f15770?w=800&auto=format&fit=crop&q=80'],
+  shirt: ['https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&auto=format&fit=crop&q=80'],
+  shorts: ['https://images.unsplash.com/photo-1583496661160-fb5886a13d77?w=800&auto=format&fit=crop&q=80'],
+  skirt: ['https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&auto=format&fit=crop&q=80'],
+  coOrdSet: ['https://images.unsplash.com/photo-1614251056216-f748f76cd228?w=800&auto=format&fit=crop&q=80'],
+  trousers: ['https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop&q=80'],
+  jacket: ['https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&auto=format&fit=crop&q=80'],
+  bag: ['https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80']
+};
+
 export const COLOR_SWATCHES = [
   { name: 'White', hex: '#F5F1E8' },
   { name: 'Natural Sand', hex: '#E4D8C3' },
@@ -23,9 +38,11 @@ export const COLOR_SWATCHES = [
   { name: 'Desert Rose', hex: '#C58B82' }
 ];
 
-// Per-category size runs. Add more as new categories get real inventory
-// (e.g. waist-based sizing for Trousers, one-size for most Bags & Pouches).
+// Per-category size runs.
 const DRESS_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+const APPAREL_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+const TROUSER_WAIST_SIZES = ['30', '32', '34', '36', '38'];
+const ONE_SIZE = ['One Size'];
 
 // Real Sa and Sha catalog, added as actual products go live. Each new
 // product should carry the full new-taxonomy field set (category,
@@ -72,6 +89,253 @@ export let products: Product[] = [
       'Warm iron if needed; avoid ironing directly over printed areas'
     ],
     sku: 'SS-DRS-BLOCKPRINT-01'
+  },
+
+  // ---------------------------------------------------------------------
+  // PLACEHOLDER PRODUCTS — one per remaining category, added at the
+  // owner's request so every category page has something to preview
+  // before real inventory exists. Every name is prefixed "[Placeholder]",
+  // uses a generic stock photo, and carries $0-review/rating so nothing
+  // here reads as a real listing or real customer feedback. Replace each
+  // one's name, price, fabric, sizes, description, and images array with
+  // real product data and photography — the rest of the taxonomy fields
+  // (category/collection/productType/etc.) can stay as a template.
+  // ---------------------------------------------------------------------
+  {
+    id: 'ss-placeholder-top-001',
+    name: '[Placeholder] Top',
+    slug: 'placeholder-top',
+    category: 'tops-shirts',
+    subCategory: 'tops',
+    collection: 'apparel',
+    productType: 'tops-shirts',
+    productSubType: 'tops',
+    materialType: 'cotton',
+    tax_class: 'womens_top_shirt',
+    price: 1499,
+    compareAtPrice: 1499,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.top,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Top & Shirts (Top) product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-TOP-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-shirt-001',
+    name: '[Placeholder] Shirt',
+    slug: 'placeholder-shirt',
+    category: 'tops-shirts',
+    subCategory: 'shirts',
+    collection: 'apparel',
+    productType: 'tops-shirts',
+    productSubType: 'shirts',
+    materialType: 'cotton',
+    tax_class: 'womens_top_shirt',
+    price: 1799,
+    compareAtPrice: 1799,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.shirt,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Top & Shirts (Shirt) product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-SHIRT-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-shorts-001',
+    name: '[Placeholder] Shorts',
+    slug: 'placeholder-shorts',
+    category: 'shorts-skirts',
+    subCategory: 'shorts',
+    collection: 'apparel',
+    productType: 'shorts-skirts',
+    productSubType: 'shorts',
+    materialType: 'cotton',
+    tax_class: 'womens_shorts_skirt',
+    price: 1299,
+    compareAtPrice: 1299,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.shorts,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Shorts & Skirts (Shorts) product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-SHORTS-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-skirt-001',
+    name: '[Placeholder] Skirt',
+    slug: 'placeholder-skirt',
+    category: 'shorts-skirts',
+    subCategory: 'skirts',
+    collection: 'apparel',
+    productType: 'shorts-skirts',
+    productSubType: 'skirts',
+    materialType: 'cotton',
+    tax_class: 'womens_shorts_skirt',
+    price: 1599,
+    compareAtPrice: 1599,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.skirt,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Shorts & Skirts (Skirt) product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-SKIRT-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-coord-001',
+    name: '[Placeholder] Co-Ord Set',
+    slug: 'placeholder-co-ord-set',
+    category: 'co-ord-sets',
+    subCategory: 'co-ord-sets',
+    collection: 'apparel',
+    productType: 'co-ord-sets',
+    materialType: 'cotton',
+    tax_class: 'womens_coord_set',
+    price: 2999,
+    compareAtPrice: 2999,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.coOrdSet,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Co-Ord Sets product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-COORD-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-trousers-001',
+    name: '[Placeholder] Trousers',
+    slug: 'placeholder-trousers',
+    category: 'trousers',
+    subCategory: 'trousers',
+    collection: 'apparel',
+    productType: 'trousers',
+    materialType: 'cotton',
+    tax_class: 'womens_trouser',
+    price: 1899,
+    compareAtPrice: 1899,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: TROUSER_WAIST_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.trousers,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Trousers product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-TROUSERS-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-jacket-001',
+    name: '[Placeholder] Jacket',
+    slug: 'placeholder-jacket',
+    category: 'jackets',
+    subCategory: 'jackets',
+    collection: 'apparel',
+    productType: 'jackets',
+    materialType: 'cotton',
+    tax_class: 'womens_jacket',
+    price: 3499,
+    compareAtPrice: 3499,
+    fabric: 'Cotton',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: APPAREL_SIZES,
+    pattern: 'Solid',
+    images: placeholderImages.jacket,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Jackets product. Replace this name, price, fabric, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-JACKET-PLACEHOLDER-01'
+  },
+  {
+    id: 'ss-placeholder-bag-001',
+    name: '[Placeholder] Bag',
+    slug: 'placeholder-bag',
+    category: 'bags-pouches',
+    subCategory: 'bags-pouches',
+    collection: 'accessories',
+    productType: 'bags-pouches',
+    materialType: 'other',
+    tax_class: 'bags_pouches',
+    price: 999,
+    compareAtPrice: 999,
+    fabric: 'Canvas',
+    fit: 'Regular',
+    color: 'White',
+    colorHex: '#F5F1E8',
+    sizes: ONE_SIZE,
+    pattern: 'Solid',
+    images: placeholderImages.bag,
+    rating: 0,
+    reviewCount: 0,
+    bestseller: false,
+    newArrival: false,
+    dateAdded: '2026-09-09',
+    description: 'Placeholder listing for a Bags & Pouches product. Replace this name, price, material, and photos with a real Sa and Sha item.',
+    details: ['Placeholder entry — update with real product details', 'Photo is a generic stock placeholder, not the actual product'],
+    careInstructions: ['Placeholder — update with real care instructions'],
+    sku: 'SS-BAG-PLACEHOLDER-01'
   }
 ];
 
