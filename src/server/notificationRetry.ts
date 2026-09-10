@@ -408,7 +408,7 @@ export async function recordRetryAuditLog(db: Firestore, input: RetryAuditLogInp
   const docData = {
     audit_id: auditId,
     action: input.action,
-    admin_email: input.admin_email || 'shop@sa-and-sha.com',
+    admin_email: input.admin_email || 'sales@sa-and-sha.com',
     target_type: input.target_type,
     target_ids: input.target_ids || [],
     successful_ids: input.successful_ids || [],
@@ -431,7 +431,7 @@ export async function recordRetryAuditLog(db: Firestore, input: RetryAuditLogInp
 export async function bulkRetryFailedJobs(
   db: Firestore,
   jobIds: string[],
-  adminEmail: string = 'shop@sa-and-sha.com',
+  adminEmail: string = 'sales@sa-and-sha.com',
   source: 'ui' | 'api' = 'ui'
 ) {
   if (!Array.isArray(jobIds) || jobIds.length === 0) {
@@ -536,7 +536,7 @@ export async function bulkRetryFailedJobs(
 export async function bulkCancelQueuedJobs(
   db: Firestore,
   jobIds: string[],
-  adminEmail: string = 'shop@sa-and-sha.com',
+  adminEmail: string = 'sales@sa-and-sha.com',
   source: 'ui' | 'api' = 'ui'
 ) {
   if (!Array.isArray(jobIds) || jobIds.length === 0) {
@@ -625,7 +625,7 @@ export async function bulkCancelQueuedJobs(
 export async function bulkRequeueDeadLetterJobs(
   db: Firestore,
   deadLetterIds: string[],
-  adminEmail: string = 'shop@sa-and-sha.com',
+  adminEmail: string = 'sales@sa-and-sha.com',
   source: 'ui' | 'api' = 'ui'
 ) {
   if (!Array.isArray(deadLetterIds) || deadLetterIds.length === 0) {

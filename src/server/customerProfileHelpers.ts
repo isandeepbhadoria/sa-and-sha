@@ -782,7 +782,7 @@ export async function findDuplicateCustomerCandidates(
     }
 
     // 2. Email match lookup
-    if (cleanEmail && cleanEmail !== "shop@sa-and-sha.com") {
+    if (cleanEmail && cleanEmail !== "sales@sa-and-sha.com") {
       const emailSnap = await adminDb
         .collection("customer_profiles")
         .where("email_lower", "==", cleanEmail)
@@ -866,7 +866,7 @@ export async function recalculateCustomerCommerceSummary(adminDb: any, phone: st
         cleanPhoneDigits.endsWith(orderPhoneDigits)
       );
 
-      const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && orderEmail === cleanEmail;
+      const emailMatch = cleanEmail && cleanEmail !== "sales@sa-and-sha.com" && orderEmail === cleanEmail;
 
       if (phoneMatch || emailMatch) {
         matchedOrders.push(o);
@@ -1478,7 +1478,7 @@ export async function repairCustomerProfilesAndOrders(
       const oPhone = (o.customer_phone || "").replace(/\D/g, "");
       const normPhoneDigits = (normPhone || "").replace(/\D/g, "");
       const phoneMatch = normPhoneDigits && oPhone && (oPhone === normPhoneDigits || oPhone.endsWith(normPhoneDigits) || normPhoneDigits.endsWith(oPhone));
-      const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && (o.customer_email || "").trim().toLowerCase() === cleanEmail;
+      const emailMatch = cleanEmail && cleanEmail !== "sales@sa-and-sha.com" && (o.customer_email || "").trim().toLowerCase() === cleanEmail;
       const profileIdMatch = o.customer_profile_id === docId;
       return phoneMatch || emailMatch || profileIdMatch;
     });

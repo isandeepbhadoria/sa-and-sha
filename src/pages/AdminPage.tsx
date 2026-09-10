@@ -87,7 +87,7 @@ import {
 } from '../lib/firebase';
 import { useSEO } from '../hooks/useSEO';
 
-const ADMIN_EMAIL = 'shop@sa-and-sha.com';
+const ADMIN_EMAIL = 'sales@sa-and-sha.com';
 
 const isPreviewEnvironment = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -845,7 +845,7 @@ export const AdminPage: React.FC = () => {
 
     // 1. Enforce strict email restriction
     if (targetEmail !== ADMIN_EMAIL.toLowerCase()) {
-      setAuthError('Unauthorized admin email. Access denied. Only shop@sa-and-sha.com can access the admin portal.');
+      setAuthError('Unauthorized admin email. Access denied. Only sales@sa-and-sha.com can access the admin portal.');
       showToast('Unauthorized admin email. Access denied.', 'error');
       setIsLoading(false);
       return;

@@ -858,7 +858,7 @@ async function saveCustomerProfileFromOrder(
   try {
     const adminDb = getAdminDb();
     const cleanEmail = (customerEmail || "").trim().toLowerCase();
-    const finalEmailForSummary = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
+    const finalEmailForSummary = cleanEmail === "sales@sa-and-sha.com" ? "" : cleanEmail;
     const summary = await recalculateCustomerCommerceSummary(adminDb, targetPhone, finalEmailForSummary);
 
     const docId = getCustomerProfileDocId(targetPhone);
@@ -869,8 +869,8 @@ async function saveCustomerProfileFromOrder(
       const normalizedProfile = migrateAndNormalizeProfile(existingData, docId);
       const customerId = await ensureCustomerIdInTransaction(transaction, adminDb, existingData);
 
-      let finalEmail = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
-      if (!finalEmail && normalizedProfile.email && normalizedProfile.email !== "shop@sa-and-sha.com") {
+      let finalEmail = cleanEmail === "sales@sa-and-sha.com" ? "" : cleanEmail;
+      if (!finalEmail && normalizedProfile.email && normalizedProfile.email !== "sales@sa-and-sha.com") {
         finalEmail = normalizedProfile.email;
       }
 
@@ -1155,7 +1155,7 @@ async function validatePromotionServer(
     const perCustomerLimit = typeof promoDoc.per_customer_limit === 'number' && promoDoc.per_customer_limit > 0 ? promoDoc.per_customer_limit : null;
     if (perCustomerLimit !== null) {
       let cleanEmail = (customerEmail || '').trim().toLowerCase();
-      if (cleanEmail === 'shop@sa-and-sha.com') {
+      if (cleanEmail === 'sales@sa-and-sha.com') {
         cleanEmail = '';
       }
       const cleanPhone = (customerPhone || '').trim().replace(/\D/g, '');
@@ -3316,7 +3316,7 @@ async function startServer() {
         return res.status(404).json({ success: false, error: "Conflict not found." });
       }
 
-      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
+      const adminEmail = (req as any).adminUser?.email || "sales@sa-and-sha.com";
       const nowIso = new Date().toISOString();
 
       await conflictRef.update({
@@ -3361,7 +3361,7 @@ async function startServer() {
         return res.status(404).json({ success: false, error: "Conflict not found." });
       }
 
-      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
+      const adminEmail = (req as any).adminUser?.email || "sales@sa-and-sha.com";
       const nowIso = new Date().toISOString();
 
       await conflictRef.update({
@@ -3401,7 +3401,7 @@ async function startServer() {
 
       const preview = await generateMergePreview(adminDb, req.params.id, canonical_profile_id);
 
-      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
+      const adminEmail = (req as any).adminUser?.email || "sales@sa-and-sha.com";
       await recordIdentityAudit(adminDb, {
         action: "preview_generated",
         conflict_id: req.params.id,
@@ -3442,7 +3442,7 @@ async function startServer() {
       }
 
       const adminDb = getAdminDb();
-      const adminEmail = (req as any).adminUser?.email || "shop@sa-and-sha.com";
+      const adminEmail = (req as any).adminUser?.email || "sales@sa-and-sha.com";
 
       const result = await executeProfileMergeTransaction(adminDb, {
         conflictId: req.params.id,
@@ -4552,7 +4552,7 @@ async function startServer() {
 
       await adminDb.collection("admin_audit_logs").add({
         action: "TRACKING_TOKENS_BACKFILL",
-        admin_email: adminAuth.email || "shop@sa-and-sha.com",
+        admin_email: adminAuth.email || "sales@sa-and-sha.com",
         processed_count: snap.size,
         updated_count: updatedCount,
         next_cursor: nextCursor,
@@ -5417,7 +5417,7 @@ async function startServer() {
     }
   });
 
-  // Admin authorization helper verifying Firebase Auth token for shop@sa-and-sha.com
+  // Admin authorization helper verifying Firebase Auth token for sales@sa-and-sha.com
   async function verifyAdminRequest(req: express.Request): Promise<{ authorized: boolean; email?: string; error?: string }> {
     try {
       const authHeader = req.headers.authorization;
@@ -5426,10 +5426,10 @@ async function startServer() {
         if (token) {
           try {
             const decoded = await getAdminAuth().verifyIdToken(token);
-            if (decoded.email && decoded.email.toLowerCase() === "shop@sa-and-sha.com") {
+            if (decoded.email && decoded.email.toLowerCase() === "sales@sa-and-sha.com") {
               return { authorized: true, email: decoded.email };
             } else {
-              return { authorized: false, error: "Unauthorized email. Only shop@sa-and-sha.com is granted admin access." };
+              return { authorized: false, error: "Unauthorized email. Only sales@sa-and-sha.com is granted admin access." };
             }
           } catch (authErr: any) {
             console.warn("[ADMIN AUTH] Firebase Auth token verification failed:", authErr.message);
@@ -5441,7 +5441,7 @@ async function startServer() {
       const adminKey = req.headers["x-admin-key"] || req.headers["x-admin-token"];
       const totpSecret = process.env.ADMIN_TOTP_SECRET || "";
       if (adminKey && totpSecret && adminKey === totpSecret) {
-        return { authorized: true, email: "shop@sa-and-sha.com" };
+        return { authorized: true, email: "sales@sa-and-sha.com" };
       }
 
       return { authorized: false, error: "Missing or invalid Firebase Auth admin session token." };
@@ -5629,7 +5629,7 @@ async function startServer() {
         applicable_categories: appCats,
         created_at: nowIso,
         updated_at: nowIso,
-        created_by: adminAuth.email || "shop@sa-and-sha.com"
+        created_by: adminAuth.email || "sales@sa-and-sha.com"
       };
 
       try {
@@ -6504,7 +6504,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'cancel_single',
-        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
+        admin_email: adminAuth.email || 'sales@sa-and-sha.com',
         target_type: 'job',
         target_ids: [jobId],
         successful_ids: [jobId],
@@ -6807,7 +6807,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'retry_single',
-        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
+        admin_email: adminAuth.email || 'sales@sa-and-sha.com',
         target_type: 'job',
         target_ids: [jobId],
         successful_ids: [jobId],
@@ -6905,7 +6905,7 @@ async function startServer() {
 
       await recordRetryAuditLog(adminDb, {
         action: 'requeue_single',
-        admin_email: adminAuth.email || 'shop@sa-and-sha.com',
+        admin_email: adminAuth.email || 'sales@sa-and-sha.com',
         target_type: 'dead_letter',
         target_ids: [deadLetterId],
         successful_ids: [deadLetterId],
@@ -6942,7 +6942,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
+      const adminEmail = adminAuth.email || "sales@sa-and-sha.com";
       const result = await bulkRetryFailedJobs(adminDb, jobIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -6973,7 +6973,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
+      const adminEmail = adminAuth.email || "sales@sa-and-sha.com";
       const result = await bulkCancelQueuedJobs(adminDb, jobIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -7004,7 +7004,7 @@ async function startServer() {
 
     try {
       const adminDb = getAdminDb();
-      const adminEmail = adminAuth.email || "shop@sa-and-sha.com";
+      const adminEmail = adminAuth.email || "sales@sa-and-sha.com";
       const result = await bulkRequeueDeadLetterJobs(adminDb, deadLetterIds, adminEmail, "ui");
       return res.json({
         success: true,
@@ -7479,7 +7479,7 @@ async function startServer() {
         status: newStatus,
         previousStatus: currentStatus,
         timestamp: new Date().toISOString(),
-        updatedBy: adminAuth.email || "shop@sa-and-sha.com",
+        updatedBy: adminAuth.email || "sales@sa-and-sha.com",
         notes: adminNotes || ""
       };
 
@@ -8760,7 +8760,7 @@ async function startServer() {
 
       await saveEnquiryToFirestore(enquiryPayload);
 
-      console.log(`[EMAIL DISPATCH] Transactional notification sent to ADMIN (shop@sa-and-sha.com) for Ticket #${enquiryId}`);
+      console.log(`[EMAIL DISPATCH] Transactional notification sent to ADMIN (sales@sa-and-sha.com) for Ticket #${enquiryId}`);
       console.log(`[EMAIL DISPATCH] Confirmation receipt sent to CUSTOMER (${cleanEmail}) for Ticket #${enquiryId}`);
 
       return res.json({
@@ -8772,7 +8772,7 @@ async function startServer() {
 
     } catch (err: any) {
       console.error("Error processing contact submission:", err);
-      return res.status(500).json({ success: false, error: "An unexpected error occurred. Please try again or email shop@sa-and-sha.com directly." });
+      return res.status(500).json({ success: false, error: "An unexpected error occurred. Please try again or email sales@sa-and-sha.com directly." });
     }
   });
 
@@ -12939,7 +12939,7 @@ async function startServer() {
           orderPhoneDigits.endsWith(cleanPhoneDigits) ||
           cleanPhoneDigits.endsWith(orderPhoneDigits)
         );
-        const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && orderEmail === cleanEmail;
+        const emailMatch = cleanEmail && cleanEmail !== "sales@sa-and-sha.com" && orderEmail === cleanEmail;
 
         if (phoneMatch || emailMatch) {
           matchedOrders.push({
@@ -12971,7 +12971,7 @@ async function startServer() {
           retPhoneDigits.endsWith(cleanPhoneDigits) ||
           cleanPhoneDigits.endsWith(retPhoneDigits)
         );
-        const emailMatch = cleanEmail && cleanEmail !== "shop@sa-and-sha.com" && retEmail === cleanEmail;
+        const emailMatch = cleanEmail && cleanEmail !== "sales@sa-and-sha.com" && retEmail === cleanEmail;
 
         if (phoneMatch || emailMatch) {
           matchedReturns.push({
@@ -14160,7 +14160,7 @@ Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
         state_code: sanitizeString(body.state_code, 10),
         pincode: sanitizeString(body.pincode, 10),
         country: sanitizeString(body.country, 100) || "India",
-        support_email: sanitizeString(body.support_email, 200) || "shop@sa-and-sha.com",
+        support_email: sanitizeString(body.support_email, 200) || "sales@sa-and-sha.com",
         support_phone: sanitizeString(body.support_phone, 50) || "+91 98765 43210",
         invoice_prefix: sanitizeString(body.invoice_prefix, 10) || "SS",
         financial_year: calculateFinancialYear(new Date()),
@@ -14889,7 +14889,7 @@ Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveHeroSliderConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
+      const result = await saveHeroSliderConfig(adminDb, req.body, adminAuth.email || "sales@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }
@@ -14908,7 +14908,7 @@ Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveBestOfInstagramConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
+      const result = await saveBestOfInstagramConfig(adminDb, req.body, adminAuth.email || "sales@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }
@@ -14927,7 +14927,7 @@ Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
         return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
       }
       const adminDb = getAdminDb();
-      const result = await saveInstaReelsConfig(adminDb, req.body, adminAuth.email || "shop@sa-and-sha.com");
+      const result = await saveInstaReelsConfig(adminDb, req.body, adminAuth.email || "sales@sa-and-sha.com");
       if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
       }

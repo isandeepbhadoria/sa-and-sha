@@ -7,7 +7,7 @@ import { sendStatusUpdateEmail, sendOrderTransactionalEmails, generateCustomerCo
 import { sendMail, isEmailConfigured, getDefaultFromAddress } from '../../mailer';
 
 const FROM_ADDRESS = getDefaultFromAddress();
-const REPLY_TO_ADDRESS = 'shop@sa-and-sha.com';
+const REPLY_TO_ADDRESS = 'sales@sa-and-sha.com';
 
 export interface EmailProvider {
   dispatch(

@@ -17,7 +17,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() && request.auth.token.email == "shop@sa-and-sha.com";
+      return isSignedIn() && request.auth.token.email == "sales@sa-and-sha.com";
     }
 
     function isValidProduct(data) {
@@ -47,7 +47,7 @@ service cloud.firestore {
 
     match /orders/{orderId} {
       // Unauthenticated clients cannot read, create, update, or delete orders.
-      // Only authenticated shop@sa-and-sha.com admin has client-side access.
+      // Only authenticated sales@sa-and-sha.com admin has client-side access.
       allow read, write: if isAdmin();
     }
 

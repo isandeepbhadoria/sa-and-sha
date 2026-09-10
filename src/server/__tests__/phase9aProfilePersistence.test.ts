@@ -109,8 +109,8 @@ describe("PHASE 9A — Customer Profile Persistence, Returning Autofill & CRM Su
     expect(norm.email).toBe("pria@sa-and-sha.com");
 
     // Placeholder shop email check
-    const cleanEmail = "shop@sa-and-sha.com".trim().toLowerCase();
-    const finalEmail = cleanEmail === "shop@sa-and-sha.com" ? "" : cleanEmail;
+    const cleanEmail = "sales@sa-and-sha.com".trim().toLowerCase();
+    const finalEmail = cleanEmail === "sales@sa-and-sha.com" ? "" : cleanEmail;
     const mergedEmail = finalEmail || norm.email;
     expect(mergedEmail).toBe("pria@sa-and-sha.com");
   });

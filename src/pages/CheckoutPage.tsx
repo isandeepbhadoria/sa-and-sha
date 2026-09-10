@@ -308,7 +308,7 @@ export const CheckoutPage: React.FC = () => {
       setUser(currentUser);
       if (currentUser && currentUser.email) {
         const authEmail = currentUser.email.trim().toLowerCase();
-        if (authEmail && authEmail !== 'shop@sa-and-sha.com') {
+        if (authEmail && authEmail !== 'sales@sa-and-sha.com') {
           setForm(prev => ({ ...prev, email: prev.email || authEmail }));
         }
       }
@@ -1055,7 +1055,7 @@ export const CheckoutPage: React.FC = () => {
                 <>
                   <span className="font-bold uppercase tracking-wider text-[10px]">Email Confirmation Dispatched</span>
                   <p className="text-[#2A211C]/70 leading-relaxed text-[11px]">
-                    A receipt and package tracking estimate have been successfully sent to <strong className="text-stone-900">{completedOrder?.customer_email}</strong>. Our staff has also sent a copy to <strong className="text-stone-900">shop@sa-and-sha.com</strong> to coordinate packing.
+                    A receipt and package tracking estimate have been successfully sent to <strong className="text-stone-900">{completedOrder?.customer_email}</strong>. Our staff has also sent a copy to <strong className="text-stone-900">sales@sa-and-sha.com</strong> to coordinate packing.
                   </p>
                 </>
               ) : (
@@ -1406,7 +1406,7 @@ export const CheckoutPage: React.FC = () => {
                                 }
 
                                 let profileEmail = (p.email || '').trim().toLowerCase();
-                                if (profileEmail === 'shop@sa-and-sha.com') {
+                                if (profileEmail === 'sales@sa-and-sha.com') {
                                   profileEmail = '';
                                 }
 

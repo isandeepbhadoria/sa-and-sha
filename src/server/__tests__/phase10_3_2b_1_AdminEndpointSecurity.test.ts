@@ -267,13 +267,13 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
 
   it("2. Reject non-admin / invalid email authorization", async () => {
     const invalidEmail: string = "user@example.com";
-    const isAuthorized = invalidEmail === "shop@sa-and-sha.com";
+    const isAuthorized = invalidEmail === "sales@sa-and-sha.com";
     expect(isAuthorized).toBe(false);
   });
 
-  it("3. Accept valid shop@sa-and-sha.com admin session", async () => {
-    const validEmail = "shop@sa-and-sha.com";
-    const isAuthorized = validEmail === "shop@sa-and-sha.com";
+  it("3. Accept valid sales@sa-and-sha.com admin session", async () => {
+    const validEmail = "sales@sa-and-sha.com";
+    const isAuthorized = validEmail === "sales@sa-and-sha.com";
     expect(isAuthorized).toBe(true);
   });
 
@@ -300,7 +300,7 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     };
 
     const db = createMockAdminDb({ orders: [preDispatchCod] });
-    const result = await finalizeGstInvoiceForOrder(db, "KL-COD-PRE", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result = await finalizeGstInvoiceForOrder(db, "KL-COD-PRE", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result.success).toBe(false);
     expect(result.code).toBe("COD_AWAITING_DISPATCH");
@@ -317,7 +317,7 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     };
 
     const db = createMockAdminDb({ orders: [cancelledOrder] });
-    const result = await finalizeGstInvoiceForOrder(db, "KL-CANCELLED-1", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result = await finalizeGstInvoiceForOrder(db, "KL-CANCELLED-1", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result.success).toBe(false);
     expect(result.code).toBe("ORDER_CANCELLED_OR_REFUNDED");
@@ -361,7 +361,7 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     };
 
     const db = createMockAdminDb({ orders: [eligiblePrepaid], products: [sampleProduct] });
-    const result = await finalizeGstInvoiceForOrder(db, "KL-ELIG-PREPAID", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result = await finalizeGstInvoiceForOrder(db, "KL-ELIG-PREPAID", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result.success).toBe(true);
     expect(result.invoice).toBeDefined();
@@ -402,7 +402,7 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     };
 
     const db = createMockAdminDb({ orders: [eligibleCod], products: [sampleProduct] });
-    const result = await finalizeGstInvoiceForOrder(db, "KL-ELIG-COD", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result = await finalizeGstInvoiceForOrder(db, "KL-ELIG-COD", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result.success).toBe(true);
     expect(result.invoice).toBeDefined();
@@ -421,7 +421,7 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     };
 
     const db = createMockAdminDb({ invoices: [existingInvoice] });
-    const result = await finalizeGstInvoiceForOrder(db, "KL-DUP", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result = await finalizeGstInvoiceForOrder(db, "KL-DUP", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result.success).toBe(true);
     expect(result.reused).toBe(true);
@@ -441,8 +441,8 @@ describe("Phase 10.3.2B.1 Admin Invoice Security & Lifecycle Regression Tests", 
     const db = createMockAdminDb({ invoices: [existingInvoice] });
     const initialCount = db._invoicesMap.size;
 
-    const result1 = await finalizeGstInvoiceForOrder(db, "KL-DUP2", { createdBy: "admin:shop@sa-and-sha.com" });
-    const result2 = await finalizeGstInvoiceForOrder(db, "KL-DUP2", { createdBy: "admin:shop@sa-and-sha.com" });
+    const result1 = await finalizeGstInvoiceForOrder(db, "KL-DUP2", { createdBy: "admin:sales@sa-and-sha.com" });
+    const result2 = await finalizeGstInvoiceForOrder(db, "KL-DUP2", { createdBy: "admin:sales@sa-and-sha.com" });
 
     expect(result1.invoice?.invoice_number).toBe("KL/2026-27/000056");
     expect(result2.invoice?.invoice_number).toBe("KL/2026-27/000056");
