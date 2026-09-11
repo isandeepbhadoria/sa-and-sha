@@ -107,6 +107,7 @@ import {
   createMobileVerificationRequiredToken
 } from "./src/server/registrationHelpers";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { readStockForItems, restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
 import {
   generateTrackingToken,
   ensureOrderTrackingToken,
@@ -7823,17 +7824,7 @@ async function startServer() {
         if (!orderDocData.inventory_restored) {
           try {
             const items = Array.isArray(orderDocData.items) ? orderDocData.items : [];
-            for (const item of items) {
-              const pId = item.product_id || item.id;
-              if (pId) {
-                const pRef = adminDb.collection("products").doc(pId);
-                const pSnap = await pRef.get();
-                if (pSnap.exists) {
-                  const currentStock = Number(pSnap.data()?.stock || 0);
-                  await pRef.update({ stock: currentStock + (item.quantity || 1), updated_at: nowIso });
-                }
-              }
-            }
+            await restoreInventoryForOrderItems(adminDb, items, nowIso);
             await docRef.update({ inventory_restored: true });
           } catch (invErr) {
             console.error("[ADMIN COD CANCEL INVENTORY RESTORE ERROR]", invErr);
@@ -7912,17 +7903,7 @@ async function startServer() {
         if (!orderDocData.inventory_restored) {
           try {
             const items = Array.isArray(orderDocData.items) ? orderDocData.items : [];
-            for (const item of items) {
-              const pId = item.product_id || item.id;
-              if (pId) {
-                const pRef = adminDb.collection("products").doc(pId);
-                const pSnap = await pRef.get();
-                if (pSnap.exists) {
-                  const currentStock = Number(pSnap.data()?.stock || 0);
-                  await pRef.update({ stock: currentStock + (item.quantity || 1), updated_at: nowIso });
-                }
-              }
-            }
+            await restoreInventoryForOrderItems(adminDb, items, nowIso);
             await docRef.update({ inventory_restored: true });
           } catch (invErr) {
             console.error("[CANCEL INVENTORY RESTORE ERROR]", invErr);
@@ -7991,17 +7972,7 @@ async function startServer() {
           if (!oData.inventory_restored) {
             try {
               const items = Array.isArray(oData.items) ? oData.items : [];
-              for (const item of items) {
-                const pId = item.product_id || item.id;
-                if (pId) {
-                  const pRef = adminDb.collection("products").doc(pId);
-                  const pSnap = await pRef.get();
-                  if (pSnap.exists) {
-                    const currentStock = Number(pSnap.data()?.stock || 0);
-                    await pRef.update({ stock: currentStock + (item.quantity || 1), updated_at: new Date().toISOString() });
-                  }
-                }
-              }
+              await restoreInventoryForOrderItems(adminDb, items, new Date().toISOString());
               await orderSnap.ref.update({ inventory_restored: true });
             } catch (invErr) {
               console.error("[RECONCILIATION INVENTORY RESTORE ERROR]", invErr);
@@ -9241,6 +9212,12 @@ async function startServer() {
           return;
         }
 
+        // Reserve stock before any writes (Firestore requires all reads first).
+        // Payment is already captured at this point, so we NEVER abort here on low
+        // stock (that would leave the customer charged with no order created) — we
+        // clamp at zero and flag the order for admin follow-up instead.
+        const stockChecks = await readStockForItems(transaction, adminDb, totals.validatedItems);
+
         const resRef = adminDb.collection("promo_reservations").doc(razorpay_order_id);
         const resSnap = await transaction.get(resRef);
 
@@ -9286,6 +9263,23 @@ async function startServer() {
               updated_at: new Date().toISOString()
             });
           }
+        }
+
+        const oversoldItems: Array<{ name: string; size: string; requested: number; available: number }> = [];
+        for (const check of stockChecks) {
+          if (check.tracked) {
+            const newVal = (check.currentAvailable as number) - check.qty;
+            if (newVal < 0) {
+              oversoldItems.push({ name: check.name, size: check.size, requested: check.qty, available: check.currentAvailable as number });
+            }
+            transaction.update(check.ref, {
+              [`stock.${check.size}`]: Math.max(newVal, 0),
+              updated_at: new Date().toISOString()
+            });
+          }
+        }
+        if (oversoldItems.length > 0) {
+          console.warn(`[STOCK OVERSOLD] Razorpay order for payment #${razorpay_payment_id} oversold:`, oversoldItems);
         }
 
         const randId = Math.floor(100000 + Math.random() * 900000);
@@ -9335,7 +9329,8 @@ async function startServer() {
           promo_discount_type: totals.appliedPromo ? totals.appliedPromo.discount_type : null,
           promo_discount_value: totals.appliedPromo ? totals.appliedPromo.discount_value : null,
           discount_amount: totals.discount,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          ...(oversoldItems.length > 0 ? { stock_oversold: true, stock_oversold_items: oversoldItems } : {})
         };
 
         const newOrderRef = adminDb.collection("orders").doc();
@@ -9679,6 +9674,15 @@ async function startServer() {
           throw new Error("Cash on Delivery is restricted to orders under ₹5,000.");
         }
 
+        // Reserve stock before any writes (Firestore requires all reads first).
+        // COD hasn't taken any payment yet, so it's safe to hard-block on insufficient stock.
+        const stockChecks = await readStockForItems(transaction, adminDb, totals.validatedItems);
+        for (const check of stockChecks) {
+          if (check.tracked && (check.currentAvailable as number) < check.qty) {
+            throw new Error(`"${check.name}" (size ${check.size}) has only ${Math.max(check.currentAvailable as number, 0)} left in stock. Please update your cart.`);
+          }
+        }
+
         if (totals.appliedPromo && totals.appliedPromo.promo_id) {
           const promoRef = adminDb.collection("promotions").doc(totals.appliedPromo.promo_id);
           const promoSnap = await transaction.get(promoRef);
@@ -9703,6 +9707,15 @@ async function startServer() {
             usage_count: uCount + 1,
             updated_at: new Date().toISOString()
           });
+        }
+
+        for (const check of stockChecks) {
+          if (check.tracked) {
+            transaction.update(check.ref, {
+              [`stock.${check.size}`]: (check.currentAvailable as number) - check.qty,
+              updated_at: new Date().toISOString()
+            });
+          }
         }
 
         const randId = Math.floor(100000 + Math.random() * 900000);
