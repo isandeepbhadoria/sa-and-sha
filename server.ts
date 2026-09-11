@@ -108,6 +108,7 @@ import {
 } from "./src/server/registrationHelpers";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { readStockForItems, restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
+import { createStaffAccount, listStaffAccounts, setStaffActive, deleteStaffAccount, resolveStaffOrAdmin } from "./src/server/staffHelpers";
 import {
   generateTrackingToken,
   ensureOrderTrackingToken,
@@ -5450,6 +5451,110 @@ async function startServer() {
       return { authorized: false, error: err.message || "Admin authorization verification error" };
     }
   }
+
+  // Resolves a Firebase ID token to either the admin account or an active staff_users
+  // entry. Used by endpoints that store staff (not just the owner) may call, e.g. the
+  // Record Store Sale flow.
+  async function verifyStaffOrAdminRequest(req: express.Request): Promise<import("./src/server/staffHelpers").StaffOrAdminAuthResult> {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return { authorized: false, error: "Missing Authorization header." };
+      }
+      const token = authHeader.split("Bearer ")[1].trim();
+      if (!token) {
+        return { authorized: false, error: "Missing Authorization token." };
+      }
+      const decoded = await getAdminAuth().verifyIdToken(token);
+      return await resolveStaffOrAdmin(getAdminDb(), decoded.email, decoded.uid, "sales@sa-and-sha.com");
+    } catch (err: any) {
+      console.warn("[STAFF/ADMIN AUTH] Token verification failed:", err.message);
+      return { authorized: false, error: "Invalid or expired session token." };
+    }
+  }
+
+  // Admin-only: create a new store staff login (Firebase Auth user + staff_users record).
+  app.post("/api/admin/staff", async (req, res) => {
+    try {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
+      }
+
+      const { name, email, password } = req.body;
+      const record = await createStaffAccount(getAdminAuth(), getAdminDb(), {
+        name,
+        email,
+        password,
+        createdBy: adminAuth.email || "admin"
+      });
+
+      return res.json({ success: true, staff: record });
+    } catch (err: any) {
+      console.error("[ADMIN CREATE STAFF ERROR]", err);
+      const isAuthErr = typeof err?.code === "string" && err.code.startsWith("auth/");
+      return res.status(isAuthErr ? 409 : 400).json({ success: false, error: err.message || "Failed to create staff account." });
+    }
+  });
+
+  // Admin-only: list all store staff logins.
+  app.get("/api/admin/staff", async (req, res) => {
+    try {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
+      }
+      const staff = await listStaffAccounts(getAdminDb());
+      return res.json({ success: true, staff });
+    } catch (err: any) {
+      console.error("[ADMIN LIST STAFF ERROR]", err);
+      return res.status(500).json({ success: false, error: "Failed to load staff accounts." });
+    }
+  });
+
+  // Admin-only: activate/deactivate a store staff login.
+  app.patch("/api/admin/staff/:uid", async (req, res) => {
+    try {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
+      }
+      const { active } = req.body;
+      if (typeof active !== "boolean") {
+        return res.status(400).json({ success: false, error: "'active' must be a boolean." });
+      }
+      await setStaffActive(getAdminDb(), req.params.uid, active);
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error("[ADMIN UPDATE STAFF ERROR]", err);
+      return res.status(400).json({ success: false, error: err.message || "Failed to update staff account." });
+    }
+  });
+
+  // Admin-only: permanently remove a store staff login.
+  app.delete("/api/admin/staff/:uid", async (req, res) => {
+    try {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
+      }
+      await deleteStaffAccount(getAdminAuth(), getAdminDb(), req.params.uid);
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error("[ADMIN DELETE STAFF ERROR]", err);
+      return res.status(400).json({ success: false, error: err.message || "Failed to delete staff account." });
+    }
+  });
+
+  // Staff/Admin: verify the caller's Firebase session and report their role.
+  // Called right after Firebase sign-in on the staff login page.
+  app.post("/api/staff/verify-login", async (req, res) => {
+    const result = await verifyStaffOrAdminRequest(req);
+    if (!result.authorized) {
+      return res.status(403).json({ success: false, error: result.error || "Unauthorized." });
+    }
+    return res.json({ success: true, role: result.role, name: result.name || null, email: result.email });
+  });
 
   // Customer API: Validate Promo Code
   app.post("/api/promotions/validate", async (req, res) => {

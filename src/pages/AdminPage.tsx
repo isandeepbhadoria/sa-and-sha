@@ -52,6 +52,7 @@ import { AdminReturnsTab } from '../components/admin-returns/AdminReturnsTab';
 import { TaxMasterAdminTab } from '../components/admin/TaxMasterAdminTab';
 import { RewardsPolicySettings } from '../components/admin/RewardsPolicySettings';
 import { AdminCreditNotesTab } from '../components/admin/AdminCreditNotesTab';
+import { AdminStaffAccountsTab } from '../components/admin/AdminStaffAccountsTab';
 import {
   CANONICAL_COLLECTIONS,
   CANONICAL_PRODUCT_TYPES,
@@ -151,7 +152,7 @@ export const AdminPage: React.FC = () => {
   const [forgotStatus, setForgotStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media' | 'staff-accounts'>('orders');
 
   // Promotions management state
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -1993,7 +1994,23 @@ export const AdminPage: React.FC = () => {
               <Sliders className="w-4 h-4" />
               <span>Homepage Media CMS</span>
             </button>
+            <button
+              onClick={() => setActiveTab('staff-accounts')}
+              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                activeTab === 'staff-accounts'
+                  ? 'border-[#B08D57] text-[#B08D57]'
+                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
+              }`}
+              id="admin-tab-staff-accounts"
+            >
+              <Users className="w-4 h-4" />
+              <span>Staff Accounts</span>
+            </button>
           </div>
+
+          {activeTab === 'staff-accounts' && (
+            <AdminStaffAccountsTab adminToken={adminToken} showToast={showToast} />
+          )}
 
           {activeTab === 'identity' && (
             <AdminIdentityManagementTab adminToken={adminToken} showToast={showToast} />
