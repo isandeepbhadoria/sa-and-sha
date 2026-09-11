@@ -43,7 +43,12 @@ export async function readStockForItems(
     const snap = snapById.get(productId);
     const data = snap && snap.exists ? (snap.data() || {}) : null;
     const stockMap = data && typeof data.stock === "object" && data.stock !== null ? data.stock : null;
-    const tracked = stockMap !== null;
+    // Tracked per exact size key, not per product: the admin form always saves a
+    // `stock` object (even {} for products with no size checkboxes checked, e.g.
+    // bags/accessories with no matching size option), so "a stock object exists"
+    // is not a safe signal. Only an explicitly-set entry for this exact size means
+    // the admin actually configured tracking for it.
+    const tracked = stockMap !== null && Object.prototype.hasOwnProperty.call(stockMap, size);
     const rawAvailable = tracked ? Number((stockMap as Record<string, number>)[size]) : null;
     const currentAvailable = tracked ? (Number.isFinite(rawAvailable) ? (rawAvailable as number) : 0) : null;
     return { ref, productId, size, qty, name, tracked, currentAvailable };

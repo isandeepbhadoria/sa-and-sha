@@ -109,6 +109,8 @@ import {
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { readStockForItems, restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
 import { createStaffAccount, listStaffAccounts, setStaffActive, deleteStaffAccount, resolveStaffOrAdmin } from "./src/server/staffHelpers";
+import { createStoreSale, listStoreSales } from "./src/server/storeSaleHelpers";
+import { finalizeGstInvoiceForStoreSale } from "./src/server/invoice/storeSaleInvoiceEngine";
 import {
   generateTrackingToken,
   ensureOrderTrackingToken,
@@ -5554,6 +5556,71 @@ async function startServer() {
       return res.status(403).json({ success: false, error: result.error || "Unauthorized." });
     }
     return res.json({ success: true, role: result.role, name: result.name || null, email: result.email });
+  });
+
+  // Staff/Admin: record a walk-in store sale (validates items, reserves stock,
+  // then finalizes a GST invoice through the same numbering series as online orders).
+  app.post("/api/staff/sales", async (req, res) => {
+    try {
+      const authResult = await verifyStaffOrAdminRequest(req);
+      if (!authResult.authorized) {
+        return res.status(403).json({ success: false, error: authResult.error || "Unauthorized." });
+      }
+
+      const { items, payment_method, customer_name, customer_phone, customer_email } = req.body;
+      const adminDb = getAdminDb();
+
+      const sale = await createStoreSale(adminDb, {
+        items,
+        payment_method,
+        customer_name,
+        customer_phone,
+        customer_email,
+        recordedBy: {
+          uid: authResult.uid || "",
+          name: authResult.name || authResult.email || "Staff",
+          email: authResult.email || "",
+          role: authResult.role || "store_staff"
+        }
+      });
+
+      const invoiceResult = await finalizeGstInvoiceForStoreSale(adminDb, sale.order_id, sale, {
+        createdBy: authResult.email || "staff"
+      });
+
+      if (!invoiceResult.success) {
+        console.error(`[STORE SALE] Sale ${sale.order_id} recorded but invoice finalization failed:`, invoiceResult.error);
+      }
+
+      return res.json({
+        success: true,
+        sale,
+        invoice_number: invoiceResult.invoice?.invoice_number || null,
+        invoice_warning: invoiceResult.success ? null : (invoiceResult.error || "Invoice could not be finalized.")
+      });
+    } catch (err: any) {
+      console.error("[RECORD STORE SALE ERROR]", err);
+      return res.status(400).json({ success: false, error: err.message || "Failed to record store sale." });
+    }
+  });
+
+  // Staff/Admin: list store sales. Staff see only their own; admin sees all.
+  app.get("/api/staff/sales", async (req, res) => {
+    try {
+      const authResult = await verifyStaffOrAdminRequest(req);
+      if (!authResult.authorized) {
+        return res.status(403).json({ success: false, error: authResult.error || "Unauthorized." });
+      }
+
+      const adminDb = getAdminDb();
+      const scopeToUid = authResult.role === "store_staff" ? authResult.uid : undefined;
+      const sales = await listStoreSales(adminDb, { staffUid: scopeToUid, limit: 100 });
+
+      return res.json({ success: true, sales });
+    } catch (err: any) {
+      console.error("[LIST STORE SALES ERROR]", err);
+      return res.status(500).json({ success: false, error: "Failed to load store sales." });
+    }
   });
 
   // Customer API: Validate Promo Code

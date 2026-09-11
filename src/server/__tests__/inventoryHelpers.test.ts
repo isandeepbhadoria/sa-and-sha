@@ -70,7 +70,9 @@ describe("readStockForItems", () => {
     expect(results[0].currentAvailable).toBeNull();
   });
 
-  it("treats a size missing from the stock map as 0 available", async () => {
+  it("treats a size that was never explicitly given a stock entry as untracked, not 0", async () => {
+    // The admin form always saves `stock` as an object even when a size checkbox
+    // was never checked - an absent key means "never configured," not "zero."
     const adminDb = createMockAdminDb({
       p1: { name: "Dress", stock: { S: 5 } } // no "XL" key
     });
@@ -80,8 +82,39 @@ describe("readStockForItems", () => {
       { product_id: "p1", size: "XL", quantity: 1, name: "Dress" }
     ]);
 
+    expect(results[0].tracked).toBe(false);
+    expect(results[0].currentAvailable).toBeNull();
+  });
+
+  it("treats a size explicitly set to 0 as tracked and unavailable", async () => {
+    const adminDb = createMockAdminDb({
+      p1: { name: "Dress", stock: { S: 5, L: 0 } }
+    });
+    const transaction = createMockTransaction(adminDb);
+
+    const results = await readStockForItems(transaction, adminDb as any, [
+      { product_id: "p1", size: "L", quantity: 1, name: "Dress" }
+    ]);
+
     expect(results[0].tracked).toBe(true);
     expect(results[0].currentAvailable).toBe(0);
+  });
+
+  it("treats a no-size product (bags/accessories) with an empty stock map as untracked", async () => {
+    // The admin form's size checkboxes are apparel-only (S/M/L/XL/XXL/3XL) - a
+    // no-size product like a bag saves `stock: {}` since no checkbox applies,
+    // and checkout defaults its pseudo-size to 'Free Size'.
+    const adminDb = createMockAdminDb({
+      p1: { name: "Tote Bag", stock: {} }
+    });
+    const transaction = createMockTransaction(adminDb);
+
+    const results = await readStockForItems(transaction, adminDb as any, [
+      { product_id: "p1", size: "Free Size", quantity: 1, name: "Tote Bag" }
+    ]);
+
+    expect(results[0].tracked).toBe(false);
+    expect(results[0].currentAvailable).toBeNull();
   });
 
   it("aggregates duplicate (product, size) cart lines into a single quantity", async () => {
