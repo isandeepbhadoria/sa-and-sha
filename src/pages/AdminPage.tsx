@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Lock, 
@@ -464,6 +464,42 @@ export const AdminPage: React.FC = () => {
     setFormSku(generateSkuCode(formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingProduct, formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints]);
+
+  // Every SKU already in use by another product (excluding the one being
+  // edited, if any) — used to warn/block before a newly generated SKU
+  // (primary print or an additional print row) collides with one that
+  // already exists.
+  const usedSkuSet = useMemo(() => {
+    const set = new Set<string>();
+    allProducts.forEach(p => {
+      if (editingProduct && p.id === editingProduct.id) return;
+      if (p.sku) set.add(p.sku.trim().toUpperCase());
+    });
+    return set;
+  }, [allProducts, editingProduct]);
+
+  // SKU keys for everything about to be saved in this submission (the
+  // primary print + every additional print row), so two prints in the
+  // *same* batch can't silently collide with each other either.
+  const printBatchSkus = useMemo(() => {
+    const primaryKey = (formSku || '').trim().toUpperCase();
+    const counts = new Map<string, number>();
+    if (primaryKey) counts.set(primaryKey, (counts.get(primaryKey) || 0) + 1);
+    const rows = additionalPrints.map(row => {
+      const sku = row.printName.trim()
+        ? generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName, false)
+        : '';
+      const key = sku.trim().toUpperCase();
+      if (key) counts.set(key, (counts.get(key) || 0) + 1);
+      return { id: row.id, sku, key };
+    });
+    return { primaryKey, counts, rows };
+  }, [formSku, additionalPrints, formProductType, formStyleNumber, formFabricColor]);
+
+  const isSkuDuplicate = (key: string): boolean => {
+    if (!key) return false;
+    return usedSkuSet.has(key) || (printBatchSkus.counts.get(key) || 0) > 1;
+  };
 
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
@@ -1527,6 +1563,37 @@ export const AdminPage: React.FC = () => {
       }
     }
 
+    // Guard against saving a SKU that's already in use — either by another
+    // existing product, or by another print in this very batch.
+    const skuCounts = new Map<string, number>();
+    const primarySkuKey = (formSku || '').trim().toUpperCase();
+    if (primarySkuKey) skuCounts.set(primarySkuKey, (skuCounts.get(primarySkuKey) || 0) + 1);
+    const rowSkus = extraRows.map(row => {
+      const sku = generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName.trim(), false);
+      const key = sku.trim().toUpperCase();
+      if (key) skuCounts.set(key, (skuCounts.get(key) || 0) + 1);
+      return { row, sku, key };
+    });
+
+    if (primarySkuKey && usedSkuSet.has(primarySkuKey)) {
+      showToast(`SKU "${formSku}" already exists on another product. Adjust the Pattern/Style Number, Fabric Color, or Print Name to generate a different one.`);
+      return;
+    }
+    if (primarySkuKey && (skuCounts.get(primarySkuKey) || 0) > 1) {
+      showToast(`SKU "${formSku}" is shared by more than one print in this batch — give them different Print Names.`);
+      return;
+    }
+    for (const { row, sku, key } of rowSkus) {
+      if (key && usedSkuSet.has(key)) {
+        showToast(`SKU "${sku}" (Print "${row.printName.trim()}") already exists on another product. Use a different Print Name.`);
+        return;
+      }
+      if (key && (skuCounts.get(key) || 0) > 1) {
+        showToast(`SKU "${sku}" (Print "${row.printName.trim()}") is duplicated within this batch — give it a different Print Name.`);
+        return;
+      }
+    }
+
     setIsSavingProduct(true);
     showToast(
       extraRows.length > 0
@@ -2499,10 +2566,16 @@ export const AdminPage: React.FC = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Code</label>
-                          <div className="w-full px-3 py-2 border border-stone-200 rounded bg-stone-100 font-mono font-medium text-stone-600">
+                          <div className={`w-full px-3 py-2 border rounded bg-stone-100 font-mono font-medium ${
+                            isSkuDuplicate(printBatchSkus.primaryKey) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                          }`}>
                             {formSku || '—'}
                           </div>
-                          <p className="text-[10px] text-stone-400">Auto-generated from Category + Color — never typed, never changes once created.</p>
+                          {isSkuDuplicate(printBatchSkus.primaryKey) ? (
+                            <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — adjust Style Number, Fabric Color, or Print Name.</p>
+                          ) : (
+                            <p className="text-[10px] text-stone-400">Auto-generated from Category + Color — never typed, never changes once created.</p>
+                          )}
                         </div>
 
                         <div className="space-y-1">
@@ -3049,11 +3122,22 @@ export const AdminPage: React.FC = () => {
                                 placeholder="e.g. Pink Checks, Blush Floral"
                                 className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                               />
-                              <div className="px-3 py-1.5 border border-stone-200 rounded bg-stone-100 font-mono text-[11px] text-stone-600">
-                                {row.printName.trim()
-                                  ? generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName, false)
-                                  : '— enter a Print Name to preview its SKU —'}
-                              </div>
+                              {(() => {
+                                const rowSkuInfo = printBatchSkus.rows.find(r => r.id === row.id);
+                                const duplicate = rowSkuInfo ? isSkuDuplicate(rowSkuInfo.key) : false;
+                                return (
+                                  <>
+                                    <div className={`px-3 py-1.5 border rounded bg-stone-100 font-mono text-[11px] ${
+                                      duplicate ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                                    }`}>
+                                      {rowSkuInfo?.sku || '— enter a Print Name to preview its SKU —'}
+                                    </div>
+                                    {duplicate && (
+                                      <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — use a different Print Name.</p>
+                                    )}
+                                  </>
+                                );
+                              })()}
 
                               <div className="flex flex-wrap gap-2 items-center">
                                 {row.images.map((imgUrl, idx) => (
