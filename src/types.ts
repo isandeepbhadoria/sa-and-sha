@@ -42,12 +42,15 @@ export interface Product {
   // Sourced from Fit Profile Master, not a fixed list — see
   // SimpleMasterListTab / server.ts's /api/admin/fit-profiles.
   fit: string;
-  // Really the Print/Pattern name (e.g. "Pink Checks") — kept as `color`
-  // for backward compatibility with existing products/filters/swatches.
+  // Really the Print name (e.g. "Pink Checks") — kept as `color` for
+  // backward compatibility with existing products/filters/swatches.
   // fabricColor below is the separate, genuinely-color dimension.
   color: string;
   colorHex: string;
   fabricColor?: string;
+  // True for a solid fabric with no print at all — `color` is then
+  // ignored in favor of "Solid"/"SOLIDS" for SKU/ERP variant purposes.
+  noPrints?: boolean;
   sizes: string[];
   collar?: 'Spread' | 'Cutaway' | 'Mandarin' | 'Polo Collar';
   sleeve?: 'Full Sleeve' | 'Half Sleeve';

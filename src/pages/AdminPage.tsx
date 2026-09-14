@@ -408,6 +408,7 @@ export const AdminPage: React.FC = () => {
   const [formColor, setFormColor] = useState('');
   const [formColorHex, setFormColorHex] = useState('#FBF6EE');
   const [formFabricColor, setFormFabricColor] = useState('');
+  const [formNoPrints, setFormNoPrints] = useState(false);
   const [formSizes, setFormSizes] = useState<string[]>([]);
   const [formCollar, setFormCollar] = useState<string>('Spread');
   const [formSleeve, setFormSleeve] = useState<string>('Full Sleeve');
@@ -451,9 +452,9 @@ export const AdminPage: React.FC = () => {
   // (Normalized Taxonomy), not the legacy "category" field.
   useEffect(() => {
     if (editingProduct) return;
-    setFormSku(generateSkuCode(formProductType, formStyleNumber, formFabricColor, formColor));
+    setFormSku(generateSkuCode(formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editingProduct, formProductType, formStyleNumber, formFabricColor, formColor]);
+  }, [editingProduct, formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints]);
 
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
@@ -1299,6 +1300,7 @@ export const AdminPage: React.FC = () => {
       setFormFit(product.fit || 'Regular');
       setFormColor(product.color || '');
       setFormFabricColor(product.fabricColor || '');
+      setFormNoPrints(product.noPrints || false);
       setFormColorHex(product.colorHex || '#FBF6EE');
       setFormSizes(product.sizes || []);
       setFormCollar(product.collar || 'Spread');
@@ -1331,6 +1333,7 @@ export const AdminPage: React.FC = () => {
       setFormFit('Regular');
       setFormColor('');
       setFormFabricColor('');
+      setFormNoPrints(false);
       setFormColorHex('#FBF6EE');
       setFormSizes([]);
       setFormCollar('Spread');
@@ -1545,6 +1548,7 @@ export const AdminPage: React.FC = () => {
         fit: formFit,
         color: formColor || 'Natural',
         fabricColor: formFabricColor || undefined,
+        noPrints: formNoPrints,
         colorHex: formColorHex || '#FBF6EE',
         sizes: formSizes,
         collar: (formCategory === 'tops-shirts' ? formCollar : undefined) as any,
@@ -2190,12 +2194,13 @@ export const AdminPage: React.FC = () => {
                       className="px-3 py-2 rounded-lg bg-stone-100 text-xs text-[#2A211C] font-bold uppercase border-none focus:ring-1 focus:ring-[#B08D57]"
                     >
                       <option value="All">All Categories</option>
-                      <option value="shirts">Shirts</option>
-                      <option value="pants">Pants/Trousers</option>
-                      <option value="kurtas">Kurtas</option>
-                      <option value="co-ord sets">Co-ord Sets</option>
+                      <option value="dresses">Dresses</option>
+                      <option value="tops-shirts">Top & Shirts</option>
+                      <option value="shorts-skirts">Shorts & Skirts</option>
+                      <option value="co-ord-sets">Co-Ord Sets</option>
+                      <option value="trousers">Trousers</option>
                       <option value="jackets">Jackets</option>
-                      <option value="accessories">Accessories</option>
+                      <option value="bags-pouches">Bags & Pouches</option>
                     </select>
                   </div>
 
@@ -2409,10 +2414,10 @@ export const AdminPage: React.FC = () => {
                             type="text"
                             value={formStyleNumber}
                             onChange={(e) => setFormStyleNumber(e.target.value)}
-                            placeholder="e.g. PATT9001"
+                            placeholder="e.g. 0090"
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                           />
-                          <p className="text-[10px] text-stone-400">The factory's own numbering — required for this product's sizes to become real, orderable stock.</p>
+                          <p className="text-[10px] text-stone-400">The factory's own numbering — required for this product's sizes to become real, orderable stock. Only its first 4 characters appear in the SKU Code.</p>
                         </div>
                       </div>
 
@@ -2685,18 +2690,34 @@ export const AdminPage: React.FC = () => {
                             placeholder="e.g. White, Black"
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
-                          <p className="text-[10px] text-stone-400">The base fabric's own color — separate from any print on it.</p>
+                          <p className="text-[10px] text-stone-400">The base fabric's own color, separate from any print on it — first 4 letters appear in the SKU Code.</p>
                         </div>
 
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print / Pattern Name</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print Name</label>
                           <input
                             type="text"
                             value={formColor}
                             onChange={(e) => setFormColor(e.target.value)}
-                            placeholder="e.g. Pink Checks, Blush Floral, Solid"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                            disabled={formNoPrints}
+                            placeholder="e.g. Pink Checks, Blush Floral"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
                           />
+                          <label className="flex items-center gap-2 pt-1 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={formNoPrints}
+                              onChange={(e) => setFormNoPrints(e.target.checked)}
+                              className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5 cursor-pointer"
+                            />
+                            <span className="text-[10px] text-stone-500">No print — this is a solid fabric</span>
+                          </label>
+                          {!formNoPrints && (
+                            <p className="text-[10px] text-stone-400">
+                              Encoded into 6 SKU letters by word count: 1 word → first 6 letters; 2 words → first 3 of
+                              each; 3+ words → first 2 of each (only the first 3 words count).
+                            </p>
+                          )}
                         </div>
                       </div>
 
