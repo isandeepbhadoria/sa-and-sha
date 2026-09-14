@@ -298,6 +298,15 @@ export const CollectionPage: React.FC = () => {
     priceMax
   ]);
 
+  // Distinct fit values actually in use — sourced from Fit Profile Master
+  // via each product's own `fit` field, not a hardcoded list (see
+  // AdminPage.tsx's Fit Profile Master). A fit with zero products doesn't
+  // show as a filter option, which is correct: nothing to filter to yet.
+  const availableFits = useMemo(() => {
+    const base = contextProducts && contextProducts.length > 0 ? contextProducts : products;
+    return Array.from(new Set(base.map(p => p.fit).filter(Boolean))).sort();
+  }, [contextProducts]);
+
   // Paginated subset of visible items
   const paginatedProducts = useMemo(() => {
     return filteredProducts.slice(0, visibleCount);
@@ -948,7 +957,7 @@ export const CollectionPage: React.FC = () => {
                   </button>
                   {expandedFilters.fit && (
                     <div className="space-y-2 pl-1">
-                      {['Slim', 'Regular', 'Relaxed'].map(f => (
+                      {availableFits.map(f => (
                         <label key={f} className="flex items-center gap-2.5 text-xs font-sans cursor-pointer">
                           <input
                             type="checkbox"

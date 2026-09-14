@@ -534,6 +534,12 @@ async function seedDefaultPromotionsIfEmpty() {
   }
 }
 
+// Material Type / Fit Profile were hardcoded dropdown lists on the product
+// form until now — these two masters let the admin add more without a code
+// change. Seeded once (idempotent — doc id is the slug of the value, so a
+// re-seed is a no-op) with exactly the values that used to be hardcoded, so
+// existing products' materialType/fit values keep resolving to a real
+// master row instead of becoming orphaned free text.
 /* ============================================================================
  * MOBILE OTP VERIFICATION SESSION TOKEN & CUSTOMER PROFILE HELPERS
  * ============================================================================ */
@@ -5661,6 +5667,75 @@ async function startServer() {
       return res.status(500).json({ success: false, error: "Failed to create promo code in database." });
     }
   });
+
+  // Material Type / Fit Profile masters — the exact same 4 material types
+  // and 3 fit profiles that used to be hardcoded on the product form now
+  // live here instead, seeded once (idempotent — doc id is the slug of the
+  // value) so existing products' materialType/fit values keep resolving to
+  // a real master row instead of becoming orphaned free text.
+  async function seedDefaultMasterListIfEmpty(collection: string, defaults: string[]) {
+    try {
+      const adminDb = getAdminDb();
+      for (const name of defaults) {
+        const id = slugify(name);
+        const docRef = adminDb.collection(collection).doc(id);
+        const docSnap = await docRef.get();
+        if (!docSnap.exists) {
+          await docRef.set({ name, created_at: new Date().toISOString() });
+        }
+      }
+    } catch (err) {
+      console.warn(`[MASTER SEED WARNING] Error seeding '${collection}':`, err);
+    }
+  }
+
+  function registerSimpleMasterEndpoints(collection: string, defaults: string[], routePath: string) {
+    app.get(routePath, async (req, res) => {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+      }
+      try {
+        await seedDefaultMasterListIfEmpty(collection, defaults);
+        const adminDb = getAdminDb();
+        const snapshot = await adminDb.collection(collection).orderBy("name").get();
+        const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        return res.json({ success: true, items: list });
+      } catch (err: any) {
+        console.error(`Error fetching ${collection}:`, err);
+        return res.status(500).json({ success: false, error: `Failed to fetch ${collection}.` });
+      }
+    });
+
+    app.post(routePath, async (req, res) => {
+      const adminAuth = await verifyAdminRequest(req);
+      if (!adminAuth.authorized) {
+        return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+      }
+      try {
+        const name = (req.body?.name || "").toString().trim();
+        if (!name) {
+          return res.status(400).json({ success: false, error: "Name is required." });
+        }
+        const adminDb = getAdminDb();
+        const id = slugify(name);
+        const docRef = adminDb.collection(collection).doc(id);
+        const existing = await docRef.get();
+        if (existing.exists) {
+          return res.status(400).json({ success: false, error: `"${name}" already exists.` });
+        }
+        const data = { name, created_at: new Date().toISOString() };
+        await docRef.set(data);
+        return res.json({ success: true, item: { id, ...data } });
+      } catch (err: any) {
+        console.error(`Error adding to ${collection}:`, err);
+        return res.status(500).json({ success: false, error: `Failed to add to ${collection}.` });
+      }
+    });
+  }
+
+  registerSimpleMasterEndpoints("material_types", ["Cotton", "Linen-Cotton Blend", "Georgette", "Other"], "/api/admin/material-types");
+  registerSimpleMasterEndpoints("fit_profiles", ["Slim", "Regular", "Relaxed"], "/api/admin/fit-profiles");
 
   // Admin API: Update Promotion
   app.patch("/api/admin/promotions/:id", async (req, res) => {

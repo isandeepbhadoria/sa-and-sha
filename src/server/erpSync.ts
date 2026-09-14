@@ -9,6 +9,15 @@ import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseR
  * webhook receiver uses to find "which product/size does this SKU mean"
  * without a collection scan.
  *
+ * The product's `color` is passed through as the ERP's variantName: one
+ * Pattern/Style Number covers every color of a design (the factory's own
+ * convention), so each color is its own Firestore product doc but shares
+ * a style number — the ERP tells them apart via a ProductVariant, and the
+ * SKU it mints comes back with the color already baked in
+ * (STYLENUMBER-BRAND-CATEGORY-COLOR-SIZE). This is the real barcode; the
+ * admin form no longer collects a separate hand-typed SKU (see AdminPage's
+ * read-only "SKU / Barcode" display of `erpSkuBySize`).
+ *
  * Never touches `stock` — a newly registered article starts at 0 in the
  * ERP, same as any other new article; real stock only ever enters through
  * the ERP itself (production receipt, restock, transfer).
@@ -16,10 +25,11 @@ import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseR
 export async function registerProductWithErp(
   adminDb: FirebaseFirestore.Firestore,
   productId: string,
-  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number }
+  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number; color?: string }
 ): Promise<{ registered: Record<string, string>; errors: Array<{ size: string; error: string }> }> {
   const styleNumber = (product.styleNumber || "").trim();
   const sizes = Array.isArray(product.sizes) ? product.sizes : [];
+  const variantName = (product.color || "").trim() || undefined;
   const registered: Record<string, string> = {};
   const errors: Array<{ size: string; error: string }> = [];
 
@@ -33,6 +43,7 @@ export async function registerProductWithErp(
         styleNumber,
         size,
         name: product.name,
+        variantName,
         mrp: typeof product.price === "number" && product.price > 0 ? product.price : undefined
       });
       registered[size] = result.sku;

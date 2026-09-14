@@ -39,7 +39,9 @@ export interface Product {
   price: number;
   compareAtPrice: number;
   fabric: string;
-  fit: 'Slim' | 'Regular' | 'Relaxed';
+  // Sourced from Fit Profile Master, not a fixed list — see
+  // SimpleMasterListTab / server.ts's /api/admin/fit-profiles.
+  fit: string;
   color: string;
   colorHex: string;
   sizes: string[];

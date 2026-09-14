@@ -41,7 +41,9 @@ import {
   Award,
   FileText,
   Sliders,
-  IdCard
+  IdCard,
+  Layers,
+  Ruler
 } from 'lucide-react';
 import { HomepageMediaAdmin } from '../components/admin/HomepageMediaAdmin';
 import { AdminShell } from '../components/admin/AdminShell';
@@ -53,13 +55,13 @@ import { AdminCommunicationTab } from '../components/AdminCommunicationTab';
 import { AdminIdentityManagementTab } from '../components/AdminIdentityManagementTab';
 import { AdminReturnsTab } from '../components/admin-returns/AdminReturnsTab';
 import { TaxMasterAdminTab } from '../components/admin/TaxMasterAdminTab';
+import { SimpleMasterListTab } from '../components/admin/SimpleMasterListTab';
 import { RewardsPolicySettings } from '../components/admin/RewardsPolicySettings';
 import { AdminCreditNotesTab } from '../components/admin/AdminCreditNotesTab';
 import {
   CANONICAL_COLLECTIONS,
   CANONICAL_PRODUCT_TYPES,
   CANONICAL_PRODUCT_SUB_TYPES,
-  CANONICAL_MATERIAL_TYPES,
   SELECTABLE_TAX_CLASSES,
   getAvailableProductTypesForCollection,
   getAvailableSubTypesForProductType,
@@ -67,6 +69,7 @@ import {
   isValidProductSubTypeForType,
   validateProductTaxonomy
 } from '../config/catalogTaxonomy';
+import { generateSkuCode } from '../utils/skuGenerator';
 import {
   auth,
   db,
@@ -154,7 +157,7 @@ export const AdminPage: React.FC = () => {
   const [forgotStatus, setForgotStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'material-type-master' | 'fit-profile-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>('orders');
 
   // Promotions management state
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -384,6 +387,11 @@ export const AdminPage: React.FC = () => {
   const [formProductSubType, setFormProductSubType] = useState<string>('');
   const [formMaterialType, setFormMaterialType] = useState<string>('');
   const [formTaxClass, setFormTaxClass] = useState<string>('');
+  // Sourced from the Material Type Master / Fit Profile Master admin
+  // screens (see SimpleMasterListTab) instead of a hardcoded list, so
+  // adding a new material/fit doesn't need a code change.
+  const [availableMaterialTypes, setAvailableMaterialTypes] = useState<Array<{ id: string; name: string }>>([]);
+  const [availableFitProfiles, setAvailableFitProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [formSku, setFormSku] = useState('');
   // The factory's shared Pattern/Style Number — required for this
   // product's sizes to become real, orderable ERP stock (see
@@ -392,7 +400,7 @@ export const AdminPage: React.FC = () => {
   const [formPrice, setFormPrice] = useState('');
   const [formCompareAtPrice, setFormCompareAtPrice] = useState('');
   const [formFabric, setFormFabric] = useState('');
-  const [formFit, setFormFit] = useState<'Slim' | 'Regular' | 'Relaxed'>('Regular');
+  const [formFit, setFormFit] = useState<string>('Regular');
   const [formColor, setFormColor] = useState('');
   const [formColorHex, setFormColorHex] = useState('#FBF6EE');
   const [formSizes, setFormSizes] = useState<string[]>([]);
@@ -431,6 +439,15 @@ export const AdminPage: React.FC = () => {
     return unsubscribe;
   }, []);
 
+  // Auto-generates SKU Code for a brand-new product as Category/Color are
+  // filled in — never for an existing one being edited, since its SKU is
+  // already frozen into past invoices/credit notes (see skuGenerator.ts).
+  useEffect(() => {
+    if (editingProduct) return;
+    setFormSku(generateSkuCode(allProducts, formCategory, formColor));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingProduct, formCategory, formColor, allProducts]);
+
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
     if (isLoggedIn) {
@@ -441,8 +458,26 @@ export const AdminPage: React.FC = () => {
       loadReturnRequests();
       loadEnquiries();
       loadPromotions();
+      loadMaterialTypesAndFitProfiles();
     }
   }, [isLoggedIn]);
+
+  const loadMaterialTypesAndFitProfiles = async () => {
+    try {
+      const token = await getAdminAuthToken();
+      const headers: Record<string, string> = { Authorization: `Bearer ${token || ''}` };
+      const [materialRes, fitRes] = await Promise.all([
+        fetch('/api/admin/material-types', { headers }),
+        fetch('/api/admin/fit-profiles', { headers })
+      ]);
+      const materialData = await materialRes.json();
+      const fitData = await fitRes.json();
+      if (materialData.success) setAvailableMaterialTypes(materialData.items || []);
+      if (fitData.success) setAvailableFitProfiles(fitData.items || []);
+    } catch (err) {
+      console.warn('Failed to load Material Type / Fit Profile masters:', err);
+    }
+  };
 
   const loadPromotions = async () => {
     setIsPromotionsLoading(true);
@@ -1718,9 +1753,16 @@ export const AdminPage: React.FC = () => {
       ]
     },
     {
-      title: 'Settings',
+      title: 'Master',
       items: [
         { key: 'tax-master', label: 'GST Tax Master', icon: ShieldCheck },
+        { key: 'material-type-master', label: 'Material Type Master', icon: Layers },
+        { key: 'fit-profile-master', label: 'Fit Profile Master', icon: Ruler }
+      ]
+    },
+    {
+      title: 'Settings',
+      items: [
         { key: 'rewards-policy', label: 'Sa and Sha Rewards Settings', icon: Award }
       ]
     }
@@ -1736,6 +1778,8 @@ export const AdminPage: React.FC = () => {
     communications: 'Communication Centre',
     identity: 'Identity Management',
     'tax-master': 'GST Tax Master',
+    'material-type-master': 'Material Type Master',
+    'fit-profile-master': 'Fit Profile Master',
     'rewards-policy': 'Sa and Sha Rewards Settings',
     'credit-notes': 'GST Credit Notes',
     'homepage-media': 'Homepage Media CMS'
@@ -1904,6 +1948,30 @@ export const AdminPage: React.FC = () => {
 
           {activeTab === 'tax-master' && (
             <TaxMasterAdminTab adminToken={adminToken} showToast={showToast} />
+          )}
+
+          {activeTab === 'material-type-master' && (
+            <SimpleMasterListTab
+              title="Material Type Master"
+              description="Fabric/material options offered on the product form's Material Type dropdown."
+              endpoint="/api/admin/material-types"
+              addLabel="New material type"
+              namePlaceholder="e.g. Rayon"
+              adminToken={adminToken}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'fit-profile-master' && (
+            <SimpleMasterListTab
+              title="Fit Profile Master"
+              description="Fit options offered on the product form's Fit Profile dropdown, and as a Fits filter on the storefront."
+              endpoint="/api/admin/fit-profiles"
+              addLabel="New fit profile"
+              namePlaceholder="e.g. Oversized"
+              adminToken={adminToken}
+              showToast={showToast}
+            />
           )}
 
           {activeTab === 'rewards-policy' && (
@@ -2319,13 +2387,10 @@ export const AdminPage: React.FC = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Code</label>
-                          <input
-                            type="text"
-                            value={formSku}
-                            onChange={(e) => setFormSku(e.target.value)}
-                            placeholder="e.g. SS-SH-004"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
-                          />
+                          <div className="w-full px-3 py-2 border border-stone-200 rounded bg-stone-100 font-mono font-medium text-stone-600">
+                            {formSku || '—'}
+                          </div>
+                          <p className="text-[10px] text-stone-400">Auto-generated from Category + Color — never typed, never changes once created.</p>
                         </div>
 
                         <div className="space-y-1">
@@ -2346,12 +2411,13 @@ export const AdminPage: React.FC = () => {
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fit Profile</label>
                           <select
                             value={formFit}
-                            onChange={(e) => setFormFit(e.target.value as any)}
+                            onChange={(e) => setFormFit(e.target.value)}
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
                           >
-                            <option value="Slim">Slim Fit</option>
-                            <option value="Regular">Regular Fit</option>
-                            <option value="Relaxed">Relaxed Fit</option>
+                            {availableFitProfiles.length === 0 && <option value={formFit}>{formFit}</option>}
+                            {availableFitProfiles.map(fp => (
+                              <option key={fp.id} value={fp.name}>{fp.name} Fit</option>
+                            ))}
                           </select>
                         </div>
                       </div>
@@ -2420,8 +2486,11 @@ export const AdminPage: React.FC = () => {
                             className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                           >
                             <option value="">-- None / Unassigned --</option>
-                            {CANONICAL_MATERIAL_TYPES.map(mt => (
-                              <option key={mt.id} value={mt.id}>{mt.label}</option>
+                            {availableMaterialTypes.map(mt => (
+                              // value is the slugged id (e.g. "cotton") — matches
+                              // exactly what pre-existing products already have
+                              // stored, back from when this was a hardcoded list.
+                              <option key={mt.id} value={mt.id}>{mt.name}</option>
                             ))}
                           </select>
                         </div>
