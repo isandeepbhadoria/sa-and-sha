@@ -60,8 +60,22 @@ export interface Product {
   previousSlugs?: string[];
   status?: 'draft' | 'published' | 'archived';
   isDecommissioned?: boolean;
+  // Read-only display cache, kept current by the ERP's stock-change
+  // webhook (see server.ts's /api/webhooks/erp-inventory) — the ERP is now
+  // the only place real stock changes happen. Never write this from the
+  // admin form.
   stock?: Record<string, number>;
   tax_class?: string;
+  // The factory's Pattern/Style Number — shared across export and
+  // domestic brands on purpose. Required for a product's sizes to become
+  // real, orderable ERP stock; see erpSkuBySize below.
+  styleNumber?: string;
+  // One ERP StyleArticle SKU per size, populated by
+  // src/server/erpSync.ts#registerProductWithErp after each save. A size
+  // with no entry here isn't tracked in the ERP yet (e.g. styleNumber was
+  // just added and hasn't synced) and checkout treats it as untracked,
+  // same as a legacy product with no stock map ever did.
+  erpSkuBySize?: Record<string, string>;
 }
 
 export interface CartItem {

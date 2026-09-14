@@ -21,7 +21,6 @@ import { AboutPage } from './pages/AboutPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
 import { AdminPage } from './pages/AdminPage';
-import { StaffPage } from './pages/StaffPage';
 import { CustomerDashboardPage } from './pages/CustomerDashboardPage';
 import { CustomerOrdersPage } from './pages/CustomerOrdersPage';
 import { CustomerOrderDetailsPage } from './pages/CustomerOrderDetailsPage';
@@ -175,7 +174,6 @@ export default function App() {
               <Route path="/portal" element={<CustomerDashboardPage />} />
               <Route path="/dashboard" element={<CustomerDashboardPage />} />
               <Route path="/admin" element={<AdminPage />} />
-              <Route path="/staff" element={<StaffPage />} />
               {/* Fallback to custom 404 page */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>

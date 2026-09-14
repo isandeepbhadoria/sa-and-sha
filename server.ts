@@ -107,10 +107,11 @@ import {
   createMobileVerificationRequiredToken
 } from "./src/server/registrationHelpers";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
-import { readStockForItems, restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
-import { createStaffAccount, listStaffAccounts, setStaffActive, deleteStaffAccount, resolveStaffOrAdmin } from "./src/server/staffHelpers";
-import { createStoreSale, listStoreSales } from "./src/server/storeSaleHelpers";
-import { finalizeGstInvoiceForStoreSale } from "./src/server/invoice/storeSaleInvoiceEngine";
+// readStockForItems retired — checkout now reserves stock through the ERP
+// (see src/server/erpSync.ts). restoreInventoryForOrderItems still restores
+// the local display cache on cancel/refund; the ERP-side restock for those
+// flows is a follow-up, not yet wired.
+import { restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
 import {
   generateTrackingToken,
   ensureOrderTrackingToken,
@@ -5454,175 +5455,6 @@ async function startServer() {
     }
   }
 
-  // Resolves a Firebase ID token to either the admin account or an active staff_users
-  // entry. Used by endpoints that store staff (not just the owner) may call, e.g. the
-  // Record Store Sale flow.
-  async function verifyStaffOrAdminRequest(req: express.Request): Promise<import("./src/server/staffHelpers").StaffOrAdminAuthResult> {
-    try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return { authorized: false, error: "Missing Authorization header." };
-      }
-      const token = authHeader.split("Bearer ")[1].trim();
-      if (!token) {
-        return { authorized: false, error: "Missing Authorization token." };
-      }
-      const decoded = await getAdminAuth().verifyIdToken(token);
-      return await resolveStaffOrAdmin(getAdminDb(), decoded.email, decoded.uid, "sales@sa-and-sha.com");
-    } catch (err: any) {
-      console.warn("[STAFF/ADMIN AUTH] Token verification failed:", err.message);
-      return { authorized: false, error: "Invalid or expired session token." };
-    }
-  }
-
-  // Admin-only: create a new store staff login (Firebase Auth user + staff_users record).
-  app.post("/api/admin/staff", async (req, res) => {
-    try {
-      const adminAuth = await verifyAdminRequest(req);
-      if (!adminAuth.authorized) {
-        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
-      }
-
-      const { name, email, password } = req.body;
-      const record = await createStaffAccount(getAdminAuth(), getAdminDb(), {
-        name,
-        email,
-        password,
-        createdBy: adminAuth.email || "admin"
-      });
-
-      return res.json({ success: true, staff: record });
-    } catch (err: any) {
-      console.error("[ADMIN CREATE STAFF ERROR]", err);
-      const isAuthErr = typeof err?.code === "string" && err.code.startsWith("auth/");
-      return res.status(isAuthErr ? 409 : 400).json({ success: false, error: err.message || "Failed to create staff account." });
-    }
-  });
-
-  // Admin-only: list all store staff logins.
-  app.get("/api/admin/staff", async (req, res) => {
-    try {
-      const adminAuth = await verifyAdminRequest(req);
-      if (!adminAuth.authorized) {
-        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
-      }
-      const staff = await listStaffAccounts(getAdminDb());
-      return res.json({ success: true, staff });
-    } catch (err: any) {
-      console.error("[ADMIN LIST STAFF ERROR]", err);
-      return res.status(500).json({ success: false, error: "Failed to load staff accounts." });
-    }
-  });
-
-  // Admin-only: activate/deactivate a store staff login.
-  app.patch("/api/admin/staff/:uid", async (req, res) => {
-    try {
-      const adminAuth = await verifyAdminRequest(req);
-      if (!adminAuth.authorized) {
-        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
-      }
-      const { active } = req.body;
-      if (typeof active !== "boolean") {
-        return res.status(400).json({ success: false, error: "'active' must be a boolean." });
-      }
-      await setStaffActive(getAdminDb(), req.params.uid, active);
-      return res.json({ success: true });
-    } catch (err: any) {
-      console.error("[ADMIN UPDATE STAFF ERROR]", err);
-      return res.status(400).json({ success: false, error: err.message || "Failed to update staff account." });
-    }
-  });
-
-  // Admin-only: permanently remove a store staff login.
-  app.delete("/api/admin/staff/:uid", async (req, res) => {
-    try {
-      const adminAuth = await verifyAdminRequest(req);
-      if (!adminAuth.authorized) {
-        return res.status(403).json({ success: false, error: adminAuth.error || "Unauthorized." });
-      }
-      await deleteStaffAccount(getAdminAuth(), getAdminDb(), req.params.uid);
-      return res.json({ success: true });
-    } catch (err: any) {
-      console.error("[ADMIN DELETE STAFF ERROR]", err);
-      return res.status(400).json({ success: false, error: err.message || "Failed to delete staff account." });
-    }
-  });
-
-  // Staff/Admin: verify the caller's Firebase session and report their role.
-  // Called right after Firebase sign-in on the staff login page.
-  app.post("/api/staff/verify-login", async (req, res) => {
-    const result = await verifyStaffOrAdminRequest(req);
-    if (!result.authorized) {
-      return res.status(403).json({ success: false, error: result.error || "Unauthorized." });
-    }
-    return res.json({ success: true, role: result.role, name: result.name || null, email: result.email });
-  });
-
-  // Staff/Admin: record a walk-in store sale (validates items, reserves stock,
-  // then finalizes a GST invoice through the same numbering series as online orders).
-  app.post("/api/staff/sales", async (req, res) => {
-    try {
-      const authResult = await verifyStaffOrAdminRequest(req);
-      if (!authResult.authorized) {
-        return res.status(403).json({ success: false, error: authResult.error || "Unauthorized." });
-      }
-
-      const { items, payment_method, customer_name, customer_phone, customer_email } = req.body;
-      const adminDb = getAdminDb();
-
-      const sale = await createStoreSale(adminDb, {
-        items,
-        payment_method,
-        customer_name,
-        customer_phone,
-        customer_email,
-        recordedBy: {
-          uid: authResult.uid || "",
-          name: authResult.name || authResult.email || "Staff",
-          email: authResult.email || "",
-          role: authResult.role || "store_staff"
-        }
-      });
-
-      const invoiceResult = await finalizeGstInvoiceForStoreSale(adminDb, sale.order_id, sale, {
-        createdBy: authResult.email || "staff"
-      });
-
-      if (!invoiceResult.success) {
-        console.error(`[STORE SALE] Sale ${sale.order_id} recorded but invoice finalization failed:`, invoiceResult.error);
-      }
-
-      return res.json({
-        success: true,
-        sale,
-        invoice_number: invoiceResult.invoice?.invoice_number || null,
-        invoice_warning: invoiceResult.success ? null : (invoiceResult.error || "Invoice could not be finalized.")
-      });
-    } catch (err: any) {
-      console.error("[RECORD STORE SALE ERROR]", err);
-      return res.status(400).json({ success: false, error: err.message || "Failed to record store sale." });
-    }
-  });
-
-  // Staff/Admin: list store sales. Staff see only their own; admin sees all.
-  app.get("/api/staff/sales", async (req, res) => {
-    try {
-      const authResult = await verifyStaffOrAdminRequest(req);
-      if (!authResult.authorized) {
-        return res.status(403).json({ success: false, error: authResult.error || "Unauthorized." });
-      }
-
-      const adminDb = getAdminDb();
-      const scopeToUid = authResult.role === "store_staff" ? authResult.uid : undefined;
-      const sales = await listStoreSales(adminDb, { staffUid: scopeToUid, limit: 100 });
-
-      return res.json({ success: true, sales });
-    } catch (err: any) {
-      console.error("[LIST STORE SALES ERROR]", err);
-      return res.status(500).json({ success: false, error: "Failed to load store sales." });
-    }
-  });
-
   // Customer API: Validate Promo Code
   app.post("/api/promotions/validate", async (req, res) => {
     try {
@@ -8968,6 +8800,105 @@ async function startServer() {
     }
   });
 
+  // Registers/ensures one ERP StyleArticle per size for a product — called
+  // by the admin panel right after it saves a product doc to Firestore
+  // (products are written client-side, see AdminPage.tsx, so this is a
+  // separate explicit sync step rather than a hook on the write itself).
+  // Idempotent, safe to call on every save.
+  app.post("/api/admin/products/:id/sync-erp", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const adminDb = getAdminDb();
+      const productId = req.params.id;
+      const productSnap = await adminDb.collection("products").doc(productId).get();
+      if (!productSnap.exists) {
+        return res.status(404).json({ success: false, error: "Product not found." });
+      }
+      const product = productSnap.data() || {};
+      const { registerProductWithErp } = await import("./src/server/erpSync");
+      const result = await registerProductWithErp(adminDb, productId, product as any);
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      console.error("[ERP SYNC ENDPOINT ERROR]", err?.message || err);
+      return res.status(500).json({ success: false, error: err?.message || "Failed to sync product with the ERP." });
+    }
+  });
+
+  // Receives stock-change notifications from the ERP (see
+  // InventoryService.notifyExternalSites in the ERP repo) and updates this
+  // site's local `stock` cache — the ERP is the only place real stock
+  // changes happen now; this keeps product pages fast without calling the
+  // ERP live on every view. HMAC-SHA256 verified against ERP_WEBHOOK_SECRET,
+  // same raw-body-Buffer convention as the Razorpay webhook above.
+  app.post("/api/webhooks/erp-inventory", async (req, res) => {
+    const webhookSecret = process.env.ERP_WEBHOOK_SECRET;
+    if (!webhookSecret || !webhookSecret.trim()) {
+      console.warn("[ERP WEBHOOK SECURITY] Missing or empty ERP_WEBHOOK_SECRET environment variable on server.");
+      return res.status(500).json({ success: false, error: "ERP webhook secret not configured on server." });
+    }
+
+    const signature = req.headers["x-erp-signature"] as string;
+    if (!signature) {
+      console.warn("[ERP WEBHOOK SECURITY] Missing X-Erp-Signature header.");
+      return res.status(400).json({ success: false, error: "Missing x-erp-signature header." });
+    }
+
+    const rawBody = (req as any).rawBody;
+    if (!rawBody || !Buffer.isBuffer(rawBody)) {
+      console.warn("[ERP WEBHOOK] Raw request body Buffer not available for signature verification.");
+      return res.status(400).json({ success: false, error: "Missing raw request body" });
+    }
+
+    const expectedSignature = crypto.createHmac("sha256", webhookSecret.trim()).update(rawBody).digest("hex");
+    try {
+      const sigBuf = Buffer.from(signature, "utf8");
+      const expBuf = Buffer.from(expectedSignature, "utf8");
+      if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+        console.warn("[ERP WEBHOOK] Signature mismatch.");
+        return res.status(400).json({ success: false, error: "Invalid webhook signature" });
+      }
+    } catch (e) {
+      console.warn("[ERP WEBHOOK] Signature comparison failed:", e);
+      return res.status(400).json({ success: false, error: "Invalid webhook signature" });
+    }
+
+    try {
+      const { sku, available } = req.body || {};
+      if (!sku || typeof available !== "number") {
+        return res.status(400).json({ success: false, error: "Missing sku or available in webhook body." });
+      }
+
+      const adminDb = getAdminDb();
+      const indexSnap = await adminDb.collection("erp_sku_index").doc(sku).get();
+      if (!indexSnap.exists) {
+        // Not necessarily an error — could be a SKU registered by
+        // koralinen.com or some other site sharing the same ERP, or a
+        // reconciliation event for a SKU this site never registered.
+        console.log(`[ERP WEBHOOK] No local index entry for SKU '${sku}' — ignoring.`);
+        return res.json({ success: true, ignored: true });
+      }
+
+      const { productId, size } = indexSnap.data() as { productId: string; size: string };
+      // Dotted field path, not a nested `stock: {...}` object — a plain
+      // nested object here would replace the whole stock map and wipe out
+      // every other size, same gotcha the rest of this file already works
+      // around (see readStockForItems's callers).
+      await adminDb.collection("products").doc(productId).update({
+        [`stock.${size}`]: Math.max(0, Math.trunc(available)),
+        updated_at: new Date().toISOString()
+      });
+
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error("[ERP WEBHOOK ERROR]", err?.message || err);
+      return res.status(500).json({ success: false, error: "Failed to process ERP webhook." });
+    }
+  });
+
   // Step 1: Create Server-Authoritative Razorpay Order
   app.post("/api/create-order", async (req, res) => {
     try {
@@ -9367,6 +9298,34 @@ async function startServer() {
         });
       }
 
+      // 3.6 Reserve + confirm ERP stock before the Firestore transaction
+      // begins — a Firestore transaction can retry on contention, and an
+      // external HTTP call must never run more than once for the same
+      // request. Payment is already captured at this point, so this is
+      // deliberately best-effort per line (see
+      // reserveAndConfirmErpStockBestEffort): a line that can't be moved in
+      // the ERP gets flagged via oversoldItems below, never blocks order
+      // creation — the customer is already charged.
+      // Narrow it further: re-check for an existing order right before
+      // moving ERP stock. Not a full guarantee against the webhook and this
+      // endpoint racing on the exact same payment (only the transactional
+      // orderQuery check below is truly atomic), but it closes almost all
+      // of that window cheaply.
+      const preErpOrderCheck = await adminDb.collection("orders").where("payment_id", "==", razorpay_payment_id).limit(1).get();
+      let oversoldItems: Array<{ name: string; size: string; requested: number; available: number }> = [];
+      if (preErpOrderCheck.empty) {
+        const { reserveAndConfirmErpStockBestEffort } = await import("./src/server/erpSync");
+        oversoldItems = await reserveAndConfirmErpStockBestEffort(
+          adminDb,
+          totals.validatedItems,
+          razorpay_payment_id,
+          "SaAndShaOrder"
+        );
+        if (oversoldItems.length > 0) {
+          console.warn(`[STOCK OVERSOLD] Razorpay order for payment #${razorpay_payment_id} oversold:`, oversoldItems);
+        }
+      }
+
       // 4. Atomically Consume Promo Reservation & Write Order
       let order_id = "";
       let orderPayload: any = null;
@@ -9383,12 +9342,6 @@ async function startServer() {
           order_id = orderPayload.order_id;
           return;
         }
-
-        // Reserve stock before any writes (Firestore requires all reads first).
-        // Payment is already captured at this point, so we NEVER abort here on low
-        // stock (that would leave the customer charged with no order created) — we
-        // clamp at zero and flag the order for admin follow-up instead.
-        const stockChecks = await readStockForItems(transaction, adminDb, totals.validatedItems);
 
         const resRef = adminDb.collection("promo_reservations").doc(razorpay_order_id);
         const resSnap = await transaction.get(resRef);
@@ -9437,22 +9390,8 @@ async function startServer() {
           }
         }
 
-        const oversoldItems: Array<{ name: string; size: string; requested: number; available: number }> = [];
-        for (const check of stockChecks) {
-          if (check.tracked) {
-            const newVal = (check.currentAvailable as number) - check.qty;
-            if (newVal < 0) {
-              oversoldItems.push({ name: check.name, size: check.size, requested: check.qty, available: check.currentAvailable as number });
-            }
-            transaction.update(check.ref, {
-              [`stock.${check.size}`]: Math.max(newVal, 0),
-              updated_at: new Date().toISOString()
-            });
-          }
-        }
-        if (oversoldItems.length > 0) {
-          console.warn(`[STOCK OVERSOLD] Razorpay order for payment #${razorpay_payment_id} oversold:`, oversoldItems);
-        }
+        // oversoldItems was already computed above, before this transaction
+        // — see the ERP reserve+confirm step (3.6).
 
         const randId = Math.floor(100000 + Math.random() * 900000);
         order_id = `SS-${randId}-LX`;
@@ -9818,44 +9757,55 @@ async function startServer() {
         }
       }
 
+      // 1.5 Reserve ERP stock before the Firestore transaction begins — a
+      // Firestore transaction can retry on contention, and an external HTTP
+      // reserve() call must never run more than once for the same request.
+      // COD hasn't taken any payment yet, so it's safe (and correct) to
+      // hard-block here on insufficient stock, same as the old Firestore
+      // stock check did. Computing totals a second time (the transaction
+      // below still computes its own, authoritative copy) is redundant but
+      // safe — it only needs validatedItems here, nothing pricing-critical.
+      const { reserveErpStockOrThrow, confirmErpReservations } = await import("./src/server/erpSync");
+      const preflightTotals = await calculateAuthoritativeTotals(
+        items,
+        couponCode,
+        country || "India",
+        shipping_method || "standard",
+        cleanEmail,
+        cleanPhone
+      );
+      const heldReservations = await reserveErpStockOrThrow(adminDb, preflightTotals.validatedItems, key);
+
       // 2. Run Firestore Transaction
       let order_id = "";
       let orderPayload: OrderData | null = null;
       let docRefId = "";
 
-      await adminDb.runTransaction(async (transaction) => {
-        const txIdempSnap = await transaction.get(idempDocRef);
-        if (txIdempSnap.exists && txIdempSnap.data()?.status === "completed") {
-          const idempData = txIdempSnap.data();
-          order_id = idempData?.order_id;
-          orderPayload = idempData?.orderPayload;
-          docRefId = idempData?.docRefId || "";
-          return;
-        }
-
-        const totals = await calculateAuthoritativeTotals(
-          items,
-          couponCode,
-          country || "India",
-          shipping_method || "standard",
-          cleanEmail,
-          cleanPhone
-        );
-
-        if (totals.grand_total >= 5000) {
-          throw new Error("Cash on Delivery is restricted to orders under ₹5,000.");
-        }
-
-        // Reserve stock before any writes (Firestore requires all reads first).
-        // COD hasn't taken any payment yet, so it's safe to hard-block on insufficient stock.
-        const stockChecks = await readStockForItems(transaction, adminDb, totals.validatedItems);
-        for (const check of stockChecks) {
-          if (check.tracked && (check.currentAvailable as number) < check.qty) {
-            throw new Error(`"${check.name}" (size ${check.size}) has only ${Math.max(check.currentAvailable as number, 0)} left in stock. Please update your cart.`);
+      try {
+        await adminDb.runTransaction(async (transaction) => {
+          const txIdempSnap = await transaction.get(idempDocRef);
+          if (txIdempSnap.exists && txIdempSnap.data()?.status === "completed") {
+            const idempData = txIdempSnap.data();
+            order_id = idempData?.order_id;
+            orderPayload = idempData?.orderPayload;
+            docRefId = idempData?.docRefId || "";
+            return;
           }
-        }
 
-        if (totals.appliedPromo && totals.appliedPromo.promo_id) {
+          const totals = await calculateAuthoritativeTotals(
+            items,
+            couponCode,
+            country || "India",
+            shipping_method || "standard",
+            cleanEmail,
+            cleanPhone
+          );
+
+          if (totals.grand_total >= 5000) {
+            throw new Error("Cash on Delivery is restricted to orders under ₹5,000.");
+          }
+
+          if (totals.appliedPromo && totals.appliedPromo.promo_id) {
           const promoRef = adminDb.collection("promotions").doc(totals.appliedPromo.promo_id);
           const promoSnap = await transaction.get(promoRef);
 
@@ -9879,15 +9829,6 @@ async function startServer() {
             usage_count: uCount + 1,
             updated_at: new Date().toISOString()
           });
-        }
-
-        for (const check of stockChecks) {
-          if (check.tracked) {
-            transaction.update(check.ref, {
-              [`stock.${check.size}`]: (check.currentAvailable as number) - check.qty,
-              updated_at: new Date().toISOString()
-            });
-          }
         }
 
         const randId = Math.floor(100000 + Math.random() * 900000);
@@ -9942,16 +9883,33 @@ async function startServer() {
           status: "completed",
           order_id,
           docRefId,
-          orderPayload,
+          orderPayload: removeUndefined(orderPayload),
           created_at: new Date().toISOString()
         });
-      });
+        });
+      } catch (txErr) {
+        // The order wasn't created — release the ERP holds now rather than
+        // waiting for their TTL, so the stock is free again immediately.
+        for (const h of heldReservations) {
+          const { erpReleaseReservation } = await import("./src/server/erpClient");
+          erpReleaseReservation(h.reservationId).catch((releaseErr) =>
+            console.error(`[ERP RELEASE ERROR] reservation=${h.reservationId}:`, releaseErr?.message || releaseErr)
+          );
+        }
+        throw txErr;
+      }
 
       if (!orderPayload) {
         throw new Error("Failed to create COD order inside transaction.");
       }
 
       console.log(`[FIREBASE ADMIN] Server created COD order #${order_id} (docId: ${docRefId})`);
+
+      // The order now exists in Firestore — turn the ERP's temporary holds
+      // into permanent deductions. A confirm failure here is logged, not
+      // thrown: the order (and, since COD, the customer's commitment to pay
+      // on delivery) already stands either way.
+      await confirmErpReservations(heldReservations, "SaAndShaOrder", order_id);
 
       // Note: COD orders do NOT auto-finalize GST invoices upon order placement.
       // GST Tax Invoices for COD orders are finalized upon dispatch/fulfillment/delivery confirmation.

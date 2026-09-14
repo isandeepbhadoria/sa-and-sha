@@ -52,7 +52,6 @@ import { AdminReturnsTab } from '../components/admin-returns/AdminReturnsTab';
 import { TaxMasterAdminTab } from '../components/admin/TaxMasterAdminTab';
 import { RewardsPolicySettings } from '../components/admin/RewardsPolicySettings';
 import { AdminCreditNotesTab } from '../components/admin/AdminCreditNotesTab';
-import { AdminStaffAccountsTab } from '../components/admin/AdminStaffAccountsTab';
 import {
   CANONICAL_COLLECTIONS,
   CANONICAL_PRODUCT_TYPES,
@@ -152,7 +151,7 @@ export const AdminPage: React.FC = () => {
   const [forgotStatus, setForgotStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media' | 'staff-accounts'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>('orders');
 
   // Promotions management state
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -383,6 +382,10 @@ export const AdminPage: React.FC = () => {
   const [formMaterialType, setFormMaterialType] = useState<string>('');
   const [formTaxClass, setFormTaxClass] = useState<string>('');
   const [formSku, setFormSku] = useState('');
+  // The factory's shared Pattern/Style Number — required for this
+  // product's sizes to become real, orderable ERP stock (see
+  // syncProductWithErp below).
+  const [formStyleNumber, setFormStyleNumber] = useState('');
   const [formPrice, setFormPrice] = useState('');
   const [formCompareAtPrice, setFormCompareAtPrice] = useState('');
   const [formFabric, setFormFabric] = useState('');
@@ -1244,6 +1247,7 @@ export const AdminPage: React.FC = () => {
       setFormMaterialType(product.materialType || '');
       setFormTaxClass(product.tax_class || '');
       setFormSku(product.sku || '');
+      setFormStyleNumber(product.styleNumber || '');
       setFormPrice(product.price ? String(product.price) : '');
       setFormCompareAtPrice(product.compareAtPrice ? String(product.compareAtPrice) : '');
       setFormFabric(product.fabric || '');
@@ -1274,6 +1278,7 @@ export const AdminPage: React.FC = () => {
       setFormMaterialType('');
       setFormTaxClass('');
       setFormSku('');
+      setFormStyleNumber('');
       setFormPrice('');
       setFormCompareAtPrice('');
       setFormFabric('');
@@ -1344,33 +1349,39 @@ export const AdminPage: React.FC = () => {
     setFormImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSizeToggle = (size: string) => {
-    setFormSizes(prev => {
-      if (prev.includes(size)) {
-        const updated = prev.filter(s => s !== size);
-        setFormStock(stock => {
-          const newStock = { ...stock };
-          delete newStock[size];
-          return newStock;
-        });
-        return updated;
-      } else {
-        const updated = [...prev, size];
-        setFormStock(stock => ({
-          ...stock,
-          [size]: stock[size] !== undefined ? stock[size] : 10
-        }));
-        return updated;
+  // Registers/ensures an ERP StyleArticle for each of this product's sizes
+  // (see server.ts's /api/admin/products/:id/sync-erp), so there's
+  // something real to reserve stock against at checkout. Best-effort and
+  // never throws — the Firestore save above is what actually matters to
+  // the admin; if this fails they still have a saved product, just one the
+  // ERP hasn't picked up yet (retried on the next save).
+  const syncProductWithErp = async (productId: string, styleNumber: string) => {
+    if (!styleNumber.trim() || !auth.currentUser) return;
+    try {
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/admin/products/${productId}/sync-erp`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${idToken}` }
+      });
+      const data = await res.json();
+      if (!data.success) {
+        console.warn('[ERP SYNC] Failed:', data.error);
+        showToast(`Saved, but couldn't sync stock tracking with the ERP: ${data.error}`);
+      } else if (data.errors?.length > 0) {
+        console.warn('[ERP SYNC] Partial failure:', data.errors);
+        showToast(`Saved — some sizes couldn't sync with the ERP (check console).`);
       }
-    });
+    } catch (err: any) {
+      console.warn('[ERP SYNC] Request failed:', err?.message || err);
+      showToast(`Saved, but couldn't reach the ERP to sync stock tracking.`);
+    }
   };
 
-  const handleStockChange = (size: string, qtyStr: string) => {
-    const quantity = qtyStr === '' ? 0 : Number(qtyStr);
-    setFormStock(prev => ({
-      ...prev,
-      [size]: quantity
-    }));
+  // Stock itself is no longer edited here (see the read-only display in the
+  // Available Sizes section) — this only tracks which sizes exist, which
+  // drives what gets registered with the ERP on save.
+  const handleSizeToggle = (size: string) => {
+    setFormSizes(prev => (prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]));
   };
 
   const uploadAndSaveProduct = async (e: React.FormEvent) => {
@@ -1501,8 +1512,11 @@ export const AdminPage: React.FC = () => {
         details: detailsArray.length > 0 ? detailsArray : ['Premium quality fabric', 'Tailored stitching'],
         careInstructions: careArray.length > 0 ? careArray : ['Machine wash cold', 'Dry in shade'],
         sku: formSku,
-        status: formStatus,
-        stock: formStock
+        styleNumber: formStyleNumber.trim() || undefined,
+        status: formStatus
+        // stock is intentionally omitted — it's the ERP's webhook that
+        // keeps this field current now (see registerProductWithErp /
+        // /api/webhooks/erp-inventory), never a direct write from here.
       };
 
       if (editingProduct) {
@@ -1525,6 +1539,7 @@ export const AdminPage: React.FC = () => {
           try {
             await setDoc(doc(db, 'products', editingProduct.id), productData, { merge: true });
             showToast(`Product "${formName}" updated successfully!`);
+            await syncProductWithErp(editingProduct.id, formStyleNumber);
           } catch (fbErr) {
             console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
             const localCustom = localStorage.getItem('kora_custom_products');
@@ -1556,8 +1571,9 @@ export const AdminPage: React.FC = () => {
           showToast(`Product "${formName}" added locally in Sandbox!`);
         } else {
           try {
-            await addDoc(collection(db, 'products'), productData);
+            const newRef = await addDoc(collection(db, 'products'), productData);
             showToast(`Product "${formName}" added successfully!`);
+            await syncProductWithErp(newRef.id, formStyleNumber);
           } catch (fbErr) {
             console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
             const localCustom = localStorage.getItem('kora_custom_products');
@@ -1994,23 +2010,7 @@ export const AdminPage: React.FC = () => {
               <Sliders className="w-4 h-4" />
               <span>Homepage Media CMS</span>
             </button>
-            <button
-              onClick={() => setActiveTab('staff-accounts')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'staff-accounts'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-staff-accounts"
-            >
-              <Users className="w-4 h-4" />
-              <span>Staff Accounts</span>
-            </button>
           </div>
-
-          {activeTab === 'staff-accounts' && (
-            <AdminStaffAccountsTab adminToken={adminToken} showToast={showToast} />
-          )}
 
           {activeTab === 'identity' && (
             <AdminIdentityManagementTab adminToken={adminToken} showToast={showToast} />
@@ -2443,6 +2443,20 @@ export const AdminPage: React.FC = () => {
                         </div>
 
                         <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Pattern / Style Number</label>
+                          <input
+                            type="text"
+                            value={formStyleNumber}
+                            onChange={(e) => setFormStyleNumber(e.target.value)}
+                            placeholder="e.g. PATT9001"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
+                          />
+                          <p className="text-[10px] text-stone-400">The factory's own numbering — required for this product's sizes to become real, orderable stock.</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fit Profile</label>
                           <select
                             value={formFit}
@@ -2755,9 +2769,13 @@ export const AdminPage: React.FC = () => {
 
                       {/* AVAILABLE SIZES SELECTION */}
                       <div className="space-y-2 border border-stone-100 p-4 rounded-xl">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Available Sizes & Stock Quantity per Size *</label>
-                        <p className="text-[10px] text-stone-400">Check size to enable it, then specify available stock units.</p>
-                        
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Available Sizes *</label>
+                        <p className="text-[10px] text-stone-400">
+                          Check every size this product comes in. Stock quantity is read-only here — it's kept in
+                          sync from the ERP after you save (see Pattern/Style Number above); add or adjust real stock
+                          from the ERP, not from this form.
+                        </p>
+
                         <div className="grid grid-cols-3 gap-3">
                           {(formCategory === 'trousers'
                             ? ['30', '32', '34', '36', '38']
@@ -2775,16 +2793,11 @@ export const AdminPage: React.FC = () => {
                                   />
                                   <span className="font-bold text-stone-800 text-xs font-mono">{size}</span>
                                 </label>
-                                
+
                                 {isChecked && (
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    placeholder="Stock Qty"
-                                    value={formStock[size] !== undefined ? formStock[size] : ''}
-                                    onChange={(e) => handleStockChange(size, e.target.value)}
-                                    className="w-full px-1.5 py-1 text-[11px] font-mono border border-stone-200 rounded focus:outline-none focus:ring-1 focus:ring-[#B08D57]"
-                                  />
+                                  <div className="w-full px-1.5 py-1 text-[11px] font-mono border border-stone-100 rounded bg-stone-100 text-stone-500">
+                                    Stock: {formStock[size] !== undefined ? formStock[size] : '—'}
+                                  </div>
                                 )}
                               </div>
                             );
