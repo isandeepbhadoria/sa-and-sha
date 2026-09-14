@@ -377,7 +377,7 @@ export const CollectionPage: React.FC = () => {
     if (currentCategory.isPants) {
       return ['30', '32', '34', '36', '38'];
     }
-    return ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
+    return ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'S/M', 'L/XL', 'XXL/3XL'];
   }, [currentCategory]);
 
   // Color Swatch references

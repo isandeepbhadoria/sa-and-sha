@@ -435,7 +435,7 @@ export const ProductDetailPage: React.FC = () => {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`w-11 h-11 text-xs font-sans font-bold rounded-md border flex items-center justify-center transition-all ${
+                      className={`min-w-[2.75rem] h-11 px-2 text-xs font-sans font-bold rounded-md border flex items-center justify-center transition-all ${
                         selectedSize === size
                           ? 'bg-[#2A211C] text-[#FBF6EE] border-[#2A211C] font-extrabold shadow'
                           : 'bg-white text-[#2A211C] border-[#E5D2BC]/30 hover:border-[#2A211C]'

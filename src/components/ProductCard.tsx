@@ -132,7 +132,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, printCount })
                   <button
                     key={size}
                     onClick={(e) => handleSizeSelect(e, size)}
-                    className="w-8 h-8 rounded bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border border-[#E5D2BC]/30"
+                    className="min-w-[2rem] h-8 px-1.5 rounded bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border border-[#E5D2BC]/30"
                     id={`size-opt-${product.id}-${size}`}
                   >
                     {size}

@@ -410,6 +410,10 @@ export const AdminPage: React.FC = () => {
   const [formFabricColor, setFormFabricColor] = useState('');
   const [formNoPrints, setFormNoPrints] = useState(false);
   const [formSizes, setFormSizes] = useState<string[]>([]);
+  // Free-size garments (one cut fits two standard sizes, e.g. "S/M") use a
+  // separate combo-size list instead of the regular S/M/L/... checklist —
+  // see the FREE_SIZE_OPTIONS constant and the Available Sizes section.
+  const [formFreeSize, setFormFreeSize] = useState(false);
   const [formCollar, setFormCollar] = useState<string>('Spread');
   const [formSleeve, setFormSleeve] = useState<string>('Full Sleeve');
   const [formPattern, setFormPattern] = useState<'Solid' | 'Striped' | 'Printed' | 'Checked'>('Solid');
@@ -1334,6 +1338,7 @@ export const AdminPage: React.FC = () => {
       setFormNoPrints(product.noPrints || false);
       setFormColorHex(product.colorHex || '#FBF6EE');
       setFormSizes(product.sizes || []);
+      setFormFreeSize((product.sizes || []).some(s => s.includes('/')));
       setFormCollar(product.collar || 'Spread');
       setFormSleeve(product.sleeve || 'Full Sleeve');
       setFormPattern(product.pattern || 'Solid');
@@ -1368,6 +1373,7 @@ export const AdminPage: React.FC = () => {
       setFormNoPrints(false);
       setFormColorHex('#FBF6EE');
       setFormSizes([]);
+      setFormFreeSize(false);
       setFormCollar('Spread');
       setFormSleeve('Full Sleeve');
       setFormPattern('Solid');
@@ -2940,15 +2946,34 @@ export const AdminPage: React.FC = () => {
 
                       {/* AVAILABLE SIZES SELECTION */}
                       <div className="space-y-2 border border-stone-100 p-4 rounded-xl">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Available Sizes *</label>
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Available Sizes *</label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={formFreeSize}
+                              onChange={(e) => {
+                                setFormFreeSize(e.target.checked);
+                                setFormSizes([]);
+                                setFormStock({});
+                              }}
+                              className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5 cursor-pointer"
+                            />
+                            <span className="text-[10px] text-stone-500">Free Size (combo sizing, e.g. S/M)</span>
+                          </label>
+                        </div>
                         <p className="text-[10px] text-stone-400">
-                          Check every size this product comes in. Stock quantity is read-only here — it's kept in
+                          {formFreeSize
+                            ? 'This garment is labeled with a combo size on the tag (one cut fits two standard sizes). Check the combo(s) it comes in.'
+                            : 'Check every size this product comes in.'} Stock quantity is read-only here — it's kept in
                           sync from the ERP after you save (see Pattern/Style Number above); add or adjust real stock
                           from the ERP, not from this form.
                         </p>
 
                         <div className="grid grid-cols-3 gap-3">
-                          {(formCategory === 'trousers'
+                          {(formFreeSize
+                            ? ['S/M', 'L/XL', 'XXL/3XL']
+                            : formCategory === 'trousers'
                             ? ['30', '32', '34', '36', '38']
                             : ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
                           ).map((size) => {
