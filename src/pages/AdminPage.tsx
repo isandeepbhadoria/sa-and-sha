@@ -40,9 +40,12 @@ import {
   Radio,
   Award,
   FileText,
-  Sliders
+  Sliders,
+  IdCard
 } from 'lucide-react';
 import { HomepageMediaAdmin } from '../components/admin/HomepageMediaAdmin';
+import { AdminShell } from '../components/admin/AdminShell';
+import type { AdminNavSection } from '../components/admin/AdminShell';
 import { useShop } from '../context/ShopContext';
 import { Product, Promotion } from '../types';
 import { AdminCustomersTab } from '../components/AdminCustomersTab';
@@ -1685,8 +1688,61 @@ export const AdminPage: React.FC = () => {
     return matchesSearch && matchesCategory;
   });
 
+  // Grouped sidebar nav for AdminShell — same grouping/order as
+  // koralinen.com's admin panel so the two sites' admin experiences match;
+  // only labels/counts are specific to this site's own tabs/data.
+  const adminNavSections: AdminNavSection[] = [
+    {
+      title: 'Sales',
+      items: [
+        { key: 'orders', label: 'Orders Registry', icon: ShoppingBag, count: orders.length },
+        { key: 'returns', label: 'Returns & Exchanges', icon: RotateCcw, count: returnRequests.length },
+        { key: 'credit-notes', label: 'GST Credit Notes', icon: FileText }
+      ]
+    },
+    {
+      title: 'Catalog',
+      items: [
+        { key: 'products', label: 'Product Catalog', icon: Package, count: allProducts.length },
+        { key: 'promotions', label: 'Promo Codes', icon: Tag, count: promotions.length },
+        { key: 'homepage-media', label: 'Homepage Media CMS', icon: Sliders }
+      ]
+    },
+    {
+      title: 'Customers',
+      items: [
+        { key: 'customers', label: 'Customers', icon: Users },
+        { key: 'identity', label: 'Identity Management', icon: IdCard },
+        { key: 'communications', label: 'Communication Centre', icon: Radio },
+        { key: 'enquiries', label: 'Customer Enquiries', icon: Mail, count: enquiries.length }
+      ]
+    },
+    {
+      title: 'Settings',
+      items: [
+        { key: 'tax-master', label: 'GST Tax Master', icon: ShieldCheck },
+        { key: 'rewards-policy', label: 'Sa and Sha Rewards Settings', icon: Award }
+      ]
+    }
+  ];
+
+  const adminPageLabels: Record<string, string> = {
+    orders: 'Orders Registry',
+    products: 'Product Catalog',
+    promotions: 'Promo Codes',
+    customers: 'Customers',
+    returns: 'Returns & Exchanges',
+    enquiries: 'Customer Enquiries',
+    communications: 'Communication Centre',
+    identity: 'Identity Management',
+    'tax-master': 'GST Tax Master',
+    'rewards-policy': 'Sa and Sha Rewards Settings',
+    'credit-notes': 'GST Credit Notes',
+    'homepage-media': 'Homepage Media CMS'
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6" id="admin-root-container">
+    <div className={!isLoggedIn ? 'max-w-7xl mx-auto px-4 sm:px-6 py-6' : ''} id="admin-root-container">
       {!isLoggedIn ? (
         /* LOGIN PANEL */
         <div className="min-h-[60vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -1831,187 +1887,17 @@ export const AdminPage: React.FC = () => {
         </div>
       ) : (
         /* ADMIN DASHBOARD */
-        <div className="space-y-6">
-          
-          {/* HEADER ROW */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E5D2BC]/20 pb-5">
-            <div>
-              <div className="flex items-center gap-2 text-stone-500 text-xs tracking-wider uppercase font-sans font-bold">
-                <span>Executive Dashboard</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C98A82]"></span>
-                <span className="text-[#C98A82]">Live Session</span>
-              </div>
-              <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#2A211C] mt-1">
-                Sa and Sha Order Registry
-              </h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={loadOrders}
-                disabled={isLoading}
-                className="p-2.5 rounded-lg border border-[#E5D2BC]/30 hover:bg-stone-50 text-[#2A211C] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider disabled:opacity-50"
-              >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="p-2.5 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 hover:bg-stone-200 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Log Out</span>
-              </button>
-            </div>
-          </div>
-
-
-
-          {/* TAB SWITCHER */}
-          <div className="flex flex-wrap gap-y-1 border-b border-stone-200 mt-4" id="admin-tab-switcher">
-            <button
-              onClick={() => setActiveTab('orders')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'orders'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Orders Registry ({orders.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('products')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'products'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-            >
-              <Package className="w-4 h-4" />
-              <span>Product Catalog ({allProducts.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('promotions')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'promotions'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-promotions"
-            >
-              <Tag className="w-4 h-4" />
-              <span>Promo Codes ({promotions.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('customers')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'customers'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-customers"
-            >
-              <Users className="w-4 h-4" />
-              <span>Customers</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('returns')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'returns'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span>Returns & Exchanges ({returnRequests.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('enquiries')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'enquiries'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-            >
-              <Mail className="w-4 h-4" />
-              <span>Customer Enquiries ({enquiries.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('communications')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'communications'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-communications"
-            >
-              <Radio className="w-4 h-4" />
-              <span>Communication Centre</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('identity')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'identity'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-identity"
-            >
-              <Users className="w-4 h-4" />
-              <span>Identity Management</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('tax-master')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'tax-master'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-tax-master"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span>GST Tax Master</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('rewards-policy')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'rewards-policy'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-rewards-policy"
-            >
-              <Award className="w-4 h-4" />
-              <span>Sa and Sha Rewards Settings</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('credit-notes')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'credit-notes'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-credit-notes"
-            >
-              <FileText className="w-4 h-4" />
-              <span>GST Credit Notes</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('homepage-media')}
-              className={`py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                activeTab === 'homepage-media'
-                  ? 'border-[#B08D57] text-[#B08D57]'
-                  : 'border-transparent text-stone-500 hover:text-[#2A211C]'
-              }`}
-              id="admin-tab-homepage-media"
-            >
-              <Sliders className="w-4 h-4" />
-              <span>Homepage Media CMS</span>
-            </button>
-          </div>
-
+        <AdminShell
+          brandName="Sa and Sha"
+          accentColor="#B08D57"
+          navSections={adminNavSections}
+          activeTab={activeTab}
+          onTabChange={(key) => setActiveTab(key as typeof activeTab)}
+          pageLabel={adminPageLabels[activeTab] || 'Admin'}
+          onRefresh={loadOrders}
+          isRefreshing={isLoading}
+          onLogout={handleLogout}
+        >
           {activeTab === 'identity' && (
             <AdminIdentityManagementTab adminToken={adminToken} showToast={showToast} />
           )}
@@ -4805,7 +4691,7 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-        </div>
+        </AdminShell>
       )}
     </div>
   );
