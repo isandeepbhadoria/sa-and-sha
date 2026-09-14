@@ -425,6 +425,15 @@ export const AdminPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Additional prints for a brand-new product — same style/fabric color,
+  // different Print Name + its own images. Each row becomes its own
+  // Firestore product on save, alongside the primary print above. Only
+  // used when creating (never while editing an existing product, since
+  // each print already exists as its own separate document by then).
+  const [additionalPrints, setAdditionalPrints] = useState<Array<{
+    id: string; printName: string; images: string[]; selectedFiles: File[];
+  }>>([]);
+
   // Check login state on mount via Firebase Auth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -1247,20 +1256,6 @@ export const AdminPage: React.FC = () => {
     return used;
   };
 
-  // Helper to generate a unique auto-suffixed slug for new products or auto-generation
-  const generateUniqueSlug = (baseText: string, excludeProductId?: string): string => {
-    const base = slugify(baseText);
-    if (!base) return 'product';
-    const used = getUsedSlugsSet(excludeProductId);
-    if (!used.has(base)) return base;
-
-    let counter = 2;
-    while (used.has(`${base}-${counter}`)) {
-      counter++;
-    }
-    return `${base}-${counter}`;
-  };
-
   // ==================== PRODUCT MANAGEMENT OPERATIONS ====================
   const handleCollectionChange = (newCol: string) => {
     setFormCollection(newCol);
@@ -1313,6 +1308,7 @@ export const AdminPage: React.FC = () => {
       setFormStatus(product.status || 'published');
       setFormStock(product.stock || {});
       setSelectedFiles([]);
+      setAdditionalPrints([]);
     } else {
       setEditingProduct(null);
       setFormName('');
@@ -1346,6 +1342,7 @@ export const AdminPage: React.FC = () => {
       setFormStatus('published');
       setFormStock({});
       setSelectedFiles([]);
+      setAdditionalPrints([]);
     }
     setShowProductForm(true);
   };
@@ -1397,6 +1394,65 @@ export const AdminPage: React.FC = () => {
 
   const removeUploadedImage = (index: number) => {
     setFormImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Additional-print row management (see additionalPrints above).
+  const addPrintRow = () => {
+    setAdditionalPrints(prev => [
+      ...prev,
+      { id: `print-${Date.now()}-${prev.length}`, printName: '', images: [], selectedFiles: [] }
+    ]);
+  };
+
+  const removePrintRow = (rowId: string) => {
+    setAdditionalPrints(prev => prev.filter(r => r.id !== rowId));
+  };
+
+  const updatePrintRowName = (rowId: string, name: string) => {
+    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, printName: name } : r)));
+  };
+
+  const addFilesToPrintRow = (rowId: string, files: File[]) => {
+    setAdditionalPrints(prev => prev.map(r => {
+      if (r.id !== rowId) return r;
+      const totalCount = r.images.length + r.selectedFiles.length + files.length;
+      if (totalCount > 6) {
+        showToast('Maximum 6 images are allowed per print.');
+        return r;
+      }
+      return { ...r, selectedFiles: [...r.selectedFiles, ...files] };
+    }));
+  };
+
+  const removePrintRowFile = (rowId: string, index: number) => {
+    setAdditionalPrints(prev => prev.map(r => (
+      r.id === rowId ? { ...r, selectedFiles: r.selectedFiles.filter((_, i) => i !== index) } : r
+    )));
+  };
+
+  // Uploads files to Firebase Storage, falling back to a Base64 data URL
+  // per-file if Storage access fails — shared by the primary print and
+  // every additional print row.
+  const uploadFilesWithFallback = async (files: File[]): Promise<string[]> => {
+    const urls: string[] = [];
+    for (const file of files) {
+      try {
+        const fileRef = ref(storage, `products/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(fileRef, file);
+        const downloadUrl = await getDownloadURL(snapshot.ref);
+        urls.push(downloadUrl);
+      } catch (storageErr) {
+        console.error('Firebase Storage upload failed, falling back to Base64 data URL:', file.name, storageErr);
+        const base64Url = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(file);
+        });
+        urls.push(base64Url);
+      }
+    }
+    return urls;
   };
 
   // Registers/ensures an ERP StyleArticle for each of this product's sizes
@@ -1456,29 +1512,30 @@ export const AdminPage: React.FC = () => {
       return;
     }
 
+    // Extra prints of the same style/fabric color can only be added while
+    // creating a brand-new product — once saved, each print is its own
+    // separate document, edited on its own.
+    const extraRows = editingProduct ? [] : additionalPrints;
+    for (const row of extraRows) {
+      if (!row.printName.trim()) {
+        showToast('Give each additional print a Print Name.');
+        return;
+      }
+      if (row.images.length + row.selectedFiles.length < 1) {
+        showToast(`Add at least 1 image for the "${row.printName.trim()}" print.`);
+        return;
+      }
+    }
+
     setIsSavingProduct(true);
-    showToast('Uploading images and saving product...');
+    showToast(
+      extraRows.length > 0
+        ? `Uploading images and saving ${extraRows.length + 1} prints...`
+        : 'Uploading images and saving product...'
+    );
 
     try {
-      const uploadedUrls: string[] = [...formImages];
-
-      for (const file of selectedFiles) {
-        try {
-          const fileRef = ref(storage, `products/${Date.now()}_${file.name}`);
-          const snapshot = await uploadBytes(fileRef, file);
-          const downloadUrl = await getDownloadURL(snapshot.ref);
-          uploadedUrls.push(downloadUrl);
-        } catch (storageErr) {
-          console.error('Firebase Storage upload failed, falling back to Base64 data URL:', file.name, storageErr);
-          const base64Url = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = (err) => reject(err);
-            reader.readAsDataURL(file);
-          });
-          uploadedUrls.push(base64Url);
-        }
-      }
+      const uploadedUrls: string[] = [...formImages, ...(await uploadFilesWithFallback(selectedFiles))];
 
       const detailsArray = formDetails.split('\n').map(l => l.trim()).filter(Boolean);
       const careArray = formCareInstructions.split('\n').map(l => l.trim()).filter(Boolean);
@@ -1486,34 +1543,6 @@ export const AdminPage: React.FC = () => {
       const finalImages = uploadedUrls.length > 0 ? uploadedUrls : [
         'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800'
       ];
-
-      const rawBaseSlug = slugify(formSlug || formName);
-      const usedSlugs = getUsedSlugsSet(editingProduct?.id);
-
-      let computedSlug = rawBaseSlug;
-
-      if (!editingProduct) {
-        // For NEW products, automatically find a unique slug if collision exists
-        computedSlug = generateUniqueSlug(formSlug || formName, undefined);
-      } else {
-        // For EXISTING products:
-        // Check if the requested slug collides with another product's current slug or redirect history
-        if (usedSlugs.has(rawBaseSlug)) {
-          showToast('This URL slug is already used by another product or redirect history. Please choose a different slug.');
-          setIsSavingProduct(false);
-          return;
-        }
-        computedSlug = rawBaseSlug;
-      }
-
-      let updatedPreviousSlugs = [...formPreviousSlugs];
-
-      if (editingProduct) {
-        const oldSlug = editingProduct.slug || slugify(editingProduct.name);
-        if (oldSlug && oldSlug !== computedSlug && !updatedPreviousSlugs.includes(oldSlug)) {
-          updatedPreviousSlugs.push(oldSlug);
-        }
-      }
 
       if (formCollection || formProductType || formProductSubType || formMaterialType) {
         const taxonomyCheck = validateProductTaxonomy({
@@ -1531,119 +1560,187 @@ export const AdminPage: React.FC = () => {
         }
       }
 
-      const productData: Omit<Product, 'id'> = {
-        name: formName,
-        slug: computedSlug,
-        previousSlugs: updatedPreviousSlugs,
-        category: formCategory,
-        subCategory: formSubCategory,
-        collection: formCollection ? (formCollection as any) : undefined,
-        productType: formProductType ? (formProductType as any) : undefined,
-        productSubType: formProductSubType ? (formProductSubType as any) : undefined,
-        materialType: formMaterialType ? (formMaterialType as any) : undefined,
-        tax_class: formTaxClass ? formTaxClass.trim() : undefined,
-        price: Number(formPrice),
-        compareAtPrice: formCompareAtPrice ? Number(formCompareAtPrice) : 0,
-        fabric: formFabric || 'Premium Fabric',
-        fit: formFit,
-        color: formColor || 'Natural',
-        fabricColor: formFabricColor || undefined,
-        noPrints: formNoPrints,
-        colorHex: formColorHex || '#FBF6EE',
-        sizes: formSizes,
-        collar: (formCategory === 'tops-shirts' ? formCollar : undefined) as any,
-        sleeve: (formCategory === 'tops-shirts' ? formSleeve : undefined) as any,
-        pattern: formPattern,
-        images: finalImages,
-        rating: editingProduct ? editingProduct.rating : 4.5,
-        reviewCount: editingProduct ? editingProduct.reviewCount : 1,
-        bestseller: editingProduct ? editingProduct.bestseller : false,
-        newArrival: editingProduct ? editingProduct.newArrival : true,
-        dateAdded: editingProduct ? editingProduct.dateAdded : new Date().toISOString().split('T')[0],
-        description: formDescription,
-        details: detailsArray.length > 0 ? detailsArray : ['Premium quality fabric', 'Tailored stitching'],
-        careInstructions: careArray.length > 0 ? careArray : ['Machine wash cold', 'Dry in shade'],
-        sku: formSku,
-        styleNumber: formStyleNumber.trim() || undefined,
-        status: formStatus
-        // stock is intentionally omitted — it's the ERP's webhook that
-        // keeps this field current now (see registerProductWithErp /
-        // /api/webhooks/erp-inventory), never a direct write from here.
-      };
+      // The primary print filled into the form, plus any additional prints
+      // added below. Each becomes its own Firestore product document,
+      // sharing every field except Print Name, SKU, and images.
+      const printEntries: Array<{ printName: string; sku: string; images: string[]; noPrints: boolean }> = [
+        { printName: formColor || 'Natural', sku: formSku, images: finalImages, noPrints: formNoPrints },
+      ];
+      for (const row of extraRows) {
+        const rowUrls = [...row.images, ...(await uploadFilesWithFallback(row.selectedFiles))];
+        printEntries.push({
+          printName: row.printName.trim(),
+          sku: generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName.trim(), false),
+          images: rowUrls.length > 0 ? rowUrls : finalImages,
+          noPrints: false,
+        });
+      }
 
-      if (editingProduct) {
-        const isPreview = isPreviewEnvironment();
-        const bypassActive = isPreview && localStorage.getItem('kora_admin_bypass_logged_in') === 'true';
-        const useLocalFallback = isPreview && (bypassActive || !auth.currentUser);
+      const usedSlugs = getUsedSlugsSet(editingProduct?.id);
+      let savedCount = 0;
 
-        if (useLocalFallback) {
-          const localCustom = localStorage.getItem('kora_custom_products');
-          const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
-          const updated = customProducts.map(p => 
-            p.id === editingProduct.id ? { ...p, ...productData } : p
-          );
-          if (!customProducts.some(p => p.id === editingProduct.id)) {
-            updated.push({ id: editingProduct.id, ...productData } as Product);
+      for (let i = 0; i < printEntries.length; i++) {
+        const entry = printEntries[i];
+
+        const rawBaseSlug = slugify(formSlug || formName);
+        let computedSlug: string;
+
+        if (editingProduct) {
+          // For EXISTING products: check if the requested slug collides
+          // with another product's current slug or redirect history
+          if (usedSlugs.has(rawBaseSlug)) {
+            showToast('This URL slug is already used by another product or redirect history. Please choose a different slug.');
+            setIsSavingProduct(false);
+            return;
           }
-          localStorage.setItem('kora_custom_products', JSON.stringify(updated));
-          showToast(`Product "${formName}" updated locally in Sandbox!`);
+          computedSlug = rawBaseSlug;
         } else {
-          try {
-            await setDoc(doc(db, 'products', editingProduct.id), productData, { merge: true });
-            showToast(`Product "${formName}" updated successfully!`);
-            await syncProductWithErp(editingProduct.id, formStyleNumber);
-          } catch (fbErr) {
-            console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
+          // For NEW products, automatically find a unique slug if a
+          // collision exists — additional prints fold their Print Name
+          // into the base text so each print gets its own distinct slug.
+          const baseText = i === 0 ? (formSlug || formName) : `${formName}-${entry.printName}`;
+          const base = slugify(baseText) || 'product';
+          computedSlug = base;
+          if (usedSlugs.has(computedSlug)) {
+            let counter = 2;
+            while (usedSlugs.has(`${base}-${counter}`)) counter++;
+            computedSlug = `${base}-${counter}`;
+          }
+        }
+        usedSlugs.add(computedSlug);
+
+        let updatedPreviousSlugs = [...formPreviousSlugs];
+
+        if (editingProduct) {
+          const oldSlug = editingProduct.slug || slugify(editingProduct.name);
+          if (oldSlug && oldSlug !== computedSlug && !updatedPreviousSlugs.includes(oldSlug)) {
+            updatedPreviousSlugs.push(oldSlug);
+          }
+        }
+
+        const productData: Omit<Product, 'id'> = {
+          name: formName,
+          slug: computedSlug,
+          previousSlugs: updatedPreviousSlugs,
+          category: formCategory,
+          subCategory: formSubCategory,
+          collection: formCollection ? (formCollection as any) : undefined,
+          productType: formProductType ? (formProductType as any) : undefined,
+          productSubType: formProductSubType ? (formProductSubType as any) : undefined,
+          materialType: formMaterialType ? (formMaterialType as any) : undefined,
+          tax_class: formTaxClass ? formTaxClass.trim() : undefined,
+          price: Number(formPrice),
+          compareAtPrice: formCompareAtPrice ? Number(formCompareAtPrice) : 0,
+          fabric: formFabric || 'Premium Fabric',
+          fit: formFit,
+          color: entry.printName,
+          fabricColor: formFabricColor || undefined,
+          noPrints: entry.noPrints,
+          colorHex: formColorHex || '#FBF6EE',
+          sizes: formSizes,
+          collar: (formCategory === 'tops-shirts' ? formCollar : undefined) as any,
+          sleeve: (formCategory === 'tops-shirts' ? formSleeve : undefined) as any,
+          pattern: formPattern,
+          images: entry.images,
+          rating: editingProduct ? editingProduct.rating : 4.5,
+          reviewCount: editingProduct ? editingProduct.reviewCount : 1,
+          bestseller: editingProduct ? editingProduct.bestseller : false,
+          newArrival: editingProduct ? editingProduct.newArrival : true,
+          dateAdded: editingProduct ? editingProduct.dateAdded : new Date().toISOString().split('T')[0],
+          description: formDescription,
+          details: detailsArray.length > 0 ? detailsArray : ['Premium quality fabric', 'Tailored stitching'],
+          careInstructions: careArray.length > 0 ? careArray : ['Machine wash cold', 'Dry in shade'],
+          sku: entry.sku,
+          styleNumber: formStyleNumber.trim() || undefined,
+          status: formStatus
+          // stock is intentionally omitted — it's the ERP's webhook that
+          // keeps this field current now (see registerProductWithErp /
+          // /api/webhooks/erp-inventory), never a direct write from here.
+        };
+
+        const soleEntry = printEntries.length === 1;
+
+        if (editingProduct) {
+          const isPreview = isPreviewEnvironment();
+          const bypassActive = isPreview && localStorage.getItem('kora_admin_bypass_logged_in') === 'true';
+          const useLocalFallback = isPreview && (bypassActive || !auth.currentUser);
+
+          if (useLocalFallback) {
             const localCustom = localStorage.getItem('kora_custom_products');
             const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
-            const updated = customProducts.map(p => 
+            const updated = customProducts.map(p =>
               p.id === editingProduct.id ? { ...p, ...productData } : p
             );
             if (!customProducts.some(p => p.id === editingProduct.id)) {
               updated.push({ id: editingProduct.id, ...productData } as Product);
             }
             localStorage.setItem('kora_custom_products', JSON.stringify(updated));
-            showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            showToast(`Product "${formName}" updated locally in Sandbox!`);
+          } else {
+            try {
+              await setDoc(doc(db, 'products', editingProduct.id), productData, { merge: true });
+              showToast(`Product "${formName}" updated successfully!`);
+              await syncProductWithErp(editingProduct.id, formStyleNumber);
+            } catch (fbErr) {
+              console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
+              const localCustom = localStorage.getItem('kora_custom_products');
+              const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
+              const updated = customProducts.map(p =>
+                p.id === editingProduct.id ? { ...p, ...productData } : p
+              );
+              if (!customProducts.some(p => p.id === editingProduct.id)) {
+                updated.push({ id: editingProduct.id, ...productData } as Product);
+              }
+              localStorage.setItem('kora_custom_products', JSON.stringify(updated));
+              showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            }
           }
-        }
-      } else {
-        const isPreview = isPreviewEnvironment();
-        const bypassActive = isPreview && localStorage.getItem('kora_admin_bypass_logged_in') === 'true';
-        const useLocalFallback = isPreview && (bypassActive || !auth.currentUser);
-
-        if (useLocalFallback) {
-          const localCustom = localStorage.getItem('kora_custom_products');
-          const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
-          const newProduct: Product = {
-            id: `custom-${Date.now()}`,
-            ...productData
-          } as Product;
-          customProducts.push(newProduct);
-          localStorage.setItem('kora_custom_products', JSON.stringify(customProducts));
-          showToast(`Product "${formName}" added locally in Sandbox!`);
         } else {
-          try {
-            const newRef = await addDoc(collection(db, 'products'), productData);
-            showToast(`Product "${formName}" added successfully!`);
-            await syncProductWithErp(newRef.id, formStyleNumber);
-          } catch (fbErr) {
-            console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
+          const isPreview = isPreviewEnvironment();
+          const bypassActive = isPreview && localStorage.getItem('kora_admin_bypass_logged_in') === 'true';
+          const useLocalFallback = isPreview && (bypassActive || !auth.currentUser);
+
+          if (useLocalFallback) {
             const localCustom = localStorage.getItem('kora_custom_products');
             const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
             const newProduct: Product = {
-              id: `custom-${Date.now()}`,
+              id: `custom-${Date.now()}-${i}`,
               ...productData
             } as Product;
             customProducts.push(newProduct);
             localStorage.setItem('kora_custom_products', JSON.stringify(customProducts));
-            showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            if (soleEntry) showToast(`Product "${formName}" added locally in Sandbox!`);
+          } else {
+            try {
+              const newRef = await addDoc(collection(db, 'products'), productData);
+              if (soleEntry) showToast(`Product "${formName}" added successfully!`);
+              await syncProductWithErp(newRef.id, formStyleNumber);
+            } catch (fbErr) {
+              console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
+              const localCustom = localStorage.getItem('kora_custom_products');
+              const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
+              const newProduct: Product = {
+                id: `custom-${Date.now()}-${i}`,
+                ...productData
+              } as Product;
+              customProducts.push(newProduct);
+              localStorage.setItem('kora_custom_products', JSON.stringify(customProducts));
+              if (soleEntry) showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            }
           }
         }
+
+        savedCount++;
+      }
+
+      if (savedCount > 1) {
+        showToast(`Saved ${savedCount} prints of "${formName}"!`);
       }
 
       await refreshProducts();
       setShowProductForm(false);
       setEditingProduct(null);
+      setAdditionalPrints([]);
     } catch (err: any) {
       console.error('Error saving product to Firestore:', err);
       showToast('Error saving product: ' + err.message);
@@ -2906,6 +3003,95 @@ export const AdminPage: React.FC = () => {
                           })}
                         </div>
                       </div>
+
+                      {/* ADDITIONAL PRINTS — only offered for a brand-new,
+                          non-solid product. Each row becomes its own
+                          separate product document on save, sharing every
+                          field above except Print Name and its own images;
+                          the storefront automatically groups them onto one
+                          product page (same Style Number + Fabric Color). */}
+                      {!editingProduct && !formNoPrints && (
+                        <div className="space-y-3 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Additional Prints (Optional)</label>
+                              <p className="text-[10px] text-stone-400 mt-0.5">
+                                Same Style Number & Fabric Color, different Print Name — each becomes its own product and
+                                they'll show together as one page with a print selector on the storefront.
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={addPrintRow}
+                              className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors shrink-0"
+                            >
+                              <Plus className="w-3 h-3" /> Add Another Print
+                            </button>
+                          </div>
+
+                          {additionalPrints.map((row, rowIdx) => (
+                            <div key={row.id} className="border border-stone-200 rounded-lg p-3 bg-white space-y-2">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Print #{rowIdx + 2}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => removePrintRow(row.id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+
+                              <input
+                                type="text"
+                                value={row.printName}
+                                onChange={(e) => updatePrintRowName(row.id, e.target.value)}
+                                placeholder="e.g. Pink Checks, Blush Floral"
+                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                              />
+
+                              <div className="flex flex-wrap gap-2 items-center">
+                                {row.images.map((imgUrl, idx) => (
+                                  <div key={`row-img-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden">
+                                    <img src={imgUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                  </div>
+                                ))}
+                                {row.selectedFiles.map((file, idx) => {
+                                  const localUrl = URL.createObjectURL(file);
+                                  return (
+                                    <div key={`row-file-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
+                                      <img src={localUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                      <button
+                                        type="button"
+                                        onClick={() => removePrintRowFile(row.id, idx)}
+                                        className="absolute top-0.5 right-0.5 p-0.5 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                                      >
+                                        <X className="w-2 h-2" />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                                <label className="w-14 h-16 border-2 border-dashed border-stone-200 rounded flex items-center justify-center cursor-pointer hover:border-[#B08D57] transition-colors">
+                                  <Upload className="w-4 h-4 text-stone-400" />
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      if (e.target.files && e.target.files.length > 0) {
+                                        addFilesToPrintRow(row.id, Array.from(e.target.files));
+                                      }
+                                      e.target.value = '';
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                              <p className="text-[10px] text-stone-400">1–6 images for this print.</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
 
                       {/* STATUS TOGGLE */}
                       <div className="p-4 rounded-xl border border-stone-100 bg-stone-50 flex items-center justify-between">
