@@ -3049,6 +3049,11 @@ export const AdminPage: React.FC = () => {
                                 placeholder="e.g. Pink Checks, Blush Floral"
                                 className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                               />
+                              <div className="px-3 py-1.5 border border-stone-200 rounded bg-stone-100 font-mono text-[11px] text-stone-600">
+                                {row.printName.trim()
+                                  ? generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName, false)
+                                  : '— enter a Print Name to preview its SKU —'}
+                              </div>
 
                               <div className="flex flex-wrap gap-2 items-center">
                                 {row.images.map((imgUrl, idx) => (
