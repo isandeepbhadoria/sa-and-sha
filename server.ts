@@ -108,10 +108,10 @@ import {
 } from "./src/server/registrationHelpers";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 // readStockForItems retired — checkout now reserves stock through the ERP
-// (see src/server/erpSync.ts). restoreInventoryForOrderItems still restores
-// the local display cache on cancel/refund; the ERP-side restock for those
-// flows is a follow-up, not yet wired.
-import { restoreInventoryForOrderItems } from "./src/server/inventoryHelpers";
+// (see src/server/erpSync.ts). Cancel/refund flows restock the ERP the same
+// way (see restockErpForOrder, dynamically imported at each call site below,
+// matching reserveErpStockOrThrow/confirmErpReservations); the local `stock`
+// display cache is never written directly, only by the ERP's webhook.
 import {
   generateTrackingToken,
   ensureOrderTrackingToken,
@@ -7827,8 +7827,9 @@ async function startServer() {
 
         if (!orderDocData.inventory_restored) {
           try {
+            const { restockErpForOrder } = await import("./src/server/erpSync");
             const items = Array.isArray(orderDocData.items) ? orderDocData.items : [];
-            await restoreInventoryForOrderItems(adminDb, items, nowIso);
+            await restockErpForOrder(adminDb, items, orderIdStr);
             await docRef.update({ inventory_restored: true });
           } catch (invErr) {
             console.error("[ADMIN COD CANCEL INVENTORY RESTORE ERROR]", invErr);
@@ -7906,8 +7907,9 @@ async function startServer() {
 
         if (!orderDocData.inventory_restored) {
           try {
+            const { restockErpForOrder } = await import("./src/server/erpSync");
             const items = Array.isArray(orderDocData.items) ? orderDocData.items : [];
-            await restoreInventoryForOrderItems(adminDb, items, nowIso);
+            await restockErpForOrder(adminDb, items, orderIdStr);
             await docRef.update({ inventory_restored: true });
           } catch (invErr) {
             console.error("[CANCEL INVENTORY RESTORE ERROR]", invErr);
@@ -7975,8 +7977,9 @@ async function startServer() {
           const oData = orderSnap.data();
           if (!oData.inventory_restored) {
             try {
+              const { restockErpForOrder } = await import("./src/server/erpSync");
               const items = Array.isArray(oData.items) ? oData.items : [];
-              await restoreInventoryForOrderItems(adminDb, items, new Date().toISOString());
+              await restockErpForOrder(adminDb, items, oData.order_id || id);
               await orderSnap.ref.update({ inventory_restored: true });
             } catch (invErr) {
               console.error("[RECONCILIATION INVENTORY RESTORE ERROR]", invErr);

@@ -620,25 +620,21 @@ export async function cancelCustomerOrder(
     console.error("[CANCELLATION LEDGER REVERSAL] Non-blocking error:", revErr);
   }
 
-  // Inventory Restoration
-  try {
-    const items = Array.isArray(orderData.items) ? orderData.items : [];
-    for (const item of items) {
-      const pId = item.product_id || item.id;
-      if (pId) {
-        const pRef = adminDb.collection("products").doc(pId);
-        const pSnap = await pRef.get();
-        if (pSnap.exists) {
-          const currentStock = Number(pSnap.data()?.stock || 0);
-          await pRef.update({
-            stock: currentStock + (item.quantity || 1),
-            updated_at: nowIso
-          });
-        }
-      }
+  // Inventory Restoration — only for COD, which is cancelled outright here.
+  // A Razorpay order only has its cancellation *requested* at this point
+  // (see above); its actual cancellation + refund, and therefore its ERP
+  // restock, happens later via handleAdminCancelAndRefund in server.ts,
+  // guarded by the same `inventory_restored` flag this sets so it's never
+  // restocked twice.
+  if (isCod && !orderData.inventory_restored) {
+    try {
+      const { restockErpForOrder } = await import("./erpSync");
+      const items = Array.isArray(orderData.items) ? orderData.items : [];
+      await restockErpForOrder(adminDb, items, orderIdStr);
+      await adminDb.collection("orders").doc(docId).update({ inventory_restored: true });
+    } catch (invErr) {
+      console.error("[CANCELLATION STOCK RESTORE] Non-blocking error:", invErr);
     }
-  } catch (invErr) {
-    console.error("[CANCELLATION STOCK RESTORE] Non-blocking error:", invErr);
   }
 
   // Dispatch Notification Event

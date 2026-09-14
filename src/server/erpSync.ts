@@ -1,4 +1,4 @@
-import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseReservation } from "./erpClient";
+import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseReservation, erpReturnStock } from "./erpClient";
 
 /**
  * Registers/ensures one ERP StyleArticle per size for a product, keyed by
@@ -185,4 +185,30 @@ export async function reserveAndConfirmErpStockBestEffort(
   }
 
   return oversold;
+}
+
+/**
+ * Cancellation/refund path: adds stock back in the ERP for every
+ * ERP-tracked line in an order whose stock was already confirmed
+ * (deducted) at checkout — see the ERP's POST /integrations/inventory/return.
+ * Best-effort per line, same reasoning as confirmErpReservations: the
+ * order's own cancellation/refund has already been decided and recorded by
+ * the time this runs, so a restock failure here is logged, not thrown. The
+ * caller is responsible for its own idempotency (e.g. an `inventory_restored`
+ * flag on the order doc) so this never runs twice for the same order.
+ */
+export async function restockErpForOrder(
+  adminDb: FirebaseFirestore.Firestore,
+  items: Array<{ product_id: string; size?: string; quantity: number; name?: string }>,
+  orderRef: string
+): Promise<void> {
+  const lines = await resolveLines(adminDb, items);
+  for (const line of lines) {
+    if (!line.sku) continue; // untracked — nothing was ever deducted in the ERP for this line
+    try {
+      await erpReturnStock({ sku: line.sku, quantity: line.qty, orderRef });
+    } catch (err: any) {
+      console.error(`[ERP RESTOCK ERROR] order=${orderRef} sku=${line.sku}:`, err?.message || err);
+    }
+  }
 }

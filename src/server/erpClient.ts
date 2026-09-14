@@ -78,6 +78,13 @@ export function erpReleaseReservation(id: string): Promise<ErpReservation> {
   return erpFetch(`/integrations/inventory/reservations/${encodeURIComponent(id)}/release`, { method: "POST" });
 }
 
+// Restores stock the ERP already deducted for a confirmed reservation —
+// used when an order is cancelled or refunded after checkout confirmed it
+// (see erpSync.ts's restockErpForOrder).
+export function erpReturnStock(params: { sku: string; quantity: number; orderRef?: string }): Promise<{ styleArticleId: string; locationId: string; quantity: number }> {
+  return erpFetch("/integrations/inventory/return", { method: "POST", body: params });
+}
+
 export function erpRegisterStyleArticle(params: {
   styleNumber: string;
   size: string;
