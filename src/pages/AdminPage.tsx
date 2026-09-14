@@ -2976,6 +2976,52 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </div>
 
+                      {/* SKU PREVIEW BY SIZE — live, site-side reference
+                          only (Size appended to the SKU Code above for
+                          each print in this batch). Not the same as the
+                          ERP's own barcode below — that's the one POS
+                          actually scans, and only exists once you've
+                          saved and synced. */}
+                      {formSizes.length > 0 && (formSku || additionalPrints.some(r => r.printName.trim())) && (
+                        <div className="space-y-2 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Preview by Size</label>
+                          <p className="text-[10px] text-stone-400">
+                            Size is appended to each print's SKU Code above. This is a reference code for this site —
+                            the ERP's own barcode (once you save) is what Factory Outlet POS actually scans.
+                          </p>
+                          <div className="space-y-2">
+                            {formSku && (
+                              <div className="space-y-1">
+                                <span className="text-[10px] font-bold text-stone-500 uppercase">{formColor || 'Natural'}</span>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {formSizes.map(size => (
+                                    <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
+                                      {formSku}-{size}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {additionalPrints.filter(r => r.printName.trim()).map(row => {
+                              const info = printBatchSkus.rows.find(r => r.id === row.id);
+                              if (!info?.sku) return null;
+                              return (
+                                <div key={row.id} className="space-y-1">
+                                  <span className="text-[10px] font-bold text-stone-500 uppercase">{row.printName.trim()}</span>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {formSizes.map(size => (
+                                      <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
+                                        {info.sku}-{size}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
                       {/* COMPLETE SKU / ERP BARCODE PER SIZE — read-only,
                           the real per-size barcode the ERP mints (encodes
                           Style Number + Fabric Color + Print Name + Size),
