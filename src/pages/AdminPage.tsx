@@ -2950,7 +2950,7 @@ export const AdminPage: React.FC = () => {
                         <div className="grid grid-cols-3 gap-3">
                           {(formCategory === 'trousers'
                             ? ['30', '32', '34', '36', '38']
-                            : ['S', 'M', 'L', 'XL', 'XXL', '3XL']
+                            : ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
                           ).map((size) => {
                             const isChecked = formSizes.includes(size);
                             return (
