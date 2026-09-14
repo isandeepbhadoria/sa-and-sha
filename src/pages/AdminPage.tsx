@@ -401,8 +401,13 @@ export const AdminPage: React.FC = () => {
   const [formCompareAtPrice, setFormCompareAtPrice] = useState('');
   const [formFabric, setFormFabric] = useState('');
   const [formFit, setFormFit] = useState<string>('Regular');
+  // formColor now holds the Print/Pattern name (e.g. "Pink Checks") — the
+  // "Color Name" label was ambiguous with the separate formFabricColor
+  // below (e.g. "White"), which is a real, distinct dimension the factory
+  // tracks. Both feed the SKU and the ERP's variant identifier together.
   const [formColor, setFormColor] = useState('');
   const [formColorHex, setFormColorHex] = useState('#FBF6EE');
+  const [formFabricColor, setFormFabricColor] = useState('');
   const [formSizes, setFormSizes] = useState<string[]>([]);
   const [formCollar, setFormCollar] = useState<string>('Spread');
   const [formSleeve, setFormSleeve] = useState<string>('Full Sleeve');
@@ -439,16 +444,16 @@ export const AdminPage: React.FC = () => {
     return unsubscribe;
   }, []);
 
-  // Auto-generates SKU Code for a brand-new product as Product Type/Color
-  // are filled in — never for an existing one being edited, since its SKU
-  // is already frozen into past invoices/credit notes (see
-  // skuGenerator.ts). Keyed off Product Type (Normalized Taxonomy), not
-  // the legacy "category" field — see skuGenerator.ts's own comment.
+  // Auto-generates SKU Code for a brand-new product as Product Type/Pattern
+  // Style Number/Fabric Color/Print Name are filled in — never for an
+  // existing one being edited, since its SKU is already frozen into past
+  // invoices/credit notes (see skuGenerator.ts). Keyed off Product Type
+  // (Normalized Taxonomy), not the legacy "category" field.
   useEffect(() => {
     if (editingProduct) return;
-    setFormSku(generateSkuCode(allProducts, formProductType, formColor));
+    setFormSku(generateSkuCode(formProductType, formStyleNumber, formFabricColor, formColor));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editingProduct, formProductType, formColor, allProducts]);
+  }, [editingProduct, formProductType, formStyleNumber, formFabricColor, formColor]);
 
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
@@ -1293,6 +1298,7 @@ export const AdminPage: React.FC = () => {
       setFormFabric(product.fabric || '');
       setFormFit(product.fit || 'Regular');
       setFormColor(product.color || '');
+      setFormFabricColor(product.fabricColor || '');
       setFormColorHex(product.colorHex || '#FBF6EE');
       setFormSizes(product.sizes || []);
       setFormCollar(product.collar || 'Spread');
@@ -1324,6 +1330,7 @@ export const AdminPage: React.FC = () => {
       setFormFabric('');
       setFormFit('Regular');
       setFormColor('');
+      setFormFabricColor('');
       setFormColorHex('#FBF6EE');
       setFormSizes([]);
       setFormCollar('Spread');
@@ -1537,6 +1544,7 @@ export const AdminPage: React.FC = () => {
         fabric: formFabric || 'Premium Fabric',
         fit: formFit,
         color: formColor || 'Natural',
+        fabricColor: formFabricColor || undefined,
         colorHex: formColorHex || '#FBF6EE',
         sizes: formSizes,
         collar: (formCategory === 'tops-shirts' ? formCollar : undefined) as any,
@@ -2669,16 +2677,30 @@ export const AdminPage: React.FC = () => {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Color Name</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
+                          <input
+                            type="text"
+                            value={formFabricColor}
+                            onChange={(e) => setFormFabricColor(e.target.value)}
+                            placeholder="e.g. White, Black"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                          />
+                          <p className="text-[10px] text-stone-400">The base fabric's own color — separate from any print on it.</p>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print / Pattern Name</label>
                           <input
                             type="text"
                             value={formColor}
                             onChange={(e) => setFormColor(e.target.value)}
-                            placeholder="e.g. Blush Pink, Ivory"
+                            placeholder="e.g. Pink Checks, Blush Floral, Solid"
                             className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
                           />
                         </div>
+                      </div>
 
+                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Color Palette Accent Hex</label>
                           <div className="flex gap-2">
@@ -2696,6 +2718,7 @@ export const AdminPage: React.FC = () => {
                               className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-mono text-[11px] text-stone-800"
                             />
                           </div>
+                          <p className="text-[10px] text-stone-400">Optional — just a swatch dot color, doesn't affect SKU or stock.</p>
                         </div>
                       </div>
 
@@ -2761,6 +2784,27 @@ export const AdminPage: React.FC = () => {
                           })}
                         </div>
                       </div>
+
+                      {/* COMPLETE SKU / ERP BARCODE PER SIZE — read-only,
+                          the real per-size barcode the ERP mints (encodes
+                          Style Number + Fabric Color + Print Name + Size),
+                          separate from the product-level SKU Code above. */}
+                      {editingProduct && editingProduct.erpSkuBySize && Object.keys(editingProduct.erpSkuBySize).length > 0 && (
+                        <div className="space-y-2 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Complete SKU (ERP Barcode, per size)</label>
+                          <p className="text-[10px] text-stone-400">
+                            The real barcode the ERP assigned this product, one per size — this is what Factory Outlet POS scans.
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {Object.entries(editingProduct.erpSkuBySize).map(([size, sku]) => (
+                              <div key={size} className="flex items-center gap-2 px-2 py-1.5 border border-stone-100 rounded bg-white">
+                                <span className="font-bold text-stone-600 text-[10px] font-mono w-8">{size}</span>
+                                <span className="font-mono text-[11px] text-stone-700 truncate">{sku}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* MEDIA FILE UPLOAD ZONE */}
                       <div className="space-y-2">

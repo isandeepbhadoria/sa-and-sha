@@ -9,14 +9,16 @@ import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseR
  * webhook receiver uses to find "which product/size does this SKU mean"
  * without a collection scan.
  *
- * The product's `color` is passed through as the ERP's variantName: one
- * Pattern/Style Number covers every color of a design (the factory's own
- * convention), so each color is its own Firestore product doc but shares
- * a style number — the ERP tells them apart via a ProductVariant, and the
- * SKU it mints comes back with the color already baked in
- * (STYLENUMBER-BRAND-CATEGORY-COLOR-SIZE). This is the real barcode; the
- * admin form no longer collects a separate hand-typed SKU (see AdminPage's
- * read-only "SKU / Barcode" display of `erpSkuBySize`).
+ * The product's Fabric Color + Print Name (`color`, despite the field
+ * name — see types.ts) are combined into one ERP variantName ("White /
+ * Pink Checks"): one Pattern/Style Number covers every color+print
+ * combination of a design (the factory's own convention), so each
+ * combination is its own Firestore product doc but shares a style number
+ * — the ERP tells them apart via a ProductVariant, and the SKU it mints
+ * comes back with both baked in (STYLENUMBER-BRAND-CATEGORY-VARIANT-SIZE).
+ * This is the real barcode; the admin form's own "SKU Code" is a
+ * separate, product-level (not per-size) identifier — see
+ * skuGenerator.ts.
  *
  * Never touches `stock` — a newly registered article starts at 0 in the
  * ERP, same as any other new article; real stock only ever enters through
@@ -25,11 +27,13 @@ import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseR
 export async function registerProductWithErp(
   adminDb: FirebaseFirestore.Firestore,
   productId: string,
-  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number; color?: string }
+  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number; color?: string; fabricColor?: string }
 ): Promise<{ registered: Record<string, string>; errors: Array<{ size: string; error: string }> }> {
   const styleNumber = (product.styleNumber || "").trim();
   const sizes = Array.isArray(product.sizes) ? product.sizes : [];
-  const variantName = (product.color || "").trim() || undefined;
+  const fabricColor = (product.fabricColor || "").trim();
+  const printName = (product.color || "").trim();
+  const variantName = [fabricColor, printName].filter(Boolean).join(" / ") || undefined;
   const registered: Record<string, string> = {};
   const errors: Array<{ size: string; error: string }> = [];
 
