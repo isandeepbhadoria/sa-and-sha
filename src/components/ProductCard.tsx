@@ -6,9 +6,13 @@ import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
+  // Number of print variants this card represents (see
+  // productGrouping.ts) — undefined/1 means no badge, this style has
+  // only one print. Only CollectionPage's main grid passes this today.
+  printCount?: number;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, printCount }) => {
   const { toggleWishlist, isInWishlist, addToCart } = useShop();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showSizeSelector, setShowSizeSelector] = useState(false);
@@ -152,6 +156,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <h3 className="font-serif text-[#2A211C] text-sm group-hover:text-[#B08D57] transition-colors line-clamp-1 mt-0.5">
             {product.name}
           </h3>
+
+          {/* Print count — this style has more than one print available */}
+          {printCount !== undefined && printCount > 1 && (
+            <span className="text-[10px] text-[#B08D57] font-sans font-semibold mt-0.5 block">
+              {printCount} Prints Available
+            </span>
+          )}
 
           {/* Rating */}
           {product.reviewCount > 0 ? (

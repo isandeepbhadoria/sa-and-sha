@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSEO } from '../hooks/useSEO';
 import { NotFoundPage } from './NotFoundPage';
 import { getTaxonomyRouteInfo } from '../config/catalogTaxonomy';
+import { groupProductsByStyleAndColor } from '../utils/productGrouping';
 
 export const CollectionPage: React.FC = () => {
   const { categorySlug, collectionId, productTypeId, subTypeSlug } = useParams<{
@@ -246,7 +247,10 @@ export const CollectionPage: React.FC = () => {
       result = result.filter(p => activeSubCats.includes(p.subCategory));
     }
     if (activeColors.length > 0) {
-      result = result.filter(p => activeColors.includes(p.color));
+      // Checks the real Fabric Color, not `color` (which is actually the
+      // Print Name — see types.ts) — COLOR_SWATCHES above is a fixed
+      // palette of real colors (White, Ink Navy, ...), not print names.
+      result = result.filter(p => activeColors.includes(p.fabricColor || ''));
     }
     if (activeSizes.length > 0) {
       result = result.filter(p => p.sizes.some(s => activeSizes.includes(s)));
@@ -307,10 +311,19 @@ export const CollectionPage: React.FC = () => {
     return Array.from(new Set(base.map(p => p.fit).filter(Boolean))).sort();
   }, [contextProducts]);
 
+  // Collapses a style's separate print listings into one grid card each
+  // (see productGrouping.ts) — a style with 6-10 prints shows as one card,
+  // not 6-10 near-duplicates. The representative is whichever sibling
+  // happens to be first after filtering, so an active filter (e.g. one
+  // specific print) still leads with a matching thumbnail.
+  const groupedProducts = useMemo(() => {
+    return groupProductsByStyleAndColor(filteredProducts);
+  }, [filteredProducts]);
+
   // Paginated subset of visible items
   const paginatedProducts = useMemo(() => {
-    return filteredProducts.slice(0, visibleCount);
-  }, [filteredProducts, visibleCount]);
+    return groupedProducts.slice(0, visibleCount);
+  }, [groupedProducts, visibleCount]);
 
   const handleLoadMore = () => {
     setIsLoadingMore(true);
@@ -437,7 +450,7 @@ export const CollectionPage: React.FC = () => {
           )}
         </div>
         <span className="text-xs font-sans font-bold text-[#2A211C]/60 uppercase tracking-widest">
-          {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'} Available
+          {groupedProducts.length} {groupedProducts.length === 1 ? 'Product' : 'Products'} Available
         </span>
       </div>
 
@@ -658,13 +671,13 @@ export const CollectionPage: React.FC = () => {
                 : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
             }`}
           >
-            {paginatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {paginatedProducts.map(({ representative, siblings }) => (
+              <ProductCard key={representative.id} product={representative} printCount={siblings.length} />
             ))}
           </div>
 
           {/* Load More buttons pagination */}
-          {visibleCount < filteredProducts.length && (
+          {visibleCount < groupedProducts.length && (
             <div className="text-center pt-4">
               <button
                 onClick={handleLoadMore}
@@ -1096,7 +1109,7 @@ export const CollectionPage: React.FC = () => {
                   className="py-3 bg-[#2A211C] text-[#FBF6EE] hover:bg-[#B08D57] transition-colors rounded text-xs font-sans font-bold uppercase tracking-widest"
                   id="drawer-apply-filters-btn"
                 >
-                  Apply Filters ({filteredProducts.length})
+                  Apply Filters ({groupedProducts.length})
                 </button>
               </div>
             </motion.div>

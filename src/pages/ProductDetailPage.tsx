@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { COLOR_SWATCHES } from '../data';
 import { useShop } from '../context/ShopContext';
 import { Star, Heart, ShoppingBag, Plus, Minus, MapPin, Truck, HelpCircle, ChevronRight, Check, X } from 'lucide-react';
@@ -8,9 +8,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSEO } from '../hooks/useSEO';
 import { RETURNS_CONFIG } from '../config/returnsConfig';
 import { NotFoundPage } from './NotFoundPage';
+import { findPrintSiblings } from '../utils/productGrouping';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug, id } = useParams<{ slug?: string; id?: string }>();
+  const navigate = useNavigate();
   const { products, allProducts, isProductsLoaded, addToCart, toggleWishlist, isInWishlist, addToRecentlyViewed, recentlyViewed } = useShop();
 
   const productIdentifier = slug || id;
@@ -165,6 +167,14 @@ export const ProductDetailPage: React.FC = () => {
   const relatedProducts = products
     .filter(p => p.subCategory === product.subCategory && p.id !== product.id && p.status !== 'archived' && !p.isDecommissioned)
     .slice(0, 4);
+
+  // Other prints of this exact same style (same Pattern/Style Number +
+  // Fabric Color) — see productGrouping.ts. A style with only one print
+  // gets back just itself, so the selector below stays hidden for it.
+  const printSiblingsPool = products.filter(p => p.status !== 'archived' && !p.isDecommissioned);
+  const printSiblings = findPrintSiblings(product, printSiblingsPool)
+    .slice()
+    .sort((a, b) => a.color.localeCompare(b.color));
 
   const handleAddToCart = () => {
     if (isArchivedOrDecommissioned) {
@@ -331,20 +341,57 @@ export const ProductDetailPage: React.FC = () => {
             {product.description}
           </p>
 
-          {/* Color display */}
+          {/* Fabric Color display — falls back to `color` for legacy
+              products saved before Fabric Color/Print Name were split. */}
           <div className="space-y-2">
             <span className="text-[11px] font-sans font-bold uppercase tracking-widest text-[#2A211C]/60">
-              Color: <strong className="text-[#2A211C]">{product.color}</strong>
+              Color: <strong className="text-[#2A211C]">{product.fabricColor || product.color}</strong>
             </span>
             <div className="flex gap-2">
               <button
                 className="w-8 h-8 rounded-full border-2 border-[#2A211C] p-0.5 flex items-center justify-center cursor-default bg-white"
-                aria-label={product.color}
+                aria-label={product.fabricColor || product.color}
               >
                 <span className="w-full h-full rounded-full border border-black/10" style={{ backgroundColor: product.colorHex }} />
               </button>
             </div>
           </div>
+
+          {/* Print selector — every other print of this exact same style
+              (same Style Number + Fabric Color). Hidden entirely for a
+              style that only has one print. Switching prints navigates to
+              that print's own product page (its own URL/SEO stay intact)
+              without a full reload. */}
+          {printSiblings.length > 1 && (
+            <div className="space-y-2">
+              <span className="text-[11px] font-sans font-bold uppercase tracking-widest text-[#2A211C]/60">
+                Print: <strong className="text-[#2A211C]">{product.noPrints ? 'Solid' : product.color}</strong>
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {printSiblings.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      if (p.id !== product.id) navigate(`/product/${p.slug || p.id}`);
+                    }}
+                    title={p.noPrints ? 'Solid' : p.color}
+                    className={`w-14 h-14 rounded-md overflow-hidden border-2 transition-all shrink-0 ${
+                      p.id === product.id
+                        ? 'border-[#B08D57] shadow-md'
+                        : 'border-[#E5D2BC]/30 opacity-80 hover:opacity-100 hover:border-[#B08D57]/60'
+                    }`}
+                  >
+                    <img
+                      src={p.images?.[0]}
+                      alt={p.noPrints ? 'Solid' : p.color}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Size selection & Actions or Discontinued Notice */}
           {isArchivedOrDecommissioned ? (
