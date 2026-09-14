@@ -439,14 +439,16 @@ export const AdminPage: React.FC = () => {
     return unsubscribe;
   }, []);
 
-  // Auto-generates SKU Code for a brand-new product as Category/Color are
-  // filled in — never for an existing one being edited, since its SKU is
-  // already frozen into past invoices/credit notes (see skuGenerator.ts).
+  // Auto-generates SKU Code for a brand-new product as Product Type/Color
+  // are filled in — never for an existing one being edited, since its SKU
+  // is already frozen into past invoices/credit notes (see
+  // skuGenerator.ts). Keyed off Product Type (Normalized Taxonomy), not
+  // the legacy "category" field — see skuGenerator.ts's own comment.
   useEffect(() => {
     if (editingProduct) return;
-    setFormSku(generateSkuCode(allProducts, formCategory, formColor));
+    setFormSku(generateSkuCode(allProducts, formProductType, formColor));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editingProduct, formCategory, formColor, allProducts]);
+  }, [editingProduct, formProductType, formColor, allProducts]);
 
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
