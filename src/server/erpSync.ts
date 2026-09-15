@@ -27,13 +27,14 @@ import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseR
 export async function registerProductWithErp(
   adminDb: FirebaseFirestore.Firestore,
   productId: string,
-  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number; color?: string; fabricColor?: string; noPrints?: boolean }
+  product: { styleNumber?: string; name?: string; sizes?: string[]; price?: number; color?: string; fabricColor?: string; noPrints?: boolean; sku?: string }
 ): Promise<{ registered: Record<string, string>; errors: Array<{ size: string; error: string }> }> {
   const styleNumber = (product.styleNumber || "").trim();
   const sizes = Array.isArray(product.sizes) ? product.sizes : [];
   const fabricColor = (product.fabricColor || "").trim();
   const printName = product.noPrints ? "Solid" : (product.color || "").trim();
   const variantName = [fabricColor, printName].filter(Boolean).join(" / ") || undefined;
+  const siteSku = (product.sku || "").trim() || undefined;
   const registered: Record<string, string> = {};
   const errors: Array<{ size: string; error: string }> = [];
 
@@ -48,6 +49,7 @@ export async function registerProductWithErp(
         size,
         name: product.name,
         variantName,
+        siteSku,
         mrp: typeof product.price === "number" && product.price > 0 ? product.price : undefined
       });
       registered[size] = result.sku;

@@ -91,6 +91,7 @@ export function erpRegisterStyleArticle(params: {
   name?: string;
   variantName?: string;
   mrp?: number;
+  siteSku?: string;
 }): Promise<{ sku: string; styleArticleId: string }> {
   return erpFetch("/integrations/inventory/style-articles", { method: "POST", body: params });
 }
