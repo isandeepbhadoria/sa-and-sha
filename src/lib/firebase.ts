@@ -8,18 +8,18 @@ import {
   onAuthStateChanged,
   Auth
 } from 'firebase/auth';
-import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
+import {
+  initializeFirestore,
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+  addDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
   orderBy
 } from 'firebase/firestore';
 import { 
@@ -48,8 +48,11 @@ const databaseId = (import.meta as any).env?.VITE_FIREBASE_DATABASE_ID || "(defa
 // Initialize app
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firestore with specific databaseId if provided
-export const db = getFirestore(app, databaseId);
+// Initialize Firestore with specific databaseId if provided.
+// ignoreUndefinedProperties: the admin form builds product/order objects
+// with `field: value || undefined` for optional fields — without this,
+// Firestore rejects the whole write the moment any one of those is unset.
+export const db = initializeFirestore(app, { ignoreUndefinedProperties: true }, databaseId);
 
 export const auth = getAuth(app);
 export const storage = getStorage(app);
