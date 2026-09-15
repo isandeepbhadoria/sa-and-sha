@@ -106,6 +106,11 @@ export interface ErpPatternVariant {
 export interface ErpPattern {
   styleNumber: string;
   productName: string;
+  // Customer-facing name — set in the ERP's Create Barcode SKU page,
+  // separate from productName (its own short internal name). Falls back to
+  // productName when unset. Use this for what actually gets saved as the
+  // product's name on this site — never productName.
+  displayName: string;
   variants: ErpPatternVariant[];
 }
 

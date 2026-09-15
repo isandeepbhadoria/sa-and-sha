@@ -110,6 +110,10 @@ interface ErpPatternVariant {
 interface ErpPattern {
   styleNumber: string;
   productName: string;
+  // Customer-facing name from the ERP — this is what gets saved as the
+  // product's actual name on this site, never productName (the ERP's own
+  // short internal name).
+  displayName: string;
   variants: ErpPatternVariant[];
 }
 
@@ -1495,8 +1499,8 @@ export const AdminPage: React.FC = () => {
   // Fills the form from a picked pattern+variant and locks the fields the
   // ERP now owns — see isPatternLocked's comment above.
   const applyPickedVariant = (pattern: ErpPattern, variant: ErpPatternVariant) => {
-    setFormName(pattern.productName);
-    setFormSlug(slugify(pattern.productName));
+    setFormName(pattern.displayName);
+    setFormSlug(slugify(pattern.displayName));
     setFormStyleNumber(pattern.styleNumber);
     setFormFabricColor(variant.fabricColor || '');
     setFormColor(variant.noPrints ? '' : (variant.printName || ''));
