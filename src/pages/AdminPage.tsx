@@ -1396,6 +1396,18 @@ export const AdminPage: React.FC = () => {
     setShowProductForm(true);
   };
 
+  // Leaves the product form page. Navigating the URL to /admin is not
+  // enough on its own — AdminPage renders the same component instance for
+  // /admin, /admin/products/new and /admin/products/:id/edit, so a bare
+  // navigate() doesn't unmount anything; the form stayed on screen after
+  // Cancel/X/save until a hard reload because showProductForm (a plain
+  // local boolean) was never reset to false.
+  const closeProductForm = () => {
+    setShowProductForm(false);
+    setEditingProduct(null);
+    navigate('/admin', { state: { tab: 'products' } });
+  };
+
   // Drives the product form page from the URL (/admin/products/new,
   // /admin/products/:productId/edit) instead of a plain local boolean —
   // see the "ADD / EDIT PRODUCT FORM" block below, which is a real page,
@@ -1412,7 +1424,7 @@ export const AdminPage: React.FC = () => {
         if (!showProductForm || editingProduct?.id !== found.id) initProductForm(found);
       } else {
         showToast('That product could not be found.');
-        navigate('/admin', { state: { tab: 'products' } });
+        closeProductForm();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1909,16 +1921,16 @@ export const AdminPage: React.FC = () => {
       }
 
       setAdditionalPrints([]);
-      // Navigate away from the product-form URL (rather than just hiding
-      // the form locally) — otherwise the route-sync effect would see the
-      // URL is still /admin/products/... and immediately reopen a blank
-      // form. Do this BEFORE refreshing the product list: refreshProducts()
-      // updates the shared allProducts state, which this still-mounted
-      // form's live duplicate-SKU check reads from — awaiting it first
-      // let this form re-render with the SKUs it just created now present
-      // in that list, incorrectly flagging them as "already exists"
-      // against itself for the instant before navigation took effect.
-      navigate('/admin', { state: { tab: 'products' } });
+      // Leave the product-form page (rather than just hiding the form
+      // locally) — otherwise the route-sync effect would see the URL is
+      // still /admin/products/... and immediately reopen a blank form. Do
+      // this BEFORE refreshing the product list: refreshProducts() updates
+      // the shared allProducts state, which this still-mounted form's live
+      // duplicate-SKU check reads from — awaiting it first let this form
+      // re-render with the SKUs it just created now present in that list,
+      // incorrectly flagging them as "already exists" against itself for
+      // the instant before navigation took effect.
+      closeProductForm();
       refreshProducts();
     } catch (err: any) {
       console.error('Error saving product to Firestore:', err);
@@ -2639,7 +2651,7 @@ export const AdminPage: React.FC = () => {
                   <div>
                     <button
                       type="button"
-                      onClick={() => navigate('/admin', { state: { tab: 'products' } })}
+                      onClick={closeProductForm}
                       className="text-[10px] font-bold uppercase tracking-wider text-stone-400 hover:text-[#B08D57] flex items-center gap-1 mb-1"
                     >
                       <ChevronLeft className="w-3 h-3" /> Back to Product Catalog
@@ -2652,7 +2664,7 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => {
                       if (window.confirm('Discard unsaved changes?')) {
-                        navigate('/admin', { state: { tab: 'products' } });
+                        closeProductForm();
                       }
                     }}
                     className="p-1.5 rounded-full hover:bg-stone-200 text-stone-500 transition-colors cursor-pointer"
@@ -3465,7 +3477,7 @@ export const AdminPage: React.FC = () => {
                       disabled={isSavingProduct}
                       onClick={() => {
                         if (window.confirm('Discard unsaved changes?')) {
-                          navigate('/admin', { state: { tab: 'products' } });
+                          closeProductForm();
                         }
                       }}
                       className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded font-bold uppercase tracking-wider text-[10px] transition-colors"
