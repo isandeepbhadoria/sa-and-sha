@@ -56,6 +56,7 @@ import { AdminIdentityManagementTab } from '../components/AdminIdentityManagemen
 import { AdminReturnsTab } from '../components/admin-returns/AdminReturnsTab';
 import { TaxMasterAdminTab } from '../components/admin/TaxMasterAdminTab';
 import { SimpleMasterListTab } from '../components/admin/SimpleMasterListTab';
+import { ImageCropModal } from '../components/admin/ImageCropModal';
 import { RewardsPolicySettings } from '../components/admin/RewardsPolicySettings';
 import { AdminCreditNotesTab } from '../components/admin/AdminCreditNotesTab';
 import {
@@ -1411,24 +1412,14 @@ export const AdminPage: React.FC = () => {
           files.push(file);
         }
       }
-      addFilesToSelection(files);
+      enqueueFilesForCrop(files, 'primary');
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const files: File[] = Array.from(e.target.files);
-      addFilesToSelection(files);
+      enqueueFilesForCrop(Array.from(e.target.files), 'primary');
     }
-  };
-
-  const addFilesToSelection = (files: File[]) => {
-    const totalCount = formImages.length + selectedFiles.length + files.length;
-    if (totalCount > 6) {
-      showToast('Maximum 6 images are allowed per product.');
-      return;
-    }
-    setSelectedFiles(prev => [...prev, ...files]);
   };
 
   const removeSelectedFile = (index: number) => {
@@ -1463,16 +1454,57 @@ export const AdminPage: React.FC = () => {
     setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, noPrints } : r)));
   };
 
-  const addFilesToPrintRow = (rowId: string, files: File[]) => {
-    setAdditionalPrints(prev => prev.map(r => {
-      if (r.id !== rowId) return r;
-      const totalCount = r.images.length + r.selectedFiles.length + files.length;
-      if (totalCount > 6) {
-        showToast('Maximum 6 images are allowed per print.');
-        return r;
-      }
-      return { ...r, selectedFiles: [...r.selectedFiles, ...files] };
-    }));
+  // Image crop queue — every selected/dropped file (primary or an
+  // additional-variant row) is routed through ImageCropModal one at a
+  // time before landing in state, instead of going straight from disk to
+  // Firebase Storage unprocessed. `target` is 'primary' for the main
+  // product's own images, or a row id for that variant's images.
+  const [cropQueue, setCropQueue] = useState<Array<{ id: string; file: File; target: string }>>([]);
+  const activeCropItem = cropQueue[0] || null;
+
+  const enqueueFilesForCrop = (files: File[], target: string) => {
+    const imageFiles = files.filter(f => f.type.startsWith('image/'));
+    setCropQueue(prev => [
+      ...prev,
+      ...imageFiles.map((f, i) => ({ id: `crop-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`, file: f, target }))
+    ]);
+  };
+
+  const addProcessedFileToTarget = (target: string, file: File) => {
+    if (target === 'primary') {
+      setSelectedFiles(prev => {
+        if (formImages.length + prev.length >= 6) {
+          showToast('Maximum 6 images are allowed per product — later photos in this batch were skipped.');
+          return prev;
+        }
+        return [...prev, file];
+      });
+    } else {
+      setAdditionalPrints(prev => prev.map(r => {
+        if (r.id !== target) return r;
+        if (r.images.length + r.selectedFiles.length >= 6) {
+          showToast('Maximum 6 images are allowed per print — later photos in this batch were skipped.');
+          return r;
+        }
+        return { ...r, selectedFiles: [...r.selectedFiles, file] };
+      }));
+    }
+  };
+
+  const handleCropConfirm = (croppedFile: File) => {
+    if (!activeCropItem) return;
+    addProcessedFileToTarget(activeCropItem.target, croppedFile);
+    setCropQueue(prev => prev.slice(1));
+  };
+
+  const handleCropUseOriginal = () => {
+    if (!activeCropItem) return;
+    addProcessedFileToTarget(activeCropItem.target, activeCropItem.file);
+    setCropQueue(prev => prev.slice(1));
+  };
+
+  const handleCropCancel = () => {
+    setCropQueue(prev => prev.slice(1));
   };
 
   const removePrintRowFile = (rowId: string, index: number) => {
@@ -3122,7 +3154,7 @@ export const AdminPage: React.FC = () => {
                                   className="hidden"
                                   onChange={(e) => {
                                     if (e.target.files && e.target.files.length > 0) {
-                                      addFilesToPrintRow(row.id, Array.from(e.target.files));
+                                      enqueueFilesForCrop(Array.from(e.target.files), row.id);
                                     }
                                     e.target.value = '';
                                   }}
@@ -3377,6 +3409,18 @@ export const AdminPage: React.FC = () => {
                 </form>
               </div>
             </div>
+          )}
+
+          {activeCropItem && (
+            <ImageCropModal
+              key={activeCropItem.id}
+              file={activeCropItem.file}
+              title={`Crop Photo${cropQueue.length > 1 ? ` (${cropQueue.length} left)` : ''}`}
+              accentColor="#B08D57"
+              onConfirm={handleCropConfirm}
+              onUseOriginal={handleCropUseOriginal}
+              onCancel={handleCropCancel}
+            />
           )}
 
           {/* RETURNS & EXCHANGES MANAGEMENT TAB */}
