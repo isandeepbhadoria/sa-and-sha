@@ -14,7 +14,7 @@ import { isSizeOutOfStock, isProductSoldOut } from '../utils/stockHelpers';
 export const ProductDetailPage: React.FC = () => {
   const { slug, id } = useParams<{ slug?: string; id?: string }>();
   const navigate = useNavigate();
-  const { products, allProducts, isProductsLoaded, addToCart, toggleWishlist, isInWishlist, addToRecentlyViewed, recentlyViewed } = useShop();
+  const { products, allProducts, isProductsLoaded, addToCart, toggleWishlist, isInWishlist, addToRecentlyViewed, recentlyViewed, showToast } = useShop();
 
   const productIdentifier = slug || id;
   const product = products.find(p => p.slug === productIdentifier) ||
@@ -100,22 +100,14 @@ export const ProductDetailPage: React.FC = () => {
     }
   }, [product]);
 
-  if (!product) {
-    if (!isProductsLoaded) {
-      return (
-        <div className="bg-[#FBF6EE] text-[#2A211C] min-h-screen flex items-center justify-center p-8">
-          <div className="text-center space-y-3">
-            <div className="w-8 h-8 border-2 border-[#2A211C] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="font-sans text-xs uppercase tracking-widest text-stone-600">Loading product details...</p>
-          </div>
-        </div>
-      );
-    }
-    return <NotFoundPage />;
-  }
-
-  // PDP States
-  const [activeImage, setActiveImage] = useState(product.images?.[0] || '');
+  // PDP States — these hooks must run on every render, in the same
+  // order, whether or not `product` has resolved yet (products still
+  // loading on a fresh page load vs. already-cached client-side nav).
+  // The "not found / still loading" early return below used to sit
+  // above these, which skipped this whole block on some renders and
+  // ran it on others — a React "rendered fewer/more hooks than
+  // expected" crash that unmounted the entire app to a blank page.
+  const [activeImage, setActiveImage] = useState(product?.images?.[0] || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
 
@@ -149,12 +141,27 @@ export const ProductDetailPage: React.FC = () => {
 
   // Sync active image if product changes
   useEffect(() => {
+    if (!product) return;
     setActiveImage(product.images[0]);
     setSelectedSize('');
     setQuantity(1);
     setPincode('');
     setPincodeMessage(null);
   }, [product]);
+
+  if (!product) {
+    if (!isProductsLoaded) {
+      return (
+        <div className="bg-[#FBF6EE] text-[#2A211C] min-h-screen flex items-center justify-center p-8">
+          <div className="text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-[#2A211C] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="font-sans text-xs uppercase tracking-widest text-stone-600">Loading product details...</p>
+          </div>
+        </div>
+      );
+    }
+    return <NotFoundPage />;
+  }
 
   const hasDiscount = product.compareAtPrice > product.price;
   const discountPercent = hasDiscount
@@ -193,8 +200,6 @@ export const ProductDetailPage: React.FC = () => {
     }
     addToCart(product, selectedSize, quantity);
   };
-
-  const { showToast } = useShop();
 
   const handlePincodeCheck = (e: React.FormEvent) => {
     e.preventDefault();
