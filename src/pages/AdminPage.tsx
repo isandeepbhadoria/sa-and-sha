@@ -1721,8 +1721,28 @@ export const AdminPage: React.FC = () => {
         });
       }
 
+      // Fail fast, before writing anything, if a print's photos are too
+      // large to fit in one Firestore document (1MB hard limit). This is
+      // almost always because uploadFilesWithFallback's Storage upload
+      // silently failed and embedded the photo directly instead — give a
+      // specific, actionable error instead of letting Firestore's own
+      // cryptic size-limit error surface deep inside the save loop below.
+      for (const entry of printEntries) {
+        const approxBytes = entry.images.reduce((sum, img) => sum + img.length, 0);
+        if (approxBytes > 900_000) {
+          const label = printEntries.length > 1 ? `the "${entry.noPrints ? 'Solid' : entry.printName}" print` : 'this product';
+          const hasEmbeddedImage = entry.images.some(img => img.startsWith('data:'));
+          throw new Error(
+            hasEmbeddedImage
+              ? `Couldn't save ${label} — its photos failed to upload to cloud storage and got embedded directly instead, which is too large to save. This usually means Firebase Storage isn't configured correctly; nothing was saved. Try again once that's fixed, or use fewer/smaller images per print.`
+              : `Couldn't save ${label} — its photos are too large. Please use fewer or smaller images.`
+          );
+        }
+      }
+
       const usedSlugs = getUsedSlugsSet(editingProduct?.id);
       let savedCount = 0;
+      const createdDocIds: string[] = [];
 
       for (let i = 0; i < printEntries.length; i++) {
         const entry = printEntries[i];
@@ -1826,18 +1846,11 @@ export const AdminPage: React.FC = () => {
               await setDoc(doc(db, 'products', editingProduct.id), productData, { merge: true });
               showToast(`Product "${formName}" updated successfully!`);
               await syncProductWithErp(editingProduct.id, formStyleNumber);
-            } catch (fbErr) {
-              console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
-              const localCustom = localStorage.getItem('kora_custom_products');
-              const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
-              const updated = customProducts.map(p =>
-                p.id === editingProduct.id ? { ...p, ...productData } : p
-              );
-              if (!customProducts.some(p => p.id === editingProduct.id)) {
-                updated.push({ id: editingProduct.id, ...productData } as Product);
-              }
-              localStorage.setItem('kora_custom_products', JSON.stringify(updated));
-              showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            } catch (fbErr: any) {
+              // Must NOT be reported as a success — see the matching
+              // comment in the create branch below for why.
+              console.error('Firestore update failed:', fbErr);
+              throw new Error(`Failed to save changes (${fbErr?.message || 'Unknown error'}). Please try again.`);
             }
           }
         } else {
@@ -1858,19 +1871,32 @@ export const AdminPage: React.FC = () => {
           } else {
             try {
               const newRef = await addDoc(collection(db, 'products'), productData);
+              createdDocIds.push(newRef.id);
               if (soleEntry) showToast(`Product "${formName}" added successfully!`);
               await syncProductWithErp(newRef.id, formStyleNumber);
-            } catch (fbErr) {
-              console.warn('Firebase save failed, falling back to local sandbox storage:', fbErr);
-              const localCustom = localStorage.getItem('kora_custom_products');
-              const customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
-              const newProduct: Product = {
-                id: `custom-${Date.now()}-${i}`,
-                ...productData
-              } as Product;
-              customProducts.push(newProduct);
-              localStorage.setItem('kora_custom_products', JSON.stringify(customProducts));
-              if (soleEntry) showToast(`Saved "${formName}" locally (Firebase access restricted).`);
+            } catch (fbErr: any) {
+              // A save that fails here must NOT be reported as a success —
+              // it previously fell back to writing a phantom copy into
+              // this browser's own localStorage and showed a "saved"
+              // toast, which looked fine to the admin but left nothing in
+              // the real database (a blank page for every other visitor).
+              // Roll back any prints from this same batch that DID save,
+              // so a partial multi-print batch never lingers half-saved.
+              console.error('Firestore save failed for print', entry.printName, fbErr);
+              for (const docId of createdDocIds) {
+                try {
+                  await deleteDoc(doc(db, 'products', docId));
+                } catch (rollbackErr) {
+                  console.error('Rollback delete failed for', docId, rollbackErr);
+                }
+              }
+              const reason = fbErr?.message || 'Unknown error';
+              const label = entry.noPrints ? 'Solid' : entry.printName;
+              throw new Error(
+                printEntries.length > 1
+                  ? `Failed to save the "${label}" print (${reason}). None of this batch's ${printEntries.length} prints were saved — please try again.`
+                  : `Failed to save this product (${reason}). Please try again.`
+              );
             }
           }
         }

@@ -158,9 +158,13 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (toast?.visible) {
+      // Short confirmations ("Added to bag") don't need long to read, but
+      // a longer message — a real error, often technical — needs more
+      // time than a flat 3s to actually be read before it auto-dismisses.
+      const duration = Math.min(10000, Math.max(3000, toast.message.length * 60));
       const timer = setTimeout(() => {
         hideToast();
-      }, 3000);
+      }, duration);
       return () => clearTimeout(timer);
     }
   }, [toast]);
