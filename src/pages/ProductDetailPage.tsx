@@ -239,7 +239,7 @@ export const ProductDetailPage: React.FC = () => {
         <span>/</span>
         <Link to={`/shop/${product.category}`} className="hover:text-[#B08D57] transition-colors uppercase">{product.category}</Link>
         <span>/</span>
-        <Link to={`/shop/${product.subCategory}`} className="hover:text-[#B08D57] transition-colors uppercase">{product.subCategory.replace(/-/g, ' ')}</Link>
+        <Link to={`/shop/${product.subCategory}`} className="hover:text-[#B08D57] transition-colors uppercase">{(product.subCategory || '').replace(/-/g, ' ')}</Link>
         <span>/</span>
         <span className="text-[#2A211C] font-semibold">{product.name}</span>
       </nav>
@@ -265,7 +265,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Thumbnail strip */}
           <div className="flex md:flex-col gap-3 shrink-0 overflow-x-auto md:overflow-y-auto max-h-[500px] py-1">
-            {product.images.map((img, idx) => (
+            {(product.images || []).map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveImage(img)}
@@ -444,7 +444,7 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map(size => {
+                  {(product.sizes || []).map(size => {
                     const outOfStock = isSizeOutOfStock(product, size);
                     return (
                       <button
@@ -581,7 +581,7 @@ export const ProductDetailPage: React.FC = () => {
                     className="overflow-hidden"
                   >
                     <ul className="list-disc pl-4 py-2 text-xs font-sans text-[#2A211C]/70 leading-relaxed space-y-1.5 font-medium">
-                      {product.details.map((detail, idx) => (
+                      {(product.details || []).map((detail, idx) => (
                         <li key={idx}>{detail}</li>
                       ))}
                     </ul>
@@ -608,7 +608,7 @@ export const ProductDetailPage: React.FC = () => {
                     className="overflow-hidden"
                   >
                     <ul className="list-disc pl-4 py-2 text-xs font-sans text-[#2A211C]/70 leading-relaxed space-y-1.5 font-medium">
-                      {product.careInstructions.map((inst, idx) => (
+                      {(product.careInstructions || []).map((inst, idx) => (
                         <li key={idx}>{inst}</li>
                       ))}
                     </ul>
