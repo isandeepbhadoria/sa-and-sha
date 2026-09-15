@@ -1908,13 +1908,18 @@ export const AdminPage: React.FC = () => {
         showToast(`Saved ${savedCount} prints of "${formName}"!`);
       }
 
-      await refreshProducts();
       setAdditionalPrints([]);
       // Navigate away from the product-form URL (rather than just hiding
       // the form locally) — otherwise the route-sync effect would see the
       // URL is still /admin/products/... and immediately reopen a blank
-      // form.
+      // form. Do this BEFORE refreshing the product list: refreshProducts()
+      // updates the shared allProducts state, which this still-mounted
+      // form's live duplicate-SKU check reads from — awaiting it first
+      // let this form re-render with the SKUs it just created now present
+      // in that list, incorrectly flagging them as "already exists"
+      // against itself for the instant before navigation took effect.
       navigate('/admin', { state: { tab: 'products' } });
+      refreshProducts();
     } catch (err: any) {
       console.error('Error saving product to Firestore:', err);
       showToast('Error saving product: ' + err.message);
