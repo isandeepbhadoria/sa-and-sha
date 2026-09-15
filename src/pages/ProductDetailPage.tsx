@@ -9,6 +9,7 @@ import { useSEO } from '../hooks/useSEO';
 import { RETURNS_CONFIG } from '../config/returnsConfig';
 import { NotFoundPage } from './NotFoundPage';
 import { findPrintSiblings } from '../utils/productGrouping';
+import { isSizeOutOfStock, isProductSoldOut } from '../utils/stockHelpers';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug, id } = useParams<{ slug?: string; id?: string }>();
@@ -183,6 +184,11 @@ export const ProductDetailPage: React.FC = () => {
     }
     if (!selectedSize) {
       showToast('Please select a size to add to your bag.');
+      return;
+    }
+    if (isSizeOutOfStock(product, selectedSize)) {
+      showToast(`Size ${selectedSize} just went out of stock. Please pick another size.`);
+      setSelectedSize('');
       return;
     }
     addToCart(product, selectedSize, quantity);
@@ -433,21 +439,33 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`min-w-[2.75rem] h-11 px-2 text-xs font-sans font-bold rounded-md border flex items-center justify-center transition-all ${
-                        selectedSize === size
-                          ? 'bg-[#2A211C] text-[#FBF6EE] border-[#2A211C] font-extrabold shadow'
-                          : 'bg-white text-[#2A211C] border-[#E5D2BC]/30 hover:border-[#2A211C]'
-                      }`}
-                      id={`size-btn-${size}`}
-                    >
-                      {size}
-                    </button>
-                  ))}
+                  {product.sizes.map(size => {
+                    const outOfStock = isSizeOutOfStock(product, size);
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => { if (!outOfStock) setSelectedSize(size); }}
+                        disabled={outOfStock}
+                        title={outOfStock ? `Size ${size} is out of stock` : undefined}
+                        className={`min-w-[2.75rem] h-11 px-2 text-xs font-sans font-bold rounded-md border flex items-center justify-center transition-all ${
+                          outOfStock
+                            ? 'bg-stone-50 text-[#2A211C]/30 border-[#E5D2BC]/20 line-through cursor-not-allowed'
+                            : selectedSize === size
+                            ? 'bg-[#2A211C] text-[#FBF6EE] border-[#2A211C] font-extrabold shadow'
+                            : 'bg-white text-[#2A211C] border-[#E5D2BC]/30 hover:border-[#2A211C]'
+                        }`}
+                        id={`size-btn-${size}`}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
                 </div>
+                {isProductSoldOut(product) && (
+                  <p className="text-[11px] font-sans font-semibold text-red-600">
+                    Currently sold out in all sizes.
+                  </p>
+                )}
               </div>
 
               {/* Quantity & CTA triggers */}
@@ -479,11 +497,12 @@ export const ProductDetailPage: React.FC = () => {
                   <button
                     ref={mainCtaRef}
                     onClick={handleAddToCart}
-                    className="flex-1 bg-[#2A211C] text-[#FBF6EE] hover:bg-[#B08D57] py-3 px-6 rounded font-sans font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-95"
+                    disabled={isProductSoldOut(product)}
+                    className="flex-1 bg-[#2A211C] text-[#FBF6EE] hover:bg-[#B08D57] py-3 px-6 rounded font-sans font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-95 disabled:opacity-50 disabled:hover:bg-[#2A211C] disabled:cursor-not-allowed"
                     id="add-to-bag-pdp"
                   >
                     <ShoppingBag className="w-4 h-4" />
-                    <span>Add To Bag</span>
+                    <span>{isProductSoldOut(product) ? 'Sold Out' : 'Add To Bag'}</span>
                   </button>
 
                   {/* Wishlist toggle */}
@@ -825,7 +844,11 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             </div>
 
-            {selectedSize ? (
+            {isProductSoldOut(product) ? (
+              <span className="bg-white/10 text-white/60 font-sans font-bold text-[11px] uppercase tracking-widest px-4 py-2.5 rounded">
+                Sold Out
+              </span>
+            ) : selectedSize ? (
               <button
                 onClick={handleAddToCart}
                 className="bg-[#B08D57] hover:bg-[#B08D57]/90 text-white font-sans font-bold text-[11px] uppercase tracking-widest px-4 py-2.5 rounded shadow active:scale-95 transition-all"
@@ -835,7 +858,7 @@ export const ProductDetailPage: React.FC = () => {
               </button>
             ) : (
               <div className="flex gap-1">
-                {product.sizes.slice(0, 3).map(size => (
+                {product.sizes.filter(size => !isSizeOutOfStock(product, size)).slice(0, 3).map(size => (
                   <button
                     key={size}
                     onClick={() => {

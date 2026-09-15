@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, CartItem } from '../types';
 import { db, collection, getDocs, handleFirestoreError, OperationType } from '../lib/firebase';
 import { products as staticProducts } from '../data';
+import { isSizeOutOfStock } from '../utils/stockHelpers';
 
 interface ShopContextType {
   products: Product[];
@@ -168,6 +169,14 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const addToCart = (product: Product, size: string, quantity = 1) => {
     if (product.status === 'archived' || product.isDecommissioned) {
       showToast(`"${product.name}" has been discontinued and is no longer available.`);
+      return;
+    }
+    // Defense in depth — the size-selection UI shouldn't let an
+    // out-of-stock size reach here, but stock can also change between page
+    // load and click, and this is the one place every add-to-cart entry
+    // point (PDP, Quick Add, sticky bar) funnels through.
+    if (isSizeOutOfStock(product, size)) {
+      showToast(`"${product.name}" (${size}) is currently out of stock.`);
       return;
     }
     setCart(prevCart => {

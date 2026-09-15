@@ -3,6 +3,7 @@ import { Product } from '../types';
 import { useShop } from '../context/ShopContext';
 import { Heart, Star, ShoppingBag, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { isSizeOutOfStock, isProductSoldOut } from '../utils/stockHelpers';
 
 interface ProductCardProps {
   product: Product;
@@ -44,11 +45,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, printCount })
 
   const handleSizeSelect = (e: React.MouseEvent, size: string) => {
     e.stopPropagation();
+    if (isSizeOutOfStock(product, size)) return;
     setSelectedSize(size);
     addToCart(product, size, 1);
     setShowSizeSelector(false);
     setSelectedSize('');
   };
+
+  const soldOut = isProductSoldOut(product);
 
   return (
     <div
@@ -99,11 +103,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, printCount })
               {discountPercent}% OFF
             </span>
           )}
+          {soldOut && (
+            <span className="bg-stone-700 text-white px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider shadow">
+              Sold Out
+            </span>
+          )}
         </div>
 
         {/* Quick Add To Bag Hover Panel */}
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10">
-          {!showSizeSelector ? (
+          {soldOut ? (
+            <button
+              disabled
+              className="w-full bg-stone-200 text-stone-500 py-2.5 rounded text-xs font-sans font-bold uppercase tracking-widest shadow flex items-center justify-center gap-1.5 cursor-not-allowed"
+            >
+              <span>Sold Out</span>
+            </button>
+          ) : !showSizeSelector ? (
             <button
               onClick={handleQuickAddClick}
               className="w-full bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white py-2.5 rounded text-xs font-sans font-bold uppercase tracking-widest transition-all shadow flex items-center justify-center gap-1.5 active:scale-95"
@@ -128,16 +144,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, printCount })
                 </button>
               </div>
               <div className="flex flex-wrap gap-1.5 justify-center">
-                {product.sizes.map((size) => (
+                {product.sizes.map((size) => {
+                  const outOfStock = isSizeOutOfStock(product, size);
+                  return (
                   <button
                     key={size}
                     onClick={(e) => handleSizeSelect(e, size)}
-                    className="min-w-[2rem] h-8 px-1.5 rounded bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border border-[#E5D2BC]/30"
+                    disabled={outOfStock}
+                    title={outOfStock ? `Size ${size} is out of stock` : undefined}
+                    className={`min-w-[2rem] h-8 px-1.5 rounded text-[10px] font-sans font-bold flex items-center justify-center transition-colors active:scale-95 border ${
+                      outOfStock
+                        ? 'bg-transparent text-white/30 border-white/10 line-through cursor-not-allowed'
+                        : 'bg-[#FBF6EE] text-[#2A211C] hover:bg-[#B08D57] hover:text-white border-[#E5D2BC]/30'
+                    }`}
                     id={`size-opt-${product.id}-${size}`}
                   >
                     {size}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
