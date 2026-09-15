@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { 
   Lock, 
   Mail, 
   KeyRound, 
-  Search, 
-  Filter, 
-  Eye, 
-  ChevronDown, 
+  Search,
+  Filter,
+  Eye,
+  ChevronDown,
+  ChevronLeft,
   CheckCircle2, 
   Truck, 
   X, 
@@ -137,6 +138,8 @@ export const AdminPage: React.FC = () => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const routeParams = useParams<{ productId?: string }>();
   const { showToast } = useShop();
 
   // Auth state
@@ -158,7 +161,9 @@ export const AdminPage: React.FC = () => {
   const [forgotStatus, setForgotStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'material-type-master' | 'fit-profile-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'material-type-master' | 'fit-profile-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>(
+    (location.state as { tab?: string } | null)?.tab as any || 'orders'
+  );
 
   // Promotions management state
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -370,7 +375,7 @@ export const AdminPage: React.FC = () => {
   };
 
   // Product management state
-  const { allProducts, refreshProducts } = useShop();
+  const { allProducts, refreshProducts, isProductsLoaded } = useShop();
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -1391,6 +1396,28 @@ export const AdminPage: React.FC = () => {
     setShowProductForm(true);
   };
 
+  // Drives the product form page from the URL (/admin/products/new,
+  // /admin/products/:productId/edit) instead of a plain local boolean —
+  // see the "ADD / EDIT PRODUCT FORM" block below, which is a real page,
+  // not a modal, so it always has room to show its own errors/toasts.
+  useEffect(() => {
+    if (location.pathname === '/admin/products/new') {
+      if (!showProductForm || editingProduct) initProductForm(null);
+      return;
+    }
+    if (routeParams.productId) {
+      if (!isProductsLoaded) return; // wait for the catalog to load before deciding
+      const found = allProducts.find(p => p.id === routeParams.productId);
+      if (found) {
+        if (!showProductForm || editingProduct?.id !== found.id) initProductForm(found);
+      } else {
+        showToast('That product could not be found.');
+        navigate('/admin', { state: { tab: 'products' } });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, routeParams.productId, allProducts, isProductsLoaded]);
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -1856,9 +1883,12 @@ export const AdminPage: React.FC = () => {
       }
 
       await refreshProducts();
-      setShowProductForm(false);
-      setEditingProduct(null);
       setAdditionalPrints([]);
+      // Navigate away from the product-form URL (rather than just hiding
+      // the form locally) — otherwise the route-sync effect would see the
+      // URL is still /admin/products/... and immediately reopen a blank
+      // form.
+      navigate('/admin', { state: { tab: 'products' } });
     } catch (err: any) {
       console.error('Error saving product to Firestore:', err);
       showToast('Error saving product: ' + err.message);
@@ -2171,6 +2201,18 @@ export const AdminPage: React.FC = () => {
           isRefreshing={isLoading}
           onLogout={handleLogout}
         >
+          {/* A direct visit/refresh on an edit URL needs the catalog
+              loaded before it can look up which product to show. */}
+          {routeParams.productId && !showProductForm && !isProductsLoaded && (
+            <div className="flex items-center justify-center py-24 text-stone-400 text-xs font-sans font-bold uppercase tracking-wider">
+              Loading product...
+            </div>
+          )}
+
+          {/* Tab content is hidden (not unmounted) while the product form
+              page is open, so its own tab dashboard state survives a
+              Cancel/Save back-navigation without a reload. */}
+          <div hidden={showProductForm || (!!routeParams.productId && !isProductsLoaded)}>
           {activeTab === 'identity' && (
             <AdminIdentityManagementTab adminToken={adminToken} showToast={showToast} />
           )}
@@ -2420,7 +2462,7 @@ export const AdminPage: React.FC = () => {
                   </div>
 
                   <button
-                    onClick={() => initProductForm(null)}
+                    onClick={() => navigate('/admin/products/new')}
                     className="bg-[#B08D57] hover:bg-[#a04e2e] text-white py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                   >
                     <Plus className="w-4 h-4" />
@@ -2452,7 +2494,7 @@ export const AdminPage: React.FC = () => {
                             <Package className="w-8 h-8 mx-auto text-stone-300" />
                             <p className="font-medium text-xs">No products found in Firestore catalog</p>
                             <button
-                              onClick={() => initProductForm(null)}
+                              onClick={() => navigate('/admin/products/new')}
                               className="text-[#B08D57] hover:underline font-bold text-xs"
                             >
                               Create your first product now
@@ -2528,7 +2570,7 @@ export const AdminPage: React.FC = () => {
                             <td className="p-4 text-center whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <button
-                                  onClick={() => initProductForm(product)}
+                                  onClick={() => navigate(`/admin/products/${product.id}/edit`)}
                                   className="p-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded transition-colors cursor-pointer"
                                   title="Edit Product"
                                 >
@@ -2552,15 +2594,25 @@ export const AdminPage: React.FC = () => {
               </div>
             </div>
           )}
+          </div>
 
-          {/* ADD / EDIT PRODUCT FORM FULL-OVERLAY */}
+          {/* ADD / EDIT PRODUCT FORM — its own full page (not a modal), so
+              validation errors and toasts are never hidden behind it, and
+              it has a real URL (/admin/products/new or .../:id/edit). */}
           {showProductForm && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-end">
-              <div className="bg-white shadow-2xl max-w-4xl w-full h-full overflow-y-auto border-l border-[#E5D2BC]/30 flex flex-col font-sans animate-slide-left">
-                {/* Form Pinned Header */}
-                <div className="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50 sticky top-0 z-10">
+            <div className="bg-white rounded-xl shadow-sm border border-[#E5D2BC]/20 w-full flex flex-col font-sans">
+                {/* Form Header — scrolls with the page; AdminShell already
+                    owns the sticky top bar, so this can't also stick to
+                    top:0 without the two fighting for the same spot. */}
+                <div className="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50 rounded-t-xl">
                   <div>
-                    <span className="text-[9px] font-bold tracking-widest uppercase text-[#B08D57] block">Product Catalog Administration</span>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/admin', { state: { tab: 'products' } })}
+                      className="text-[10px] font-bold uppercase tracking-wider text-stone-400 hover:text-[#B08D57] flex items-center gap-1 mb-1"
+                    >
+                      <ChevronLeft className="w-3 h-3" /> Back to Product Catalog
+                    </button>
                     <h3 className="font-serif text-lg font-bold text-[#2A211C]">
                       {editingProduct ? `Edit Product: ${editingProduct.name}` : 'Create Brand-New Product'}
                     </h3>
@@ -2569,8 +2621,7 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => {
                       if (window.confirm('Discard unsaved changes?')) {
-                        setShowProductForm(false);
-                        setEditingProduct(null);
+                        navigate('/admin', { state: { tab: 'products' } });
                       }
                     }}
                     className="p-1.5 rounded-full hover:bg-stone-200 text-stone-500 transition-colors cursor-pointer"
@@ -2580,7 +2631,7 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* Form Main Body Content */}
-                <form onSubmit={uploadAndSaveProduct} className="p-6 space-y-6 flex-1 overflow-y-auto text-xs text-stone-700">
+                <form onSubmit={uploadAndSaveProduct} className="p-6 space-y-6 flex-1 text-xs text-stone-700">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* LEFT COLUMN: CORE INFO */}
                     <div className="space-y-4">
@@ -3383,8 +3434,7 @@ export const AdminPage: React.FC = () => {
                       disabled={isSavingProduct}
                       onClick={() => {
                         if (window.confirm('Discard unsaved changes?')) {
-                          setShowProductForm(false);
-                          setEditingProduct(null);
+                          navigate('/admin', { state: { tab: 'products' } });
                         }
                       }}
                       className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded font-bold uppercase tracking-wider text-[10px] transition-colors"
@@ -3407,7 +3457,6 @@ export const AdminPage: React.FC = () => {
                     </button>
                   </div>
                 </form>
-              </div>
             </div>
           )}
 

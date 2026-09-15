@@ -174,6 +174,8 @@ export default function App() {
               <Route path="/portal" element={<CustomerDashboardPage />} />
               <Route path="/dashboard" element={<CustomerDashboardPage />} />
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/products/new" element={<AdminPage />} />
+              <Route path="/admin/products/:productId/edit" element={<AdminPage />} />
               {/* Fallback to custom 404 page */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
