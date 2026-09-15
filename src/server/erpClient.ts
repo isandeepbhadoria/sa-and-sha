@@ -95,3 +95,25 @@ export function erpRegisterStyleArticle(params: {
 }): Promise<{ sku: string; styleArticleId: string }> {
   return erpFetch("/integrations/inventory/style-articles", { method: "POST", body: params });
 }
+
+export interface ErpPatternVariant {
+  fabricColor: string | null;
+  printName: string | null;
+  noPrints: boolean;
+  baseSku: string;
+  sizes: Array<{ size: string; sku: string; available: number }>;
+}
+export interface ErpPattern {
+  styleNumber: string;
+  productName: string;
+  variants: ErpPatternVariant[];
+}
+
+// Lets the admin panel search barcode SKUs already minted in the ERP
+// (Inventory → Create Barcode SKU) for this site's own brand, to pick from
+// when creating a product instead of generating a SKU here — see the
+// Barcode SKU picker in AdminPage.tsx.
+export function erpListPatterns(search?: string): Promise<{ patterns: ErpPattern[] }> {
+  const qs = search?.trim() ? `?search=${encodeURIComponent(search.trim())}` : "";
+  return erpFetch(`/integrations/inventory/patterns${qs}`);
+}

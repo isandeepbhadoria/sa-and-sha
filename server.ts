@@ -8883,6 +8883,26 @@ async function startServer() {
   // (products are written client-side, see AdminPage.tsx, so this is a
   // separate explicit sync step rather than a hook on the write itself).
   // Idempotent, safe to call on every save.
+  // Lets the admin panel's Barcode SKU picker search patterns already
+  // minted in the ERP (Inventory → Create Barcode SKU) — see erpClient.ts's
+  // erpListPatterns. Admin-authenticated the same way as every other
+  // /api/admin/* route; the actual ERP_API_KEY never reaches the browser.
+  app.get("/api/admin/erp/patterns", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const { erpListPatterns } = await import("./src/server/erpClient");
+      const search = typeof req.query.search === "string" ? req.query.search : undefined;
+      const result = await erpListPatterns(search);
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      console.error("[ERP PATTERNS ENDPOINT ERROR]", err?.message || err);
+      return res.status(500).json({ success: false, error: err?.message || "Failed to search the ERP." });
+    }
+  });
+
   app.post("/api/admin/products/:id/sync-erp", async (req, res) => {
     const adminAuth = await verifyAdminRequest(req);
     if (!adminAuth.authorized) {

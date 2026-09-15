@@ -97,6 +97,22 @@ import { useSEO } from '../hooks/useSEO';
 
 const ADMIN_EMAIL = 'sales@sa-and-sha.com';
 
+// One pattern/print variant as returned by GET /api/admin/erp/patterns
+// (proxying the ERP's own /integrations/inventory/patterns) — see the
+// Barcode SKU picker in the product form below.
+interface ErpPatternVariant {
+  fabricColor: string | null;
+  printName: string | null;
+  noPrints: boolean;
+  baseSku: string;
+  sizes: Array<{ size: string; sku: string; available: number }>;
+}
+interface ErpPattern {
+  styleNumber: string;
+  productName: string;
+  variants: ErpPatternVariant[];
+}
+
 const isPreviewEnvironment = (): boolean => {
   if (typeof window === 'undefined') return false;
   const host = window.location.hostname;
@@ -445,6 +461,22 @@ export const AdminPage: React.FC = () => {
     id: string; fabricColor: string; printName: string; noPrints: boolean; images: string[]; selectedFiles: File[];
   }>>([]);
 
+  // Barcode SKU / Pattern picker (see the ERP's Inventory → Create Barcode
+  // SKU) — the ERP is now the source of truth for Style Number/Fabric
+  // Color/Print Name/Sizes/SKU on a brand-new product; this form no longer
+  // generates its own. isPatternLocked flips true the moment a pattern is
+  // picked, disabling those fields and skipping this product's own
+  // generateSkuCode/registerStyleArticle calls in favor of the SKUs the
+  // ERP already minted. Editing an existing product that already has
+  // erpSkuBySize keeps the same fields locked (see fieldsLocked below) —
+  // any correction happens in the ERP, not here.
+  const [patternSearch, setPatternSearch] = useState('');
+  const [patternResults, setPatternResults] = useState<ErpPattern[]>([]);
+  const [patternSearchLoading, setPatternSearchLoading] = useState(false);
+  const [patternSearchError, setPatternSearchError] = useState('');
+  const [isPatternLocked, setIsPatternLocked] = useState(false);
+  const [pickedErpSkuBySize, setPickedErpSkuBySize] = useState<Record<string, string>>({});
+
   // Check login state on mount via Firebase Auth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -468,13 +500,16 @@ export const AdminPage: React.FC = () => {
   // Auto-generates SKU Code for a brand-new product as Product Type/Pattern
   // Style Number/Fabric Color/Print Name are filled in — never for an
   // existing one being edited, since its SKU is already frozen into past
-  // invoices/credit notes (see skuGenerator.ts). Keyed off Product Type
-  // (Normalized Taxonomy), not the legacy "category" field.
+  // invoices/credit notes (see skuGenerator.ts), and never once a Barcode
+  // SKU has been picked from the ERP (isPatternLocked) — that SKU is what
+  // this product actually saves under, and this effect would otherwise
+  // silently overwrite it whenever a taxonomy field changes. Keyed off
+  // Product Type (Normalized Taxonomy), not the legacy "category" field.
   useEffect(() => {
-    if (editingProduct) return;
+    if (editingProduct || isPatternLocked) return;
     setFormSku(generateSkuCode(formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editingProduct, formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints]);
+  }, [editingProduct, isPatternLocked, formProductType, formStyleNumber, formFabricColor, formColor, formNoPrints]);
 
   // Every SKU already in use by another product (excluding the one being
   // edited, if any) — used to warn/block before a newly generated SKU
@@ -1357,6 +1392,11 @@ export const AdminPage: React.FC = () => {
       setFormStock(product.stock || {});
       setSelectedFiles([]);
       setAdditionalPrints([]);
+      const existingErpSkus = product.erpSkuBySize || {};
+      setPickedErpSkuBySize(existingErpSkus);
+      setIsPatternLocked(Object.keys(existingErpSkus).length > 0);
+      setPatternSearch('');
+      setPatternResults([]);
     } else {
       setEditingProduct(null);
       setFormName('');
@@ -1392,6 +1432,10 @@ export const AdminPage: React.FC = () => {
       setFormStock({});
       setSelectedFiles([]);
       setAdditionalPrints([]);
+      setPickedErpSkuBySize({});
+      setIsPatternLocked(false);
+      setPatternSearch('');
+      setPatternResults([]);
     }
     setShowProductForm(true);
   };
@@ -1406,6 +1450,68 @@ export const AdminPage: React.FC = () => {
     setShowProductForm(false);
     setEditingProduct(null);
     navigate('/admin', { state: { tab: 'products' } });
+  };
+
+  // Debounced search against the ERP's own patterns for this brand (see
+  // GET /api/admin/erp/patterns) — the Barcode SKU picker below.
+  useEffect(() => {
+    if (isPatternLocked) return;
+    const term = patternSearch.trim();
+    if (!term) {
+      setPatternResults([]);
+      setPatternSearchError('');
+      return;
+    }
+    let cancelled = false;
+    setPatternSearchLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const idToken = await auth.currentUser?.getIdToken();
+        if (!idToken) return;
+        const res = await fetch(`/api/admin/erp/patterns?search=${encodeURIComponent(term)}`, {
+          headers: { Authorization: `Bearer ${idToken}` }
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (!data.success) {
+          setPatternSearchError(data.error || 'Could not search the ERP.');
+          setPatternResults([]);
+        } else {
+          setPatternResults(data.patterns || []);
+          setPatternSearchError('');
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setPatternSearchError('Could not reach the ERP.');
+          setPatternResults([]);
+        }
+      } finally {
+        if (!cancelled) setPatternSearchLoading(false);
+      }
+    }, 300);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [patternSearch, isPatternLocked]);
+
+  // Fills the form from a picked pattern+variant and locks the fields the
+  // ERP now owns — see isPatternLocked's comment above.
+  const applyPickedVariant = (pattern: ErpPattern, variant: ErpPatternVariant) => {
+    setFormName(pattern.productName);
+    setFormSlug(slugify(pattern.productName));
+    setFormStyleNumber(pattern.styleNumber);
+    setFormFabricColor(variant.fabricColor || '');
+    setFormColor(variant.noPrints ? '' : (variant.printName || ''));
+    setFormNoPrints(variant.noPrints);
+    setFormSizes(variant.sizes.map(s => s.size));
+    setFormFreeSize(variant.sizes.some(s => s.size.includes('/')));
+    setFormSku(variant.baseSku);
+    const stock: Record<string, number> = {};
+    const skuBySize: Record<string, string> = {};
+    for (const s of variant.sizes) { stock[s.size] = s.available; skuBySize[s.size] = s.sku; }
+    setFormStock(stock);
+    setPickedErpSkuBySize(skuBySize);
+    setIsPatternLocked(true);
+    setPatternResults([]);
+    setPatternSearch(`${pattern.styleNumber} — ${pattern.productName}`);
   };
 
   // Drives the product form page from the URL (/admin/products/new,
@@ -1615,6 +1721,10 @@ export const AdminPage: React.FC = () => {
   const uploadAndSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!editingProduct && !isPatternLocked) {
+      showToast('Pick a Barcode SKU / Pattern before saving — see the field at the top of this form.');
+      return;
+    }
     if (!formName.trim()) {
       showToast('Product name is required.');
       return;
@@ -1718,8 +1828,15 @@ export const AdminPage: React.FC = () => {
       // variants added below. Each becomes its own Firestore product
       // document, sharing every field except Fabric Color, Print Name,
       // SKU, and images.
-      const printEntries: Array<{ printName: string; fabricColor: string; sku: string; images: string[]; noPrints: boolean }> = [
-        { printName: formColor || 'Natural', fabricColor: formFabricColor, sku: formSku, images: finalImages, noPrints: formNoPrints },
+      const printEntries: Array<{ printName: string; fabricColor: string; sku: string; images: string[]; noPrints: boolean; erpSkuBySize?: Record<string, string> }> = [
+        {
+          printName: formColor || 'Natural',
+          fabricColor: formFabricColor,
+          sku: formSku,
+          images: finalImages,
+          noPrints: formNoPrints,
+          erpSkuBySize: isPatternLocked ? pickedErpSkuBySize : undefined,
+        },
       ];
       for (const row of extraRows) {
         const rowUrls = [...row.images, ...(await uploadFilesWithFallback(row.selectedFiles))];
@@ -1829,7 +1946,14 @@ export const AdminPage: React.FC = () => {
           careInstructions: careArray.length > 0 ? careArray : ['Machine wash cold', 'Dry in shade'],
           sku: entry.sku,
           styleNumber: formStyleNumber.trim() || undefined,
-          status: formStatus
+          status: formStatus,
+          // Set directly from the picked Barcode SKU (see the picker
+          // above) when this entry came from one — the ERP already minted
+          // these, so there's no round trip through syncProductWithErp for
+          // it (see the save loop below). Legacy/manually-typed entries
+          // still get this filled in afterward by that call, same as
+          // before.
+          ...(entry.erpSkuBySize ? { erpSkuBySize: entry.erpSkuBySize } : {})
           // stock is intentionally omitted — it's the ERP's webhook that
           // keeps this field current now (see registerProductWithErp /
           // /api/webhooks/erp-inventory), never a direct write from here.
@@ -1857,7 +1981,10 @@ export const AdminPage: React.FC = () => {
             try {
               await setDoc(doc(db, 'products', editingProduct.id), productData, { merge: true });
               showToast(`Product "${formName}" updated successfully!`);
-              await syncProductWithErp(editingProduct.id, formStyleNumber);
+              // Already has erpSkuBySize — this product's SKUs came from
+              // the ERP (either picked at creation, or a legacy product
+              // already synced), so there's nothing new to register.
+              if (!entry.erpSkuBySize) await syncProductWithErp(editingProduct.id, formStyleNumber);
             } catch (fbErr: any) {
               // Must NOT be reported as a success — see the matching
               // comment in the create branch below for why.
@@ -1885,7 +2012,10 @@ export const AdminPage: React.FC = () => {
               const newRef = await addDoc(collection(db, 'products'), productData);
               createdDocIds.push(newRef.id);
               if (soleEntry) showToast(`Product "${formName}" added successfully!`);
-              await syncProductWithErp(newRef.id, formStyleNumber);
+              // The picked Barcode SKU already carries erpSkuBySize (set
+              // above) — only entries still using the legacy free-typed
+              // flow need to register themselves with the ERP now.
+              if (!entry.erpSkuBySize) await syncProductWithErp(newRef.id, formStyleNumber);
             } catch (fbErr: any) {
               // A save that fails here must NOT be reported as a success —
               // it previously fell back to writing a phantom copy into
@@ -2675,6 +2805,79 @@ export const AdminPage: React.FC = () => {
 
                 {/* Form Main Body Content */}
                 <form onSubmit={uploadAndSaveProduct} className="p-6 space-y-6 flex-1 text-xs text-stone-700">
+                  {!editingProduct && (
+                    <div className="border border-[#B08D57]/30 bg-[#B08D57]/5 rounded-xl p-4 space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                        Barcode SKU / Pattern <span className="text-red-500">*</span>
+                      </label>
+                      {isPatternLocked ? (
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-[11px] font-mono font-semibold text-[#2A211C]">{patternSearch}</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsPatternLocked(false);
+                              setPickedErpSkuBySize({});
+                              setPatternSearch('');
+                              setFormStyleNumber('');
+                              setFormFabricColor('');
+                              setFormColor('');
+                              setFormNoPrints(false);
+                              setFormSizes([]);
+                              setFormStock({});
+                              setFormSku('');
+                            }}
+                            className="text-[10px] font-bold uppercase tracking-wider text-[#B08D57] hover:underline shrink-0"
+                          >
+                            Change
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={patternSearch}
+                            onChange={(e) => setPatternSearch(e.target.value)}
+                            placeholder="Search by Pattern/Style Number — e.g. 0090"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white font-mono font-medium text-stone-800"
+                          />
+                          {patternSearchLoading && <p className="text-[10px] text-stone-400 mt-1">Searching…</p>}
+                          {patternSearchError && <p className="text-[10px] text-red-500 mt-1">{patternSearchError}</p>}
+                          {patternResults.length > 0 && (
+                            <div className="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white border border-stone-200 rounded-lg shadow-lg">
+                              {patternResults.map(pattern => (
+                                <div key={pattern.styleNumber} className="border-b border-stone-100 last:border-0">
+                                  <div className="px-3 py-1.5 bg-stone-50 text-[10px] font-bold text-stone-500">
+                                    {pattern.styleNumber} — {pattern.productName}
+                                  </div>
+                                  {pattern.variants.map((variant, vIdx) => (
+                                    <button
+                                      key={vIdx}
+                                      type="button"
+                                      onClick={() => applyPickedVariant(pattern, variant)}
+                                      className="w-full text-left px-3 py-2 hover:bg-[#B08D57]/10 flex items-center justify-between gap-2"
+                                    >
+                                      <span className="text-[11px] text-stone-700">
+                                        {variant.fabricColor ? `${variant.fabricColor} — ` : ''}
+                                        {variant.noPrints ? 'Solid' : (variant.printName || 'Untitled print')}
+                                        <span className="text-stone-400"> · {variant.sizes.map(s => s.size).join(', ')}</span>
+                                      </span>
+                                      <span className="text-[9px] font-mono text-stone-400 shrink-0">{variant.baseSku}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <p className="text-[10px] text-stone-400">
+                        Every product now starts from a barcode SKU already created in the ERP (Inventory → Create
+                        Barcode SKU) — Product Name, Style Number, Fabric Color, Print Name, and Sizes are pulled from
+                        there and locked. Editing those after this point happens in the ERP, not here.
+                      </p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* LEFT COLUMN: CORE INFO */}
                     <div className="space-y-4">
@@ -2683,6 +2886,7 @@ export const AdminPage: React.FC = () => {
                         <input
                           type="text"
                           required
+                          disabled={isPatternLocked}
                           value={formName}
                           onChange={(e) => {
                             const newName = e.target.value;
@@ -2692,8 +2896,9 @@ export const AdminPage: React.FC = () => {
                             }
                           }}
                           placeholder="e.g. Belgian Heritage Mandarin Collar Shirt"
-                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
+                          className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800 disabled:bg-stone-100 disabled:text-stone-500"
                         />
+                        {isPatternLocked && <p className="text-[10px] text-stone-400">Locked — from the picked Barcode SKU.</p>}
                       </div>
 
                       <div className="space-y-1">
@@ -2727,10 +2932,11 @@ export const AdminPage: React.FC = () => {
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Pattern / Style Number</label>
                           <input
                             type="text"
+                            disabled={isPatternLocked}
                             value={formStyleNumber}
                             onChange={(e) => setFormStyleNumber(e.target.value)}
                             placeholder="e.g. 0090"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800"
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-stone-800 disabled:bg-stone-100 disabled:text-stone-500"
                           />
                           <p className="text-[10px] text-stone-400">The factory's own numbering — required for this product's sizes to become real, orderable stock. Only its first 4 characters appear in the SKU Code.</p>
                         </div>
@@ -3033,10 +3239,11 @@ export const AdminPage: React.FC = () => {
                               <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
                               <input
                                 type="text"
+                                disabled={isPatternLocked}
                                 value={formFabricColor}
                                 onChange={(e) => setFormFabricColor(e.target.value)}
                                 placeholder="e.g. White, Black"
-                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
                               />
                             </div>
                             <div className="space-y-1">
@@ -3045,7 +3252,7 @@ export const AdminPage: React.FC = () => {
                                 type="text"
                                 value={formColor}
                                 onChange={(e) => setFormColor(e.target.value)}
-                                disabled={formNoPrints}
+                                disabled={formNoPrints || isPatternLocked}
                                 placeholder="e.g. Pink Checks, Blush Floral"
                                 className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
                               />
@@ -3056,11 +3263,13 @@ export const AdminPage: React.FC = () => {
                             <input
                               type="checkbox"
                               checked={formNoPrints}
+                              disabled={isPatternLocked}
                               onChange={(e) => setFormNoPrints(e.target.checked)}
                               className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5 cursor-pointer"
                             />
                             <span className="text-[10px] text-stone-500">No print — this is a solid fabric</span>
                           </label>
+                          {isPatternLocked && <p className="text-[10px] text-stone-400">Locked — from the picked Barcode SKU.</p>}
 
                           <div className={`px-3 py-2 border rounded bg-stone-100 font-mono font-medium text-[11px] ${
                             isSkuDuplicate(printBatchSkus.primaryKey) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
@@ -3315,6 +3524,7 @@ export const AdminPage: React.FC = () => {
                             <input
                               type="checkbox"
                               checked={formFreeSize}
+                              disabled={isPatternLocked}
                               onChange={(e) => {
                                 setFormFreeSize(e.target.checked);
                                 setFormSizes([]);
@@ -3347,8 +3557,9 @@ export const AdminPage: React.FC = () => {
                                   <input
                                     type="checkbox"
                                     checked={isChecked}
+                                    disabled={isPatternLocked}
                                     onChange={() => handleSizeToggle(size)}
-                                    className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer"
+                                    className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-4 h-4 cursor-pointer disabled:cursor-not-allowed"
                                   />
                                   <span className="font-bold text-stone-800 text-xs font-mono">{size}</span>
                                 </label>
