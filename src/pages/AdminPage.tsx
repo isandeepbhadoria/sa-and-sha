@@ -429,13 +429,14 @@ export const AdminPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Additional prints for a brand-new product — same style/fabric color,
-  // different Print Name + its own images. Each row becomes its own
-  // Firestore product on save, alongside the primary print above. Only
-  // used when creating (never while editing an existing product, since
-  // each print already exists as its own separate document by then).
+  // Additional variants (Fabric Color + Print) for a brand-new product —
+  // same Style Number as the primary variant above, own Fabric Color, own
+  // Print Name (or "no print"), own images. Each row becomes its own
+  // Firestore product on save. Only used when creating (never while
+  // editing an existing product, since each variant already exists as
+  // its own separate document by then).
   const [additionalPrints, setAdditionalPrints] = useState<Array<{
-    id: string; printName: string; images: string[]; selectedFiles: File[];
+    id: string; fabricColor: string; printName: string; noPrints: boolean; images: string[]; selectedFiles: File[];
   }>>([]);
 
   // Check login state on mount via Firebase Auth
@@ -490,15 +491,15 @@ export const AdminPage: React.FC = () => {
     const counts = new Map<string, number>();
     if (primaryKey) counts.set(primaryKey, (counts.get(primaryKey) || 0) + 1);
     const rows = additionalPrints.map(row => {
-      const sku = row.printName.trim()
-        ? generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName, false)
+      const sku = (row.noPrints || row.printName.trim())
+        ? generateSkuCode(formProductType, formStyleNumber, row.fabricColor, row.printName, row.noPrints)
         : '';
       const key = sku.trim().toUpperCase();
       if (key) counts.set(key, (counts.get(key) || 0) + 1);
       return { id: row.id, sku, key };
     });
     return { primaryKey, counts, rows };
-  }, [formSku, additionalPrints, formProductType, formStyleNumber, formFabricColor]);
+  }, [formSku, additionalPrints, formProductType, formStyleNumber]);
 
   const isSkuDuplicate = (key: string): boolean => {
     if (!key) return false;
@@ -1442,7 +1443,7 @@ export const AdminPage: React.FC = () => {
   const addPrintRow = () => {
     setAdditionalPrints(prev => [
       ...prev,
-      { id: `print-${Date.now()}-${prev.length}`, printName: '', images: [], selectedFiles: [] }
+      { id: `print-${Date.now()}-${prev.length}`, fabricColor: '', printName: '', noPrints: false, images: [], selectedFiles: [] }
     ]);
   };
 
@@ -1450,8 +1451,16 @@ export const AdminPage: React.FC = () => {
     setAdditionalPrints(prev => prev.filter(r => r.id !== rowId));
   };
 
+  const updatePrintRowFabricColor = (rowId: string, fabricColor: string) => {
+    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, fabricColor } : r)));
+  };
+
   const updatePrintRowName = (rowId: string, name: string) => {
     setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, printName: name } : r)));
+  };
+
+  const updatePrintRowNoPrints = (rowId: string, noPrints: boolean) => {
+    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, noPrints } : r)));
   };
 
   const addFilesToPrintRow = (rowId: string, files: File[]) => {
@@ -1554,28 +1563,28 @@ export const AdminPage: React.FC = () => {
       return;
     }
 
-    // Extra prints of the same style/fabric color can only be added while
-    // creating a brand-new product — once saved, each print is its own
-    // separate document, edited on its own.
+    // Extra variants (Fabric Color + Print) of the same Style Number can
+    // only be added while creating a brand-new product — once saved, each
+    // variant is its own separate document, edited on its own.
     const extraRows = editingProduct ? [] : additionalPrints;
     for (const row of extraRows) {
-      if (!row.printName.trim()) {
-        showToast('Give each additional print a Print Name.');
+      if (!row.noPrints && !row.printName.trim()) {
+        showToast('Give each additional variant a Print Name, or tick "No print" for a solid.');
         return;
       }
       if (row.images.length + row.selectedFiles.length < 1) {
-        showToast(`Add at least 1 image for the "${row.printName.trim()}" print.`);
+        showToast(`Add at least 1 image for the "${row.noPrints ? 'Solid' : row.printName.trim()}" variant.`);
         return;
       }
     }
 
     // Guard against saving a SKU that's already in use — either by another
-    // existing product, or by another print in this very batch.
+    // existing product, or by another variant in this very batch.
     const skuCounts = new Map<string, number>();
     const primarySkuKey = (formSku || '').trim().toUpperCase();
     if (primarySkuKey) skuCounts.set(primarySkuKey, (skuCounts.get(primarySkuKey) || 0) + 1);
     const rowSkus = extraRows.map(row => {
-      const sku = generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName.trim(), false);
+      const sku = generateSkuCode(formProductType, formStyleNumber, row.fabricColor, row.printName.trim(), row.noPrints);
       const key = sku.trim().toUpperCase();
       if (key) skuCounts.set(key, (skuCounts.get(key) || 0) + 1);
       return { row, sku, key };
@@ -1586,16 +1595,17 @@ export const AdminPage: React.FC = () => {
       return;
     }
     if (primarySkuKey && (skuCounts.get(primarySkuKey) || 0) > 1) {
-      showToast(`SKU "${formSku}" is shared by more than one print in this batch — give them different Print Names.`);
+      showToast(`SKU "${formSku}" is shared by more than one variant in this batch — give them a different Fabric Color or Print Name.`);
       return;
     }
     for (const { row, sku, key } of rowSkus) {
+      const label = row.noPrints ? 'Solid' : row.printName.trim();
       if (key && usedSkuSet.has(key)) {
-        showToast(`SKU "${sku}" (Print "${row.printName.trim()}") already exists on another product. Use a different Print Name.`);
+        showToast(`SKU "${sku}" (${label}) already exists on another product. Use a different Fabric Color or Print Name.`);
         return;
       }
       if (key && (skuCounts.get(key) || 0) > 1) {
-        showToast(`SKU "${sku}" (Print "${row.printName.trim()}") is duplicated within this batch — give it a different Print Name.`);
+        showToast(`SKU "${sku}" (${label}) is duplicated within this batch — give it a different Fabric Color or Print Name.`);
         return;
       }
     }
@@ -1633,19 +1643,22 @@ export const AdminPage: React.FC = () => {
         }
       }
 
-      // The primary print filled into the form, plus any additional prints
-      // added below. Each becomes its own Firestore product document,
-      // sharing every field except Print Name, SKU, and images.
-      const printEntries: Array<{ printName: string; sku: string; images: string[]; noPrints: boolean }> = [
-        { printName: formColor || 'Natural', sku: formSku, images: finalImages, noPrints: formNoPrints },
+      // The primary variant filled into the form, plus any additional
+      // variants added below. Each becomes its own Firestore product
+      // document, sharing every field except Fabric Color, Print Name,
+      // SKU, and images.
+      const printEntries: Array<{ printName: string; fabricColor: string; sku: string; images: string[]; noPrints: boolean }> = [
+        { printName: formColor || 'Natural', fabricColor: formFabricColor, sku: formSku, images: finalImages, noPrints: formNoPrints },
       ];
       for (const row of extraRows) {
         const rowUrls = [...row.images, ...(await uploadFilesWithFallback(row.selectedFiles))];
+        const rowPrintName = row.printName.trim() || (row.noPrints ? 'Natural' : '');
         printEntries.push({
-          printName: row.printName.trim(),
-          sku: generateSkuCode(formProductType, formStyleNumber, formFabricColor, row.printName.trim(), false),
+          printName: rowPrintName,
+          fabricColor: row.fabricColor,
+          sku: generateSkuCode(formProductType, formStyleNumber, row.fabricColor, row.printName.trim(), row.noPrints),
           images: rowUrls.length > 0 ? rowUrls : finalImages,
-          noPrints: false,
+          noPrints: row.noPrints,
         });
       }
 
@@ -1707,7 +1720,7 @@ export const AdminPage: React.FC = () => {
           fabric: formFabric || 'Premium Fabric',
           fit: formFit,
           color: entry.printName,
-          fabricColor: formFabricColor || undefined,
+          fabricColor: entry.fabricColor || undefined,
           noPrints: entry.noPrints,
           colorHex: formColorHex || '#FBF6EE',
           sizes: formSizes,
@@ -2856,30 +2869,64 @@ export const AdminPage: React.FC = () => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
-                          <input
-                            type="text"
-                            value={formFabricColor}
-                            onChange={(e) => setFormFabricColor(e.target.value)}
-                            placeholder="e.g. White, Black"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
-                          />
-                          <p className="text-[10px] text-stone-400">The base fabric's own color, separate from any print on it — first 4 letters appear in the SKU Code.</p>
+                      {/* VARIANTS — Fabric Color & Print, combined on one
+                          page. Each variant becomes its own Firestore
+                          product with its own SKU/images; every variant
+                          sharing this Style Number groups onto one
+                          storefront page where the customer picks a print
+                          — never a color (see productGrouping.ts). */}
+                      <div className="space-y-3 border border-stone-100 p-4 rounded-xl">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Variants — Fabric Color & Print *</label>
+                            <p className="text-[10px] text-stone-400 mt-0.5">
+                              Add every Fabric Color / Print combination this Style Number comes in. Each becomes its
+                              own product with its own SKU and photos — together they'll show as one page with a
+                              print selector on the storefront.
+                            </p>
+                          </div>
+                          {!editingProduct && (
+                            <button
+                              type="button"
+                              onClick={addPrintRow}
+                              className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors shrink-0"
+                            >
+                              <Plus className="w-3 h-3" /> Add Another Variant
+                            </button>
+                          )}
                         </div>
 
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print Name</label>
-                          <input
-                            type="text"
-                            value={formColor}
-                            onChange={(e) => setFormColor(e.target.value)}
-                            disabled={formNoPrints}
-                            placeholder="e.g. Pink Checks, Blush Floral"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
-                          />
-                          <label className="flex items-center gap-2 pt-1 cursor-pointer">
+                        {/* Variant 1 — the primary variant, backing this product's own fields */}
+                        <div className="border border-stone-200 rounded-lg p-3 bg-white space-y-3">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                            Variant 1{!editingProduct ? ' (Primary)' : ''}
+                          </span>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
+                              <input
+                                type="text"
+                                value={formFabricColor}
+                                onChange={(e) => setFormFabricColor(e.target.value)}
+                                placeholder="e.g. White, Black"
+                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print Name</label>
+                              <input
+                                type="text"
+                                value={formColor}
+                                onChange={(e) => setFormColor(e.target.value)}
+                                disabled={formNoPrints}
+                                placeholder="e.g. Pink Checks, Blush Floral"
+                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
+                              />
+                            </div>
+                          </div>
+
+                          <label className="flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={formNoPrints}
@@ -2888,13 +2935,203 @@ export const AdminPage: React.FC = () => {
                             />
                             <span className="text-[10px] text-stone-500">No print — this is a solid fabric</span>
                           </label>
-                          {!formNoPrints && (
+
+                          <div className={`px-3 py-2 border rounded bg-stone-100 font-mono font-medium text-[11px] ${
+                            isSkuDuplicate(printBatchSkus.primaryKey) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                          }`}>
+                            {formSku || '—'}
+                          </div>
+                          {isSkuDuplicate(printBatchSkus.primaryKey) ? (
+                            <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — adjust Style Number, Fabric Color, or Print Name.</p>
+                          ) : (
                             <p className="text-[10px] text-stone-400">
-                              Encoded into 6 SKU letters by word count: 1 word → first 6 letters; 2 words → first 3 of
-                              each; 3+ words → first 2 of each (only the first 3 words count).
+                              SKU auto-generated from Category + Style Number + Fabric Color (4 letters) + Print (6
+                              letters, by word count: 1 word → first 6; 2 words → first 3 of each; 3+ words → first 2
+                              of each).
                             </p>
                           )}
+
+                          {/* Media for this variant */}
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Product Media Images (Minimum 1, Maximum 6) *</label>
+                            <div
+                              onClick={() => fileInputRef.current?.click()}
+                              onDragOver={handleDragOver}
+                              onDragLeave={handleDragLeave}
+                              onDrop={handleDrop}
+                              className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 ${
+                                isDragging
+                                  ? 'border-[#B08D57] bg-[#B08D57]/5'
+                                  : 'border-stone-200 hover:border-[#B08D57] hover:bg-stone-50'
+                              }`}
+                            >
+                              <Upload className="w-7 h-7 text-stone-400 animate-pulse" />
+                              <span className="text-[11px] font-bold text-stone-700">Drag & drop product photos here or click to browse</span>
+                              <span className="text-[9px] text-stone-400 uppercase tracking-wide">JPG, PNG, WEBP formats</span>
+                              <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileSelect}
+                                multiple
+                                accept="image/*"
+                                className="hidden"
+                              />
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 pt-2">
+                              {formImages.map((imgUrl, idx) => (
+                                <div key={`form-img-${idx}`} className="relative w-16 h-20 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
+                                  <img
+                                    src={imgUrl}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => removeUploadedImage(idx)}
+                                    className="absolute top-0.5 right-0.5 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                                  >
+                                    <X className="w-2.5 h-2.5" />
+                                  </button>
+                                  <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white text-center font-bold py-0.5">
+                                    Active
+                                  </div>
+                                </div>
+                              ))}
+
+                              {selectedFiles.map((file, idx) => {
+                                const localUrl = URL.createObjectURL(file);
+                                return (
+                                  <div key={`local-file-${idx}`} className="relative w-16 h-20 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
+                                    <img
+                                      src={localUrl}
+                                      alt=""
+                                      className="w-full h-full object-cover"
+                                      referrerPolicy="no-referrer"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => removeSelectedFile(idx)}
+                                      className="absolute top-0.5 right-0.5 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                                    >
+                                      <X className="w-2.5 h-2.5" />
+                                    </button>
+                                    <div className="absolute bottom-0 inset-x-0 bg-[#C98A82] text-[8px] text-white text-center font-bold py-0.5">
+                                      Pending
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
                         </div>
+
+                        {/* Variant 2+ — additional variants (new products only) */}
+                        {!editingProduct && additionalPrints.map((row, rowIdx) => (
+                          <div key={row.id} className="border border-stone-200 rounded-lg p-3 bg-white space-y-3">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Variant {rowIdx + 2}</span>
+                              <button
+                                type="button"
+                                onClick={() => removePrintRow(row.id)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
+                                <input
+                                  type="text"
+                                  value={row.fabricColor}
+                                  onChange={(e) => updatePrintRowFabricColor(row.id, e.target.value)}
+                                  placeholder="e.g. White, Black"
+                                  className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print Name</label>
+                                <input
+                                  type="text"
+                                  value={row.printName}
+                                  onChange={(e) => updatePrintRowName(row.id, e.target.value)}
+                                  disabled={row.noPrints}
+                                  placeholder="e.g. Pink Checks, Blush Floral"
+                                  className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
+                                />
+                              </div>
+                            </div>
+
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={row.noPrints}
+                                onChange={(e) => updatePrintRowNoPrints(row.id, e.target.checked)}
+                                className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5 cursor-pointer"
+                              />
+                              <span className="text-[10px] text-stone-500">No print — this is a solid fabric</span>
+                            </label>
+
+                            {(() => {
+                              const rowSkuInfo = printBatchSkus.rows.find(r => r.id === row.id);
+                              const duplicate = rowSkuInfo ? isSkuDuplicate(rowSkuInfo.key) : false;
+                              return (
+                                <>
+                                  <div className={`px-3 py-2 border rounded bg-stone-100 font-mono text-[11px] ${
+                                    duplicate ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                                  }`}>
+                                    {rowSkuInfo?.sku || '— enter a Fabric Color / Print Name to preview its SKU —'}
+                                  </div>
+                                  {duplicate && (
+                                    <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — use a different Fabric Color or Print Name.</p>
+                                  )}
+                                </>
+                              );
+                            })()}
+
+                            <div className="flex flex-wrap gap-2 items-center">
+                              {row.images.map((imgUrl, idx) => (
+                                <div key={`row-img-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden">
+                                  <img src={imgUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                </div>
+                              ))}
+                              {row.selectedFiles.map((file, idx) => {
+                                const localUrl = URL.createObjectURL(file);
+                                return (
+                                  <div key={`row-file-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
+                                    <img src={localUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                    <button
+                                      type="button"
+                                      onClick={() => removePrintRowFile(row.id, idx)}
+                                      className="absolute top-0.5 right-0.5 p-0.5 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                                    >
+                                      <X className="w-2 h-2" />
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                              <label className="w-14 h-16 border-2 border-dashed border-stone-200 rounded flex items-center justify-center cursor-pointer hover:border-[#B08D57] transition-colors">
+                                <Upload className="w-4 h-4 text-stone-400" />
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  multiple
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 0) {
+                                      addFilesToPrintRow(row.id, Array.from(e.target.files));
+                                    }
+                                    e.target.value = '';
+                                  }}
+                                />
+                              </label>
+                            </div>
+                            <p className="text-[10px] text-stone-400">1–6 images for this variant.</p>
+                          </div>
+                        ))}
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
@@ -3007,17 +3244,19 @@ export const AdminPage: React.FC = () => {
                           ERP's own barcode below — that's the one POS
                           actually scans, and only exists once you've
                           saved and synced. */}
-                      {formSizes.length > 0 && (formSku || additionalPrints.some(r => r.printName.trim())) && (
+                      {formSizes.length > 0 && (formSku || additionalPrints.some(r => r.noPrints || r.printName.trim())) && (
                         <div className="space-y-2 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Preview by Size</label>
                           <p className="text-[10px] text-stone-400">
-                            Size is appended to each print's SKU Code above. This is a reference code for this site —
+                            Size is appended to each variant's SKU Code above. This is a reference code for this site —
                             the ERP's own barcode (once you save) is what Factory Outlet POS actually scans.
                           </p>
                           <div className="space-y-2">
                             {formSku && (
                               <div className="space-y-1">
-                                <span className="text-[10px] font-bold text-stone-500 uppercase">{formColor || 'Natural'}</span>
+                                <span className="text-[10px] font-bold text-stone-500 uppercase">
+                                  {formFabricColor ? `${formFabricColor} — ` : ''}{formNoPrints ? 'Solid' : (formColor || 'Natural')}
+                                </span>
                                 <div className="flex flex-wrap gap-1.5">
                                   {formSizes.map(size => (
                                     <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
@@ -3027,12 +3266,14 @@ export const AdminPage: React.FC = () => {
                                 </div>
                               </div>
                             )}
-                            {additionalPrints.filter(r => r.printName.trim()).map(row => {
+                            {additionalPrints.filter(r => r.noPrints || r.printName.trim()).map(row => {
                               const info = printBatchSkus.rows.find(r => r.id === row.id);
                               if (!info?.sku) return null;
                               return (
                                 <div key={row.id} className="space-y-1">
-                                  <span className="text-[10px] font-bold text-stone-500 uppercase">{row.printName.trim()}</span>
+                                  <span className="text-[10px] font-bold text-stone-500 uppercase">
+                                    {row.fabricColor ? `${row.fabricColor} — ` : ''}{row.noPrints ? 'Solid' : row.printName.trim()}
+                                  </span>
                                   <div className="flex flex-wrap gap-1.5">
                                     {formSizes.map(size => (
                                       <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
@@ -3065,191 +3306,6 @@ export const AdminPage: React.FC = () => {
                               </div>
                             ))}
                           </div>
-                        </div>
-                      )}
-
-                      {/* MEDIA FILE UPLOAD ZONE */}
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Product Media Images (Minimum 1, Maximum 6) *</label>
-                        
-                        {/* Drag and Drop Zone */}
-                        <div
-                          onClick={() => fileInputRef.current?.click()}
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 ${
-                            isDragging
-                              ? 'border-[#B08D57] bg-[#B08D57]/5'
-                              : 'border-stone-200 hover:border-[#B08D57] hover:bg-stone-50'
-                          }`}
-                        >
-                          <Upload className="w-7 h-7 text-stone-400 animate-pulse" />
-                          <span className="text-[11px] font-bold text-stone-700">Drag & drop product photos here or click to browse</span>
-                          <span className="text-[9px] text-stone-400 uppercase tracking-wide">JPG, PNG, WEBP formats</span>
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileSelect}
-                            multiple
-                            accept="image/*"
-                            className="hidden"
-                          />
-                        </div>
-
-                        {/* Images list and priorities */}
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          {/* Firebase Stored Images */}
-                          {formImages.map((imgUrl, idx) => (
-                            <div key={`form-img-${idx}`} className="relative w-16 h-20 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
-                              <img
-                                src={imgUrl}
-                                alt=""
-                                className="w-full h-full object-cover"
-                                referrerPolicy="no-referrer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => removeUploadedImage(idx)}
-                                className="absolute top-0.5 right-0.5 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                              >
-                                <X className="w-2.5 h-2.5" />
-                              </button>
-                              <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white text-center font-bold py-0.5">
-                                Active
-                              </div>
-                            </div>
-                          ))}
-
-                          {/* Selected files pending upload */}
-                          {selectedFiles.map((file, idx) => {
-                            const localUrl = URL.createObjectURL(file);
-                            return (
-                              <div key={`local-file-${idx}`} className="relative w-16 h-20 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
-                                <img
-                                  src={localUrl}
-                                  alt=""
-                                  className="w-full h-full object-cover"
-                                  referrerPolicy="no-referrer"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => removeSelectedFile(idx)}
-                                  className="absolute top-0.5 right-0.5 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                                >
-                                  <X className="w-2.5 h-2.5" />
-                                </button>
-                                <div className="absolute bottom-0 inset-x-0 bg-[#C98A82] text-[8px] text-white text-center font-bold py-0.5">
-                                  Pending
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* ADDITIONAL PRINTS — only offered for a brand-new,
-                          non-solid product. Each row becomes its own
-                          separate product document on save, sharing every
-                          field above except Print Name and its own images;
-                          the storefront automatically groups them onto one
-                          product page (same Style Number + Fabric Color). */}
-                      {!editingProduct && !formNoPrints && (
-                        <div className="space-y-3 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Additional Prints (Optional)</label>
-                              <p className="text-[10px] text-stone-400 mt-0.5">
-                                Same Style Number & Fabric Color, different Print Name — each becomes its own product and
-                                they'll show together as one page with a print selector on the storefront.
-                              </p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={addPrintRow}
-                              className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors shrink-0"
-                            >
-                              <Plus className="w-3 h-3" /> Add Another Print
-                            </button>
-                          </div>
-
-                          {additionalPrints.map((row, rowIdx) => (
-                            <div key={row.id} className="border border-stone-200 rounded-lg p-3 bg-white space-y-2">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Print #{rowIdx + 2}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => removePrintRow(row.id)}
-                                  className="text-red-500 hover:text-red-700"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-
-                              <input
-                                type="text"
-                                value={row.printName}
-                                onChange={(e) => updatePrintRowName(row.id, e.target.value)}
-                                placeholder="e.g. Pink Checks, Blush Floral"
-                                className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
-                              />
-                              {(() => {
-                                const rowSkuInfo = printBatchSkus.rows.find(r => r.id === row.id);
-                                const duplicate = rowSkuInfo ? isSkuDuplicate(rowSkuInfo.key) : false;
-                                return (
-                                  <>
-                                    <div className={`px-3 py-1.5 border rounded bg-stone-100 font-mono text-[11px] ${
-                                      duplicate ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
-                                    }`}>
-                                      {rowSkuInfo?.sku || '— enter a Print Name to preview its SKU —'}
-                                    </div>
-                                    {duplicate && (
-                                      <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — use a different Print Name.</p>
-                                    )}
-                                  </>
-                                );
-                              })()}
-
-                              <div className="flex flex-wrap gap-2 items-center">
-                                {row.images.map((imgUrl, idx) => (
-                                  <div key={`row-img-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden">
-                                    <img src={imgUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                  </div>
-                                ))}
-                                {row.selectedFiles.map((file, idx) => {
-                                  const localUrl = URL.createObjectURL(file);
-                                  return (
-                                    <div key={`row-file-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
-                                      <img src={localUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                      <button
-                                        type="button"
-                                        onClick={() => removePrintRowFile(row.id, idx)}
-                                        className="absolute top-0.5 right-0.5 p-0.5 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                                      >
-                                        <X className="w-2 h-2" />
-                                      </button>
-                                    </div>
-                                  );
-                                })}
-                                <label className="w-14 h-16 border-2 border-dashed border-stone-200 rounded flex items-center justify-center cursor-pointer hover:border-[#B08D57] transition-colors">
-                                  <Upload className="w-4 h-4 text-stone-400" />
-                                  <input
-                                    type="file"
-                                    accept="image/*"
-                                    multiple
-                                    className="hidden"
-                                    onChange={(e) => {
-                                      if (e.target.files && e.target.files.length > 0) {
-                                        addFilesToPrintRow(row.id, Array.from(e.target.files));
-                                      }
-                                      e.target.value = '';
-                                    }}
-                                  />
-                                </label>
-                              </div>
-                              <p className="text-[10px] text-stone-400">1–6 images for this print.</p>
-                            </div>
-                          ))}
                         </div>
                       )}
 

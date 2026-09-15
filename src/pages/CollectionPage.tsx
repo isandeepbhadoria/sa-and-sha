@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSEO } from '../hooks/useSEO';
 import { NotFoundPage } from './NotFoundPage';
 import { getTaxonomyRouteInfo } from '../config/catalogTaxonomy';
-import { groupProductsByStyleAndColor } from '../utils/productGrouping';
+import { groupProductsByStyle } from '../utils/productGrouping';
 
 export const CollectionPage: React.FC = () => {
   const { categorySlug, collectionId, productTypeId, subTypeSlug } = useParams<{
@@ -317,7 +317,7 @@ export const CollectionPage: React.FC = () => {
   // happens to be first after filtering, so an active filter (e.g. one
   // specific print) still leads with a matching thumbnail.
   const groupedProducts = useMemo(() => {
-    return groupProductsByStyleAndColor(filteredProducts);
+    return groupProductsByStyle(filteredProducts);
   }, [filteredProducts]);
 
   // Paginated subset of visible items

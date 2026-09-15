@@ -357,11 +357,13 @@ export const ProductDetailPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Print selector — every other print of this exact same style
-              (same Style Number + Fabric Color). Hidden entirely for a
-              style that only has one print. Switching prints navigates to
-              that print's own product page (its own URL/SEO stay intact)
-              without a full reload. */}
+          {/* Print selector — every other variant (any Fabric Color, any
+              Print Name) sharing this exact Style Number. Labeled by Print
+              Name only — Fabric Color is never exposed as its own
+              selectable option here. Hidden entirely for a style that only
+              has one variant. Switching prints navigates to that variant's
+              own product page (its own URL/SEO stay intact) without a full
+              reload. */}
           {printSiblings.length > 1 && (
             <div className="space-y-2">
               <span className="text-[11px] font-sans font-bold uppercase tracking-widest text-[#2A211C]/60">
