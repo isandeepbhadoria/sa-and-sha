@@ -9016,6 +9016,27 @@ async function startServer() {
     }
   });
 
+  // POST /api/admin/erp/sync-prices - Pulls current MRP/Selling Price for
+  // every barcode-linked product from the ERP and updates any Firestore
+  // product whose stored price has drifted. See syncPricesFromErp's own
+  // comment for why this exists — picking a pattern only locks price at
+  // creation time, not continuously.
+  app.post("/api/admin/erp/sync-prices", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const adminDb = getAdminDb();
+      const { syncPricesFromErp } = await import("./src/server/erpSync");
+      const result = await syncPricesFromErp(adminDb);
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      console.error("[ERP PRICE SYNC ENDPOINT ERROR]", err?.message || err);
+      return res.status(500).json({ success: false, error: err?.message || "Failed to sync prices from the ERP." });
+    }
+  });
+
   app.post("/api/admin/products/:id/sync-erp", async (req, res) => {
     const adminAuth = await verifyAdminRequest(req);
     if (!adminAuth.authorized) {

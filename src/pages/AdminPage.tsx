@@ -405,6 +405,8 @@ export const AdminPage: React.FC = () => {
   const { allProducts, refreshProducts, isProductsLoaded } = useShop();
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
+  const [syncingPrices, setSyncingPrices] = useState(false);
+  const hasAutoSyncedPrices = useRef(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showProductForm, setShowProductForm] = useState(false);
   const [isSavingProduct, setIsSavingProduct] = useState(false);
@@ -1328,6 +1330,48 @@ export const AdminPage: React.FC = () => {
       setGeneratingAwb(false);
     }
   };
+
+  // Pulls current MRP/Selling Price for every barcode-linked product from
+  // the ERP and updates any listing whose stored price has drifted — see
+  // syncPricesFromErp's own comment (erpSync.ts) for why picking a pattern
+  // alone doesn't keep prices in sync after the product's already live.
+  // silent=true (used for the once-per-session auto-run on opening the
+  // Products tab) skips the toast on a no-op result, so it doesn't nag the
+  // admin every time they land here with nothing to report.
+  const handleSyncPricesFromErp = async (silent = false) => {
+    setSyncingPrices(true);
+    try {
+      const token = await getAdminAuthToken();
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch('/api/admin/erp/sync-prices', { method: 'POST', headers });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (data.updated > 0) {
+          showToast(`Synced pricing from the ERP — ${data.updated} product${data.updated === 1 ? '' : 's'} updated.`);
+        } else if (!silent) {
+          showToast('Pricing already matches the ERP — nothing to update.');
+        }
+      } else if (!silent) {
+        showToast(data.error || 'Failed to sync prices from the ERP.', 'error');
+      }
+    } catch (err: any) {
+      console.error('Error syncing prices from ERP:', err);
+      if (!silent) showToast('Network error syncing prices from the ERP.', 'error');
+    } finally {
+      setSyncingPrices(false);
+    }
+  };
+
+  // Runs once per admin session, the first time the Products tab is opened
+  // — not on every switch back to it, so it doesn't re-fetch constantly.
+  useEffect(() => {
+    if (activeTab === 'products' && !hasAutoSyncedPrices.current) {
+      hasAutoSyncedPrices.current = true;
+      handleSyncPricesFromErp(true);
+    }
+  }, [activeTab]);
 
   const handleRetryEmail = async (orderId: string, eventType: string) => {
     setRetryingEmailStatus(eventType);
@@ -2691,6 +2735,16 @@ export const AdminPage: React.FC = () => {
                       <option value="bags-pouches">Bags & Pouches</option>
                     </select>
                   </div>
+
+                  <button
+                    onClick={() => handleSyncPricesFromErp(false)}
+                    disabled={syncingPrices}
+                    title="Pull current MRP/Selling Price for every barcode-linked product from the ERP"
+                    className="bg-white border border-[#B08D57]/40 hover:bg-[#B08D57]/5 text-[#B08D57] py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${syncingPrices ? 'animate-spin' : ''}`} />
+                    <span>{syncingPrices ? 'Syncing…' : 'Sync Prices from ERP'}</span>
+                  </button>
 
                   <button
                     onClick={() => navigate('/admin/products/new')}

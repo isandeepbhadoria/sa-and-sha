@@ -1,4 +1,4 @@
-import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseReservation, erpReturnStock } from "./erpClient";
+import { erpRegisterStyleArticle, erpReserve, erpConfirmReservation, erpReleaseReservation, erpReturnStock, erpListPatterns } from "./erpClient";
 
 /**
  * Registers/ensures one ERP StyleArticle per size for a product, keyed by
@@ -228,4 +228,62 @@ export async function restockErpForOrder(
       console.error(`[ERP RESTOCK ERROR] order=${orderRef} sku=${line.sku}:`, err?.message || err);
     }
   }
+}
+
+export interface PriceSyncResult {
+  checked: number;
+  updated: number;
+  updatedProducts: Array<{ productId: string; name: string }>;
+}
+
+const FIRESTORE_BATCH_LIMIT = 450; // stay under Firestore's 500-write batch cap
+
+/**
+ * Pulls every barcode-linked product's current MRP/Selling Price from the
+ * ERP and updates any Firestore product doc whose stored price has drifted
+ * from it — closes the gap left by the picker only syncing price once, at
+ * creation time (see applyPickedVariant in AdminPage.tsx): a later price
+ * change in the ERP's Create Barcode SKU page otherwise never reaches an
+ * already-published listing. Only touches products with a non-empty
+ * erpSkuBySize (i.e. actually created by picking an ERP pattern) — a
+ * manually-created product that happens to share a style number text is
+ * never touched. Safe to call anytime; unchanged prices are never written.
+ */
+export async function syncPricesFromErp(adminDb: FirebaseFirestore.Firestore): Promise<PriceSyncResult> {
+  const { patterns } = await erpListPatterns();
+  const priceByStyleNumber = new Map<string, { mrp: number | null; sellingPrice: number | null }>();
+  for (const p of patterns) {
+    priceByStyleNumber.set(p.styleNumber, { mrp: p.mrp, sellingPrice: p.sellingPrice });
+  }
+
+  const snap = await adminDb.collection("products").where("styleNumber", ">", "").get();
+  const updatedProducts: Array<{ productId: string; name: string }> = [];
+  let pendingBatch = adminDb.batch();
+  let pendingCount = 0;
+
+  for (const doc of snap.docs) {
+    const data = doc.data();
+    if (!data.erpSkuBySize || Object.keys(data.erpSkuBySize).length === 0) continue; // not ERP-linked — never touch
+    const erpPrice = priceByStyleNumber.get(data.styleNumber);
+    if (!erpPrice) continue; // pattern no longer found for this brand — leave the last known price alone
+
+    const currentPrice = Number(data.price) || 0;
+    const currentCompareAtPrice = Number(data.compareAtPrice) || 0;
+    const newPrice = erpPrice.sellingPrice ?? currentPrice;
+    const newCompareAtPrice = erpPrice.mrp ?? currentCompareAtPrice;
+
+    if (newPrice !== currentPrice || newCompareAtPrice !== currentCompareAtPrice) {
+      pendingBatch.update(doc.ref, { price: newPrice, compareAtPrice: newCompareAtPrice });
+      updatedProducts.push({ productId: doc.id, name: data.name || doc.id });
+      pendingCount++;
+      if (pendingCount >= FIRESTORE_BATCH_LIMIT) {
+        await pendingBatch.commit();
+        pendingBatch = adminDb.batch();
+        pendingCount = 0;
+      }
+    }
+  }
+
+  if (pendingCount > 0) await pendingBatch.commit();
+  return { checked: snap.size, updated: updatedProducts.length, updatedProducts };
 }
