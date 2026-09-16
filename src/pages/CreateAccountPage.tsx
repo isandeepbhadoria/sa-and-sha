@@ -786,7 +786,7 @@ export const CreateAccountPage: React.FC = () => {
             </button>
             {!isMobileVerified && (
               <p className="text-center text-xs text-amber-800 mt-2 font-medium">
-                * Please verify your mobile number via MSG91 OTP above to enable account creation.
+                * Please verify your mobile number via OTP above to enable account creation.
               </p>
             )}
           </div>

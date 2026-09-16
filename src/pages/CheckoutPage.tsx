@@ -1417,7 +1417,7 @@ export const CheckoutPage: React.FC = () => {
                           setVerifiedCustomerSessionId(sessionId);
                           try { sessionStorage.setItem('verifiedCustomerSessionId', sessionId); } catch {}
                         }
-                        showToast('Mobile number verified successfully via MSG91 OTP!');
+                        showToast('Mobile number verified successfully!');
 
                         // Server-side profile lookup for verified mobile number
                         if (token) {
