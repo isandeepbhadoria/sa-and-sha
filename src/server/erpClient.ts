@@ -111,6 +111,12 @@ export interface ErpPattern {
   // productName when unset. Use this for what actually gets saved as the
   // product's name on this site — never productName.
   displayName: string;
+  // Source of truth for pricing — set in the ERP's Create Barcode SKU
+  // page. Use these for the product's actual price/compareAtPrice on
+  // this site — the price fields lock once a pattern is picked, same as
+  // the other ERP-owned fields, so pricing can never drift from the ERP.
+  mrp: number | null;
+  sellingPrice: number | null;
   variants: ErpPatternVariant[];
 }
 

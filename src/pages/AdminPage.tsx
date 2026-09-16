@@ -114,6 +114,11 @@ interface ErpPattern {
   // product's actual name on this site, never productName (the ERP's own
   // short internal name).
   displayName: string;
+  // Source of truth for pricing, set in the ERP's Create Barcode SKU page.
+  // Locks Price/Compare-at Price on this site once a pattern is picked, so
+  // pricing can never drift from the ERP or the printed barcode label.
+  mrp: number | null;
+  sellingPrice: number | null;
   variants: ErpPatternVariant[];
 }
 
@@ -1555,6 +1560,8 @@ export const AdminPage: React.FC = () => {
     setFormSizes(variant.sizes.map(s => s.size));
     setFormFreeSize(variant.sizes.some(s => s.size.includes('/')));
     setFormSku(variant.baseSku);
+    setFormPrice(pattern.sellingPrice !== null ? String(pattern.sellingPrice) : '');
+    setFormCompareAtPrice(pattern.mrp !== null ? String(pattern.mrp) : '');
     const stock: Record<string, number> = {};
     const skuBySize: Record<string, string> = {};
     for (const s of variant.sizes) { stock[s.size] = s.available; skuBySize[s.size] = s.sku; }
@@ -2877,6 +2884,8 @@ export const AdminPage: React.FC = () => {
                               setFormSizes([]);
                               setFormStock({});
                               setFormSku('');
+                              setFormPrice('');
+                              setFormCompareAtPrice('');
                             }}
                             className="text-[10px] font-bold uppercase tracking-wider text-[#B08D57] hover:underline shrink-0"
                           >
@@ -3224,8 +3233,10 @@ export const AdminPage: React.FC = () => {
                             value={formPrice}
                             onChange={(e) => setFormPrice(e.target.value)}
                             placeholder="e.g. 3200"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                            disabled={isPatternLocked}
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:opacity-60"
                           />
+                          {isPatternLocked && <p className="text-[10px] text-stone-400">Locked — set in the ERP's Create Barcode SKU page.</p>}
                         </div>
 
                         <div className="space-y-1">
@@ -3236,8 +3247,10 @@ export const AdminPage: React.FC = () => {
                             value={formCompareAtPrice}
                             onChange={(e) => setFormCompareAtPrice(e.target.value)}
                             placeholder="e.g. 4500"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
+                            disabled={isPatternLocked}
+                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:opacity-60"
                           />
+                          {isPatternLocked && <p className="text-[10px] text-stone-400">Locked — set in the ERP's Create Barcode SKU page.</p>}
                         </div>
                       </div>
 
