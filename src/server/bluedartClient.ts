@@ -173,9 +173,13 @@ export async function bluedartCheckPincode(pincode: string): Promise<PincodeServ
     throw new BluedartApiError('Pincode must be exactly 6 digits.');
   }
 
+  // Confirmed from Blue Dart's own "Get Service for Pin-code" sample request
+  // on the developer portal: the wrapper key is lowercase "profile", unlike
+  // the BRD design doc's PascalCase "Profile" — the nested field names
+  // (Api_type/LicenceKey/LoginID) match the BRD as documented.
   const result = await bluedartPost<any>('/finder/v1/GetServicesforPincode', {
     pinCode: clean,
-    Profile: profile()
+    profile: profile()
   });
 
   const ref = result?.ServiceCenterDetailsReference || result;
@@ -360,9 +364,13 @@ export async function bluedartGenerateWaybill(params: GenerateWaybillParams): Pr
     IsUpdateAPI: false
   };
 
+  // Applying the same lowercase-wrapper-key pattern confirmed for the
+  // Finder API's "profile" key (see bluedartCheckPincode) — not yet
+  // independently confirmed for Waybill specifically, so verify against
+  // its own portal sample if this still 401s.
   const result = await bluedartPost<any>('/waybill/v1/GenerateWayBill', {
-    Request: request,
-    Profile: profile()
+    request: request,
+    profile: profile()
   });
 
   if (!result?.AWBNo) {
