@@ -251,6 +251,8 @@ export const AdminPage: React.FC = () => {
     estimated_delivery_date: new Date(Date.now() + 5 * 86400000).toISOString().split('T')[0],
     adminNotes: ''
   });
+  const [bluedartWeightKg, setBluedartWeightKg] = useState('0.5');
+  const [generatingAwb, setGeneratingAwb] = useState(false);
 
   const [statusNotesInput, setStatusNotesInput] = useState('');
   const [refundProviderConfirmed, setRefundProviderConfirmed] = useState(false);
@@ -1274,6 +1276,51 @@ export const AdminPage: React.FC = () => {
       showToast('Network error updating order status.', 'error');
     } finally {
       setIsSubmittingStatus(false);
+    }
+  };
+
+  // Books a real Blue Dart shipment for the order currently in the dispatch
+  // modal and fills the manual courier fields from the result — admin can
+  // still review/edit before confirming dispatch, or fall back to typing a
+  // different courier's details by hand as before.
+  const handleGenerateBluedartAwb = async () => {
+    if (!statusUpdateModal) return;
+    const weightKg = Number(bluedartWeightKg);
+    if (!weightKg || weightKg <= 0) {
+      showToast('Enter a valid shipment weight in kg.', 'error');
+      return;
+    }
+
+    setGeneratingAwb(true);
+    try {
+      const token = await getAdminAuthToken();
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const orderKey = statusUpdateModal.order.id || statusUpdateModal.order.order_id;
+      const res = await fetch(`/api/admin/orders/${orderKey}/bluedart/generate-awb`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ weightKg })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setDispatchForm({
+          ...dispatchForm,
+          courier_name: 'Blue Dart',
+          tracking_number: data.awb,
+          tracking_url: data.trackingUrl
+        });
+        showToast(`Blue Dart AWB ${data.awb} generated and pickup scheduled.`);
+      } else {
+        showToast(data.error || 'Failed to generate Blue Dart AWB.', 'error');
+      }
+    } catch (err: any) {
+      console.error('Error generating Blue Dart AWB:', err);
+      showToast('Network error generating Blue Dart AWB.', 'error');
+    } finally {
+      setGeneratingAwb(false);
     }
   };
 
@@ -5246,6 +5293,32 @@ export const AdminPage: React.FC = () => {
                       <span>
                         Dispatching an order records courier tracking parameters and automatically dispatches a shipping notification email to <strong>{statusUpdateModal.order.customer_email}</strong>.
                       </span>
+                    </div>
+
+                    <div className="p-3 bg-[#B08D57]/5 border border-[#B08D57]/30 rounded-lg space-y-2">
+                      <label className="text-[10px] font-bold uppercase text-stone-600 block">Book via Blue Dart (optional)</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={bluedartWeightKg}
+                          onChange={(e) => setBluedartWeightKg(e.target.value)}
+                          placeholder="Weight (kg)"
+                          className="w-28 px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-900 font-medium"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleGenerateBluedartAwb}
+                          disabled={generatingAwb}
+                          className="flex-1 px-3 py-2 bg-[#B08D57] hover:bg-[#A04D2E] text-white rounded font-bold text-[11px] uppercase tracking-wide transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          {generatingAwb ? 'Booking with Blue Dart…' : 'Generate AWB & Schedule Pickup'}
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-stone-500">
+                        Books a real shipment and fills the fields below. Leave courier fields blank above to type a different courier's details manually instead.
+                      </p>
                     </div>
 
                     <div className="space-y-1">

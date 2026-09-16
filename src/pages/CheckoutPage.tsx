@@ -197,6 +197,12 @@ export const CheckoutPage: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isPincodeLoading, setIsPincodeLoading] = useState(false);
+  const [bluedartCheck, setBluedartCheck] = useState<{
+    loading: boolean;
+    serviceable: boolean | null;
+    codAvailable: boolean;
+    errorMessage: string | null;
+  }>({ loading: false, serviceable: null, codAvailable: false, errorMessage: null });
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [verifiedPhone, setVerifiedPhone] = useState<string | null>(null);
   const [verifiedMobileToken, setVerifiedMobileToken] = useState<string | null>(null);
@@ -432,6 +438,9 @@ export const CheckoutPage: React.FC = () => {
     // Auto lookup pincode
     if (name === 'pincode' && value.replace(/\D/g, '').length === 6 && form.country === 'India') {
       fetchAddressFromPincode(value);
+      checkBluedartServiceability(value);
+    } else if (name === 'pincode') {
+      setBluedartCheck({ loading: false, serviceable: null, codAvailable: false, errorMessage: null });
     }
     if (name === 'billingPincode' && value.replace(/\D/g, '').length === 6 && form.billingCountry === 'India') {
       fetchBillingAddressFromPincode(value);
@@ -491,6 +500,31 @@ export const CheckoutPage: React.FC = () => {
       console.warn('Silent warning: India Post API failed. Falling back to local values.', err);
     } finally {
       setIsPincodeLoading(false);
+    }
+  };
+
+  // Blue Dart delivery serviceability check — informational only, never
+  // blocks checkout (a Blue Dart hiccup shouldn't stop a sale), just tells
+  // the customer up front whether COD is available at their pincode.
+  const checkBluedartServiceability = async (pin: string) => {
+    const cleanPin = pin.replace(/\D/g, '').substring(0, 6);
+    setBluedartCheck({ loading: true, serviceable: null, codAvailable: false, errorMessage: null });
+    try {
+      const res = await fetch(`/api/shipping/pincode-check?pincode=${cleanPin}`);
+      const data = await res.json();
+      if (data && data.success) {
+        setBluedartCheck({
+          loading: false,
+          serviceable: !!data.serviceable,
+          codAvailable: !!data.codAvailable,
+          errorMessage: data.serviceable ? null : (data.errorMessage || 'Delivery may not be available at this pincode.')
+        });
+      } else {
+        setBluedartCheck({ loading: false, serviceable: null, codAvailable: false, errorMessage: null });
+      }
+    } catch (err) {
+      console.warn('Blue Dart serviceability check warning:', err);
+      setBluedartCheck({ loading: false, serviceable: null, codAvailable: false, errorMessage: null });
     }
   };
 
@@ -1673,6 +1707,17 @@ export const CheckoutPage: React.FC = () => {
                           )}
                         </div>
                         {errors.pincode && <span className="text-[11px] text-rose-500 mt-1 block">{errors.pincode}</span>}
+                        {!errors.pincode && bluedartCheck.loading && (
+                          <span className="text-[11px] text-stone-400 mt-1 block">Checking delivery availability…</span>
+                        )}
+                        {!errors.pincode && !bluedartCheck.loading && bluedartCheck.serviceable === true && (
+                          <span className="text-[11px] text-emerald-600 mt-1 block">
+                            Deliverable via Blue Dart{bluedartCheck.codAvailable ? ' · Cash on Delivery available' : ''}
+                          </span>
+                        )}
+                        {!errors.pincode && !bluedartCheck.loading && bluedartCheck.serviceable === false && (
+                          <span className="text-[11px] text-amber-600 mt-1 block">{bluedartCheck.errorMessage}</span>
+                        )}
                       </div>
 
                       <div>

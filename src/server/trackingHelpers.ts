@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import type { Firestore } from 'firebase-admin/firestore';
+import { bluedartTrackShipment, BluedartApiError } from './bluedartClient';
 
 /**
  * Generates a cryptographically secure, URL-safe, non-sequential tracking token.
@@ -299,6 +300,80 @@ export interface TimelineStep {
   isCompleted: boolean;
   isCurrent: boolean;
   timestamp?: string | null;
+}
+
+const BLUEDART_SYNC_MIN_INTERVAL_MS = 10 * 60 * 1000; // don't hit Blue Dart more than once per 10 min per order
+
+function parseBluedartScanTimestamp(scanDate: string, scanTime: string): string {
+  try {
+    const parsed = new Date(`${scanDate} ${scanTime}`);
+    if (!isNaN(parsed.getTime())) return parsed.toISOString();
+  } catch {
+    // fall through to raw string below
+  }
+  return `${scanDate} ${scanTime}`;
+}
+
+/**
+ * Replaces the synthetic status-based timeline with real Blue Dart scan
+ * history for orders shipped via Blue Dart. Only calls the live API at
+ * most once per BLUEDART_SYNC_MIN_INTERVAL_MS per order (tracked via
+ * orderData.bluedart_synced_at) — a customer refreshing the tracking page
+ * repeatedly shouldn't hammer Blue Dart's API. Best-effort: on any failure
+ * (not shipped via Blue Dart, API error, no AWB yet) returns null and the
+ * caller falls back to the existing synthetic timeline.
+ *
+ * When it succeeds, persists shipment_events + bluedart_synced_at back to
+ * the order doc so buildProviderNeutralShipment (which already prefers
+ * orderData.shipment_events when present) picks up the real events on
+ * this and subsequent reads without hitting Blue Dart again.
+ */
+export async function refreshBluedartTrackingIfNeeded(
+  adminDb: Firestore,
+  orderData: any,
+  docId: string
+): Promise<void> {
+  const courierName = (orderData.courier_name || '').toLowerCase();
+  const isBlueDart = courierName.includes('bluedart') || courierName.includes('blue dart');
+  const awb = orderData.tracking_number || orderData.awb;
+  if (!isBlueDart || !awb) return;
+
+  const status = (orderData.order_status || orderData.status || '').toLowerCase();
+  if (['delivered', 'cancelled', 'returned_to_origin'].includes(status)) return;
+
+  const lastSynced = orderData.bluedart_synced_at ? new Date(orderData.bluedart_synced_at).getTime() : 0;
+  if (Date.now() - lastSynced < BLUEDART_SYNC_MIN_INTERVAL_MS) return;
+
+  try {
+    const live = await bluedartTrackShipment(awb, true);
+    const events = [...live.scans].reverse().map((s) => ({
+      code: s.scanCode,
+      label: s.scan.trim(),
+      location: s.location || null,
+      occurred_at: parseBluedartScanTimestamp(s.scanDate, s.scanTime),
+      description: s.scan.trim(),
+      source: 'bluedart'
+    }));
+
+    const updateFields = {
+      shipment_events: events,
+      bluedart_status_text: live.status,
+      bluedart_synced_at: new Date().toISOString()
+    };
+
+    orderData.shipment_events = updateFields.shipment_events;
+    orderData.bluedart_status_text = updateFields.bluedart_status_text;
+    orderData.bluedart_synced_at = updateFields.bluedart_synced_at;
+
+    await adminDb.collection('orders').doc(docId).update(updateFields);
+  } catch (err) {
+    if (err instanceof BluedartApiError) {
+      console.warn(`[BLUEDART TRACKING] Live sync failed for AWB ${awb}:`, err.message);
+    } else {
+      console.warn(`[BLUEDART TRACKING] Unexpected error syncing AWB ${awb}:`, err);
+    }
+    // Swallow — caller falls back to the synthetic timeline.
+  }
 }
 
 export function buildOrderStatusTimeline(statusRaw: string, orderData: any): TimelineStep[] {

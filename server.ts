@@ -124,11 +124,17 @@ import {
   maskEmail,
   buildProviderNeutralShipment,
   buildOrderStatusTimeline,
+  refreshBluedartTrackingIfNeeded,
   getTrackingOtpSecret,
   hashOtp,
   safeCompareHashes,
   hashSessionToken
 } from "./src/server/trackingHelpers";
+import {
+  bluedartCheckPincode,
+  bluedartGenerateWaybill,
+  BluedartApiError
+} from "./src/server/bluedartClient";
 import {
   CustomerProfileDoc,
   CustomerAddress,
@@ -4090,6 +4096,11 @@ async function startServer() {
       const orderData = tokenSnap.docs[0].data();
       const statusRaw = (orderData.order_status || orderData.status || "placed").toLowerCase();
 
+      // Mutates orderData in place with real Blue Dart scans when shipped
+      // via Blue Dart and due for a refresh — falls back silently to the
+      // synthetic timeline below on any failure.
+      await refreshBluedartTrackingIfNeeded(adminDb, orderData, tokenSnap.docs[0].id);
+
       // Privacy-Safe Items Snapshot (NO PRICES)
       const rawItems = Array.isArray(orderData.items) ? orderData.items : [];
       const itemsSummary = rawItems.map((item: any) => ({
@@ -4147,6 +4158,34 @@ async function startServer() {
     } catch (err: any) {
       console.error("Error in public tracking endpoint:", err);
       return res.status(500).json({ success: false, error: "Shipment updates are temporarily unavailable. Your order information remains safe." });
+    }
+  });
+
+  // GET /api/shipping/pincode-check?pincode=XXXXXX - Public Blue Dart
+  // serviceability check, used on the checkout page before payment.
+  app.get("/api/shipping/pincode-check", async (req, res) => {
+    try {
+      const pincode = (req.query.pincode || "").toString().trim();
+      if (!/^\d{6}$/.test(pincode)) {
+        return res.status(400).json({ success: false, error: "Enter a valid 6-digit pincode." });
+      }
+      const result = await bluedartCheckPincode(pincode);
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      if (err instanceof BluedartApiError) {
+        return res.status(200).json({
+          success: true,
+          pincode: (req.query.pincode || "").toString().trim(),
+          serviceable: false,
+          city: null,
+          state: null,
+          codAvailable: false,
+          prepaidAvailable: false,
+          errorMessage: err.message
+        });
+      }
+      console.error("Error in GET /api/shipping/pincode-check:", err);
+      return res.status(500).json({ success: false, error: "Could not check delivery availability right now." });
     }
   });
 
@@ -7322,6 +7361,80 @@ async function startServer() {
     } catch (err: any) {
       console.error("Error fetching admin orders:", err);
       return res.status(500).json({ success: false, error: "Failed to fetch orders from database." });
+    }
+  });
+
+  // POST /api/admin/orders/:id/bluedart/generate-awb - Books a real Blue
+  // Dart shipment (and schedules pickup) for this order and returns the
+  // AWB + tracking URL. Does NOT change order status itself — the admin
+  // UI feeds the result into the existing PATCH .../status "dispatched"
+  // flow below, so every existing dispatch validation/notification still
+  // runs unchanged; this only replaces manually typing the AWB.
+  app.post("/api/admin/orders/:id/bluedart/generate-awb", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const { id } = req.params;
+      const weightKg = Number(req.body?.weightKg);
+      const pieceCount = req.body?.pieceCount ? Number(req.body.pieceCount) : undefined;
+
+      if (!weightKg || weightKg <= 0) {
+        return res.status(400).json({ success: false, error: "A valid shipment weight (kg) is required." });
+      }
+
+      const adminDb = getAdminDb();
+      const docSnapById = await adminDb.collection("orders").doc(id).get();
+      const docSnap = docSnapById.exists
+        ? docSnapById
+        : (await adminDb.collection("orders").where("order_id", "==", id).limit(1).get()).docs[0];
+
+      if (!docSnap || !docSnap.exists) {
+        return res.status(404).json({ success: false, error: `Order '${id}' not found.` });
+      }
+
+      const order: any = docSnap.data();
+      const addressLine1 = order.address_line_1 || order.address || "";
+      const pincode = (order.pincode || "").toString().trim();
+      const isCod = (order.payment_method || "").toString().toLowerCase() === "cod";
+
+      if (!order.customer_name || !addressLine1 || !pincode || !order.customer_phone) {
+        return res.status(400).json({
+          success: false,
+          error: "Order is missing required shipping details (name, address, pincode or phone) for AWB generation."
+        });
+      }
+
+      const result = await bluedartGenerateWaybill({
+        orderId: order.order_id || id,
+        consigneeName: order.customer_name,
+        addressLine1,
+        addressLine2: [order.address_line_2, order.city, order.state].filter(Boolean).join(", "),
+        consigneePincode: pincode,
+        consigneeMobile: order.customer_phone,
+        consigneeEmail: order.customer_email,
+        isCod,
+        codAmount: isCod ? Number(order.grand_total) || 0 : undefined,
+        declaredValue: Number(order.grand_total) || 0,
+        weightKg,
+        pieceCount
+      });
+
+      return res.json({
+        success: true,
+        awb: result.awb,
+        trackingUrl: `https://www.bluedart.com/tracking?awb=${encodeURIComponent(result.awb)}`,
+        destinationArea: result.destinationArea
+      });
+    } catch (err: any) {
+      if (err instanceof BluedartApiError) {
+        console.error("Blue Dart AWB generation failed:", err.message, err.raw);
+        return res.status(502).json({ success: false, error: `Blue Dart: ${err.message}` });
+      }
+      console.error("Error in POST /api/admin/orders/:id/bluedart/generate-awb:", err);
+      return res.status(500).json({ success: false, error: "Failed to generate Blue Dart AWB." });
     }
   });
 
