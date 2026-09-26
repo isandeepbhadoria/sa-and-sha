@@ -1759,6 +1759,98 @@ async function processMetaWhatsAppStatus(adminDb: any, status: any): Promise<voi
   console.log(`[META WHATSAPP WEBHOOK] Updated notification_logs doc ${matchingDocSnap.id} to status ${mappedStatus}`);
 }
 
+// whatsapp_messages collection shape (Firestore, informal schema):
+//   direction: 'INBOUND' | 'OUTBOUND'
+//   wa_message_id: string | null      // Meta's message id; null for OUTBOUND (nothing to dedupe against)
+//   phone: string                     // normalizePhone()'d, 91-prefixed digits — the conversation key
+//   customer_profile_id: string | null // best-effort lookup from customer_profiles.normalized_phone
+//   message_type: string              // 'text' | 'button' | 'interactive' | ... | 'unknown'
+//   body: string | null               // extracted readable text, or null (e.g. image/audio/sticker)
+//   read: boolean                     // false for new INBOUND; true for OUTBOUND
+//   error_message: string | null      // OUTBOUND only — set when the reply send fails
+//   created_by: string | null         // OUTBOUND only — admin email from verifyAdminRequest
+//   created_at: string                // ISO timestamp
+//
+// Doc id: for INBOUND it's the Meta message id itself (written with
+// .doc(id).create(...) so a re-delivered webhook — Meta retries deliveries
+// that don't ack fast — throws ALREADY_EXISTS and is a no-op instead of a
+// duplicate). For OUTBOUND it's auto-generated as usual.
+
+// Extracts a readable body string from one of Meta's inbound message shapes.
+// Returns null for message types with no plain-text body (image, audio,
+// sticker, location, etc.) — the message still gets recorded, just without
+// a preview string.
+function extractWhatsAppMessageBody(message: any): string | null {
+  const type = message?.type;
+  if (type === "text") {
+    return message?.text?.body ?? null;
+  }
+  if (type === "button") {
+    return message?.button?.text ?? null;
+  }
+  if (type === "interactive") {
+    return message?.interactive?.button_reply?.title ?? message?.interactive?.list_reply?.title ?? null;
+  }
+  return null;
+}
+
+// Persists one inbound customer WhatsApp message (from Meta's `messages[]`
+// webhook array) into whatsapp_messages. Idempotent against Meta's webhook
+// retries via a deterministic doc id (the Meta message id) + `.create()`.
+async function recordInboundWhatsAppMessage(adminDb: any, message: any): Promise<void> {
+  const waMessageId = message?.id;
+  const rawFrom = message?.from;
+  if (!waMessageId || !rawFrom) {
+    console.warn("[WHATSAPP INBOX] Inbound message missing id or from — skipping.", JSON.stringify(message));
+    return;
+  }
+
+  const phoneResult = normalizePhone(rawFrom);
+  if (!phoneResult.isValid || !phoneResult.normalized) {
+    console.warn(`[WHATSAPP INBOX] Inbound message ${waMessageId} has an unnormalizable phone (${rawFrom}) — skipping.`);
+    return;
+  }
+  const phone = phoneResult.normalized;
+
+  let customerProfileId: string | null = null;
+  try {
+    const profileQuery = await adminDb.collection("customer_profiles")
+      .where("normalized_phone", "==", phone)
+      .limit(1)
+      .get();
+    if (!profileQuery.empty) {
+      customerProfileId = profileQuery.docs[0].id;
+    }
+  } catch (lookupErr: any) {
+    // Best-effort — never fail the write just because the profile lookup broke.
+    console.warn(`[WHATSAPP INBOX] customer_profiles lookup failed for ${phone}:`, lookupErr.message);
+  }
+
+  const doc = {
+    direction: "INBOUND",
+    wa_message_id: String(waMessageId),
+    phone,
+    customer_profile_id: customerProfileId,
+    message_type: message?.type || "unknown",
+    body: extractWhatsAppMessageBody(message),
+    read: false,
+    error_message: null,
+    created_by: null,
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    await adminDb.collection("whatsapp_messages").doc(String(waMessageId)).create(doc);
+    console.log(`[WHATSAPP INBOX] Recorded inbound message ${waMessageId} from ${phoneResult.masked}`);
+  } catch (createErr: any) {
+    if (createErr.code === 6 || createErr.message?.includes("AlreadyExists") || createErr.message?.includes("ALREADY_EXISTS")) {
+      // Meta re-delivered a webhook we already processed — no-op.
+      return;
+    }
+    throw createErr;
+  }
+}
+
 async function startServer() {
   const app = express();
   app.set("trust proxy", 1);
@@ -8695,11 +8787,14 @@ async function startServer() {
             await processMetaWhatsAppStatus(adminDb, status);
           }
 
-          // Inbound customer replies. Recording these into a WhatsApp Inbox
-          // is Phase 2 work — for now just log so nothing is silently lost.
+          // Inbound customer replies — persisted into the WhatsApp Inbox.
           const messages = Array.isArray(value.messages) ? value.messages : [];
           for (const message of messages) {
-            console.log("[META WHATSAPP WEBHOOK] Inbound message (not yet persisted — WhatsApp Inbox is Phase 2):", JSON.stringify(message));
+            try {
+              await recordInboundWhatsAppMessage(adminDb, message);
+            } catch (inboundErr: any) {
+              console.error("[META WHATSAPP WEBHOOK] Failed to record inbound message:", inboundErr);
+            }
           }
         }
       }
@@ -8715,6 +8810,264 @@ async function startServer() {
       return res.json({ success: true, data: result });
     } catch (err: any) {
       return res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
+  // WhatsApp Inbox — two-way conversation view over whatsapp_messages, keyed
+  // by normalized phone. Message volume here is small (per-store WhatsApp
+  // traffic, not bulk marketing), so conversations are reduced from a single
+  // "all messages" query in JS rather than through a Firestore aggregation.
+
+  // GET /api/admin/whatsapp-inbox/conversations — one row per distinct phone, newest message first.
+  app.get("/api/admin/whatsapp-inbox/conversations", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const adminDb = getAdminDb();
+      const snapshot = await adminDb.collection("whatsapp_messages").orderBy("created_at", "desc").get();
+
+      const conversations = new Map<string, {
+        phone: string;
+        customerProfileId: string | null;
+        lastMessage: any;
+        unreadCount: number;
+      }>();
+
+      snapshot.forEach((doc: any) => {
+        const data = doc.data();
+        const phone = data.phone;
+        if (!phone) return;
+
+        let convo = conversations.get(phone);
+        if (!convo) {
+          convo = { phone, customerProfileId: null, lastMessage: null, unreadCount: 0 };
+          conversations.set(phone, convo);
+        }
+
+        // First doc seen per phone is the newest (query is ordered desc).
+        if (!convo.lastMessage) {
+          convo.lastMessage = { id: doc.id, ...data };
+        }
+        if (data.customer_profile_id && !convo.customerProfileId) {
+          convo.customerProfileId = data.customer_profile_id;
+        }
+        if (data.direction === "INBOUND" && data.read === false) {
+          convo.unreadCount += 1;
+        }
+      });
+
+      const phones = Array.from(conversations.keys());
+      const profileIds = Array.from(
+        new Set(Array.from(conversations.values()).map((c) => c.customerProfileId).filter(Boolean))
+      ) as string[];
+
+      const profilesById: Record<string, { id: string; firstName: string; lastName: string }> = {};
+      await Promise.all(
+        profileIds.map(async (pid) => {
+          try {
+            const pSnap = await adminDb.collection("customer_profiles").doc(pid).get();
+            if (pSnap.exists) {
+              const pData = pSnap.data();
+              profilesById[pid] = {
+                id: pid,
+                firstName: pData?.first_name || "",
+                lastName: pData?.last_name || ""
+              };
+            }
+          } catch (err: any) {
+            console.warn(`[WHATSAPP INBOX] Failed to load customer_profiles/${pid}:`, err.message);
+          }
+        })
+      );
+
+      const rows = phones
+        .map((phone) => {
+          const convo = conversations.get(phone)!;
+          return {
+            phone,
+            customerProfile: convo.customerProfileId ? (profilesById[convo.customerProfileId] || null) : null,
+            lastMessage: convo.lastMessage,
+            unreadCount: convo.unreadCount
+          };
+        })
+        .sort((a, b) => {
+          const aTime = a.lastMessage?.created_at || "";
+          const bTime = b.lastMessage?.created_at || "";
+          return bTime.localeCompare(aTime);
+        });
+
+      return res.json({ success: true, conversations: rows });
+    } catch (err: any) {
+      console.error("[WHATSAPP INBOX] Error fetching conversations:", err);
+      return res.status(500).json({ success: false, error: "Failed to fetch WhatsApp conversations." });
+    }
+  });
+
+  // GET /api/admin/whatsapp-inbox/conversations/:phone — full thread, oldest first.
+  app.get("/api/admin/whatsapp-inbox/conversations/:phone", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const phoneResult = normalizePhone(req.params.phone);
+      if (!phoneResult.isValid || !phoneResult.normalized) {
+        return res.status(400).json({ success: false, error: phoneResult.error || "Invalid phone number." });
+      }
+      const phone = phoneResult.normalized;
+
+      const adminDb = getAdminDb();
+      const snapshot = await adminDb.collection("whatsapp_messages")
+        .where("phone", "==", phone)
+        .orderBy("created_at", "asc")
+        .get();
+
+      const messages = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+
+      let customerProfile: { id: string; firstName: string; lastName: string } | null = null;
+      const profileId = messages.find((m: any) => m.customer_profile_id)?.customer_profile_id;
+      if (profileId) {
+        try {
+          const pSnap = await adminDb.collection("customer_profiles").doc(profileId).get();
+          if (pSnap.exists) {
+            const pData = pSnap.data();
+            customerProfile = { id: profileId, firstName: pData?.first_name || "", lastName: pData?.last_name || "" };
+          }
+        } catch (err: any) {
+          console.warn(`[WHATSAPP INBOX] Failed to load customer_profiles/${profileId}:`, err.message);
+        }
+      }
+
+      return res.json({ success: true, phone, customerProfile, messages });
+    } catch (err: any) {
+      console.error("[WHATSAPP INBOX] Error fetching conversation thread:", err);
+      return res.status(500).json({ success: false, error: "Failed to fetch WhatsApp conversation." });
+    }
+  });
+
+  // PATCH /api/admin/whatsapp-inbox/conversations/:phone/read — mark all unread inbound messages as read.
+  app.patch("/api/admin/whatsapp-inbox/conversations/:phone/read", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const phoneResult = normalizePhone(req.params.phone);
+      if (!phoneResult.isValid || !phoneResult.normalized) {
+        return res.status(400).json({ success: false, error: phoneResult.error || "Invalid phone number." });
+      }
+      const phone = phoneResult.normalized;
+
+      const adminDb = getAdminDb();
+      const snapshot = await adminDb.collection("whatsapp_messages")
+        .where("phone", "==", phone)
+        .where("direction", "==", "INBOUND")
+        .where("read", "==", false)
+        .get();
+
+      if (snapshot.empty) {
+        return res.json({ success: true, updated: 0 });
+      }
+
+      const batch = adminDb.batch();
+      snapshot.docs.forEach((doc: any) => {
+        batch.update(doc.ref, { read: true });
+      });
+      await batch.commit();
+
+      return res.json({ success: true, updated: snapshot.docs.length });
+    } catch (err: any) {
+      console.error("[WHATSAPP INBOX] Error marking conversation read:", err);
+      return res.status(500).json({ success: false, error: "Failed to mark conversation as read." });
+    }
+  });
+
+  // POST /api/admin/whatsapp-inbox/conversations/:phone/reply — staff reply, sent via Meta Cloud API.
+  app.post("/api/admin/whatsapp-inbox/conversations/:phone/reply", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const phoneResult = normalizePhone(req.params.phone);
+      if (!phoneResult.isValid || !phoneResult.normalized) {
+        return res.status(400).json({ success: false, error: phoneResult.error || "Invalid phone number." });
+      }
+      const phone = phoneResult.normalized;
+
+      const body = (req.body?.body || "").toString().trim();
+      if (!body) {
+        return res.status(400).json({ success: false, error: "Reply body is required." });
+      }
+
+      const adminDb = getAdminDb();
+
+      let customerProfileId: string | null = null;
+      try {
+        const profileQuery = await adminDb.collection("customer_profiles")
+          .where("normalized_phone", "==", phone)
+          .limit(1)
+          .get();
+        if (!profileQuery.empty) customerProfileId = profileQuery.docs[0].id;
+      } catch (lookupErr: any) {
+        console.warn(`[WHATSAPP INBOX] customer_profiles lookup failed for ${phone}:`, lookupErr.message);
+      }
+
+      // Only deliverable within the 24-hour customer-service window Meta
+      // opens once a customer messages this number — record the attempt
+      // either way, with error_message set on failure, rather than losing
+      // the reply just because delivery failed.
+      const sendResult = await whatsappService.sendText(phone, body);
+
+      const doc = {
+        direction: "OUTBOUND",
+        wa_message_id: null,
+        phone,
+        customer_profile_id: customerProfileId,
+        message_type: "text",
+        body,
+        read: true,
+        error_message: sendResult.success ? null : (sendResult.error || "Failed to send WhatsApp reply."),
+        created_by: adminAuth.email || null,
+        created_at: new Date().toISOString()
+      };
+
+      const docRef = await adminDb.collection("whatsapp_messages").add(doc);
+
+      return res.json({
+        success: sendResult.success,
+        error: sendResult.success ? undefined : doc.error_message,
+        message: { id: docRef.id, ...doc }
+      });
+    } catch (err: any) {
+      console.error("[WHATSAPP INBOX] Error sending reply:", err);
+      return res.status(500).json({ success: false, error: "Failed to send WhatsApp reply." });
+    }
+  });
+
+  // GET /api/admin/whatsapp-inbox/unread-count — total unread inbound messages across all conversations.
+  app.get("/api/admin/whatsapp-inbox/unread-count", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+
+    try {
+      const adminDb = getAdminDb();
+      const snapshot = await adminDb.collection("whatsapp_messages")
+        .where("direction", "==", "INBOUND")
+        .where("read", "==", false)
+        .get();
+      return res.json({ success: true, count: snapshot.size });
+    } catch (err: any) {
+      console.error("[WHATSAPP INBOX] Error fetching unread count:", err);
+      return res.status(500).json({ success: false, error: "Failed to fetch unread WhatsApp count." });
     }
   });
 
