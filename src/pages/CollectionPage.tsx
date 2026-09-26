@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSEO } from '../hooks/useSEO';
 import { NotFoundPage } from './NotFoundPage';
 import { getTaxonomyRouteInfo } from '../config/catalogTaxonomy';
+import { useCategoryMaster } from '../config/categoryStore';
 import { groupProductsByStyle } from '../utils/productGrouping';
 
 export const CollectionPage: React.FC = () => {
@@ -20,6 +21,11 @@ export const CollectionPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { products: contextProducts, showToast } = useShop();
+
+  // Category Master — subscribes to the admin-editable taxonomy tree so this
+  // page re-renders (and routeInfo below recomputes) once it's loaded or an
+  // admin edits it, even though the URL params themselves didn't change.
+  const { loaded: categoriesLoaded } = useCategoryMaster();
 
   // Resolve canonical taxonomy route information
   const routeInfo = useMemo(() => {
@@ -67,7 +73,7 @@ export const CollectionPage: React.FC = () => {
 
     // Default: /shop -> Shop All
     return getTaxonomyRouteInfo({ curatedSlug: 'all' });
-  }, [collectionId, productTypeId, subTypeSlug, categorySlug]);
+  }, [collectionId, productTypeId, subTypeSlug, categorySlug, categoriesLoaded]);
 
   // Redirect archived polos category to /shop if encountered
   useEffect(() => {

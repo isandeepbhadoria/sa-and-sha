@@ -3,6 +3,7 @@ import { Product, CartItem } from '../types';
 import { db, collection, getDocs, handleFirestoreError, OperationType } from '../lib/firebase';
 import { products as staticProducts } from '../data';
 import { isSizeOutOfStock } from '../utils/stockHelpers';
+import { refreshCategoryMaster } from '../config/categoryStore';
 
 interface ShopContextType {
   products: Product[];
@@ -91,6 +92,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     refreshProducts();
+    // Category Master — fetches the admin-editable Collection/Product
+    // Type/Sub-Type tree once per app load and feeds it into
+    // src/config/catalogTaxonomy.ts, which the admin product form and the
+    // storefront's CollectionPage both read from. See categoryStore.ts.
+    refreshCategoryMaster();
   }, []);
 
   const [cart, setCart] = useState<CartItem[]>(() => {

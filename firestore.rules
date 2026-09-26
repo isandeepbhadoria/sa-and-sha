@@ -22,7 +22,14 @@ service cloud.firestore {
 
     function isValidProduct(data) {
       return data.name is string && data.name.size() > 0 && data.name.size() <= 200
-          && data.category is string && data.category in ['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets', 'bags-pouches']
+          // Category Master: `category` must reference a real, existing doc
+          // in the `categories` collection (an admin-editable Product Type
+          // node — see src/server/categoryHelpers.ts and
+          // src/config/catalogTaxonomy.ts) instead of a hardcoded enum.
+          // Deliberately does NOT also require that category's `active`
+          // field to be true — deactivating a category shouldn't block
+          // unrelated edits to products that already reference it.
+          && data.category is string && exists(/databases/$(database)/documents/categories/$(data.category))
           && data.subCategory is string && data.subCategory.size() > 0 && data.subCategory.size() <= 100
           && data.price is number && data.price >= 0
           && data.fabric is string && data.fabric.size() <= 200
@@ -38,6 +45,20 @@ service cloud.firestore {
       allow create: if isAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
       allow update: if isAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
       allow delete: if isAdmin() && isValidId(productId);
+    }
+
+    // Category Master — admin-editable Collection/Product Type/Sub-Type
+    // hierarchy (see src/server/categoryHelpers.ts). Public read so the
+    // storefront and the public GET /api/categories endpoint can render
+    // it; write is server-side (Admin SDK, bypasses these rules) via
+    // /api/admin/categories, but isAdmin()-gated here too in case a client
+    // ever writes directly. No delete rule needed: categories are only
+    // ever deactivated (active: false), never removed — see isValidProduct()
+    // above, which depends on every referenced category doc continuing to
+    // exist.
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(categoryId);
     }
 
     match /coupons/{couponId} {
