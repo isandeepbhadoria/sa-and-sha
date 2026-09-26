@@ -89,7 +89,7 @@ export const WHATSAPP_TEMPLATE_MAPPINGS: Record<NotificationEventType, WhatsAppT
   REFUND_INITIATED: {
     templateName: APPROVED_WHATSAPP_TEMPLATES.REFUND_PROCESSED,
     language: 'en',
-    variableKeys: ['customerName', 'orderId', 'refundAmount']
+    variableKeys: ['customerName', 'orderId', 'refundAmount', 'refundRef']
   },
   REFUND_COMPLETED: {
     templateName: APPROVED_WHATSAPP_TEMPLATES.REFUND_PROCESSED,
