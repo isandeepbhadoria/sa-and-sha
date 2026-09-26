@@ -383,3 +383,121 @@ export async function bluedartGenerateWaybill(params: GenerateWaybillParams): Pr
     labelPdfBase64: result.AWBPrintContent || null
   };
 }
+
+// --- Reverse Pickup (RMA / customer return collection) ---
+//
+// Blue Dart's Waybill API has no separate "pickup-only" registration
+// endpoint documented anywhere in the BRD this integration was built
+// from. The established pattern for booking a reverse pickup on this
+// kind of courier API — and what we do here — is to call the SAME
+// GenerateWayBill endpoint used for forward shipments above, but with
+// Shipper and Consignee swapped: the customer's return address becomes
+// the Shipper (pickup origin) and our own warehouse becomes the
+// Consignee (delivery destination), with RegisterPickup still set.
+//
+// This is a reasonable, standard inference for reverse logistics on an
+// API shaped like Blue Dart's, NOT something confirmed from Blue Dart's
+// own docs for this specific account — say so plainly wherever this is
+// referenced. It also inherits both of this file's other unconfirmed
+// assumptions (BLUEDART_API_TYPE/VERSION, and the lowercase `profile`
+// wrapper key — see the top-of-file comment and the note above
+// bluedartGenerateWaybill's own bluedartPost call). If the very first
+// real reverse-pickup call fails with a profile/auth-shaped error, the
+// fix is checking Blue Dart's own developer-portal sample for the exact
+// GenerateWayBill request shape used for reverse pickups, not assuming
+// this Shipper/Consignee swap itself is at fault.
+
+export interface RegisterReversePickupParams {
+  returnId: string;
+  shipperName: string;
+  addressLine1: string;
+  addressLine2?: string;
+  shipperPincode: string;
+  shipperMobile: string;
+  shipperEmail?: string;
+  declaredValue?: number;
+  weightKg?: number;
+  pieceCount?: number;
+}
+
+export type RegisterReversePickupResult = GenerateWaybillResult;
+
+function warehouseAsConsignee() {
+  // Same BLUEDART_ORIGIN_* env vars as shipperOrigin() above, just
+  // re-shaped into Consignee field names — our warehouse is the
+  // destination for a reverse pickup.
+  return {
+    ConsigneeName: requiredEnv('BLUEDART_ORIGIN_NAME'),
+    ConsigneeAddress1: requiredEnv('BLUEDART_ORIGIN_ADDRESS1'),
+    ConsigneeAddress2: process.env.BLUEDART_ORIGIN_ADDRESS2 || '',
+    ConsigneePincode: requiredEnv('BLUEDART_ORIGIN_PINCODE'),
+    ConsigneeMobile: process.env.BLUEDART_ORIGIN_PHONE || '',
+    ConsigneeEmailID: ''
+  };
+}
+
+export async function bluedartRegisterReversePickup(
+  params: RegisterReversePickupParams
+): Promise<RegisterReversePickupResult> {
+  const { pickupDateMs, pickupTime } = nextPickupDateTime();
+
+  const request = {
+    // Customer's return address as Shipper (pickup origin). Blue Dart's
+    // Shipper object schema also carries OriginArea/CustomerCode, which
+    // are our own account's fields (branch code + billing account) — we
+    // don't have a per-pincode area-code lookup in this integration, so
+    // these fall back to our own registered origin/account even though
+    // the physical pickup happens at the customer's address. Unconfirmed
+    // against Blue Dart's own reverse-pickup sample; revisit if this
+    // causes a wrong-area/misroute error rather than a clean AWB.
+    Shipper: {
+      OriginArea: requiredEnv('BLUEDART_ORIGIN_AREA'),
+      CustomerCode: requiredEnv('BLUEDART_CUSTOMER_CODE'),
+      CustomerName: params.shipperName,
+      CustomerAddress1: params.addressLine1,
+      CustomerAddress2: params.addressLine2 || '',
+      CustomerPincode: params.shipperPincode,
+      CustomerTelephone: params.shipperMobile,
+      CustomerMobile: params.shipperMobile,
+      isToPayCustomer: false
+    },
+    // Our own warehouse as Consignee (delivery destination for the
+    // collected return).
+    Consignee: warehouseAsConsignee(),
+    Services: {
+      ProductCode: 'A',
+      ProductType: 1, // Dutiables (apparel, not documents)
+      SubProductCode: 'P', // Prepaid — no COD collection on a reverse pickup
+      PieceCount: params.pieceCount ?? 1,
+      ActualWeight: params.weightKg ?? 0.5,
+      PackType: 'L',
+      InvoiceNo: params.returnId.slice(0, 10),
+      DeclaredValue: params.declaredValue ?? 0,
+      CreditReferenceNo: `${params.returnId}-${Date.now()}`.slice(0, 20),
+      PickupDate: pickupDateMs,
+      PickupTime: pickupTime,
+      RegisterPickup: true
+    },
+    IsUpdateAPI: false
+  };
+
+  // Same lowercase-wrapper-key pattern used by bluedartGenerateWaybill —
+  // not independently confirmed for Waybill (let alone for this
+  // Shipper/Consignee-swapped reverse-pickup shape); if this 401s,
+  // check Blue Dart's own portal sample before assuming anything else
+  // is wrong.
+  const result = await bluedartPost<any>('/waybill/v1/GenerateWayBill', {
+    request,
+    profile: profile()
+  });
+
+  if (!result?.AWBNo) {
+    throw new BluedartApiError('Blue Dart did not return an AWB number for the reverse pickup.', result);
+  }
+
+  return {
+    awb: result.AWBNo,
+    destinationArea: result.DestinationArea || null,
+    labelPdfBase64: result.AWBPrintContent || null
+  };
+}

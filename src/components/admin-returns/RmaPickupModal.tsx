@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Truck, X } from "lucide-react";
+import { Truck, X, Zap } from "lucide-react";
 
 export interface RmaPickupModalProps {
   rmaNumber: string;
@@ -38,6 +38,8 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
   const [awbNumber, setAwbNumber] = useState(`RAWB-${Date.now().toString().slice(-8)}`);
   const [instructions, setInstructions] = useState("");
 
+  const isBlueDart = courier === "BlueDart Express";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!pickupDate) return;
@@ -45,7 +47,11 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
       courier,
       pickup_date: pickupDate,
       time_window: timeWindow,
-      awb_number: awbNumber.trim(),
+      // For Blue Dart the AWB is generated server-side via a real API call,
+      // so we don't send whatever placeholder happens to be sitting in the
+      // (hidden) input — the server ignores this field for Blue Dart
+      // anyway, but leaving it blank keeps the request honest.
+      awb_number: isBlueDart ? undefined : awbNumber.trim(),
       instructions: instructions.trim()
     });
   };
@@ -103,16 +109,25 @@ export const RmaPickupModal: React.FC<RmaPickupModalProps> = ({
             </div>
           </div>
 
-          <div>
-            <label className="block font-bold text-stone-700 mb-1">Reverse AWB / Airway Bill Number</label>
-            <input
-              type="text"
-              placeholder="e.g. RAWB-982132"
-              value={awbNumber}
-              onChange={(e) => setAwbNumber(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
-            />
-          </div>
+          {isBlueDart ? (
+            <div className="flex items-start gap-2 p-2.5 rounded-lg border border-[#B08D57]/30 bg-[#B08D57]/10 text-[#8a6a3f]">
+              <Zap className="w-4 h-4 mt-0.5 shrink-0" />
+              <span className="font-medium">
+                AWB will be generated automatically via Blue Dart when you confirm — no manual entry needed.
+              </span>
+            </div>
+          ) : (
+            <div>
+              <label className="block font-bold text-stone-700 mb-1">Reverse AWB / Airway Bill Number</label>
+              <input
+                type="text"
+                placeholder="e.g. RAWB-982132"
+                value={awbNumber}
+                onChange={(e) => setAwbNumber(e.target.value)}
+                className="w-full p-2.5 rounded-lg border border-stone-200 bg-stone-50 font-medium text-stone-800 focus:outline-none focus:border-[#B08D57]"
+              />
+            </div>
+          )}
 
           <div>
             <label className="block font-bold text-stone-700 mb-1">Driver / Pickup Instructions (Optional)</label>
