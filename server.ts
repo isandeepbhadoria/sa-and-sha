@@ -1555,7 +1555,11 @@ const VALID_ROOTS = [
   "contact",
   "shipping-delivery",
   "about",
-  "shop"
+  "shop",
+  "privacy-policy",
+  "privacy",
+  "terms-and-conditions",
+  "terms"
 ];
 
 // Category Master — the storefront's /shop/:category route-validity check
