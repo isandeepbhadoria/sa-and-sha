@@ -15,28 +15,33 @@
  * 2. tax_class links a product to Product Tax Master, NOT directly to HSN/GST rates.
  * 3. HSN codes and GST rates are NEVER derived from merchandising categories or tax_class in this catalog layer.
  * 4. Legacy fields (category, subCategory) remain supported for backward compatibility.
+ *
+ * CATEGORY MASTER (admin-editable, database-backed):
+ * The constants below (CANONICAL_COLLECTIONS, CANONICAL_PRODUCT_TYPES,
+ * CANONICAL_PRODUCT_SUB_TYPES, COLLECTION_PRODUCT_TYPE_MATRIX,
+ * PRODUCT_TYPE_SUBTYPES_MATRIX) are `let` bindings, not `const`: they start
+ * out equal to the original hardcoded values (used as the seed data for
+ * Firestore's `categories` collection, and as the safe default before the
+ * client has fetched anything / in any environment — e.g. these unit tests
+ * — that never fetches at all), but the client calls
+ * applyCategoryMasterData() once `GET /api/categories` resolves (see
+ * src/config/categoryStore.ts), which overwrites them with the live,
+ * admin-editable Category Master tree. Every function below
+ * (isValidCollection, getTaxonomyRouteInfo, etc.) reads these same
+ * module-level bindings, so nothing else in this file changed — it
+ * automatically operates on whichever data is current.
  */
 
 import { products } from '../data';
 
-export type MerchandisingCollectionId =
-  | 'apparel'
-  | 'accessories';
-
-export type ProductTypeId =
-  | 'dresses'
-  | 'tops-shirts'
-  | 'shorts-skirts'
-  | 'co-ord-sets'
-  | 'trousers'
-  | 'jackets'
-  | 'bags-pouches';
-
-export type ProductSubTypeId =
-  | 'tops'
-  | 'shirts'
-  | 'shorts'
-  | 'skirts';
+// Loosened to `string` (still exported as named aliases for readability at
+// call sites) because these ids are no longer a fixed compile-time set —
+// Category Master lets an admin add new ones at runtime. Matches the same
+// `| string` widening already used for these fields on Product (see
+// src/types.ts).
+export type MerchandisingCollectionId = string;
+export type ProductTypeId = string;
+export type ProductSubTypeId = string;
 
 export type MaterialTypeId =
   | 'cotton'
@@ -54,7 +59,7 @@ export interface TaxonomyItem<T extends string = string> {
 // ---------------------------------------------------------------------------
 // 1. CANONICAL COLLECTIONS
 // ---------------------------------------------------------------------------
-export const CANONICAL_COLLECTIONS: readonly TaxonomyItem<MerchandisingCollectionId>[] = [
+export let CANONICAL_COLLECTIONS: readonly TaxonomyItem<MerchandisingCollectionId>[] = [
   {
     id: 'apparel',
     label: 'Apparel',
@@ -72,7 +77,7 @@ export const CANONICAL_COLLECTIONS: readonly TaxonomyItem<MerchandisingCollectio
 // ---------------------------------------------------------------------------
 // 2. CANONICAL PRODUCT TYPES
 // ---------------------------------------------------------------------------
-export const CANONICAL_PRODUCT_TYPES: readonly TaxonomyItem<ProductTypeId>[] = [
+export let CANONICAL_PRODUCT_TYPES: readonly TaxonomyItem<ProductTypeId>[] = [
   { id: 'dresses', label: 'Dresses' },
   { id: 'tops-shirts', label: 'Top & Shirts' },
   { id: 'shorts-skirts', label: 'Shorts & Skirts' },
@@ -85,7 +90,7 @@ export const CANONICAL_PRODUCT_TYPES: readonly TaxonomyItem<ProductTypeId>[] = [
 // ---------------------------------------------------------------------------
 // 3. CANONICAL PRODUCT SUB-TYPES
 // ---------------------------------------------------------------------------
-export const CANONICAL_PRODUCT_SUB_TYPES: readonly TaxonomyItem<ProductSubTypeId>[] = [
+export let CANONICAL_PRODUCT_SUB_TYPES: readonly TaxonomyItem<ProductSubTypeId>[] = [
   { id: 'tops', label: 'Tops' },
   { id: 'shirts', label: 'Shirts' },
   { id: 'shorts', label: 'Shorts' },
@@ -105,18 +110,18 @@ export const CANONICAL_MATERIAL_TYPES: readonly TaxonomyItem<MaterialTypeId>[] =
 // ---------------------------------------------------------------------------
 // 5. VALID COLLECTION × PRODUCT TYPE MATRIX
 // ---------------------------------------------------------------------------
-export const COLLECTION_PRODUCT_TYPE_MATRIX: Record<MerchandisingCollectionId, readonly ProductTypeId[]> = {
+export let COLLECTION_PRODUCT_TYPE_MATRIX: Record<MerchandisingCollectionId, readonly ProductTypeId[]> = {
   'apparel': ['dresses', 'tops-shirts', 'shorts-skirts', 'co-ord-sets', 'trousers', 'jackets'],
   'accessories': ['bags-pouches']
-} as const;
+};
 
 // ---------------------------------------------------------------------------
 // 6. VALID PRODUCT TYPE × SUB-TYPE MATRIX
 // ---------------------------------------------------------------------------
-export const PRODUCT_TYPE_SUBTYPES_MATRIX: Partial<Record<ProductTypeId, readonly ProductSubTypeId[]>> = {
+export let PRODUCT_TYPE_SUBTYPES_MATRIX: Partial<Record<ProductTypeId, readonly ProductSubTypeId[]>> = {
   'tops-shirts': ['tops', 'shirts'],
   'shorts-skirts': ['shorts', 'skirts']
-} as const;
+};
 
 // ---------------------------------------------------------------------------
 // 7. SELECTABLE TAX CLASS KEYS (INTERNAL TAX MASTER CLASSIFIERS)
@@ -586,4 +591,74 @@ export function getTaxonomyRouteInfo(params: {
     breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Shop All' }],
     curatedType: 'all'
   };
+}
+
+// ---------------------------------------------------------------------------
+// 11. CATEGORY MASTER INTEGRATION — apply live/admin-edited taxonomy data
+// ---------------------------------------------------------------------------
+
+/**
+ * One row of the flat category tree as served by GET /api/categories and
+ * GET /api/admin/categories (see src/server/categoryHelpers.ts), and as
+ * stored in Firestore's `categories` collection. `id` is always the same
+ * string used as the Firestore document id, and — for level 0/1 nodes — the
+ * same string existing products already store in `collection`/`category`.
+ */
+export interface CategoryMasterNode {
+  id: string;
+  label: string;
+  parentId: string | null;
+  level: number; // 0 = Collection, 1 = Product Type, 2 = Product Sub-Type
+  sortOrder: number;
+  active: boolean;
+}
+
+function byNodeSortOrder(a: CategoryMasterNode, b: CategoryMasterNode): number {
+  return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+}
+
+/**
+ * Rebuilds CANONICAL_COLLECTIONS / CANONICAL_PRODUCT_TYPES /
+ * CANONICAL_PRODUCT_SUB_TYPES and both matrices from a flat, admin-editable
+ * Category Master node list, so every helper in this file (isValidCollection,
+ * getTaxonomyRouteInfo, validateProductTaxonomy, ...) transparently reflects
+ * the live database instead of the original hardcoded values. Inactive
+ * nodes are excluded — they stop appearing as choices, but are never
+ * deleted, since existing products may still reference them.
+ *
+ * Defensive by design: called with an empty/malformed node list (e.g. the
+ * `categories` collection hasn't been seeded yet, or a fetch briefly races
+ * with a re-render), this is a no-op — it never blanks out the taxonomy the
+ * storefront/admin form are currently using.
+ */
+export function applyCategoryMasterData(nodes: CategoryMasterNode[]): void {
+  if (!Array.isArray(nodes) || nodes.length === 0) return;
+
+  const active = nodes.filter(n => n && n.active !== false);
+  const collections = active.filter(n => n.level === 0).sort(byNodeSortOrder);
+  const productTypes = active.filter(n => n.level === 1).sort(byNodeSortOrder);
+  const subTypes = active.filter(n => n.level === 2).sort(byNodeSortOrder);
+
+  if (collections.length === 0 || productTypes.length === 0) return;
+
+  CANONICAL_COLLECTIONS = collections.map(n => ({ id: n.id, label: n.label }));
+  CANONICAL_PRODUCT_TYPES = productTypes.map(n => ({ id: n.id, label: n.label }));
+  CANONICAL_PRODUCT_SUB_TYPES = subTypes.map(n => ({ id: n.id, label: n.label }));
+
+  const collectionMatrix: Record<string, string[]> = {};
+  collections.forEach(c => { collectionMatrix[c.id] = []; });
+  productTypes.forEach(pt => {
+    if (pt.parentId && collectionMatrix[pt.parentId]) {
+      collectionMatrix[pt.parentId].push(pt.id);
+    }
+  });
+  COLLECTION_PRODUCT_TYPE_MATRIX = collectionMatrix;
+
+  const subtypeMatrix: Partial<Record<string, string[]>> = {};
+  subTypes.forEach(st => {
+    if (!st.parentId) return;
+    if (!subtypeMatrix[st.parentId]) subtypeMatrix[st.parentId] = [];
+    subtypeMatrix[st.parentId]!.push(st.id);
+  });
+  PRODUCT_TYPE_SUBTYPES_MATRIX = subtypeMatrix;
 }

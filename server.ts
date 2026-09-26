@@ -183,6 +183,12 @@ import {
   ShippingTaxConfig
 } from "./src/server/invoice/shippingTaxConfig";
 import {
+  seedCategories,
+  fetchAllCategoryNodes,
+  createCategory,
+  updateCategory
+} from "./src/server/categoryHelpers";
+import {
   loadProductTaxMasterFromFirestore,
   checkProductTaxDateOverlap,
   parseAndValidateProductTaxCsv,
@@ -1552,18 +1558,47 @@ const VALID_ROOTS = [
   "shop"
 ];
 
-const VALID_CATEGORIES = [
+// Category Master — the storefront's /shop/:category route-validity check
+// (see isValidRoute() below) used to check against this hardcoded array.
+// It's now backed by Firestore's `categories` collection (level-1 Product
+// Type nodes, admin-editable — see src/server/categoryHelpers.ts), read
+// through an in-memory cache (liveCategorySlugs/refreshLiveCategorySlugs
+// below) so the per-request check stays synchronous and cheap instead of
+// doing a Firestore read on every page load.
+const CURATED_SHOP_SLUGS = ["bestsellers", "new-arrivals", "all"];
+
+// Used to seed the very first liveCategorySlugs value (before the initial
+// refresh completes) and as a safety net if Firestore is ever unreachable —
+// the exact same 7 product-type ids the old hardcoded VALID_CATEGORIES
+// array had, and what Category Master's seed also writes by default.
+const FALLBACK_PRODUCT_TYPE_SLUGS = [
   "dresses",
   "tops-shirts",
   "shorts-skirts",
   "co-ord-sets",
   "trousers",
   "jackets",
-  "bags-pouches",
-  "bestsellers",
-  "new-arrivals",
-  "all"
+  "bags-pouches"
 ];
+
+let liveCategorySlugs: string[] = [...FALLBACK_PRODUCT_TYPE_SLUGS, ...CURATED_SHOP_SLUGS];
+
+async function refreshLiveCategorySlugs(): Promise<void> {
+  try {
+    const nodes = await fetchAllCategoryNodes();
+    const activeProductTypeIds = nodes
+      .filter((n: any) => n.level === 1 && n.active !== false)
+      .map((n: any) => n.id);
+    if (activeProductTypeIds.length > 0) {
+      liveCategorySlugs = [...activeProductTypeIds, ...CURATED_SHOP_SLUGS];
+    }
+    // If Category Master hasn't been seeded yet (empty collection), keep
+    // whatever list is already cached rather than invalidating every
+    // /shop/:category route.
+  } catch (err) {
+    console.warn("[CATEGORY CACHE] Failed to refresh category slugs from Firestore — keeping previous list:", err);
+  }
+}
 
 function slugify(text: string): string {
   if (!text) return "";
@@ -1636,7 +1671,7 @@ function isValidRoute(urlPath: string, activeProducts: any[] = []): boolean {
     const slug = parts[1].toLowerCase();
     
     if (root === "shop") {
-      return VALID_CATEGORIES.includes(slug);
+      return liveCategorySlugs.includes(slug);
     }
     if (root === "product") {
       const res = resolveProductRoute(slug, activeProducts);
@@ -5979,6 +6014,106 @@ async function startServer() {
 
   registerSimpleMasterEndpoints("material_types", ["Cotton", "Linen-Cotton Blend", "Georgette", "Other"], "/api/admin/material-types");
   registerSimpleMasterEndpoints("fit_profiles", ["Slim", "Regular", "Relaxed"], "/api/admin/fit-profiles");
+
+  // Category Master — admin-editable, Firestore-backed replacement for the
+  // hardcoded Collection/Product Type/Sub-Type taxonomy in
+  // src/config/catalogTaxonomy.ts. See src/server/categoryHelpers.ts for
+  // the actual Firestore logic (kept separate so it's unit-testable
+  // without live credentials) and firestore.rules' isValidProduct() for
+  // the security-rule side of this (exists() check against this same
+  // `categories` collection).
+  app.get("/api/admin/categories", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      await seedCategories();
+      const nodes = await fetchAllCategoryNodes();
+      return res.json({ success: true, nodes });
+    } catch (err: any) {
+      console.error("Error fetching admin categories:", err);
+      return res.status(500).json({ success: false, error: "Failed to fetch categories." });
+    }
+  });
+
+  app.post("/api/admin/categories", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const result = await createCategory({
+        label: req.body?.label,
+        parentId: req.body?.parentId ?? null,
+        sortOrder: typeof req.body?.sortOrder === "number" ? req.body.sortOrder : undefined
+      });
+      if (result.ok === false) {
+        return res.status(result.status).json({ success: false, error: result.error });
+      }
+      await refreshLiveCategorySlugs();
+      return res.json({ success: true, node: result.node });
+    } catch (err: any) {
+      console.error("Error creating category:", err);
+      return res.status(500).json({ success: false, error: "Failed to create category." });
+    }
+  });
+
+  app.patch("/api/admin/categories/:id", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const result = await updateCategory(req.params.id, {
+        label: typeof req.body?.label === "string" ? req.body.label : undefined,
+        sortOrder: typeof req.body?.sortOrder === "number" ? req.body.sortOrder : undefined,
+        active: typeof req.body?.active === "boolean" ? req.body.active : undefined
+      });
+      if (result.ok === false) {
+        return res.status(result.status).json({ success: false, error: result.error });
+      }
+      await refreshLiveCategorySlugs();
+      return res.json({ success: true, node: result.node });
+    } catch (err: any) {
+      console.error("Error updating category:", err);
+      return res.status(500).json({ success: false, error: "Failed to update category." });
+    }
+  });
+
+  // Idempotent — safe to call more than once. Also auto-runs (check-before-
+  // write) the first time /api/categories or /api/admin/categories is hit
+  // and the collection is empty, mirroring seedDefaultMasterListIfEmpty()
+  // above; this endpoint exists for an explicit admin-triggered re-seed.
+  app.post("/api/admin/categories/seed", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const result = await seedCategories();
+      await refreshLiveCategorySlugs();
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      console.error("Error seeding categories:", err);
+      return res.status(500).json({ success: false, error: "Failed to seed categories." });
+    }
+  });
+
+  // Public API: active Category Master tree, consumed by the storefront
+  // (CollectionPage.tsx via src/config/categoryStore.ts) and by the admin
+  // product form's category pickers.
+  app.get("/api/categories", async (req, res) => {
+    try {
+      await seedCategories();
+      const nodes = await fetchAllCategoryNodes();
+      const activeNodes = nodes.filter((n: any) => n.active !== false);
+      return res.json({ success: true, nodes: activeNodes });
+    } catch (err: any) {
+      console.error("Error fetching public categories:", err);
+      return res.status(500).json({ success: false, error: "Failed to fetch categories." });
+    }
+  });
 
   // Admin API: Update Promotion
   app.patch("/api/admin/promotions/:id", async (req, res) => {
@@ -16015,6 +16150,19 @@ Sitemap: https://www.sa-and-sha.com/sitemap.xml`;
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
+
+    // Warm the in-memory Category Master slug cache once the server is up,
+    // then keep it fresh in the background — isValidRoute()'s
+    // /shop/:category check stays a synchronous, per-request-cheap array
+    // lookup instead of a Firestore read on every page load. Deferred to
+    // this callback (rather than called at the top of startServer())
+    // and explicitly .catch()'d as defense in depth: refreshLiveCategorySlugs()
+    // already catches its own errors internally, but the very first
+    // Firestore Admin SDK call of the process establishing its gRPC
+    // transport is best not fired as an un-awaited promise before the
+    // server has finished coming up.
+    refreshLiveCategorySlugs().catch(() => {});
+    setInterval(() => { refreshLiveCategorySlugs().catch(() => {}); }, 60 * 1000);
   });
 }
 

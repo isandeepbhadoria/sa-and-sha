@@ -44,7 +44,8 @@ import {
   Sliders,
   IdCard,
   Layers,
-  Ruler
+  Ruler,
+  FolderTree
 } from 'lucide-react';
 import { HomepageMediaAdmin } from '../components/admin/HomepageMediaAdmin';
 import { AdminShell } from '../components/admin/AdminShell';
@@ -56,6 +57,7 @@ import { AdminCommunicationTab } from '../components/AdminCommunicationTab';
 import { AdminIdentityManagementTab } from '../components/AdminIdentityManagementTab';
 import { AdminReturnsTab } from '../components/admin-returns/AdminReturnsTab';
 import { TaxMasterAdminTab } from '../components/admin/TaxMasterAdminTab';
+import { CategoryMasterAdminTab } from '../components/admin/CategoryMasterAdminTab';
 import { SimpleMasterListTab } from '../components/admin/SimpleMasterListTab';
 import { ImageCropModal } from '../components/admin/ImageCropModal';
 import { RewardsPolicySettings } from '../components/admin/RewardsPolicySettings';
@@ -71,6 +73,7 @@ import {
   isValidProductSubTypeForType,
   validateProductTaxonomy
 } from '../config/catalogTaxonomy';
+import { useCategoryMaster } from '../config/categoryStore';
 import { generateSkuCode } from '../utils/skuGenerator';
 import {
   auth,
@@ -167,6 +170,11 @@ export const AdminPage: React.FC = () => {
   const routeParams = useParams<{ productId?: string }>();
   const { showToast } = useShop();
 
+  // Category Master — subscribes so the product form's category pickers
+  // (below, still reading CANONICAL_COLLECTIONS/CANONICAL_PRODUCT_TYPES from
+  // catalogTaxonomy.ts) re-render with the latest admin-edited taxonomy.
+  useCategoryMaster();
+
   // Auth state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -186,7 +194,7 @@ export const AdminPage: React.FC = () => {
   const [forgotStatus, setForgotStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'material-type-master' | 'fit-profile-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>(
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'returns' | 'enquiries' | 'promotions' | 'customers' | 'communications' | 'identity' | 'tax-master' | 'category-master' | 'material-type-master' | 'fit-profile-master' | 'rewards-policy' | 'credit-notes' | 'homepage-media'>(
     (location.state as { tab?: string } | null)?.tab as any || 'orders'
   );
 
@@ -415,8 +423,11 @@ export const AdminPage: React.FC = () => {
   const [formName, setFormName] = useState('');
   const [formSlug, setFormSlug] = useState('');
   const [formPreviousSlugs, setFormPreviousSlugs] = useState<string[]>([]);
-  const [formCategory, setFormCategory] = useState<'dresses' | 'tops-shirts' | 'shorts-skirts' | 'co-ord-sets' | 'trousers' | 'jackets' | 'bags-pouches'>('dresses');
-  const [formSubCategory, setFormSubCategory] = useState<'dresses' | 'tops' | 'shirts' | 'shorts' | 'skirts' | 'co-ord-sets' | 'trousers' | 'jackets' | 'bags-pouches'>('dresses');
+  // Sourced from Category Master (CANONICAL_PRODUCT_TYPES /
+  // getAvailableSubTypesForProductType, both admin-editable — see the
+  // Storefront Category picker below), so no longer a fixed literal union.
+  const [formCategory, setFormCategory] = useState<string>('dresses');
+  const [formSubCategory, setFormSubCategory] = useState<string>('dresses');
   const [formCollection, setFormCollection] = useState<string>('');
   const [formProductType, setFormProductType] = useState<string>('');
   const [formProductSubType, setFormProductSubType] = useState<string>('');
@@ -2290,6 +2301,7 @@ export const AdminPage: React.FC = () => {
       title: 'Master',
       items: [
         { key: 'tax-master', label: 'GST Tax Master', icon: ShieldCheck },
+        { key: 'category-master', label: 'Category Master', icon: FolderTree },
         { key: 'material-type-master', label: 'Material Type Master', icon: Layers },
         { key: 'fit-profile-master', label: 'Fit Profile Master', icon: Ruler }
       ]
@@ -2312,6 +2324,7 @@ export const AdminPage: React.FC = () => {
     communications: 'Communication Centre',
     identity: 'Identity Management',
     'tax-master': 'GST Tax Master',
+    'category-master': 'Category Master',
     'material-type-master': 'Material Type Master',
     'fit-profile-master': 'Fit Profile Master',
     'rewards-policy': 'Sa and Sha Rewards Settings',
@@ -2494,6 +2507,10 @@ export const AdminPage: React.FC = () => {
 
           {activeTab === 'tax-master' && (
             <TaxMasterAdminTab adminToken={adminToken} showToast={showToast} />
+          )}
+
+          {activeTab === 'category-master' && (
+            <CategoryMasterAdminTab adminToken={adminToken} showToast={showToast} />
           )}
 
           {activeTab === 'material-type-master' && (
@@ -3194,21 +3211,20 @@ export const AdminPage: React.FC = () => {
                             <select
                               value={formCategory}
                               onChange={(e) => {
-                                const cat = e.target.value as any;
-                                setFormCategory(cat);
-                                if (cat === 'tops-shirts') setFormSubCategory('tops');
-                                else if (cat === 'shorts-skirts') setFormSubCategory('shorts');
-                                else setFormSubCategory(cat);
+                                const cat = e.target.value;
+                                setFormCategory(cat as any);
+                                // Same generalized "first available sub-type,
+                                // else fall back to the category itself" rule
+                                // Category Master's matrix already encodes —
+                                // e.g. tops-shirts -> tops, dresses -> dresses.
+                                const subs = getAvailableSubTypesForProductType(cat);
+                                setFormSubCategory((subs.length > 0 ? subs[0].id : cat) as any);
                               }}
                               className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
-                              <option value="dresses">Dresses</option>
-                              <option value="tops-shirts">Top & Shirts</option>
-                              <option value="shorts-skirts">Shorts & Skirts</option>
-                              <option value="co-ord-sets">Co-Ord Sets</option>
-                              <option value="trousers">Trousers</option>
-                              <option value="jackets">Jackets</option>
-                              <option value="bags-pouches">Bags & Pouches</option>
+                              {CANONICAL_PRODUCT_TYPES.map(pt => (
+                                <option key={pt.id} value={pt.id}>{pt.label}</option>
+                              ))}
                             </select>
                           </div>
 
@@ -3219,23 +3235,15 @@ export const AdminPage: React.FC = () => {
                               onChange={(e) => setFormSubCategory(e.target.value as any)}
                               className="w-full px-2.5 py-1.5 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white text-stone-800 text-xs"
                             >
-                              {formCategory === 'dresses' && <option value="dresses">Dresses</option>}
-                              {formCategory === 'tops-shirts' && (
-                                <>
-                                  <option value="tops">Tops</option>
-                                  <option value="shirts">Shirts</option>
-                                </>
+                              {getAvailableSubTypesForProductType(formCategory).length > 0 ? (
+                                getAvailableSubTypesForProductType(formCategory).map(st => (
+                                  <option key={st.id} value={st.id}>{st.label}</option>
+                                ))
+                              ) : (
+                                <option value={formCategory}>
+                                  {CANONICAL_PRODUCT_TYPES.find(pt => pt.id === formCategory)?.label || formCategory}
+                                </option>
                               )}
-                              {formCategory === 'shorts-skirts' && (
-                                <>
-                                  <option value="shorts">Shorts</option>
-                                  <option value="skirts">Skirts</option>
-                                </>
-                              )}
-                              {formCategory === 'co-ord-sets' && <option value="co-ord-sets">Co-Ord Sets</option>}
-                              {formCategory === 'trousers' && <option value="trousers">Trousers</option>}
-                              {formCategory === 'jackets' && <option value="jackets">Jackets</option>}
-                              {formCategory === 'bags-pouches' && <option value="bags-pouches">Bags & Pouches</option>}
                             </select>
                           </div>
                         </div>
