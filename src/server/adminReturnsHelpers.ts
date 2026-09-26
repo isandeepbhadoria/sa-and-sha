@@ -1,5 +1,11 @@
 import { createCustomerTimelineEvent } from "./crmHelpers";
 import { publishNotification } from "./notification/notificationEngine";
+import { bluedartRegisterReversePickup, BluedartApiError } from "./bluedartClient";
+
+// Exact courier-dropdown value (RmaPickupModal.tsx's COURIER_PARTNERS) that
+// triggers real Blue Dart reverse-pickup booking instead of manual AWB
+// entry. Every other courier in that dropdown is unaffected.
+const BLUEDART_COURIER_LABEL = "BlueDart Express";
 
 // Status Machine constants and allowed transitions
 export const ALLOWED_RMA_STATUSES = [
@@ -783,9 +789,86 @@ export async function scheduleReturnPickup(
     return { success: false, statusCode: 400, error: "Courier partner and pickup date are required." };
   }
 
+  const isBlueDart = payload.courier === BLUEDART_COURIER_LABEL;
+  let resolvedAwb = payload.awb_number || `RAWB-${Date.now().toString().slice(-8)}`;
+  let resolvedTrackingUrl = payload.tracking_url || "";
+
+  // Blue Dart: book a real reverse pickup via the API instead of trusting
+  // whatever AWB the admin typed (or the fake RAWB-* placeholder). Every
+  // other courier keeps today's fully-manual behavior untouched. This runs
+  // BEFORE the status transition below, so a Blue Dart failure leaves the
+  // RMA exactly where it was — no half-scheduled state — and the admin can
+  // retry or switch to a different courier.
+  if (isBlueDart) {
+    let returnDocSnap = await adminDb.collection("return_requests").doc(returnId).get();
+    if (!returnDocSnap.exists) {
+      const qRma = await adminDb.collection("return_requests").where("rma_number", "==", returnId).limit(1).get();
+      if (!qRma.empty) returnDocSnap = qRma.docs[0];
+    }
+    if (!returnDocSnap || !returnDocSnap.exists) {
+      return { success: false, statusCode: 404, error: "RMA request not found." };
+    }
+    const rData: any = returnDocSnap.data();
+
+    // Same order lookup pattern as the forward-AWB route
+    // (POST /api/admin/orders/:id/bluedart/generate-awb) — the return
+    // request itself doesn't store the full address, so we pull it from
+    // the linked order.
+    let orderData: any = null;
+    if (rData.order_id) {
+      const oSnap = await adminDb.collection("orders").where("order_id", "==", rData.order_id).limit(1).get();
+      if (!oSnap.empty) orderData = oSnap.docs[0].data();
+    }
+
+    const addressLine1 = orderData?.address_line_1 || orderData?.address || "";
+    const pincode = (orderData?.pincode || "").toString().trim();
+    const customerName = rData.customer_name || orderData?.customer_name || "";
+    const customerPhone = rData.customer_phone || orderData?.customer_phone || "";
+    const customerEmail = rData.customer_email || orderData?.customer_email || undefined;
+
+    if (!customerName || !addressLine1 || !pincode || !customerPhone) {
+      return {
+        success: false,
+        statusCode: 400,
+        error:
+          "Cannot book a Blue Dart reverse pickup: the linked order is missing required address details (name, address, pincode or phone). Fix the order's address, or schedule this pickup manually with a different courier."
+      };
+    }
+
+    const items = Array.isArray(rData.items) ? rData.items : [];
+    const returnItems = items.filter((it: any) => it.action === "return");
+    const declaredValue = returnItems.reduce(
+      (sum: number, it: any) => sum + Number(it.price_paid || 0) * Number(it.quantity || 1),
+      0
+    );
+
+    try {
+      const result = await bluedartRegisterReversePickup({
+        returnId: rData.rma_number || returnId,
+        shipperName: customerName,
+        addressLine1,
+        addressLine2: [orderData?.address_line_2, orderData?.city, orderData?.state].filter(Boolean).join(", "),
+        shipperPincode: pincode,
+        shipperMobile: customerPhone,
+        shipperEmail: customerEmail,
+        declaredValue,
+        pieceCount: returnItems.length || 1
+      });
+      resolvedAwb = result.awb;
+      resolvedTrackingUrl = `https://www.bluedart.com/tracking?awb=${encodeURIComponent(result.awb)}`;
+    } catch (err: any) {
+      if (err instanceof BluedartApiError) {
+        console.error("Blue Dart reverse pickup registration failed:", err.message, err.raw);
+        return { success: false, statusCode: 502, error: `Blue Dart: ${err.message}` };
+      }
+      console.error("Error registering Blue Dart reverse pickup:", err);
+      return { success: false, statusCode: 500, error: "Failed to register Blue Dart reverse pickup." };
+    }
+  }
+
   const transition = await transitionReturnStatus(adminDb, adminEmail, returnId, {
     targetStatus: "pickup_scheduled",
-    reason: `Pickup Scheduled with ${payload.courier} for ${payload.pickup_date}. AWB: ${payload.awb_number || "Pending"}`
+    reason: `Pickup Scheduled with ${payload.courier} for ${payload.pickup_date}. AWB: ${resolvedAwb}`
   });
 
   if (!transition.success) return transition;
@@ -803,10 +886,11 @@ export async function scheduleReturnPickup(
       courier: payload.courier,
       pickup_date: payload.pickup_date,
       pickup_time_window: payload.time_window || "09:00 AM - 06:00 PM",
-      reverse_awb: payload.awb_number || `RAWB-${Date.now().toString().slice(-8)}`,
-      tracking_url: payload.tracking_url || "",
+      reverse_awb: resolvedAwb,
+      tracking_url: resolvedTrackingUrl,
       pickup_instructions: payload.instructions || "",
-      pickup_status: "scheduled"
+      pickup_status: "scheduled",
+      ...(isBlueDart ? { pickup_awb_source: "bluedart_api" } : {})
     });
   }
 

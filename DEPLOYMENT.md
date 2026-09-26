@@ -181,7 +181,59 @@ VPS. Steps:
    registered elsewhere, make sure its nameservers/DNS point at this
    Hostinger hosting account first (hPanel → Domains).
 
-## 5. Razorpay (deferred)
+## 5. Blue Dart (shipping)
+
+Blue Dart powers pincode serviceability at checkout, forward AWB
+generation + dispatch, live tracking, and (as of this integration)
+automated reverse-pickup booking for customer returns — all through
+Blue Dart's APIGEE developer portal (`developer.dhl.com`), not the
+older bluedart.com SOAP API.
+
+1. Get your Blue Dart account's LoginID, LicenceKey, Customer Code and
+   registered pickup **OriginArea** (branch code) from your Blue Dart
+   CCF/account manager, and register an app on
+   [developer.dhl.com](https://developer.dhl.com) to get an API
+   Key/Secret for the sandbox and (separately) live environments.
+2. Fill the `BLUEDART_*` variables in `.env` — `.env.example` lists
+   every one, with `BLUEDART_ORIGIN_*` describing your own
+   warehouse/pickup address (used as the Shipper on forward shipments
+   and as the Consignee on reverse pickups).
+3. Leave `BLUEDART_ENV=sandbox` until you've confirmed real calls work,
+   then switch to `BLUEDART_ENV=live` with your live credentials.
+
+**Important — two config values are unverified, and now cover reverse
+pickup too.** `src/server/bluedartClient.ts`'s own top-of-file comment
+is explicit about this, and it's worth restating here since it's easy
+to miss:
+- `BLUEDART_API_TYPE`/`BLUEDART_API_VERSION` (sent as `Profile.Api_type`
+  /`Version` on every call) are our best inference from Blue Dart's
+  legacy Profile schema, not confirmed from this account's own docs.
+- The lowercase `profile` wrapper key is confirmed correct for the
+  Finder API (pincode check) from Blue Dart's own sample request, but
+  was **not** independently confirmed for the Waybill API
+  (`GenerateWayBill`) — which forward AWB generation, and now reverse
+  pickup booking, both call.
+- Reverse-pickup booking (`bluedartRegisterReversePickup` in
+  `bluedartClient.ts`) reuses these same unverified assumptions, on top
+  of one more inference of its own: Blue Dart's Waybill API has no
+  separate pickup-only endpoint in the docs this integration was built
+  from, so a reverse pickup is booked by calling the same
+  `GenerateWayBill` endpoint with Shipper and Consignee **swapped** —
+  the customer's return address as Shipper, your warehouse as
+  Consignee. This is a standard, reasonable pattern for reverse
+  logistics on an API shaped like this one, but it is not confirmed
+  from Blue Dart's own docs for this account.
+
+  **When you run the first real sandbox reverse pickup, watch it
+  closely.** If it comes back with a profile/auth-shaped error (rather
+  than a clean AWB), that's these assumptions, not a bug in the
+  swap logic itself — the fix is checking Blue Dart's own
+  developer-portal sample for the exact `GenerateWayBill` request shape,
+  ideally one specific to reverse pickups if the portal has one. The
+  error message you'll see is Blue Dart's own raw text (not swallowed
+  or replaced), which is what to paste back for help debugging.
+
+## 6. Razorpay (deferred)
 
 Checkout currently only supports Cash on Delivery until Razorpay keys
 (`RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`,
@@ -190,7 +242,7 @@ gracefully (COD-only checkout), so this isn't blocking going live for a
 UI/UX and COD-order test. Come back to this once you have a Razorpay
 account for Sa and Sha.
 
-## 6. First smoke test after deploy
+## 7. First smoke test after deploy
 
 1. Visit `https://sa-and-sha.com/` — homepage should load with the 7
    category tiles and the real + placeholder products.
