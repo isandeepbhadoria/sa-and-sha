@@ -14,7 +14,7 @@ export interface WhatsAppProvider {
   ): Promise<ProviderDispatchResult>;
 }
 
-export class MSG91WhatsAppProvider implements WhatsAppProvider {
+export class MetaWhatsAppProvider implements WhatsAppProvider {
   async dispatch(
     event: NotificationEventType,
     customer: CustomerTarget,
@@ -30,7 +30,7 @@ export class MSG91WhatsAppProvider implements WhatsAppProvider {
   }
 }
 
-export const whatsappProvider = new MSG91WhatsAppProvider();
+export const whatsappProvider = new MetaWhatsAppProvider();
 
 export async function sendWhatsAppNotification(options: {
   toPhone: string;

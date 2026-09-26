@@ -254,7 +254,7 @@ export async function dispatchQueueJob(
       isSuccess = Boolean(waRes.success);
       errorMessage = waRes.error || null;
       dispatchResult = {
-        provider: waRes.provider || 'msg91_whatsapp',
+        provider: waRes.provider || 'meta_whatsapp',
         channel: 'whatsapp',
         provider_message_id: waRes.providerMessageId || null,
         metadata: waRes.metadata || null,

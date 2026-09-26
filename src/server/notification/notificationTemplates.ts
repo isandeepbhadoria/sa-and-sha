@@ -4,16 +4,24 @@ import { generateTrackingToken, isValidTrackingTokenFormat } from '../trackingHe
 /**
  * Centralized Approved WhatsApp Template Registry
  * Never hardcode template names throughout the project.
+ *
+ * PLACEHOLDER NAMES: Sa and Sha's Meta WhatsApp Business Account has not
+ * been provisioned yet, so these ss_*_v1 names are placeholders. Once the
+ * WABA is set up and real templates are submitted/approved in Meta Business
+ * Manager, update this map to match the actual approved template names
+ * exactly (Meta rejects sends for any name mismatch), then confirm via the
+ * admin "verify approved templates" diagnostic
+ * (GET /api/admin/notifications/verify-templates).
  */
 export const APPROVED_WHATSAPP_TEMPLATES = {
-  ORDER_PLACED: 'kl_order_placed_v1',
-  PAYMENT_RECEIVED: 'kl_payment_received_v1',
-  ORDER_SHIPPED: 'kl_order_shipped_v1',
-  ORDER_DELIVERED: 'kl_order_delivered_v1',
-  REFUND_PROCESSED: 'kl_refund_processed_v1',
-  REFUND_COMPLETED: 'kl_refund_processed_v1',
-  LOYALTY_POINTS: 'kl_loyalty_points_v1',
-  LOYALTY_POINTS_EARNED: 'kl_loyalty_points_v1'
+  ORDER_PLACED: 'ss_order_placed_v1',
+  PAYMENT_RECEIVED: 'ss_payment_received_v1',
+  ORDER_SHIPPED: 'ss_order_shipped_v1',
+  ORDER_DELIVERED: 'ss_order_delivered_v1',
+  REFUND_PROCESSED: 'ss_refund_processed_v1',
+  REFUND_COMPLETED: 'ss_refund_processed_v1',
+  LOYALTY_POINTS: 'ss_loyalty_points_v1',
+  LOYALTY_POINTS_EARNED: 'ss_loyalty_points_v1'
 } as const;
 
 export interface WhatsAppTemplateConfig {
@@ -59,22 +67,22 @@ export const WHATSAPP_TEMPLATE_MAPPINGS: Record<NotificationEventType, WhatsAppT
     variableKeys: ['customerName', 'orderId']
   },
   ORDER_CANCELLED: {
-    templateName: 'kl_order_cancelled_v1',
+    templateName: 'ss_order_cancelled_v1',
     language: 'en',
     variableKeys: ['customerName', 'orderId', 'refundNotice']
   },
   ORDER_RETURN_REQUESTED: {
-    templateName: 'kl_return_requested_v1',
+    templateName: 'ss_return_requested_v1',
     language: 'en',
     variableKeys: ['customerName', 'orderId']
   },
   RETURN_APPROVED: {
-    templateName: 'kl_return_approved_v1',
+    templateName: 'ss_return_approved_v1',
     language: 'en',
     variableKeys: ['customerName', 'orderId', 'instructions']
   },
   RETURN_COMPLETED: {
-    templateName: 'kl_return_completed_v1',
+    templateName: 'ss_return_completed_v1',
     language: 'en',
     variableKeys: ['customerName', 'orderId']
   },
@@ -89,12 +97,12 @@ export const WHATSAPP_TEMPLATE_MAPPINGS: Record<NotificationEventType, WhatsAppT
     variableKeys: ['customerName', 'orderId', 'refundAmount', 'refundRef']
   },
   STORE_CREDIT_ADDED: {
-    templateName: 'kl_store_credit_added_v1',
+    templateName: 'ss_store_credit_added_v1',
     language: 'en',
     variableKeys: ['customerName', 'amount', 'newBalance']
   },
   STORE_CREDIT_EXPIRED: {
-    templateName: 'kl_store_credit_expired_v1',
+    templateName: 'ss_store_credit_expired_v1',
     language: 'en',
     variableKeys: ['customerName', 'amount']
   },
@@ -119,72 +127,72 @@ export const WHATSAPP_TEMPLATE_MAPPINGS: Record<NotificationEventType, WhatsAppT
     variableKeys: ['customerName', 'pointsRedeemed', 'remainingBalance']
   },
   TIER_UPGRADED: {
-    templateName: 'kl_tier_upgraded_v1',
+    templateName: 'ss_tier_upgraded_v1',
     language: 'en',
     variableKeys: ['customerName', 'newTier']
   },
   TIER_DOWNGRADED: {
-    templateName: 'kl_tier_downgraded_v1',
+    templateName: 'ss_tier_downgraded_v1',
     language: 'en',
     variableKeys: ['customerName', 'currentTier']
   },
   WELCOME: {
-    templateName: 'kl_welcome_v1',
+    templateName: 'ss_welcome_v1',
     language: 'en',
     variableKeys: ['customerName']
   },
   ACCOUNT_CREATED: {
-    templateName: 'kl_account_created_v1',
+    templateName: 'ss_account_created_v1',
     language: 'en',
     variableKeys: ['customerName']
   },
   ADDRESS_UPDATED: {
-    templateName: 'kl_address_updated_v1',
+    templateName: 'ss_address_updated_v1',
     language: 'en',
     variableKeys: ['customerName']
   },
   PASSWORDLESS_LOGIN: {
-    templateName: 'kl_login_link_v1',
+    templateName: 'ss_login_link_v1',
     language: 'en',
     variableKeys: ['customerName', 'loginUrl']
   },
   OTP_VERIFIED: {
-    templateName: 'kl_otp_verified_v1',
+    templateName: 'ss_otp_verified_v1',
     language: 'en',
     variableKeys: ['customerName', 'otpCode']
   },
   REVIEW_REQUEST: {
-    templateName: 'kl_review_request_v1',
+    templateName: 'ss_review_request_v1',
     language: 'en',
     variableKeys: ['customerName', 'orderId', 'reviewUrl']
   },
   ABANDONED_CART: {
-    templateName: 'kl_abandoned_cart_v1',
+    templateName: 'ss_abandoned_cart_v1',
     language: 'en',
     variableKeys: ['customerName', 'cartUrl']
   },
   BACK_IN_STOCK: {
-    templateName: 'kl_back_in_stock_v1',
+    templateName: 'ss_back_in_stock_v1',
     language: 'en',
     variableKeys: ['customerName', 'productName', 'productUrl']
   },
   PRICE_DROP: {
-    templateName: 'kl_price_drop_v1',
+    templateName: 'ss_price_drop_v1',
     language: 'en',
     variableKeys: ['customerName', 'productName', 'newPrice', 'productUrl']
   },
   BIRTHDAY: {
-    templateName: 'kl_birthday_wishes_v1',
+    templateName: 'ss_birthday_wishes_v1',
     language: 'en',
     variableKeys: ['customerName', 'giftCode']
   },
   ANNIVERSARY: {
-    templateName: 'kl_anniversary_wishes_v1',
+    templateName: 'ss_anniversary_wishes_v1',
     language: 'en',
     variableKeys: ['customerName', 'giftCode']
   },
   REFERRAL_REWARD: {
-    templateName: 'kl_referral_reward_v1',
+    templateName: 'ss_referral_reward_v1',
     language: 'en',
     variableKeys: ['customerName', 'rewardAmount']
   }

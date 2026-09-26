@@ -17,7 +17,7 @@ export interface PhoneNormalizationResult {
 }
 
 /**
- * Normalizes phone numbers to MSG91 format (E.164 digits without plus, default 91 prefix for India)
+ * Normalizes phone numbers to E.164 digits without a leading plus, default 91 prefix for India.
  * Examples:
  *  9876543210    -> 919876543210
  *  +919876543210 -> 919876543210
@@ -43,7 +43,7 @@ export function normalizePhone(rawPhone: string | undefined | null): PhoneNormal
       return { isValid: false, normalized: null, error: 'Invalid 10-digit Indian mobile format.' };
     }
     normalized = `91${cleanDigits}`;
-  } 
+  }
   // 12 digits starting with 91 -> Indian mobile number with country code
   else if (cleanDigits.length === 12 && cleanDigits.startsWith('91')) {
     const subscriber = cleanDigits.substring(2);
@@ -51,7 +51,7 @@ export function normalizePhone(rawPhone: string | undefined | null): PhoneNormal
       return { isValid: false, normalized: null, error: 'Invalid Indian mobile number subscriber digits.' };
     }
     normalized = cleanDigits;
-  } 
+  }
   // International format (10 to 15 digits)
   else if (cleanDigits.length >= 10 && cleanDigits.length <= 15) {
     normalized = cleanDigits;
@@ -73,53 +73,33 @@ export function maskPhoneNumber(phone: string): string {
   return `${prefix}****${suffix}`;
 }
 
-export const DEFAULT_MSG91_WHATSAPP_NAMESPACE = 'e05e342e_f402_47f4_8d19_76c1e20d8dce';
-
 export interface BuildPayloadOptions {
   toPhone: string;
   templateName: string;
   language?: string;
   bodyParams: string[];
-  integratedNumber?: string;
-  namespace?: string;
 }
 
 /**
- * Builds official MSG91 Outbound WhatsApp Bulk API JSON Payload
- * Endpoint: POST https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/
+ * Builds a Meta WhatsApp Cloud API template-message payload.
+ * Endpoint: POST https://graph.facebook.com/{version}/{phoneNumberId}/messages
  */
 export function buildPayload(options: BuildPayloadOptions) {
-  const integratedNumber = (options.integratedNumber || process.env.MSG91_WHATSAPP_NUMBER || '917688886662').replace(/\D/g, '');
-  const namespace = (options.namespace || process.env.MSG91_WHATSAPP_NAMESPACE || DEFAULT_MSG91_WHATSAPP_NAMESPACE).trim();
-
-  const componentsObj: Record<string, { type: string; value: string }> = {};
-  options.bodyParams.forEach((param, idx) => {
-    componentsObj[`body_${idx + 1}`] = {
-      type: 'text',
-      value: String(param !== undefined && param !== null ? param : '')
-    };
-  });
-
   return {
-    integrated_number: integratedNumber,
-    content_type: 'template',
-    payload: {
-      messaging_product: 'whatsapp',
-      type: 'template',
-      template: {
-        name: options.templateName,
-        language: {
-          code: options.language || 'en',
-          policy: 'deterministic'
-        },
-        namespace: namespace,
-        to_and_components: [
-          {
-            to: [options.toPhone],
-            components: componentsObj
-          }
-        ]
-      }
+    messaging_product: 'whatsapp',
+    to: options.toPhone,
+    type: 'template',
+    template: {
+      name: options.templateName,
+      language: {
+        code: options.language || 'en'
+      },
+      components: [
+        {
+          type: 'body',
+          parameters: options.bodyParams.map((text) => ({ type: 'text', text: String(text !== undefined && text !== null ? text : '') }))
+        }
+      ]
     }
   };
 }
@@ -134,32 +114,15 @@ export interface SendWhatsAppTemplateOptions {
 }
 
 export class EnterpriseWhatsAppService {
-  private baseUrl: string;
-
-  constructor() {
-    this.baseUrl = this.getNormalizedBaseUrl(process.env.MSG91_BASE_URL);
-  }
-
   /**
-   * Normalizes and validates MSG91 Outbound WhatsApp Bulk URL
+   * Reads the Meta Cloud API credentials — null if either is missing, so
+   * callers fail closed.
    */
-  public getNormalizedBaseUrl(customUrl?: string): string {
-    const raw = (
-      customUrl ||
-      process.env.MSG91_BASE_URL ||
-      'https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/'
-    ).trim();
-
-    if (!raw) {
-      return 'https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/';
-    }
-
-    if (!raw.endsWith('/whatsapp-outbound-message/bulk/') && !raw.endsWith('/whatsapp-outbound-message/bulk')) {
-      const stripped = raw.replace(/\/+$/, '');
-      return `${stripped}/whatsapp-outbound-message/bulk/`;
-    }
-
-    return raw.endsWith('/') ? raw : `${raw}/`;
+  private getConfig(): { accessToken: string; phoneNumberId: string; apiVersion: string } | null {
+    const accessToken = process.env.WHATSAPP_ACCESS_TOKEN?.trim();
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID?.trim();
+    if (!accessToken || !phoneNumberId) return null;
+    return { accessToken, phoneNumberId, apiVersion: process.env.WHATSAPP_API_VERSION?.trim() || 'v21.0' };
   }
 
   /**
@@ -168,7 +131,7 @@ export class EnterpriseWhatsAppService {
   public validateTemplate(eventType: NotificationEventType): { isValid: boolean; templateName: string; config?: any } {
     const config = WHATSAPP_TEMPLATE_MAPPINGS[eventType];
     if (!config) {
-      return { isValid: false, templateName: 'kl_generic_v1' };
+      return { isValid: false, templateName: 'ss_generic_v1' };
     }
     return { isValid: true, templateName: config.templateName, config };
   }
@@ -187,11 +150,13 @@ export class EnterpriseWhatsAppService {
   }
 
   /**
-   * Fetch live approved template list from MSG91 Client API for verification
+   * Fetch the live approved template list from the Meta WhatsApp Business
+   * Account for verification.
    */
-  public async verifyMsg91ApprovedTemplates(authKeyOverride?: string, senderOverride?: string) {
-    const authKey = (authKeyOverride || process.env.MSG91_AUTH_KEY || '').trim();
-    const senderNumber = (senderOverride || process.env.MSG91_WHATSAPP_NUMBER || '917688886662').replace(/\D/g, '');
+  public async verifyApprovedTemplates(accessTokenOverride?: string, wabaIdOverride?: string) {
+    const accessToken = (accessTokenOverride || process.env.WHATSAPP_ACCESS_TOKEN || '').trim();
+    const wabaId = (wabaIdOverride || process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || '').trim();
+    const apiVersion = process.env.WHATSAPP_API_VERSION?.trim() || 'v21.0';
 
     const requiredTemplates = [
       APPROVED_WHATSAPP_TEMPLATES.ORDER_PLACED,
@@ -202,22 +167,21 @@ export class EnterpriseWhatsAppService {
       APPROVED_WHATSAPP_TEMPLATES.LOYALTY_POINTS
     ];
 
-    if (!authKey) {
+    if (!accessToken || !wabaId) {
       return {
         verified: false,
-        reason: 'MSG91_AUTH_KEY missing',
+        reason: 'WHATSAPP_ACCESS_TOKEN or WHATSAPP_BUSINESS_ACCOUNT_ID missing',
         requiredTemplates,
         templateDetails: {}
       };
     }
 
     try {
-      const url = `https://control.msg91.com/api/v5/whatsapp/get-template-client/${senderNumber}`;
+      const url = `https://graph.facebook.com/${apiVersion}/${wabaId}/message_templates?fields=name,status,language,category&limit=250`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'accept': 'application/json',
-          'authkey': authKey
+          Authorization: `Bearer ${accessToken}`
         }
       });
 
@@ -225,32 +189,34 @@ export class EnterpriseWhatsAppService {
         return {
           verified: false,
           statusCode: response.status,
-          reason: `MSG91 Template API returned HTTP ${response.status}`,
+          reason: `Meta Template API returned HTTP ${response.status}`,
           requiredTemplates,
           templateDetails: {}
         };
       }
 
       const data: any = await response.json().catch(() => ({}));
-      const templatesList: any[] = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+      const templatesList: any[] = Array.isArray(data?.data) ? data.data : [];
 
       const templateDetails: Record<string, any> = {};
       let allFound = true;
 
       for (const tName of requiredTemplates) {
-        const found = templatesList.find((t) => t.name === tName || t.template_name === tName);
+        const found = templatesList.find((t) => t.name === tName);
         if (found) {
+          const approved = found.status === 'APPROVED';
+          if (!approved) allFound = false;
           templateDetails[tName] = {
-            approved: found.status === 'APPROVED' || found.status === 'approved' || true,
+            approved,
+            status: found.status,
             language: found.language || 'en',
-            category: found.category || 'TRANSACTIONAL',
-            variableCount: found.variable_count || found.components?.[0]?.parameters?.length || 3
+            category: found.category || 'UTILITY'
           };
         } else {
           allFound = false;
           templateDetails[tName] = {
             approved: false,
-            reason: 'Template not returned in client registry list'
+            reason: 'Template not found on this WhatsApp Business Account'
           };
         }
       }
@@ -264,7 +230,7 @@ export class EnterpriseWhatsAppService {
     } catch (err: any) {
       return {
         verified: false,
-        reason: err.message || 'Network error verifying MSG91 templates',
+        reason: err.message || 'Network error verifying WhatsApp templates',
         requiredTemplates,
         templateDetails: {}
       };
@@ -282,7 +248,7 @@ export class EnterpriseWhatsAppService {
     if (!phoneResult.isValid || !phoneResult.normalized) {
       return {
         success: false,
-        provider: 'msg91_whatsapp',
+        provider: 'meta_whatsapp',
         channel: 'whatsapp',
         error: `Phone normalization failed: ${phoneResult.error}`
       };
@@ -291,27 +257,11 @@ export class EnterpriseWhatsAppService {
     const formattedPhone = phoneResult.normalized;
     const maskedPhone = phoneResult.masked;
 
-    // 2. Endpoint Base URL Validation
-    const outboundUrl = this.getNormalizedBaseUrl();
-    if (
-      !outboundUrl.startsWith('https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk') &&
-      !outboundUrl.startsWith('https://api.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk')
-    ) {
-      console.error(`[WHATSAPP SERVICE] Invalid MSG91_BASE_URL endpoint: ${outboundUrl}`);
-      return {
-        success: false,
-        provider: 'msg91_whatsapp',
-        channel: 'whatsapp',
-        error: `INVALID_CONFIGURATION: MSG91_BASE_URL must target https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/ or https://api.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/`,
-        metadata: { outboundUrl, phone: maskedPhone, eventType, templateName: this.validateTemplate(eventType).templateName }
-      };
-    }
-
-    // 3. Template Mapping & Parameter Extraction
+    // 2. Template Mapping & Parameter Extraction
     const templateValidation = this.validateTemplate(eventType);
     const templateName = templateValidation.templateName;
     const language = templateValidation.config?.language || 'en';
-    
+
     let bodyValues: string[];
     try {
       bodyValues = buildWhatsAppTemplateParams(eventType, customer.name, order, params);
@@ -319,7 +269,7 @@ export class EnterpriseWhatsAppService {
       console.error(`[WHATSAPP SERVICE] Parameter extraction failed: ${err.message}`);
       return {
         success: false,
-        provider: 'msg91_whatsapp',
+        provider: 'meta_whatsapp',
         channel: 'whatsapp',
         error: err.message || 'CONFIGURATION_ERROR: Parameter extraction failed.',
         metadata: { phone: maskedPhone, eventType, templateName }
@@ -329,23 +279,21 @@ export class EnterpriseWhatsAppService {
     if (bodyValues.some((v) => v === undefined || v === null || v === '')) {
       return {
         success: false,
-        provider: 'msg91_whatsapp',
+        provider: 'meta_whatsapp',
         channel: 'whatsapp',
         error: 'CONFIGURATION_ERROR: Template parameters contain empty or undefined values.',
         metadata: { phone: maskedPhone, eventType, templateName, bodyValues }
       };
     }
 
-    const authKey = (process.env.MSG91_AUTH_KEY || '').trim();
-    const senderNumber = (process.env.MSG91_WHATSAPP_NUMBER || '917688886662').replace(/\D/g, '');
-    const isMockMode = process.env.MSG91_WHATSAPP_MOCK_MODE === 'true';
+    const isMockMode = process.env.WHATSAPP_MOCK_MODE === 'true';
 
-    // 4. Mock/Simulation Mode if explicitly enabled via MSG91_WHATSAPP_MOCK_MODE=true
+    // 3. Mock/Simulation Mode if explicitly enabled via WHATSAPP_MOCK_MODE=true
     if (isMockMode) {
       console.log(`[WHATSAPP SERVICE] Mock mode active. Simulating dispatch to ${maskedPhone} [Template: ${templateName}]`);
       return {
         success: true,
-        provider: 'msg91_whatsapp_mock',
+        provider: 'meta_whatsapp_mock',
         channel: 'whatsapp',
         providerMessageId: `mock_wa_${Date.now()}_${Math.random().toString(36).substring(7)}`,
         metadata: {
@@ -359,28 +307,27 @@ export class EnterpriseWhatsAppService {
     }
 
     // Fail closed if missing required production credentials
-    if (!authKey || !senderNumber) {
-      console.error(`[WHATSAPP SERVICE] Missing MSG91_AUTH_KEY or MSG91_WHATSAPP_NUMBER in production mode. Failing closed.`);
+    const config = this.getConfig();
+    if (!config) {
+      console.error(`[WHATSAPP SERVICE] Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID in production mode. Failing closed.`);
       return {
         success: false,
-        provider: 'msg91_whatsapp',
+        provider: 'meta_whatsapp',
         channel: 'whatsapp',
-        error: 'CONFIGURATION_ERROR: MSG91_AUTH_KEY or MSG91_WHATSAPP_NUMBER is missing and MSG91_WHATSAPP_MOCK_MODE is not true.',
+        error: 'CONFIGURATION_ERROR: WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID is missing and WHATSAPP_MOCK_MODE is not true.',
         metadata: { phone: maskedPhone, eventType, templateName }
       };
     }
 
-    // 5. Construct Payload in official MSG91 bulk template structure
+    // 4. Construct Payload in Meta Cloud API's template-message structure
     const requestPayload = buildPayload({
       toPhone: formattedPhone,
       templateName,
       language,
-      bodyParams: bodyValues,
-      integratedNumber: senderNumber,
-      namespace: process.env.MSG91_WHATSAPP_NAMESPACE || DEFAULT_MSG91_WHATSAPP_NAMESPACE
+      bodyParams: bodyValues
     });
 
-    // 5. Execute HTTP Request with Timeout
+    // 5. Execute HTTP Request with Timeout + Retry
     const maxRetries = 2;
     let attempt = 0;
     let lastError = '';
@@ -391,12 +338,11 @@ export class EnterpriseWhatsAppService {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
-        const response = await fetch(outboundUrl, {
+        const response = await fetch(`https://graph.facebook.com/${config.apiVersion}/${config.phoneNumberId}/messages`, {
           method: 'POST',
           headers: {
-            'accept': 'application/json',
-            'content-type': 'application/json',
-            'authkey': authKey
+            Authorization: `Bearer ${config.accessToken}`,
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(requestPayload),
           signal: controller.signal
@@ -406,12 +352,12 @@ export class EnterpriseWhatsAppService {
 
         const responseData: any = await response.json().catch(() => ({}));
 
-        if (response.ok && (responseData.status === 'success' || responseData.type === 'success')) {
-          const providerMsgId = responseData.message_id || responseData.request_id || responseData.data?.request_id || `wa_req_${Date.now()}`;
+        if (response.ok && responseData.messages?.[0]?.id) {
+          const providerMsgId = responseData.messages[0].id;
           console.log(`[WHATSAPP SERVICE] Successfully dispatched to ${maskedPhone} (MsgId: ${providerMsgId})`);
           return {
             success: true,
-            provider: 'msg91_whatsapp',
+            provider: 'meta_whatsapp',
             channel: 'whatsapp',
             providerMessageId: String(providerMsgId),
             metadata: {
@@ -423,16 +369,16 @@ export class EnterpriseWhatsAppService {
         }
 
         const statusCode = response.status;
-        const errMsg = responseData.message || responseData.error || `MSG91 Error (${statusCode})`;
+        const errMsg = responseData.error?.message || `Meta WhatsApp API Error (${statusCode})`;
         lastError = errMsg;
 
         // If non-transient error (e.g., 400 Bad Request, template rejected), break immediately
         if (!this.isTransientError(statusCode, errMsg)) {
           return {
             success: false,
-            provider: 'msg91_whatsapp',
+            provider: 'meta_whatsapp',
             channel: 'whatsapp',
-            error: `Non-retryable MSG91 error: ${errMsg}`,
+            error: `Non-retryable Meta WhatsApp error: ${errMsg}`,
             metadata: { statusCode, responseData, phone: maskedPhone }
           };
         }
@@ -451,7 +397,7 @@ export class EnterpriseWhatsAppService {
 
     return {
       success: false,
-      provider: 'msg91_whatsapp',
+      provider: 'meta_whatsapp',
       channel: 'whatsapp',
       error: `Failed after ${attempt} attempts: ${lastError}`,
       metadata: { phone: maskedPhone }
@@ -460,4 +406,3 @@ export class EnterpriseWhatsAppService {
 }
 
 export const whatsappService = new EnterpriseWhatsAppService();
-
