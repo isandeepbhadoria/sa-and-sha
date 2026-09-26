@@ -1647,6 +1647,118 @@ function isValidRoute(urlPath: string, activeProducts: any[] = []): boolean {
   return false;
 }
 
+// Verifies Meta's X-Hub-Signature-256 header on an inbound WhatsApp webhook
+// POST against WHATSAPP_APP_SECRET. Not configured -> accept unverified
+// (best-effort, same "optional but recommended" posture WHATSAPP_APP_SECRET
+// documents in .env.example).
+function verifyMetaWhatsAppSignature(req: any): boolean {
+  const appSecret = (process.env.WHATSAPP_APP_SECRET || "").trim();
+  if (!appSecret) return true;
+
+  const header = req.headers["x-hub-signature-256"];
+  const signature = Array.isArray(header) ? header[0] : header;
+  if (!signature || !req.rawBody) return false;
+
+  const expected = "sha256=" + crypto.createHmac("sha256", appSecret).update(req.rawBody).digest("hex");
+  const signatureBuf = Buffer.from(signature);
+  const expectedBuf = Buffer.from(expected);
+  if (signatureBuf.length !== expectedBuf.length) return false;
+  return crypto.timingSafeEqual(signatureBuf, expectedBuf);
+}
+
+// Maps one entry of Meta's `statuses` webhook array (delivery/read receipts
+// for a message this store sent) onto the notification_logs update path —
+// same monotonic status-rank guard, same CRM timeline write.
+async function processMetaWhatsAppStatus(adminDb: any, status: any): Promise<void> {
+  const rawMsgId = status?.id;
+  const rawStatus = String(status?.status || "").toLowerCase();
+  const rawMobile = status?.recipient_id;
+  const failureReason = Array.isArray(status?.errors) && status.errors[0]
+    ? (status.errors[0].title || status.errors[0].message)
+    : undefined;
+
+  if (!rawMsgId && !rawMobile) return;
+
+  let mappedStatus: "SUBMITTED" | "SENT" | "DELIVERED" | "READ" | "FAILED" = "SENT";
+  if (rawStatus === "sent") mappedStatus = "SENT";
+  else if (rawStatus === "delivered") mappedStatus = "DELIVERED";
+  else if (rawStatus === "read") mappedStatus = "READ";
+  else if (rawStatus === "failed" || rawStatus === "undelivered") mappedStatus = "FAILED";
+
+  const nowIso = new Date().toISOString();
+  const updates: any = { updated_at: nowIso };
+  if (mappedStatus === "DELIVERED") updates.delivered_at = nowIso;
+  if (mappedStatus === "READ") updates.read_at = nowIso;
+  if (mappedStatus === "FAILED") {
+    updates.failed_at = nowIso;
+    if (failureReason) updates.error_message = String(failureReason);
+  }
+
+  let matchingDocSnap: any = null;
+  if (rawMsgId) {
+    const msgQuery = await adminDb.collection("notification_logs")
+      .where("provider_message_id", "==", String(rawMsgId))
+      .limit(1)
+      .get();
+    if (!msgQuery.empty) {
+      matchingDocSnap = msgQuery.docs[0];
+    }
+  }
+
+  if (!matchingDocSnap && rawMobile) {
+    const phoneNorm = normalizePhone(rawMobile);
+    if (phoneNorm.normalized) {
+      const mobileQuery = await adminDb.collection("notification_logs")
+        .where("channel", "==", "whatsapp")
+        .where("recipient", "==", phoneNorm.normalized)
+        .limit(1)
+        .get();
+      if (!mobileQuery.empty) {
+        matchingDocSnap = mobileQuery.docs[0];
+      }
+    }
+  }
+
+  if (rawMsgId && !matchingDocSnap) {
+    console.warn(`[META WHATSAPP WEBHOOK] No notification_logs match for provider_message_id: ${rawMsgId}`);
+    return;
+  }
+  if (!matchingDocSnap) return;
+
+  const logData = matchingDocSnap.data();
+
+  const STATUS_RANK: Record<string, number> = {
+    QUEUED: 1,
+    PROCESSING: 1,
+    SUBMITTED: 2,
+    SENT: 3,
+    DELIVERED: 4,
+    READ: 5,
+    FAILED: 6
+  };
+
+  const currentRank = STATUS_RANK[logData.status] || 0;
+  const newRank = STATUS_RANK[mappedStatus] || 0;
+  if (currentRank >= newRank && mappedStatus !== "FAILED") {
+    console.log(`[META WHATSAPP WEBHOOK] Monotonic protection: ignoring status transition from ${logData.status} (rank ${currentRank}) to ${mappedStatus} (rank ${newRank}) for doc ${matchingDocSnap.id}`);
+    return;
+  }
+
+  await updateNotificationLogStatus(adminDb, matchingDocSnap.id, mappedStatus, updates);
+
+  if (logData.customer_profile_id && logData.customer_profile_id !== "guest") {
+    await logNotificationTimelineEvent(
+      adminDb,
+      logData.customer_profile_id,
+      "whatsapp",
+      logData.event_type,
+      mappedStatus,
+      rawMsgId || logData.provider_message_id
+    );
+  }
+  console.log(`[META WHATSAPP WEBHOOK] Updated notification_logs doc ${matchingDocSnap.id} to status ${mappedStatus}`);
+}
+
 async function startServer() {
   const app = express();
   app.set("trust proxy", 1);
@@ -6172,8 +6284,8 @@ async function startServer() {
       const isMsg91Auth = Boolean(process.env.MSG91_AUTH_KEY && process.env.MSG91_AUTH_KEY.trim());
       const isSmsWidgetConfigured = Boolean(process.env.VITE_MSG91_WIDGET_ID && process.env.VITE_MSG91_WIDGET_ID.trim());
       const isSmsConfigured = isMsg91Auth || isSmsWidgetConfigured;
-      const isWhatsAppMock = process.env.MSG91_WHATSAPP_MOCK_MODE === "true";
-      const isWhatsAppConfigured = isMsg91Auth && Boolean(process.env.MSG91_WHATSAPP_NUMBER);
+      const isWhatsAppMock = process.env.WHATSAPP_MOCK_MODE === "true";
+      const isWhatsAppConfigured = Boolean(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID);
 
       const nowIso = new Date().toISOString();
 
@@ -6191,9 +6303,9 @@ async function startServer() {
         },
         whatsapp: {
           channel: "whatsapp",
-          provider: dbProviders.whatsapp?.provider || "MSG91 WhatsApp API",
+          provider: dbProviders.whatsapp?.provider || "Meta WhatsApp Cloud API",
           status: isWhatsAppConfigured ? "Active" : (isWhatsAppMock ? "Mock / Dev Mode" : "Not Configured"),
-          api_source: dbProviders.whatsapp?.api_source || "MSG91 Outbound API",
+          api_source: dbProviders.whatsapp?.api_source || "Meta Graph API",
           updated_at: dbProviders.whatsapp?.updated_at || nowIso
         },
         sms: {
@@ -8539,138 +8651,67 @@ async function startServer() {
     return res.json({ status: "ok", event: event, processed: true });
   });
 
-  // MSG91 Enterprise WhatsApp Webhook Handler (Status Updates, Delivery & Read Receipts)
-  app.post(["/api/webhooks/msg91/whatsapp", "/api/webhooks/whatsapp"], async (req, res) => {
+  // Meta WhatsApp Cloud API Webhook — one-time verification handshake Meta
+  // sends when this URL is registered in WhatsApp Manager (Configuration ->
+  // Webhook). See the POST handler below for the actual event delivery.
+  app.get("/api/webhooks/whatsapp", (req, res) => {
+    const expected = (process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "").trim();
+    const mode = req.query["hub.mode"];
+    const verifyToken = req.query["hub.verify_token"];
+    const challenge = req.query["hub.challenge"];
+    if (mode === "subscribe" && expected && verifyToken === expected) {
+      return res.status(200).send(String(challenge ?? ""));
+    }
+    return res.status(403).send("Verification failed");
+  });
+
+  // Meta WhatsApp Cloud API Webhook (Status Updates, Delivery & Read
+  // Receipts, and Inbound Customer Messages). Replaces the old MSG91
+  // delivery-receipt webhook this same path used to serve.
+  app.post("/api/webhooks/whatsapp", async (req: any, res) => {
+    // Ack fast regardless of outcome — Meta retries a delivery that doesn't
+    // get a 2xx within a few seconds, and there's no reason to make it
+    // retry over something we've already decided not to act on.
+    res.status(200).json({ success: true });
+
     try {
+      if (!verifyMetaWhatsAppSignature(req)) {
+        console.warn("[META WHATSAPP WEBHOOK] Payload failed signature verification — ignoring.");
+        return;
+      }
+
       const adminDb = getAdminDb();
       const payload = req.body || {};
-      console.log("[MSG91 WEBHOOK] Incoming WhatsApp webhook event:", JSON.stringify(payload));
+      const entries = Array.isArray(payload.entry) ? payload.entry : [];
 
-      // 1. Webhook Secret Token Security Check
-      const webhookSecret = process.env.MSG91_WEBHOOK_SECRET;
-      const reqSecret = req.headers["x-msg91-secret"] || req.query.secret || payload.secret;
-      if (webhookSecret && reqSecret !== webhookSecret) {
-        console.warn("[MSG91 WEBHOOK] Unauthorized webhook attempt - invalid secret token.");
-        return res.status(401).json({ success: false, error: "Unauthorized webhook request" });
-      }
+      for (const entry of entries) {
+        const changes = Array.isArray(entry?.changes) ? entry.changes : [];
+        for (const change of changes) {
+          const value = change?.value || {};
 
-      const rawMsgId = payload.request_id || payload.message_id || payload.provider_message_id || payload.id;
-      const rawStatus = (payload.status || payload.event || "").toLowerCase();
-      const rawMobile = payload.mobile || payload.to || payload.recipient;
-      const failureReason = payload.reason || payload.error || payload.failure_reason;
+          // Delivery/read receipts for messages this store sent.
+          const statuses = Array.isArray(value.statuses) ? value.statuses : [];
+          for (const status of statuses) {
+            await processMetaWhatsAppStatus(adminDb, status);
+          }
 
-      if (!rawMsgId && !rawMobile) {
-        return res.status(200).json({ success: true, note: "Ignored webhook payload missing message identifier" });
-      }
-
-      // 2. Map incoming status string to standard NotificationStatus
-      let mappedStatus: "SUBMITTED" | "SENT" | "DELIVERED" | "READ" | "FAILED" = "SENT";
-      if (rawStatus.includes("subm")) mappedStatus = "SUBMITTED";
-      else if (rawStatus.includes("sent")) mappedStatus = "SENT";
-      else if (rawStatus.includes("deliv")) mappedStatus = "DELIVERED";
-      else if (rawStatus.includes("read")) mappedStatus = "READ";
-      else if (rawStatus.includes("fail") || rawStatus.includes("reject") || rawStatus.includes("undeliv")) mappedStatus = "FAILED";
-
-      const nowIso = new Date().toISOString();
-      const updates: any = {
-        updated_at: nowIso
-      };
-
-      if (mappedStatus === "DELIVERED") updates.delivered_at = nowIso;
-      if (mappedStatus === "READ") updates.read_at = nowIso;
-      if (mappedStatus === "FAILED") {
-        updates.failed_at = nowIso;
-        if (failureReason) updates.error_message = String(failureReason);
-      }
-
-      // 3. Lookup notification_logs document by provider_message_id
-      let matchingDocSnap: any = null;
-      if (rawMsgId) {
-        const msgQuery = await adminDb.collection("notification_logs")
-          .where("provider_message_id", "==", String(rawMsgId))
-          .limit(1)
-          .get();
-        if (!msgQuery.empty) {
-          matchingDocSnap = msgQuery.docs[0];
-        }
-      }
-
-      if (!matchingDocSnap && rawMobile) {
-        const phoneNorm = normalizePhone(rawMobile);
-        if (phoneNorm.normalized) {
-          const mobileQuery = await adminDb.collection("notification_logs")
-            .where("channel", "==", "whatsapp")
-            .where("recipient", "==", phoneNorm.normalized)
-            .limit(1)
-            .get();
-          if (!mobileQuery.empty) {
-            matchingDocSnap = mobileQuery.docs[0];
+          // Inbound customer replies. Recording these into a WhatsApp Inbox
+          // is Phase 2 work — for now just log so nothing is silently lost.
+          const messages = Array.isArray(value.messages) ? value.messages : [];
+          for (const message of messages) {
+            console.log("[META WHATSAPP WEBHOOK] Inbound message (not yet persisted — WhatsApp Inbox is Phase 2):", JSON.stringify(message));
           }
         }
       }
-
-      // Reject unknown provider message IDs when provider ID was explicitly specified
-      if (rawMsgId && !matchingDocSnap) {
-        console.warn(`[MSG91 WEBHOOK] Rejected webhook for unknown provider_message_id: ${rawMsgId}`);
-        return res.status(200).json({ success: false, processed: false, reason: "UNKNOWN_PROVIDER_MESSAGE_ID" });
-      }
-
-      if (matchingDocSnap) {
-        const logData = matchingDocSnap.data();
-
-        // 4. Monotonic Status Progression Enforcement
-        const STATUS_RANK: Record<string, number> = {
-          QUEUED: 1,
-          PROCESSING: 1,
-          SUBMITTED: 2,
-          SENT: 3,
-          DELIVERED: 4,
-          READ: 5,
-          FAILED: 6
-        };
-
-        const currentRank = STATUS_RANK[logData.status] || 0;
-        const newRank = STATUS_RANK[mappedStatus] || 0;
-
-        if (currentRank >= newRank && mappedStatus !== "FAILED") {
-          console.log(`[MSG91 WEBHOOK] Monotonic protection: ignoring status transition from ${logData.status} (rank ${currentRank}) to ${mappedStatus} (rank ${newRank}) for doc ${matchingDocSnap.id}`);
-          return res.status(200).json({
-            success: true,
-            processed: false,
-            reason: "MONOTONIC_STATUS_PROTECTION",
-            currentStatus: logData.status
-          });
-        }
-
-        await updateNotificationLogStatus(adminDb, matchingDocSnap.id, mappedStatus, updates);
-
-        // Update CRM Timeline with status transition
-        if (logData.customer_profile_id && logData.customer_profile_id !== "guest") {
-          await logNotificationTimelineEvent(
-            adminDb,
-            logData.customer_profile_id,
-            "whatsapp",
-            logData.event_type,
-            mappedStatus,
-            rawMsgId || logData.provider_message_id
-          );
-        }
-        console.log(`[MSG91 WEBHOOK] Updated notification_logs doc ${matchingDocSnap.id} to status ${mappedStatus}`);
-        return res.json({ success: true, processed: true, mappedStatus, logId: matchingDocSnap.id });
-      }
-
-      return res.json({ success: true, processed: false, note: "No matching record" });
     } catch (err: any) {
-      console.error("[MSG91 WEBHOOK] Exception processing WhatsApp webhook:", err);
-      // Always return 200 to provider to avoid webhook loop retries
-      return res.status(200).json({ success: false, error: err.message });
+      console.error("[META WHATSAPP WEBHOOK] Exception processing WhatsApp webhook:", err);
     }
   });
 
-  // Admin API: Verify Approved WhatsApp Templates against MSG91 Client Registry
+  // Admin API: Verify Approved WhatsApp Templates against the Meta WhatsApp Business Account
   app.get("/api/admin/notifications/verify-templates", async (req, res) => {
     try {
-      const result = await whatsappService.verifyMsg91ApprovedTemplates();
+      const result = await whatsappService.verifyApprovedTemplates();
       return res.json({ success: true, data: result });
     } catch (err: any) {
       return res.status(500).json({ success: false, error: err.message });

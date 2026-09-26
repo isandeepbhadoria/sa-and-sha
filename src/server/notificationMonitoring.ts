@@ -245,8 +245,8 @@ export async function getChannelPerformance(db: Firestore) {
       execDurationCount: 0,
       latestSuccessAt: null as string | null,
       latestFailedAt: null as string | null,
-      configuredProvider: 'msg91_whatsapp',
-      isConfigured: Boolean(process.env.MSG91_AUTH_KEY && process.env.MSG91_WHATSAPP_NUMBER)
+      configuredProvider: 'meta_whatsapp',
+      isConfigured: Boolean(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID)
     },
     sms: {
       channel: 'sms',

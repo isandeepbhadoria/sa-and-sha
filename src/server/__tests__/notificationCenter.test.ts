@@ -74,12 +74,12 @@ describe('Omnichannel Notification Center — Unit Tests', () => {
   });
 
   describe('2. WhatsApp Template Mapping', () => {
-    it('maps ORDER_PLACED event to kl_order_placed_v1 with formatted params', () => {
+    it('maps ORDER_PLACED event to ss_order_placed_v1 with formatted params', () => {
       const origBaseUrl = process.env.PUBLIC_BASE_URL;
       process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
 
       const mapping = WHATSAPP_TEMPLATES['ORDER_PLACED'];
-      expect(mapping.templateName).toBe('kl_order_placed_v1');
+      expect(mapping.templateName).toBe('ss_order_placed_v1');
 
       const params = mapping.buildBodyValues({
         customerName: 'Rohan Sharma',
@@ -96,9 +96,9 @@ describe('Omnichannel Notification Center — Unit Tests', () => {
       process.env.PUBLIC_BASE_URL = origBaseUrl;
     });
 
-    it('maps ORDER_SHIPPED event to kl_order_shipped_v1 with courier and tracking details', () => {
+    it('maps ORDER_SHIPPED event to ss_order_shipped_v1 with courier and tracking details', () => {
       const mapping = WHATSAPP_TEMPLATES['ORDER_SHIPPED'];
-      expect(mapping.templateName).toBe('kl_order_shipped_v1');
+      expect(mapping.templateName).toBe('ss_order_shipped_v1');
 
       const params = mapping.buildBodyValues({
         customerName: 'Ananya Patel',

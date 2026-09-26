@@ -8,12 +8,11 @@ import {
 } from '../notification/whatsappService';
 import {
   APPROVED_WHATSAPP_TEMPLATES,
-  WHATSAPP_TEMPLATE_MAPPINGS,
   buildWhatsAppTemplateParams
 } from '../notification/notificationTemplates';
 import { isChannelAllowedByPreferences } from '../notification/notificationPreferences';
 
-describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
+describe('Phase 8A.1 — Meta WhatsApp Cloud API Integration Tests', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -55,13 +54,13 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
   });
 
   describe('2. Centralized Approved Template Registry & Variable Mappings', () => {
-    it('contains exact approved MSG91 template identifiers for all six templates', () => {
-      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_PLACED).toBe('kl_order_placed_v1');
-      expect(APPROVED_WHATSAPP_TEMPLATES.PAYMENT_RECEIVED).toBe('kl_payment_received_v1');
-      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_SHIPPED).toBe('kl_order_shipped_v1');
-      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_DELIVERED).toBe('kl_order_delivered_v1');
-      expect(APPROVED_WHATSAPP_TEMPLATES.REFUND_PROCESSED).toBe('kl_refund_processed_v1');
-      expect(APPROVED_WHATSAPP_TEMPLATES.LOYALTY_POINTS).toBe('kl_loyalty_points_v1');
+    it('contains the six placeholder Sa and Sha template identifiers pending real Meta-approved names', () => {
+      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_PLACED).toBe('ss_order_placed_v1');
+      expect(APPROVED_WHATSAPP_TEMPLATES.PAYMENT_RECEIVED).toBe('ss_payment_received_v1');
+      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_SHIPPED).toBe('ss_order_shipped_v1');
+      expect(APPROVED_WHATSAPP_TEMPLATES.ORDER_DELIVERED).toBe('ss_order_delivered_v1');
+      expect(APPROVED_WHATSAPP_TEMPLATES.REFUND_PROCESSED).toBe('ss_refund_processed_v1');
+      expect(APPROVED_WHATSAPP_TEMPLATES.LOYALTY_POINTS).toBe('ss_loyalty_points_v1');
     });
 
     it('maps all six core templates to exact expected variable counts and builders', () => {
@@ -103,33 +102,31 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
     });
   });
 
-  describe('3. MSG91 Official Bulk Payload Format & Phase 8A.11 Requirements', () => {
-    it('constructs official bulk payload with messaging_product, namespace, and body_1 through body_4', () => {
+  describe('3. Meta Cloud API Template Payload Format', () => {
+    it('constructs a Meta Cloud API template-message payload with messaging_product, template name, language, and body parameters', () => {
       const payload = buildPayload({
         toPhone: '919876543210',
-        templateName: 'kl_order_placed_v1',
+        templateName: 'ss_order_placed_v1',
         language: 'en',
-        bodyParams: ['Vikram Sharma', 'ORD-10928', '5–7 business days', 'https://www.sa-and-sha.com/account/orders/ORD-10928'],
-        integratedNumber: '917688886662',
-        namespace: 'e05e342e_f402_47f4_8d19_76c1e20d8dce'
+        bodyParams: ['Vikram Sharma', 'ORD-10928', '5–7 business days', 'https://www.sa-and-sha.com/account/orders/ORD-10928']
       });
 
-      expect(payload.integrated_number).toBe('917688886662');
-      expect(payload.content_type).toBe('template');
-      expect(payload.payload.messaging_product).toBe('whatsapp');
-      expect(payload.payload.type).toBe('template');
-      expect(payload.payload.template.name).toBe('kl_order_placed_v1');
-      expect(payload.payload.template.language.code).toBe('en');
-      expect(payload.payload.template.namespace).toBe('e05e342e_f402_47f4_8d19_76c1e20d8dce');
-
-      const targetComp = payload.payload.template.to_and_components[0];
-      expect(targetComp.to).toEqual(['919876543210']);
-      expect(targetComp.components).toEqual({
-        body_1: { type: 'text', value: 'Vikram Sharma' },
-        body_2: { type: 'text', value: 'ORD-10928' },
-        body_3: { type: 'text', value: '5–7 business days' },
-        body_4: { type: 'text', value: 'https://www.sa-and-sha.com/account/orders/ORD-10928' }
-      });
+      expect(payload.messaging_product).toBe('whatsapp');
+      expect(payload.to).toBe('919876543210');
+      expect(payload.type).toBe('template');
+      expect(payload.template.name).toBe('ss_order_placed_v1');
+      expect(payload.template.language.code).toBe('en');
+      expect(payload.template.components).toEqual([
+        {
+          type: 'body',
+          parameters: [
+            { type: 'text', text: 'Vikram Sharma' },
+            { type: 'text', text: 'ORD-10928' },
+            { type: 'text', text: '5–7 business days' },
+            { type: 'text', text: 'https://www.sa-and-sha.com/account/orders/ORD-10928' }
+          ]
+        }
+      ]);
     });
 
     it('proves body_3 is estimated delivery (not amount) and body_4 is tracking URL with customer-friendly fallback', () => {
@@ -138,18 +135,18 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
 
       // With custom estimated delivery
       const params1 = buildWhatsAppTemplateParams('ORDER_PLACED', 'Sandeep Bhadoria', {
-        order_id: 'KL-698782-LX',
+        order_id: 'SS-698782-LX',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         estimated_delivery: 'Aug 5 - Aug 8'
       });
       expect(params1[0]).toBe('Sandeep Bhadoria');
-      expect(params1[1]).toBe('KL-698782-LX');
+      expect(params1[1]).toBe('SS-698782-LX');
       expect(params1[2]).toBe('Aug 5 - Aug 8');
       expect(params1[3]).toBe('https://www.sa-and-sha.com/track-order/trk_0123456789abcdef0123456789abcdef');
 
       // With fallback estimated delivery
       const params2 = buildWhatsAppTemplateParams('ORDER_PLACED', 'Sandeep Bhadoria', {
-        order_id: 'KL-698782-LX',
+        order_id: 'SS-698782-LX',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         estimated_delivery: 'N/A'
       });
@@ -162,11 +159,11 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
     it('fails safely when public base URL is missing and no absolute tracking URL exists', async () => {
       const origPublic = process.env.PUBLIC_BASE_URL;
       const origApp = process.env.APP_BASE_URL;
-      const origMock = process.env.MSG91_WHATSAPP_MOCK_MODE;
+      const origMock = process.env.WHATSAPP_MOCK_MODE;
 
       delete process.env.PUBLIC_BASE_URL;
       delete process.env.APP_BASE_URL;
-      process.env.MSG91_WHATSAPP_MOCK_MODE = 'true';
+      process.env.WHATSAPP_MOCK_MODE = 'true';
 
       const res = await whatsappService.sendTemplate({
         eventType: 'ORDER_PLACED',
@@ -179,7 +176,7 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
 
       process.env.PUBLIC_BASE_URL = origPublic;
       process.env.APP_BASE_URL = origApp;
-      process.env.MSG91_WHATSAPP_MOCK_MODE = origMock;
+      process.env.WHATSAPP_MOCK_MODE = origMock;
     });
 
     it('proves no undefined or empty parameters are present in output params', () => {
@@ -197,11 +194,13 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
   });
 
   describe('4. Fail-Closed Production Behavior & Mock Mode', () => {
-    it('fails closed with CONFIGURATION_ERROR when MSG91_AUTH_KEY is absent and mock mode is false', async () => {
-      const originalAuthKey = process.env.MSG91_AUTH_KEY;
-      const originalMock = process.env.MSG91_WHATSAPP_MOCK_MODE;
-      delete process.env.MSG91_AUTH_KEY;
-      process.env.MSG91_WHATSAPP_MOCK_MODE = 'false';
+    it('fails closed with CONFIGURATION_ERROR when WHATSAPP_ACCESS_TOKEN/WHATSAPP_PHONE_NUMBER_ID are absent and mock mode is false', async () => {
+      const originalAccessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+      const originalPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+      const originalMock = process.env.WHATSAPP_MOCK_MODE;
+      delete process.env.WHATSAPP_ACCESS_TOKEN;
+      delete process.env.WHATSAPP_PHONE_NUMBER_ID;
+      process.env.WHATSAPP_MOCK_MODE = 'false';
 
       const res = await whatsappService.sendTemplate({
         eventType: 'ORDER_PLACED',
@@ -220,13 +219,14 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
       expect(res.success).toBe(false);
       expect(res.error).toContain('CONFIGURATION_ERROR');
 
-      process.env.MSG91_AUTH_KEY = originalAuthKey;
-      process.env.MSG91_WHATSAPP_MOCK_MODE = originalMock;
+      process.env.WHATSAPP_ACCESS_TOKEN = originalAccessToken;
+      process.env.WHATSAPP_PHONE_NUMBER_ID = originalPhoneNumberId;
+      process.env.WHATSAPP_MOCK_MODE = originalMock;
     });
 
-    it('succeeds with simulated mock response when MSG91_WHATSAPP_MOCK_MODE=true', async () => {
-      const originalMock = process.env.MSG91_WHATSAPP_MOCK_MODE;
-      process.env.MSG91_WHATSAPP_MOCK_MODE = 'true';
+    it('succeeds with simulated mock response when WHATSAPP_MOCK_MODE=true', async () => {
+      const originalMock = process.env.WHATSAPP_MOCK_MODE;
+      process.env.WHATSAPP_MOCK_MODE = 'true';
 
       const res = await whatsappService.sendTemplate({
         eventType: 'ORDER_PLACED',
@@ -243,44 +243,43 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
       });
 
       expect(res.success).toBe(true);
-      expect(res.provider).toBe('msg91_whatsapp_mock');
+      expect(res.provider).toBe('meta_whatsapp_mock');
       expect(res.providerMessageId).toBeDefined();
 
-      process.env.MSG91_WHATSAPP_MOCK_MODE = originalMock;
+      process.env.WHATSAPP_MOCK_MODE = originalMock;
     });
 
     it('identifies non-transient errors to avoid invalid retries', () => {
       const service = new EnterpriseWhatsAppService();
       expect(service.isTransientError(400, 'Invalid template parameters')).toBe(false);
-      expect(service.isTransientError(401, 'Unauthorized authkey')).toBe(false);
+      expect(service.isTransientError(401, 'Unauthorized access token')).toBe(false);
       expect(service.isTransientError(429, 'Rate limit exceeded')).toBe(true);
       expect(service.isTransientError(503, 'Service unavailable')).toBe(true);
     });
   });
 
   describe('5. Live Template Verification Client API', () => {
-    it('verifies approved templates via MSG91 Client API', async () => {
+    it('verifies approved templates via the Meta WhatsApp Business Account Graph API', async () => {
       const mockFetch = vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          status: 'success',
           data: [
-            { name: 'kl_order_placed_v1', status: 'APPROVED', language: 'en', variable_count: 3 },
-            { name: 'kl_payment_received_v1', status: 'APPROVED', language: 'en', variable_count: 3 },
-            { name: 'kl_order_shipped_v1', status: 'APPROVED', language: 'en', variable_count: 5 },
-            { name: 'kl_order_delivered_v1', status: 'APPROVED', language: 'en', variable_count: 2 },
-            { name: 'kl_refund_processed_v1', status: 'APPROVED', language: 'en', variable_count: 3 },
-            { name: 'kl_loyalty_points_v1', status: 'APPROVED', language: 'en', variable_count: 3 }
+            { name: 'ss_order_placed_v1', status: 'APPROVED', language: 'en', category: 'UTILITY' },
+            { name: 'ss_payment_received_v1', status: 'APPROVED', language: 'en', category: 'UTILITY' },
+            { name: 'ss_order_shipped_v1', status: 'APPROVED', language: 'en', category: 'UTILITY' },
+            { name: 'ss_order_delivered_v1', status: 'APPROVED', language: 'en', category: 'UTILITY' },
+            { name: 'ss_refund_processed_v1', status: 'APPROVED', language: 'en', category: 'UTILITY' },
+            { name: 'ss_loyalty_points_v1', status: 'APPROVED', language: 'en', category: 'MARKETING' }
           ]
         })
       });
 
-      global.fetch = mockFetch;
+      global.fetch = mockFetch as any;
 
-      const result = await whatsappService.verifyMsg91ApprovedTemplates('test_auth_key', '917688886662');
+      const result = await whatsappService.verifyApprovedTemplates('test_access_token', '808292182310403');
       expect(result.verified).toBe(true);
-      expect(result.templateDetails['kl_order_placed_v1'].approved).toBe(true);
-      expect(result.templateDetails['kl_order_placed_v1'].variableCount).toBe(3);
+      expect(result.templateDetails['ss_order_placed_v1'].approved).toBe(true);
+      expect(result.templateDetails['ss_loyalty_points_v1'].category).toBe('MARKETING');
     });
   });
 
@@ -306,4 +305,3 @@ describe('Phase 8A.1 — MSG91 WhatsApp Integration Tests', () => {
     });
   });
 });
-

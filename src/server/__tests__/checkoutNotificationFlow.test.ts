@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { publishNotification } from '../notification/notificationEngine';
-import { whatsappService, EnterpriseWhatsAppService } from '../notification/whatsappService';
 
 describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Logging Tests', () => {
   let mockFirestoreDocs: Record<string, any> = {};
@@ -45,44 +44,15 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
     delete process.env.SMTP_USER;
     delete process.env.SMTP_PASSWORD;
     process.env.PUBLIC_BASE_URL = 'https://www.sa-and-sha.com';
-    process.env.MSG91_WHATSAPP_MOCK_MODE = 'true';
-    process.env.MSG91_AUTH_KEY = 'test_auth_key_123456';
-    process.env.MSG91_WHATSAPP_NUMBER = '917688886662';
-    process.env.MSG91_BASE_URL = 'https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/';
+    process.env.WHATSAPP_MOCK_MODE = 'true';
   });
 
-  describe('1. MSG91 Endpoint Normalization & Validation', () => {
-    it('normalizes base URL to official bulk outbound endpoint', () => {
-      const service = new EnterpriseWhatsAppService();
-      const normalized = service.getNormalizedBaseUrl('https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk');
-      expect(normalized).toBe('https://control.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/bulk/');
-    });
-
-    it('rejects unapproved custom base URL before dispatch', async () => {
-      process.env.MSG91_WHATSAPP_MOCK_MODE = 'false';
-      process.env.MSG91_BASE_URL = 'https://malicious.api.com/fake-endpoint/';
-      
-      const service = new EnterpriseWhatsAppService();
-      const res = await service.sendTemplate({
-        eventType: 'ORDER_PLACED',
-        customer: {
-          profileId: 'cust_123',
-          name: 'Test User',
-          phone: '919876543210'
-        }
-      });
-
-      expect(res.success).toBe(false);
-      expect(res.error).toContain('INVALID_CONFIGURATION');
-    });
-  });
-
-  describe('2. Centralized Notification Dispatch & Dual-Channel Logging', () => {
+  describe('1. Centralized Notification Dispatch & Dual-Channel Logging', () => {
     it('dispatches ORDER_PLACED event through Notification Engine and logs both Email and WhatsApp', async () => {
       const mockDb = createMockDb();
 
       const testOrder = {
-        order_id: 'KL-10099',
+        order_id: 'SS-10099',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         customer_name: 'Aditya Sharma',
         customer_email: 'aditya@example.com',
@@ -147,7 +117,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
       const mockDb = createMockDb();
 
       const guestOrder = {
-        order_id: 'KL-704862-LX',
+        order_id: 'SS-704862-LX',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         customer_name: 'Sandeep Singh Bhadoria',
         customer_email: 'isandeepbhadoria@gmail.com',
@@ -180,7 +150,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
       // Verify whatsapp provider execution
       expect(result.results.whatsapp).toBeDefined();
       expect(result.results.whatsapp.success).toBe(true);
-      expect(result.results.whatsapp.provider).toContain('msg91_whatsapp');
+      expect(result.results.whatsapp.provider).toContain('meta_whatsapp');
 
       // Verify notification_logs documents created in Firestore
       const logKeys = Object.keys(mockFirestoreDocs).filter(k => k.startsWith('notification_logs/'));
@@ -191,7 +161,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
         expect(docData.customer_profile_id).toBe('guest');
         // Ensure customer_business_id is either omitted or not undefined
         expect(docData).not.toHaveProperty('customer_business_id', undefined);
-        
+
         // Ensure no value in docData is undefined
         for (const [key, val] of Object.entries(docData)) {
           expect(val).not.toBeUndefined();
@@ -211,7 +181,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
 
       const result = await publishNotification(failingDb, {
         event: 'ORDER_PLACED',
-        order: { order_id: 'KL-FAIL-1' },
+        order: { order_id: 'SS-FAIL-1' },
         customer: {
           profileId: 'guest',
           name: 'Fail User',
@@ -227,12 +197,12 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
     });
   });
 
-  describe('3. Phase 8A.8 — Order Confirmation Email & Channel Independence Regression Tests', () => {
+  describe('2. Phase 8A.8 — Order Confirmation Email & Channel Independence Regression Tests', () => {
     it('ORDER_PLACED selects order-confirmation template and does NOT send WELCOME email', async () => {
       const { emailProvider } = await import('../notification/notificationProviders/emailProvider');
 
       const testOrder = {
-        order_id: 'KL-888999',
+        order_id: 'SS-888999',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         customer_name: 'Priya Sharma',
         customer_email: 'priya@example.com',
@@ -307,7 +277,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
       const mockDb = createMockDb();
 
       const testOrder = {
-        order_id: 'KL-INDEP-01',
+        order_id: 'SS-INDEP-01',
         tracking_token: 'trk_0123456789abcdef0123456789abcdef',
         customer_name: 'Test Customer',
         customer_email: 'test@example.com',
@@ -338,7 +308,7 @@ describe('Phase 8A.3 — Centralized Checkout Notification Architecture & Loggin
 
         // Verify WhatsApp executed successfully despite email failure
         expect(result.results.whatsapp.success).toBe(true);
-        expect(result.results.whatsapp.provider).toBe('msg91_whatsapp_mock');
+        expect(result.results.whatsapp.provider).toBe('meta_whatsapp_mock');
       } finally {
         emailProvider.dispatch = originalDispatch;
       }

@@ -45,7 +45,7 @@ Firestore database, separate Auth users, separate everything).
 8. Cloud Functions (`functions/`) are Razorpay-webhook-only — skip
    deploying these until Razorpay is wired up.
 
-## 2. MSG91 (OTP)
+## 2. MSG91 (Mobile/Email OTP widget only)
 
 1. Sign up at [msg91.com](https://msg91.com/) for Sa and Sha (separate
    account from Kora Linen's).
@@ -54,9 +54,45 @@ Firestore database, separate Auth users, separate everything).
    `VITE_MSG91_WIDGET_ID`, `VITE_MSG91_TOKEN_AUTH`.
 3. Grab your account's **Auth Key** (Dashboard → API → Auth Key) for
    `MSG91_AUTH_KEY`.
-4. WhatsApp (`MSG91_WHATSAPP_NUMBER`, `MSG91_WHATSAPP_NAMESPACE`) needs
-   a separate WhatsApp Business API approval through MSG91 — optional
-   for launch; the app degrades gracefully (mock mode) without it.
+
+MSG91 is no longer used for WhatsApp messaging — see the next section.
+
+## 2b. Meta WhatsApp Cloud API (WhatsApp messaging + inbound webhook)
+
+Sa and Sha does not have a Meta WhatsApp Business Account (WABA) yet.
+Provisioning one (separate from Kora Linen's) is a manual, one-time setup
+in Meta's dashboards:
+
+1. Create/use a Meta Business Account at
+   [business.facebook.com](https://business.facebook.com/), then add a
+   WhatsApp product from the Meta App Dashboard (developers.facebook.com)
+   — this gives you a **Phone Number ID** and **WhatsApp Business Account
+   ID**.
+2. Generate a permanent access token (System User in Business Settings,
+   with `whatsapp_business_messaging` + `whatsapp_business_management`
+   permissions) for `WHATSAPP_ACCESS_TOKEN`.
+3. Submit and get approval for your message templates in WhatsApp Manager
+   (Account Tools → Message Templates) — the template names used by the
+   code (currently placeholders `ss_order_placed_v1` etc. in
+   `src/server/notification/notificationTemplates.ts`) must match exactly
+   what's approved there.
+4. Register the inbound webhook: Configuration → Webhook, callback URL
+   `https://www.sa-and-sha.com/api/webhooks/whatsapp`, verify token of your
+   choosing (also set as `WHATSAPP_WEBHOOK_VERIFY_TOKEN`), subscribed to
+   the `messages` field. Also turn on the WABA-level "Subscribe webhooks"
+   toggle under the phone number's settings — a separate switch from the
+   Callback URL config, and messages won't route to the app without it.
+5. The app must be **Published** (App Dashboard → App Review) for it to
+   receive real (non-test) webhook traffic — this requires a hosted privacy
+   policy URL.
+6. Set `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`,
+   `WHATSAPP_BUSINESS_ACCOUNT_ID`, `WHATSAPP_WEBHOOK_VERIFY_TOKEN`, and
+   optionally `WHATSAPP_APP_SECRET` (enables webhook signature
+   verification) in `.env`. Until these are set, WhatsApp sending degrades
+   gracefully to mock mode (`WHATSAPP_MOCK_MODE=true`) or fails closed
+   without blocking the checkout/order flow that triggered it.
+7. Once configured, hit `GET /api/admin/notifications/verify-templates` to
+   confirm the template names in code match what's approved on the WABA.
 
 ## 3. Email (SMTP via your own domain)
 
