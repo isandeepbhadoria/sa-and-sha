@@ -238,6 +238,36 @@ export class EnterpriseWhatsAppService {
   }
 
   /**
+   * Sends a free-form text message via the Meta WhatsApp Cloud API. Used by
+   * the WhatsApp Inbox for staff replies to inbound customer messages — only
+   * deliverable within the 24-hour customer-service window Meta opens once a
+   * customer messages this number. No retry loop: an inbox reply is a
+   * one-shot, user-initiated action, so a failure surfaces immediately for
+   * the admin to see and retry manually rather than being retried silently.
+   */
+  public async sendText(to: string, body: string): Promise<{ success: boolean; error?: string }> {
+    const config = this.getConfig();
+    if (!config) return { success: false, error: 'WhatsApp is not configured on the server.' };
+    try {
+      const response = await fetch(`https://graph.facebook.com/${config.apiVersion}/${config.phoneNumberId}/messages`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${config.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'text', text: { body } })
+      });
+      if (!response.ok) {
+        const responseBody = await response.text().catch(() => '');
+        return { success: false, error: `${response.status}: ${responseBody}` };
+      }
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Network error' };
+    }
+  }
+
+  /**
    * Main sendTemplate execution method
    */
   public async sendTemplate(opts: SendWhatsAppTemplateOptions): Promise<ProviderDispatchResult> {

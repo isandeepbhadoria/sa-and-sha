@@ -27,11 +27,13 @@ import {
   RotateCcw,
   ShieldAlert,
   FileText,
-  Info
+  Info,
+  MessageCircle
 } from 'lucide-react';
 import { AdminEmailTemplatesTab } from './admin-communication/AdminEmailTemplatesTab';
 import { AdminDispatchQueueTab } from './admin-communication/AdminDispatchQueueTab';
 import { AdminNotificationRetryTab } from './admin-communication/AdminNotificationRetryTab';
+import { AdminWhatsAppInboxTab } from './admin-communication/AdminWhatsAppInboxTab';
 
 interface NotificationChannelConfig {
   email: boolean;
@@ -85,7 +87,7 @@ interface AdminCommunicationTabProps {
 }
 
 export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ adminToken }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'dashboard' | 'events' | 'email_templates' | 'providers' | 'queue' | 'retry' | 'settings'>('dashboard');
+  const [activeSubTab, setActiveSubTab] = useState<'dashboard' | 'events' | 'email_templates' | 'providers' | 'queue' | 'retry' | 'whatsapp_inbox' | 'settings'>('dashboard');
 
   // Notification Event Settings State
   const [eventSettings, setEventSettings] = useState<NotificationEventSetting[]>([]);
@@ -489,6 +491,18 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
         >
           <RotateCcw className="w-4 h-4" />
           <span>Retry Centre</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSubTab('whatsapp_inbox')}
+          className={`py-3.5 px-5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+            activeSubTab === 'whatsapp_inbox'
+              ? 'border-[#B08D57] text-[#B08D57]'
+              : 'border-transparent text-stone-500 hover:text-[#2A211C]'
+          }`}
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>WhatsApp Inbox</span>
         </button>
 
         <button
@@ -1266,6 +1280,15 @@ export const AdminCommunicationTab: React.FC<AdminCommunicationTabProps> = ({ ad
           onSuccessToast={triggerSuccessToast}
           onErrorToast={triggerErrorToast}
           isVisible={activeSubTab === 'retry'}
+        />
+      )}
+
+      {/* SUB-TAB: WHATSAPP INBOX */}
+      {activeSubTab === 'whatsapp_inbox' && (
+        <AdminWhatsAppInboxTab
+          adminToken={adminToken}
+          onSuccessToast={triggerSuccessToast}
+          onErrorToast={triggerErrorToast}
         />
       )}
 
