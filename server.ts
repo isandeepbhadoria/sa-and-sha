@@ -1571,6 +1571,11 @@ const VALID_ROOTS = [
 // doing a Firestore read on every page load.
 const CURATED_SHOP_SLUGS = ["bestsellers", "new-arrivals", "all"];
 
+// Convenience alias slugs — subtype-only shortcuts (e.g. /shop/tops) that
+// App.tsx redirects to their canonical /shop/product/:type/:subtype route.
+// Not category ids, so they'd otherwise fail the liveCategorySlugs check.
+const SHOP_ALIAS_SLUGS = ["tops"];
+
 // Used to seed the very first liveCategorySlugs value (before the initial
 // refresh completes) and as a safety net if Firestore is ever unreachable —
 // the exact same 7 product-type ids the old hardcoded VALID_CATEGORIES
@@ -1675,7 +1680,7 @@ function isValidRoute(urlPath: string, activeProducts: any[] = []): boolean {
     const slug = parts[1].toLowerCase();
     
     if (root === "shop") {
-      return liveCategorySlugs.includes(slug);
+      return liveCategorySlugs.includes(slug) || SHOP_ALIAS_SLUGS.includes(slug);
     }
     if (root === "product") {
       const res = resolveProductRoute(slug, activeProducts);
