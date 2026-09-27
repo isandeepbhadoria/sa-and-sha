@@ -237,10 +237,14 @@ export const ProductDetailPage: React.FC = () => {
       <nav className="text-xs font-sans text-[#2A211C]/50 tracking-wider uppercase flex items-center gap-1.5" id="pdp-breadcrumb">
         <Link to="/" className="hover:text-[#B08D57] transition-colors">Home</Link>
         <span>/</span>
-        <Link to={`/shop/${product.category}`} className="hover:text-[#B08D57] transition-colors uppercase">{product.category}</Link>
+        <Link to={`/shop/product/${product.category}`} className="hover:text-[#B08D57] transition-colors uppercase">{product.category}</Link>
         <span>/</span>
-        <Link to={`/shop/${product.subCategory}`} className="hover:text-[#B08D57] transition-colors uppercase">{(product.subCategory || '').replace(/-/g, ' ')}</Link>
-        <span>/</span>
+        {product.subCategory && (
+          <>
+            <Link to={`/shop/product/${product.category}/${product.subCategory}`} className="hover:text-[#B08D57] transition-colors uppercase">{product.subCategory.replace(/-/g, ' ')}</Link>
+            <span>/</span>
+          </>
+        )}
         <span className="text-[#2A211C] font-semibold">{product.name}</span>
       </nav>
 
