@@ -137,6 +137,7 @@ export default function App() {
               <Route path="/shop/trousers" element={<Navigate to="/shop/product/trousers" replace />} />
               <Route path="/shop/jackets" element={<Navigate to="/shop/product/jackets" replace />} />
               <Route path="/shop/bags-pouches" element={<Navigate to="/shop/product/bags-pouches" replace />} />
+              <Route path="/shop/tops" element={<Navigate to="/shop/product/tops-shirts/tops" replace />} />
 
               {/* Fallback category route */}
               <Route path="/shop/:categorySlug" element={<CollectionPage />} />
