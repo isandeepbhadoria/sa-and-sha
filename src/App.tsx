@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ShopProvider } from './context/ShopContext';
+import { CookieConsentProvider, useCookieConsent } from './context/CookieConsentContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { Toast } from './components/Toast';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { useSEO } from './hooks/useSEO';
+import { trackPageView } from './utils/analyticsLoader';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -36,6 +39,30 @@ const ScrollToTop: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  return null;
+};
+
+// Fires a GA4/Meta Pixel pageview on every client-side route change (the
+// base snippets injected by analyticsLoader only send one pageview, on
+// initial script load). Skips the very first render so it doesn't double
+// count alongside that initial pageview. Only fires once the visitor has
+// actually granted analytics/marketing consent — consent gating for the
+// scripts themselves happens in CookieConsentContext.
+const AnalyticsPageViewTracker: React.FC = () => {
+  const { pathname } = useLocation();
+  const { consent } = useCookieConsent();
+  const isFirstRender = React.useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (consent.analytics || consent.marketing) {
+      trackPageView(pathname);
+    }
+  }, [pathname, consent.analytics, consent.marketing]);
+
   return null;
 };
 
@@ -102,16 +129,19 @@ export default function App() {
 
   return (
     <ShopProvider>
+      <CookieConsentProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <AnalyticsPageViewTracker />
         <div className="min-h-screen flex flex-col justify-between bg-[#FBF6EE] text-[#2A211C] antialiased font-sans">
-          
+
           {/* Header element */}
           <Header onOpenCart={() => setIsCartOpen(true)} />
 
           {/* Overlays */}
           <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
           <Toast />
+          <CookieConsentBanner />
 
           {/* Core dynamic body routes */}
           <main className="flex-grow pb-16">
@@ -187,6 +217,7 @@ export default function App() {
 
         </div>
       </BrowserRouter>
+      </CookieConsentProvider>
     </ShopProvider>
   );
 }
