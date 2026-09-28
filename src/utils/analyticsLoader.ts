@@ -45,6 +45,23 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
   window.gtag = function gtag(...args: any[]) {
     window.dataLayer!.push(args);
   };
+
+  // gtag.js's built-in Consent Mode withholds all hits until it receives an
+  // explicit consent signal — without this, "config" never actually sends
+  // anything (confirmed via Tag Assistant: "Consent not configured"). This
+  // function is only ever called once the visitor has granted analytics
+  // consent via our own banner, so declare a default (denied) then
+  // immediately grant analytics_storage. ad_storage/ad_user_data/
+  // ad_personalization stay denied — those gate Google Ads features we
+  // don't use here, not basic GA4 pageview/event collection.
+  window.gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  window.gtag('consent', 'update', { analytics_storage: 'granted' });
+
   window.gtag('js', new Date());
   window.gtag('config', measurementId);
 }
