@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Mail, ShieldCheck } from 'lucide-react';
 import { SaAndShaLogo } from './SaAndShaLogo';
+import { useCookieConsent } from '../context/CookieConsentContext';
 
 export const Footer: React.FC = () => {
   const [emailInput, setEmailInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const { openPreferences } = useCookieConsent();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,6 +156,16 @@ export const Footer: React.FC = () => {
               <li>
                 <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openPreferences}
+                  id="footer-cookie-preferences-btn"
+                  className="hover:text-white transition-colors text-left"
+                >
+                  Cookie Preferences
+                </button>
+              </li>
               <li className="pt-2 border-t border-white/5">
                 <Link to="/admin" className="hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-[#E5D2BC]">
                   <span>Admin Portal</span>
@@ -210,6 +222,15 @@ export const Footer: React.FC = () => {
               <Link to="/privacy-policy" className="hover:text-white transition-colors underline underline-offset-2">Privacy Policy</Link>
               <span>•</span>
               <Link to="/terms-and-conditions" className="hover:text-white transition-colors underline underline-offset-2">Terms & Conditions</Link>
+              <span>•</span>
+              <button
+                type="button"
+                onClick={openPreferences}
+                id="footer-cookie-preferences-btn-bottom"
+                className="hover:text-white transition-colors underline underline-offset-2"
+              >
+                Cookie Preferences
+              </button>
             </div>
           </div>
           
