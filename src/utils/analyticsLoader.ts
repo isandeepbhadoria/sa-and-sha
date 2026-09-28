@@ -39,7 +39,6 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
   const script = document.createElement('script');
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-  document.head.appendChild(script);
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag(...args: any[]) {
@@ -62,15 +61,26 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
   window.gtag('js', new Date());
   window.gtag('config', measurementId);
 
-  // gtag.js's built-in "automatic pageview on config()" never actually
-  // fires here — confirmed via a bare static test page (same measurement
-  // ID, same account, no consent/app logic at all) that DID get a hit,
-  // proving the property/account/network are fine and the gap is specific
-  // to this dynamic script-injection setup. Rather than depend on that
-  // automatic behavior, send the first pageview explicitly ourselves.
-  window.gtag('event', 'page_view', {
-    page_path: window.location.pathname + window.location.search
-  });
+  // The very first batch of commands queued here (consent/js/config, and
+  // previously an immediate explicit "event"/page_view too) gets replayed
+  // all at once by gtag.js the moment it finishes loading — and on this
+  // specific dynamic-script-injection setup, that first replay silently
+  // never results in an actual network hit (confirmed: no _ga cookie ever
+  // gets set either, meaning gtag.js's own client bootstrap doesn't
+  // complete from that replay). A bare static test page with the same
+  // measurement ID, and this exact app once gtag.js is already warmed up
+  // (e.g. a second in-app page view), both work fine — the common trait
+  // in both working cases is that the command was processed by a gtag.js
+  // that had already finished its own load, not one processing a
+  // just-replayed backlog. So: wait for the script's own load event
+  // before sending the first explicit pageview, rather than queuing it
+  // in the same initial batch.
+  script.onload = () => {
+    window.gtag!('event', 'page_view', {
+      page_path: window.location.pathname + window.location.search
+    });
+  };
+  document.head.appendChild(script);
 }
 
 /**
