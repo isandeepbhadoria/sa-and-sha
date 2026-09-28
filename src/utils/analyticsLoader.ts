@@ -46,20 +46,16 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
     window.dataLayer!.push(args);
   };
 
-  // gtag.js's built-in Consent Mode withholds all hits until it receives an
-  // explicit consent signal — without this, "config" never actually sends
-  // anything (confirmed via Tag Assistant: "Consent not configured"). This
-  // function is only ever called once the visitor has already granted
-  // analytics consent via our own banner, so declare that known state
-  // directly as the default (a single call — no separate denied-then-
-  // granted step, since there's no window where consent is genuinely
-  // unknown here). ad_storage/ad_user_data/ad_personalization stay denied
-  // — those gate Google Ads features we don't use, not basic GA4 collection.
+  // DIAGNOSTIC (re-run of the PR #12 experiment, interrupted last time by an
+  // unrelated hosting outage): granting all four Consent Mode signals to
+  // test whether this GA4 account/property requires the full set before it
+  // will send any hit, not just analytics_storage. Not a final fix — revert
+  // to analytics_storage-only once this is confirmed either way.
   window.gtag('consent', 'default', {
     analytics_storage: 'granted',
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied'
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted'
   });
 
   window.gtag('js', new Date());
