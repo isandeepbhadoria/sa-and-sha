@@ -57,9 +57,9 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
   // — those gate Google Ads features we don't use, not basic GA4 collection.
   window.gtag('consent', 'default', {
     analytics_storage: 'granted',
-    ad_storage: 'granted',
-    ad_user_data: 'granted',
-    ad_personalization: 'granted'
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
   });
 
   window.gtag('js', new Date());
