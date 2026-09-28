@@ -46,20 +46,31 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
     window.dataLayer!.push(args);
   };
 
-  // DIAGNOSTIC (re-run of the PR #12 experiment, interrupted last time by an
-  // unrelated hosting outage): granting all four Consent Mode signals to
-  // test whether this GA4 account/property requires the full set before it
-  // will send any hit, not just analytics_storage. Not a final fix — revert
-  // to analytics_storage-only once this is confirmed either way.
+  // This function is only ever called once the visitor has already granted
+  // analytics consent via our own banner, so declare that known state
+  // directly as the default. ad_storage/ad_user_data/ad_personalization
+  // stay denied — those gate Google Ads features we don't use, not basic
+  // GA4 collection (confirmed: granting all four made no difference to
+  // whether hits were sent).
   window.gtag('consent', 'default', {
     analytics_storage: 'granted',
-    ad_storage: 'granted',
-    ad_user_data: 'granted',
-    ad_personalization: 'granted'
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
   });
 
   window.gtag('js', new Date());
   window.gtag('config', measurementId);
+
+  // gtag.js's built-in "automatic pageview on config()" never actually
+  // fires here — confirmed via a bare static test page (same measurement
+  // ID, same account, no consent/app logic at all) that DID get a hit,
+  // proving the property/account/network are fine and the gap is specific
+  // to this dynamic script-injection setup. Rather than depend on that
+  // automatic behavior, send the first pageview explicitly ourselves.
+  window.gtag('event', 'page_view', {
+    page_path: window.location.pathname + window.location.search
+  });
 }
 
 /**
