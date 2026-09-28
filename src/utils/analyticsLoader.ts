@@ -61,24 +61,23 @@ export function loadGoogleAnalytics(measurementId: string | undefined | null): v
   window.gtag('js', new Date());
   window.gtag('config', measurementId);
 
-  // The very first batch of commands queued here (consent/js/config, and
-  // previously an immediate explicit "event"/page_view too) gets replayed
-  // all at once by gtag.js the moment it finishes loading — and on this
-  // specific dynamic-script-injection setup, that first replay silently
-  // never results in an actual network hit (confirmed: no _ga cookie ever
-  // gets set either, meaning gtag.js's own client bootstrap doesn't
-  // complete from that replay). A bare static test page with the same
-  // measurement ID, and this exact app once gtag.js is already warmed up
-  // (e.g. a second in-app page view), both work fine — the common trait
-  // in both working cases is that the command was processed by a gtag.js
-  // that had already finished its own load, not one processing a
-  // just-replayed backlog. So: wait for the script's own load event
-  // before sending the first explicit pageview, rather than queuing it
-  // in the same initial batch.
+  // Sending the first explicit pageview right on script.onload still isn't
+  // enough of a gap: onload only confirms gtag.js finished downloading and
+  // running its own top-level code, not that its internal client-ID/cookie
+  // bootstrap (which does its own follow-up async work — confirmed via
+  // DevTools: no _ga cookie exists yet at that point) has actually
+  // finished. Directly verified in the browser Console that ANY gtag()
+  // call made after that bootstrap has had time to settle succeeds
+  // (produces a real collect hit) — including a manual call typed in
+  // fresh, with no special context of its own. So: give it a short buffer
+  // after onload before sending the first pageview, rather than firing
+  // the instant the script file itself is ready.
   script.onload = () => {
-    window.gtag!('event', 'page_view', {
-      page_path: window.location.pathname + window.location.search
-    });
+    setTimeout(() => {
+      window.gtag!('event', 'page_view', {
+        page_path: window.location.pathname + window.location.search
+      });
+    }, 1500);
   };
   document.head.appendChild(script);
 }
