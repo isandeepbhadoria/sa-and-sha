@@ -500,6 +500,24 @@ export const AdminPage: React.FC = () => {
   const [patternSearchError, setPatternSearchError] = useState('');
   const [isPatternLocked, setIsPatternLocked] = useState(false);
   const [pickedErpSkuBySize, setPickedErpSkuBySize] = useState<Record<string, string>>({});
+  // The full picked pattern (not just the fields it filled in) — lets
+  // "Add Another Variant" rows below offer this pattern's OTHER known
+  // variants to pick from, instead of free-typing a Fabric Color/Print
+  // Name that might not match the ERP's own spelling for it.
+  const [pickedPattern, setPickedPattern] = useState<ErpPattern | null>(null);
+  // "Register New Pattern" — lets the admin create a pattern's barcode
+  // SKUs in the ERP right from this form when the search above comes up
+  // empty (the pattern just hasn't been through the ERP's own Create
+  // Barcode SKU page yet for this brand), instead of being stuck.
+  const [registeringPattern, setRegisteringPattern] = useState(false);
+  // Live "Uploading X/Y images" feedback during a save with many photos —
+  // null when no upload is in progress.
+  const [uploadProgress, setUploadProgress] = useState<{ done: number; total: number } | null>(null);
+  // Per-print ERP sync outcome after a save, shown so a silent sync
+  // failure (stock tracking never registered for that variant) can't go
+  // unnoticed — see the modal rendered near the bottom of this component.
+  const [syncResults, setSyncResults] = useState<Array<{ docId: string; label: string; status: 'pending' | 'success' | 'error'; error?: string }>>([]);
+  const [showSyncResults, setShowSyncResults] = useState(false);
 
   // Check login state on mount via Firebase Auth
   useEffect(() => {
@@ -1545,6 +1563,7 @@ export const AdminPage: React.FC = () => {
       setAdditionalPrints([]);
       setPickedErpSkuBySize({});
       setIsPatternLocked(false);
+      setPickedPattern(null);
       setPatternSearch('');
       setPatternResults([]);
     }
@@ -1623,8 +1642,85 @@ export const AdminPage: React.FC = () => {
     setFormStock(stock);
     setPickedErpSkuBySize(skuBySize);
     setIsPatternLocked(true);
+    setPickedPattern(pattern);
     setPatternResults([]);
     setPatternSearch(`${pattern.styleNumber} — ${pattern.productName}`);
+  };
+
+  // Lets the admin register a brand-new pattern's barcode SKUs in the ERP
+  // directly from this form, for when the search above comes up empty —
+  // the pattern just hasn't been through the ERP's own Inventory → Create
+  // Barcode SKU page yet for this brand. Uses whatever's already typed
+  // into Style Number/Fabric Color/Print Name/Sizes/Price below, same as
+  // a normal pick once it succeeds (locks the fields, same SKUs come back
+  // from the same ERP endpoint Create Barcode SKU itself uses).
+  const handleRegisterNewPattern = async () => {
+    const styleNumber = (formStyleNumber || patternSearch).trim();
+    if (!styleNumber) {
+      showToast('Enter a Style Number first.');
+      return;
+    }
+    if (!formNoPrints && !formColor.trim()) {
+      showToast('Enter a Print Name, or check "No print — this is a solid fabric".');
+      return;
+    }
+    if (formSizes.length === 0) {
+      showToast('Select at least one size first.');
+      return;
+    }
+    if (!formPrice || isNaN(Number(formPrice))) {
+      showToast('Enter a valid Price first.');
+      return;
+    }
+
+    setRegisteringPattern(true);
+    try {
+      const idToken = await auth.currentUser?.getIdToken();
+      const res = await fetch('/api/admin/erp/register-pattern', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {})
+        },
+        body: JSON.stringify({
+          styleNumber,
+          fabricColor: formFabricColor.trim() || undefined,
+          printName: formNoPrints ? undefined : formColor.trim(),
+          noPrints: formNoPrints,
+          sizes: formSizes,
+          name: formName.trim() || undefined,
+          mrp: Number(formPrice),
+          siteSku: formSku || undefined
+        })
+      });
+      const data = await res.json();
+      if (!data.success) {
+        showToast(data.error || 'Could not register this pattern with the ERP.');
+        return;
+      }
+      const registered: Record<string, string> = data.registered || {};
+      if (Object.keys(registered).length === 0) {
+        showToast('The ERP did not return any SKUs for this pattern — please try again.');
+        return;
+      }
+      if (Array.isArray(data.errors) && data.errors.length > 0) {
+        showToast(`Registered — but ${data.errors.length} size(s) failed (check console) and were left out.`);
+        console.warn('[ERP REGISTER PATTERN] Partial failure:', data.errors);
+      } else {
+        showToast('New pattern registered in the ERP.');
+      }
+      setFormStyleNumber(styleNumber);
+      setFormSizes(Object.keys(registered));
+      setPickedErpSkuBySize(registered);
+      setIsPatternLocked(true);
+      setPickedPattern(null);
+      setPatternSearch(`${styleNumber} — ${formName.trim() || styleNumber}`);
+      setPatternResults([]);
+    } catch (err: any) {
+      showToast(err?.message || 'Could not reach the server to register this pattern.');
+    } finally {
+      setRegisteringPattern(false);
+    }
   };
 
   // Drives the product form page from the URL (/admin/products/new,
@@ -1712,6 +1808,27 @@ export const AdminPage: React.FC = () => {
     setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, noPrints } : r)));
   };
 
+  // Fills an "Add Another Variant" row's Fabric Color/Print Name from one
+  // of the picked pattern's OTHER known ERP variants, in one update — see
+  // the variant picker dropdown below each row. Filling from here instead
+  // of free-typing means the saved variant's name can't drift from the
+  // ERP's own spelling for it, which is what the per-size sync afterward
+  // actually matches against.
+  const applyErpVariantToRow = (rowId: string, variant: ErpPatternVariant) => {
+    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? {
+      ...r,
+      fabricColor: variant.fabricColor || '',
+      printName: variant.noPrints ? '' : (variant.printName || ''),
+      noPrints: variant.noPrints
+    } : r)));
+  };
+
+  // A variant "identity" key (Fabric Color + Print Name/Solid), used to
+  // keep the dropdown below from offering a variant that's already the
+  // primary print or already another row in this same batch.
+  const variantIdentityKey = (fabricColor: string, printName: string, noPrints: boolean) =>
+    `${fabricColor.trim().toLowerCase()}||${noPrints ? '' : printName.trim().toLowerCase()}||${noPrints}`;
+
   // Image crop queue — every selected/dropped file (primary or an
   // additional-variant row) is routed through ImageCropModal one at a
   // time before landing in state, instead of going straight from disk to
@@ -1773,8 +1890,11 @@ export const AdminPage: React.FC = () => {
 
   // Uploads files to Firebase Storage, falling back to a Base64 data URL
   // per-file if Storage access fails — shared by the primary print and
-  // every additional print row.
-  const uploadFilesWithFallback = async (files: File[]): Promise<string[]> => {
+  // every additional print row. onProgress (if given) fires once per file,
+  // success or fallback, so a save with many prints/photos can show live
+  // "Uploading X/Y" feedback instead of one static message for however
+  // long the whole batch takes.
+  const uploadFilesWithFallback = async (files: File[], onProgress?: () => void): Promise<string[]> => {
     const urls: string[] = [];
     for (const file of files) {
       try {
@@ -1792,6 +1912,7 @@ export const AdminPage: React.FC = () => {
         });
         urls.push(base64Url);
       }
+      onProgress?.();
     }
     return urls;
   };
@@ -1801,9 +1922,13 @@ export const AdminPage: React.FC = () => {
   // something real to reserve stock against at checkout. Best-effort and
   // never throws — the Firestore save above is what actually matters to
   // the admin; if this fails they still have a saved product, just one the
-  // ERP hasn't picked up yet (retried on the next save).
-  const syncProductWithErp = async (productId: string, styleNumber: string) => {
-    if (!styleNumber.trim() || !auth.currentUser) return;
+  // ERP hasn't picked up yet. Returns a structured result instead of
+  // toasting directly — the caller collects these into syncResults so a
+  // failure on one variant out of many can't go unnoticed in a single
+  // blanket toast, and can be retried individually (see the sync-results
+  // modal rendered near the bottom of this component).
+  const syncProductWithErp = async (productId: string, styleNumber: string): Promise<{ ok: boolean; error?: string }> => {
+    if (!styleNumber.trim() || !auth.currentUser) return { ok: true };
     try {
       const idToken = await auth.currentUser.getIdToken();
       const res = await fetch(`/api/admin/products/${productId}/sync-erp`, {
@@ -1813,15 +1938,30 @@ export const AdminPage: React.FC = () => {
       const data = await res.json();
       if (!data.success) {
         console.warn('[ERP SYNC] Failed:', data.error);
-        showToast(`Saved, but couldn't sync stock tracking with the ERP: ${data.error}`);
-      } else if (data.errors?.length > 0) {
-        console.warn('[ERP SYNC] Partial failure:', data.errors);
-        showToast(`Saved — some sizes couldn't sync with the ERP (check console).`);
+        return { ok: false, error: data.error || 'The ERP rejected this sync.' };
       }
+      if (data.errors?.length > 0) {
+        console.warn('[ERP SYNC] Partial failure:', data.errors);
+        const detail = data.errors.map((e: any) => `${e.size}: ${e.error}`).join('; ');
+        return { ok: false, error: `Some sizes couldn't sync: ${detail}` };
+      }
+      return { ok: true };
     } catch (err: any) {
       console.warn('[ERP SYNC] Request failed:', err?.message || err);
-      showToast(`Saved, but couldn't reach the ERP to sync stock tracking.`);
+      return { ok: false, error: err?.message || 'Could not reach the server.' };
     }
+  };
+
+  // Re-attempts a failed sync from the results panel below, in place —
+  // the product doc this refers to already exists (it saved fine; only
+  // its ERP stock-tracking link didn't), so this is just syncProductWithErp
+  // again against the same doc id.
+  const retrySyncResult = async (idx: number) => {
+    const row = syncResults[idx];
+    if (!row) return;
+    setSyncResults(prev => prev.map((r, i) => (i === idx ? { ...r, status: 'pending' } : r)));
+    const result = await syncProductWithErp(row.docId, formStyleNumber);
+    setSyncResults(prev => prev.map((r, i) => (i === idx ? { ...r, status: result.ok ? 'success' : 'error', error: result.error } : r)));
   };
 
   // Stock itself is no longer edited here (see the read-only display in the
@@ -1911,8 +2051,12 @@ export const AdminPage: React.FC = () => {
         : 'Uploading images and saving product...'
     );
 
+    const totalFilesToUpload = selectedFiles.length + extraRows.reduce((sum, row) => sum + row.selectedFiles.length, 0);
+    if (totalFilesToUpload > 0) setUploadProgress({ done: 0, total: totalFilesToUpload });
+    const bumpUploadProgress = () => setUploadProgress(prev => (prev ? { ...prev, done: prev.done + 1 } : prev));
+
     try {
-      const uploadedUrls: string[] = [...formImages, ...(await uploadFilesWithFallback(selectedFiles))];
+      const uploadedUrls: string[] = [...formImages, ...(await uploadFilesWithFallback(selectedFiles, bumpUploadProgress))];
 
       const detailsArray = formDetails.split('\n').map(l => l.trim()).filter(Boolean);
       const careArray = formCareInstructions.split('\n').map(l => l.trim()).filter(Boolean);
@@ -1952,7 +2096,7 @@ export const AdminPage: React.FC = () => {
         },
       ];
       for (const row of extraRows) {
-        const rowUrls = [...row.images, ...(await uploadFilesWithFallback(row.selectedFiles))];
+        const rowUrls = [...row.images, ...(await uploadFilesWithFallback(row.selectedFiles, bumpUploadProgress))];
         const rowPrintName = row.printName.trim() || (row.noPrints ? 'Natural' : '');
         printEntries.push({
           printName: rowPrintName,
@@ -1982,9 +2126,15 @@ export const AdminPage: React.FC = () => {
         }
       }
 
+      // All uploads for this batch are in — clear the "Uploading X/Y"
+      // button text in favor of the plain saving spinner for the
+      // Firestore-write phase below.
+      setUploadProgress(null);
+
       const usedSlugs = getUsedSlugsSet(editingProduct?.id);
       let savedCount = 0;
       const createdDocIds: string[] = [];
+      const syncOutcomes: Array<{ docId: string; label: string; status: 'success' | 'error'; error?: string }> = [];
 
       for (let i = 0; i < printEntries.length; i++) {
         const entry = printEntries[i];
@@ -2097,7 +2247,15 @@ export const AdminPage: React.FC = () => {
               // Already has erpSkuBySize — this product's SKUs came from
               // the ERP (either picked at creation, or a legacy product
               // already synced), so there's nothing new to register.
-              if (!entry.erpSkuBySize) await syncProductWithErp(editingProduct.id, formStyleNumber);
+              if (!entry.erpSkuBySize) {
+                const result = await syncProductWithErp(editingProduct.id, formStyleNumber);
+                syncOutcomes.push({
+                  docId: editingProduct.id,
+                  label: entry.noPrints ? 'Solid' : entry.printName,
+                  status: result.ok ? 'success' : 'error',
+                  error: result.error
+                });
+              }
             } catch (fbErr: any) {
               // Must NOT be reported as a success — see the matching
               // comment in the create branch below for why.
@@ -2128,7 +2286,15 @@ export const AdminPage: React.FC = () => {
               // The picked Barcode SKU already carries erpSkuBySize (set
               // above) — only entries still using the legacy free-typed
               // flow need to register themselves with the ERP now.
-              if (!entry.erpSkuBySize) await syncProductWithErp(newRef.id, formStyleNumber);
+              if (!entry.erpSkuBySize) {
+                const result = await syncProductWithErp(newRef.id, formStyleNumber);
+                syncOutcomes.push({
+                  docId: newRef.id,
+                  label: entry.noPrints ? 'Solid' : entry.printName,
+                  status: result.ok ? 'success' : 'error',
+                  error: result.error
+                });
+              }
             } catch (fbErr: any) {
               // A save that fails here must NOT be reported as a success —
               // it previously fell back to writing a phantom copy into
@@ -2159,11 +2325,27 @@ export const AdminPage: React.FC = () => {
         savedCount++;
       }
 
+      setAdditionalPrints([]);
+
+      if (syncOutcomes.some(r => r.status === 'error')) {
+        // At least one variant's ERP stock-tracking sync failed — surface
+        // it plainly instead of a toast that's easy to miss, and hold off
+        // on leaving the page so the Retry buttons below still have a
+        // live product doc id and Style Number to work with.
+        setSyncResults(syncOutcomes);
+        setShowSyncResults(true);
+        showToast(
+          savedCount > 1
+            ? `Saved ${savedCount} prints of "${formName}" — but check the ERP sync status below.`
+            : `Saved "${formName}" — but check the ERP sync status below.`
+        );
+        return;
+      }
+
       if (savedCount > 1) {
         showToast(`Saved ${savedCount} prints of "${formName}"!`);
       }
 
-      setAdditionalPrints([]);
       // Leave the product-form page (rather than just hiding the form
       // locally) — otherwise the route-sync effect would see the URL is
       // still /admin/products/... and immediately reopen a blank form. Do
@@ -2180,6 +2362,7 @@ export const AdminPage: React.FC = () => {
       showToast('Error saving product: ' + err.message);
     } finally {
       setIsSavingProduct(false);
+      setUploadProgress(null);
     }
   };
 
@@ -2947,6 +3130,7 @@ export const AdminPage: React.FC = () => {
                             onClick={() => {
                               setIsPatternLocked(false);
                               setPickedErpSkuBySize({});
+                              setPickedPattern(null);
                               setPatternSearch('');
                               setFormStyleNumber('');
                               setFormFabricColor('');
@@ -3000,12 +3184,30 @@ export const AdminPage: React.FC = () => {
                               ))}
                             </div>
                           )}
+                          {!patternSearchLoading && !patternSearchError && patternSearch.trim() && patternResults.length === 0 && (
+                            <div className="mt-2 rounded-lg border border-dashed border-[#B08D57]/40 bg-[#B08D57]/5 p-3 space-y-2">
+                              <p className="text-[11px] text-stone-600">
+                                No existing pattern matches "{patternSearch.trim()}" for this brand. If this is a
+                                brand-new style, fill in Style Number, Fabric Color/Print Name (or "No print"), Sizes,
+                                and Price below, then register it as a new pattern in the ERP.
+                              </p>
+                              <button
+                                type="button"
+                                onClick={handleRegisterNewPattern}
+                                disabled={registeringPattern}
+                                className="px-3 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors disabled:opacity-50"
+                              >
+                                {registeringPattern ? 'Registering…' : '+ Register New Pattern in ERP'}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                       <p className="text-[10px] text-stone-400">
                         Every product now starts from a barcode SKU already created in the ERP (Inventory → Create
                         Barcode SKU) — Product Name, Style Number, Fabric Color, Print Name, and Sizes are pulled from
-                        there and locked. Editing those after this point happens in the ERP, not here.
+                        there and locked. Editing those after this point happens in the ERP, not here. No match above?
+                        Fill in the fields below and register a new pattern right from this form instead.
                       </p>
                     </div>
                   )}
@@ -3502,6 +3704,45 @@ export const AdminPage: React.FC = () => {
                               </button>
                             </div>
 
+                            {(() => {
+                              const usedKeys = new Set([
+                                variantIdentityKey(formFabricColor, formColor, formNoPrints),
+                                ...additionalPrints.filter(r => r.id !== row.id).map(r => variantIdentityKey(r.fabricColor, r.printName, r.noPrints))
+                              ]);
+                              const availableErpVariants = (pickedPattern?.variants || []).filter(
+                                v => !usedKeys.has(variantIdentityKey(v.fabricColor || '', v.printName || '', v.noPrints))
+                              );
+                              if (availableErpVariants.length === 0) return null;
+                              return (
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                                    Pick from this pattern's known variants
+                                  </label>
+                                  <select
+                                    value=""
+                                    onChange={(e) => {
+                                      const idx = Number(e.target.value);
+                                      const variant = availableErpVariants[idx];
+                                      if (variant) applyErpVariantToRow(row.id, variant);
+                                    }}
+                                    className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white font-medium text-[#2A211C]"
+                                  >
+                                    <option value="">— Pick a known variant, or type one below —</option>
+                                    {availableErpVariants.map((v, i) => (
+                                      <option key={i} value={i}>
+                                        {v.fabricColor ? `${v.fabricColor} — ` : ''}{v.noPrints ? 'Solid' : (v.printName || 'Untitled print')}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <p className="text-[10px] text-stone-400">
+                                    Fills Fabric Color/Print Name exactly as named in the ERP, so this variant's stock
+                                    tracking matches cleanly instead of risking a typo. You can still edit the fields
+                                    below afterward.
+                                  </p>
+                                </div>
+                              );
+                            })()}
+
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
                                 <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
@@ -3829,7 +4070,7 @@ export const AdminPage: React.FC = () => {
                       {isSavingProduct ? (
                         <>
                           <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          <span>Saving to Catalog...</span>
+                          <span>{uploadProgress ? `Uploading ${uploadProgress.done}/${uploadProgress.total} images...` : 'Saving to Catalog...'}</span>
                         </>
                       ) : (
                         <span>Save & Apply Product</span>
@@ -3850,6 +4091,61 @@ export const AdminPage: React.FC = () => {
               onUseOriginal={handleCropUseOriginal}
               onCancel={handleCropCancel}
             />
+          )}
+
+          {/* ERP SYNC STATUS — shown after a save where at least one
+              variant's stock-tracking link to the ERP failed to register.
+              The product itself already saved; this is just visibility +
+              retry for the part that didn't, instead of a toast that's
+              easy to miss on a multi-variant batch. */}
+          {showSyncResults && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-5 space-y-4">
+                <h3 className="font-serif text-base font-bold text-[#2A211C]">ERP Sync Status</h3>
+                <p className="text-xs text-stone-500">
+                  The product itself saved fine. The variant(s) below couldn't register their stock-tracking SKU in
+                  the ERP — retry below, or leave it for later (the storefront isn't affected, but these variants
+                  won't track real stock until synced).
+                </p>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {syncResults.map((r, idx) => (
+                    <div key={r.docId} className="flex items-center justify-between gap-2 border border-stone-200 rounded-lg px-3 py-2">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-stone-800 truncate">{r.label}</p>
+                        {r.status === 'error' && r.error && <p className="text-[10px] text-red-500 truncate" title={r.error}>{r.error}</p>}
+                      </div>
+                      {r.status === 'success' ? (
+                        <span className="text-[10px] font-bold text-emerald-600 shrink-0">✓ Synced</span>
+                      ) : r.status === 'pending' ? (
+                        <span className="text-[10px] font-bold text-stone-400 shrink-0">Retrying…</span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => retrySyncResult(idx)}
+                          className="text-[10px] font-bold text-[#B08D57] hover:underline shrink-0"
+                        >
+                          Retry
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSyncResults(false);
+                      setSyncResults([]);
+                      closeProductForm();
+                      refreshProducts();
+                    }}
+                    className="px-4 py-2 bg-[#2A211C] text-white rounded text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors"
+                  >
+                    Done — Back to Catalog
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* RETURNS & EXCHANGES MANAGEMENT TAB */}

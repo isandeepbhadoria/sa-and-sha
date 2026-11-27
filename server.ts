@@ -9554,6 +9554,64 @@ async function startServer() {
     }
   });
 
+  // Lets the admin panel register a brand-new pattern's barcode SKUs in
+  // the ERP directly from the product form, for when the search above
+  // comes up empty — the pattern just hasn't been through the ERP's own
+  // Inventory → Create Barcode SKU page yet for this brand. Same
+  // idempotent per-size registration syncProductWithErp uses after a
+  // save, just called before a product doc exists — see
+  // ExternalInventoryService.registerStyleArticle in the ERP repo.
+  app.post("/api/admin/erp/register-pattern", async (req, res) => {
+    const adminAuth = await verifyAdminRequest(req);
+    if (!adminAuth.authorized) {
+      return res.status(401).json({ success: false, error: adminAuth.error || "Unauthorized admin access." });
+    }
+    try {
+      const { styleNumber, fabricColor, printName, noPrints, sizes, name, mrp, siteSku } = req.body || {};
+      if (typeof styleNumber !== "string" || !styleNumber.trim()) {
+        return res.status(400).json({ success: false, error: "Style Number is required." });
+      }
+      if (!Array.isArray(sizes) || sizes.length === 0) {
+        return res.status(400).json({ success: false, error: "At least one size is required." });
+      }
+
+      const { erpRegisterStyleArticle } = await import("./src/server/erpClient");
+      const variantName = [
+        typeof fabricColor === "string" ? fabricColor.trim() : "",
+        noPrints ? "" : (typeof printName === "string" ? printName.trim() : "")
+      ].filter(Boolean).join(" / ") || undefined;
+
+      const registered: Record<string, string> = {};
+      const errors: Array<{ size: string; error: string }> = [];
+      for (const size of sizes) {
+        try {
+          const result = await erpRegisterStyleArticle({
+            styleNumber: styleNumber.trim(),
+            size: String(size),
+            name: typeof name === "string" && name.trim() ? name.trim() : undefined,
+            variantName,
+            mrp: typeof mrp === "number" && mrp > 0 ? mrp : undefined,
+            siteSku: typeof siteSku === "string" && siteSku.trim() ? siteSku.trim() : undefined
+          });
+          registered[String(size)] = result.sku;
+        } catch (err: any) {
+          errors.push({ size: String(size), error: err?.message || String(err) });
+        }
+      }
+
+      if (Object.keys(registered).length === 0) {
+        return res.status(500).json({
+          success: false,
+          error: errors[0]?.error || "Could not register this pattern with the ERP."
+        });
+      }
+      return res.json({ success: true, registered, errors });
+    } catch (err: any) {
+      console.error("[ERP REGISTER PATTERN ENDPOINT ERROR]", err?.message || err);
+      return res.status(500).json({ success: false, error: err?.message || "Failed to register this pattern with the ERP." });
+    }
+  });
+
   // POST /api/admin/erp/sync-prices - Pulls current MRP/Selling Price for
   // every barcode-linked product from the ERP and updates any Firestore
   // product whose stored price has drifted. See syncPricesFromErp's own
