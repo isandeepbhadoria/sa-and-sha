@@ -7,6 +7,7 @@ import {
   Search,
   Filter,
   Eye,
+  EyeOff,
   ChevronDown,
   ChevronLeft,
   CheckCircle2, 
@@ -475,41 +476,37 @@ export const AdminPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Additional variants (Fabric Color + Print) for a brand-new product —
-  // same Style Number as the primary variant above, own Fabric Color, own
-  // Print Name (or "no print"), own images. Each row becomes its own
-  // Firestore product on save. Only used when creating (never while
-  // editing an existing product, since each variant already exists as
-  // its own separate document by then).
-  const [additionalPrints, setAdditionalPrints] = useState<Array<{
-    id: string; fabricColor: string; printName: string; noPrints: boolean; images: string[]; selectedFiles: File[];
-  }>>([]);
-
   // Barcode SKU / Pattern picker (see the ERP's Inventory → Create Barcode
   // SKU) — the ERP is now the source of truth for Style Number/Fabric
   // Color/Print Name/Sizes/SKU on a brand-new product; this form no longer
-  // generates its own. isPatternLocked flips true the moment a pattern is
+  // generates its own. isPatternLocked flips true the moment a variant is
   // picked, disabling those fields and skipping this product's own
   // generateSkuCode/registerStyleArticle calls in favor of the SKUs the
   // ERP already minted. Editing an existing product that already has
   // erpSkuBySize keeps the same fields locked (see fieldsLocked below) —
   // any correction happens in the ERP, not here.
-  const [patternSearch, setPatternSearch] = useState('');
-  const [patternResults, setPatternResults] = useState<ErpPattern[]>([]);
-  const [patternSearchLoading, setPatternSearchLoading] = useState(false);
-  const [patternSearchError, setPatternSearchError] = useState('');
   const [isPatternLocked, setIsPatternLocked] = useState(false);
   const [pickedErpSkuBySize, setPickedErpSkuBySize] = useState<Record<string, string>>({});
-  // The full picked pattern (not just the fields it filled in) — lets
-  // "Add Another Variant" rows below offer this pattern's OTHER known
-  // variants to pick from, instead of free-typing a Fabric Color/Print
-  // Name that might not match the ERP's own spelling for it.
+  // The full picked pattern (not just the fields it filled in) — lets the
+  // "Change" link below go back to this pattern's own variant list rather
+  // than the top of the pattern browser.
   const [pickedPattern, setPickedPattern] = useState<ErpPattern | null>(null);
-  // "Register New Pattern" — lets the admin create a pattern's barcode
-  // SKUs in the ERP right from this form when the search above comes up
-  // empty (the pattern just hasn't been through the ERP's own Create
-  // Barcode SKU page yet for this brand), instead of being stuck.
-  const [registeringPattern, setRegisteringPattern] = useState(false);
+  // Pattern Browser — every pattern/variant the ERP knows for this brand
+  // (see the GET /api/admin/erp/patterns call below), fetched once and
+  // browsed/filtered client-side instead of searched by Style Number one
+  // keystroke at a time. This is also how the admin finds out which of a
+  // pattern's variants are already live on the site vs not (see
+  // liveProductByVariantKey below) and makes a not-live one live, or an
+  // already-live one not — new print variants only ever come from the
+  // ERP's own Create Barcode SKU page; the website no longer creates them.
+  // null = not fetched yet; [] = fetched, brand has no patterns at all.
+  const [patternBrowserList, setPatternBrowserList] = useState<ErpPattern[] | null>(null);
+  const [patternBrowserLoading, setPatternBrowserLoading] = useState(false);
+  const [patternBrowserError, setPatternBrowserError] = useState('');
+  const [patternBrowserFilter, setPatternBrowserFilter] = useState('');
+  // Which pattern's variant list is currently open — null shows the grid
+  // of every Style Number instead.
+  const [selectedBrowsePattern, setSelectedBrowsePattern] = useState<ErpPattern | null>(null);
   // Live "Uploading X/Y images" feedback during a save with many photos —
   // null when no upload is in progress.
   const [uploadProgress, setUploadProgress] = useState<{ done: number; total: number } | null>(null);
@@ -566,28 +563,27 @@ export const AdminPage: React.FC = () => {
     return set;
   }, [allProducts, editingProduct]);
 
-  // SKU keys for everything about to be saved in this submission (the
-  // primary print + every additional print row), so two prints in the
-  // *same* batch can't silently collide with each other either.
-  const printBatchSkus = useMemo(() => {
-    const primaryKey = (formSku || '').trim().toUpperCase();
-    const counts = new Map<string, number>();
-    if (primaryKey) counts.set(primaryKey, (counts.get(primaryKey) || 0) + 1);
-    const rows = additionalPrints.map(row => {
-      const sku = (row.noPrints || row.printName.trim())
-        ? generateSkuCode(formProductType, formStyleNumber, row.fabricColor, row.printName, row.noPrints)
-        : '';
-      const key = sku.trim().toUpperCase();
-      if (key) counts.set(key, (counts.get(key) || 0) + 1);
-      return { id: row.id, sku, key };
-    });
-    return { primaryKey, counts, rows };
-  }, [formSku, additionalPrints, formProductType, formStyleNumber]);
-
   const isSkuDuplicate = (key: string): boolean => {
     if (!key) return false;
-    return usedSkuSet.has(key) || (printBatchSkus.counts.get(key) || 0) > 1;
+    return usedSkuSet.has(key);
   };
+
+  // Every known ERP variant, keyed by Style Number + Fabric Color + Print
+  // Name/Solid, mapped to the live Firestore product for it if one exists
+  // — lets the Pattern Browser below show each variant as live/not-live
+  // without a separate query per variant.
+  const variantIdentityKey = (fabricColor: string, printName: string, noPrints: boolean) =>
+    `${fabricColor.trim().toLowerCase()}||${noPrints ? '' : printName.trim().toLowerCase()}||${noPrints}`;
+  const productVariantKey = (styleNumber: string, fabricColor: string, printName: string, noPrints: boolean) =>
+    `${styleNumber.trim().toUpperCase()}||${variantIdentityKey(fabricColor, printName, noPrints)}`;
+  const liveProductByVariantKey = useMemo(() => {
+    const map = new Map<string, Product>();
+    for (const p of allProducts) {
+      if (!p.styleNumber) continue;
+      map.set(productVariantKey(p.styleNumber, p.fabricColor || '', p.color || '', !!p.noPrints), p);
+    }
+    return map;
+  }, [allProducts]);
 
   // Fetch orders, return requests, customer enquiries, and promotions when logged in
   useEffect(() => {
@@ -1520,12 +1516,9 @@ export const AdminPage: React.FC = () => {
       setFormStatus(product.status || 'published');
       setFormStock(product.stock || {});
       setSelectedFiles([]);
-      setAdditionalPrints([]);
       const existingErpSkus = product.erpSkuBySize || {};
       setPickedErpSkuBySize(existingErpSkus);
       setIsPatternLocked(Object.keys(existingErpSkus).length > 0);
-      setPatternSearch('');
-      setPatternResults([]);
     } else {
       setEditingProduct(null);
       setFormName('');
@@ -1560,12 +1553,13 @@ export const AdminPage: React.FC = () => {
       setFormStatus('published');
       setFormStock({});
       setSelectedFiles([]);
-      setAdditionalPrints([]);
       setPickedErpSkuBySize({});
       setIsPatternLocked(false);
       setPickedPattern(null);
-      setPatternSearch('');
-      setPatternResults([]);
+      setPatternBrowserList(null);
+      setPatternBrowserError('');
+      setPatternBrowserFilter('');
+      setSelectedBrowsePattern(null);
     }
     setShowProductForm(true);
   };
@@ -1582,48 +1576,44 @@ export const AdminPage: React.FC = () => {
     navigate('/admin', { state: { tab: 'products' } });
   };
 
-  // Debounced search against the ERP's own patterns for this brand (see
-  // GET /api/admin/erp/patterns) — the Barcode SKU picker below.
+  // Fetches every pattern/variant the ERP knows for this brand, once per
+  // time the Pattern Browser is opened (see patternBrowserList above) —
+  // browsing/filtering then happens client-side instead of a per-keystroke
+  // search, and is also how the browser knows which variants exist at all
+  // to check against liveProductByVariantKey.
   useEffect(() => {
-    if (isPatternLocked) return;
-    const term = patternSearch.trim();
-    if (!term) {
-      setPatternResults([]);
-      setPatternSearchError('');
-      return;
-    }
+    if (editingProduct || isPatternLocked || patternBrowserList !== null) return;
     let cancelled = false;
-    setPatternSearchLoading(true);
-    const timer = setTimeout(async () => {
+    setPatternBrowserLoading(true);
+    setPatternBrowserError('');
+    (async () => {
       try {
         const idToken = await auth.currentUser?.getIdToken();
-        if (!idToken) return;
-        const res = await fetch(`/api/admin/erp/patterns?search=${encodeURIComponent(term)}`, {
+        if (!idToken) { if (!cancelled) setPatternBrowserLoading(false); return; }
+        const res = await fetch('/api/admin/erp/patterns', {
           headers: { Authorization: `Bearer ${idToken}` }
         });
         const data = await res.json();
         if (cancelled) return;
         if (!data.success) {
-          setPatternSearchError(data.error || 'Could not search the ERP.');
-          setPatternResults([]);
+          setPatternBrowserError(data.error || 'Could not load patterns from the ERP.');
         } else {
-          setPatternResults(data.patterns || []);
-          setPatternSearchError('');
+          setPatternBrowserList(data.patterns || []);
         }
       } catch (err: any) {
-        if (!cancelled) {
-          setPatternSearchError('Could not reach the ERP.');
-          setPatternResults([]);
-        }
+        if (!cancelled) setPatternBrowserError('Could not reach the ERP.');
       } finally {
-        if (!cancelled) setPatternSearchLoading(false);
+        if (!cancelled) setPatternBrowserLoading(false);
       }
-    }, 300);
-    return () => { cancelled = true; clearTimeout(timer); };
-  }, [patternSearch, isPatternLocked]);
+    })();
+    return () => { cancelled = true; };
+  }, [editingProduct, isPatternLocked, patternBrowserList]);
 
   // Fills the form from a picked pattern+variant and locks the fields the
-  // ERP now owns — see isPatternLocked's comment above.
+  // ERP now owns — see isPatternLocked's comment above. Called either from
+  // the Pattern Browser's "Make Live" button (a variant with no live
+  // product yet) or nothing at all for an existing one, which goes through
+  // Edit instead.
   const applyPickedVariant = (pattern: ErpPattern, variant: ErpPatternVariant) => {
     setFormName(pattern.displayName);
     setFormSlug(slugify(pattern.displayName));
@@ -1643,98 +1633,6 @@ export const AdminPage: React.FC = () => {
     setPickedErpSkuBySize(skuBySize);
     setIsPatternLocked(true);
     setPickedPattern(pattern);
-    setPatternResults([]);
-    setPatternSearch(`${pattern.styleNumber} — ${pattern.productName}`);
-  };
-
-  // Lets the admin register a brand-new pattern's barcode SKUs in the ERP
-  // directly from this form, for when the search above comes up empty —
-  // the pattern just hasn't been through the ERP's own Inventory → Create
-  // Barcode SKU page yet for this brand. Uses whatever's already typed
-  // into Style Number/Fabric Color/Print Name/Sizes/Price below, same as
-  // a normal pick once it succeeds (locks the fields, same SKUs come back
-  // from the same ERP endpoint Create Barcode SKU itself uses).
-  const handleRegisterNewPattern = async () => {
-    const styleNumber = (formStyleNumber || patternSearch).trim();
-    if (!styleNumber) {
-      showToast('Enter a Style Number first.');
-      return;
-    }
-    if (!formNoPrints && !formColor.trim()) {
-      showToast('Enter a Print Name, or check "No print — this is a solid fabric".');
-      return;
-    }
-    if (formSizes.length === 0) {
-      showToast('Select at least one size first.');
-      return;
-    }
-    if (!formPrice || isNaN(Number(formPrice))) {
-      showToast('Enter a valid Price first.');
-      return;
-    }
-
-    // Catches the case where this pattern's Fabric Color/Print Name happen
-    // to abbreviate (see skuGenerator.ts's encodePrintName) to the same
-    // site SKU as some other, unrelated existing product (e.g. "Green Palm
-    // Checks" and "Granite Palm Checks" both shorten to "GRPACH") — checked
-    // BEFORE calling the ERP so a collision doesn't leave a real, orphaned
-    // barcode SKU registered for a pattern the save step below would then
-    // reject anyway.
-    const generatedSku = generateSkuCode(formProductType, styleNumber, formFabricColor, formColor, formNoPrints);
-    const generatedSkuKey = generatedSku.trim().toUpperCase();
-    if (generatedSkuKey && usedSkuSet.has(generatedSkuKey)) {
-      showToast(`SKU "${generatedSku}" already exists on another product. Adjust the Pattern/Style Number, Fabric Color, or Print Name to generate a different one.`);
-      return;
-    }
-
-    setRegisteringPattern(true);
-    try {
-      const idToken = await auth.currentUser?.getIdToken();
-      const res = await fetch('/api/admin/erp/register-pattern', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {})
-        },
-        body: JSON.stringify({
-          styleNumber,
-          fabricColor: formFabricColor.trim() || undefined,
-          printName: formNoPrints ? undefined : formColor.trim(),
-          noPrints: formNoPrints,
-          sizes: formSizes,
-          name: formName.trim() || undefined,
-          mrp: Number(formPrice),
-          siteSku: formSku || undefined
-        })
-      });
-      const data = await res.json();
-      if (!data.success) {
-        showToast(data.error || 'Could not register this pattern with the ERP.');
-        return;
-      }
-      const registered: Record<string, string> = data.registered || {};
-      if (Object.keys(registered).length === 0) {
-        showToast('The ERP did not return any SKUs for this pattern — please try again.');
-        return;
-      }
-      if (Array.isArray(data.errors) && data.errors.length > 0) {
-        showToast(`Registered — but ${data.errors.length} size(s) failed (check console) and were left out.`);
-        console.warn('[ERP REGISTER PATTERN] Partial failure:', data.errors);
-      } else {
-        showToast('New pattern registered in the ERP.');
-      }
-      setFormStyleNumber(styleNumber);
-      setFormSizes(Object.keys(registered));
-      setPickedErpSkuBySize(registered);
-      setIsPatternLocked(true);
-      setPickedPattern(null);
-      setPatternSearch(`${styleNumber} — ${formName.trim() || styleNumber}`);
-      setPatternResults([]);
-    } catch (err: any) {
-      showToast(err?.message || 'Could not reach the server to register this pattern.');
-    } finally {
-      setRegisteringPattern(false);
-    }
   };
 
   // Drives the product form page from the URL (/admin/products/new,
@@ -1780,13 +1678,13 @@ export const AdminPage: React.FC = () => {
           files.push(file);
         }
       }
-      enqueueFilesForCrop(files, 'primary');
+      enqueueFilesForCrop(files);
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      enqueueFilesForCrop(Array.from(e.target.files), 'primary');
+      enqueueFilesForCrop(Array.from(e.target.files));
     }
   };
 
@@ -1798,108 +1696,45 @@ export const AdminPage: React.FC = () => {
     setFormImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Additional-print row management (see additionalPrints above).
-  const addPrintRow = () => {
-    setAdditionalPrints(prev => [
-      ...prev,
-      { id: `print-${Date.now()}-${prev.length}`, fabricColor: '', printName: '', noPrints: false, images: [], selectedFiles: [] }
-    ]);
-  };
-
-  const removePrintRow = (rowId: string) => {
-    setAdditionalPrints(prev => prev.filter(r => r.id !== rowId));
-  };
-
-  const updatePrintRowFabricColor = (rowId: string, fabricColor: string) => {
-    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, fabricColor } : r)));
-  };
-
-  const updatePrintRowName = (rowId: string, name: string) => {
-    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, printName: name } : r)));
-  };
-
-  const updatePrintRowNoPrints = (rowId: string, noPrints: boolean) => {
-    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? { ...r, noPrints } : r)));
-  };
-
-  // Fills an "Add Another Variant" row's Fabric Color/Print Name from one
-  // of the picked pattern's OTHER known ERP variants, in one update — see
-  // the variant picker dropdown below each row. Filling from here instead
-  // of free-typing means the saved variant's name can't drift from the
-  // ERP's own spelling for it, which is what the per-size sync afterward
-  // actually matches against.
-  const applyErpVariantToRow = (rowId: string, variant: ErpPatternVariant) => {
-    setAdditionalPrints(prev => prev.map(r => (r.id === rowId ? {
-      ...r,
-      fabricColor: variant.fabricColor || '',
-      printName: variant.noPrints ? '' : (variant.printName || ''),
-      noPrints: variant.noPrints
-    } : r)));
-  };
-
-  // A variant "identity" key (Fabric Color + Print Name/Solid), used to
-  // keep the dropdown below from offering a variant that's already the
-  // primary print or already another row in this same batch.
-  const variantIdentityKey = (fabricColor: string, printName: string, noPrints: boolean) =>
-    `${fabricColor.trim().toLowerCase()}||${noPrints ? '' : printName.trim().toLowerCase()}||${noPrints}`;
-
-  // Image crop queue — every selected/dropped file (primary or an
-  // additional-variant row) is routed through ImageCropModal one at a
-  // time before landing in state, instead of going straight from disk to
-  // Firebase Storage unprocessed. `target` is 'primary' for the main
-  // product's own images, or a row id for that variant's images.
-  const [cropQueue, setCropQueue] = useState<Array<{ id: string; file: File; target: string }>>([]);
+  // Image crop queue — every selected/dropped file for the product's own
+  // images is routed through ImageCropModal one at a time before landing
+  // in state, instead of going straight from disk to Firebase Storage
+  // unprocessed.
+  const [cropQueue, setCropQueue] = useState<Array<{ id: string; file: File }>>([]);
   const activeCropItem = cropQueue[0] || null;
 
-  const enqueueFilesForCrop = (files: File[], target: string) => {
+  const enqueueFilesForCrop = (files: File[]) => {
     const imageFiles = files.filter(f => f.type.startsWith('image/'));
     setCropQueue(prev => [
       ...prev,
-      ...imageFiles.map((f, i) => ({ id: `crop-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`, file: f, target }))
+      ...imageFiles.map((f, i) => ({ id: `crop-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`, file: f }))
     ]);
   };
 
-  const addProcessedFileToTarget = (target: string, file: File) => {
-    if (target === 'primary') {
-      setSelectedFiles(prev => {
-        if (formImages.length + prev.length >= 6) {
-          showToast('Maximum 6 images are allowed per product — later photos in this batch were skipped.');
-          return prev;
-        }
-        return [...prev, file];
-      });
-    } else {
-      setAdditionalPrints(prev => prev.map(r => {
-        if (r.id !== target) return r;
-        if (r.images.length + r.selectedFiles.length >= 6) {
-          showToast('Maximum 6 images are allowed per print — later photos in this batch were skipped.');
-          return r;
-        }
-        return { ...r, selectedFiles: [...r.selectedFiles, file] };
-      }));
-    }
+  const addProcessedFile = (file: File) => {
+    setSelectedFiles(prev => {
+      if (formImages.length + prev.length >= 6) {
+        showToast('Maximum 6 images are allowed per product — later photos in this batch were skipped.');
+        return prev;
+      }
+      return [...prev, file];
+    });
   };
 
   const handleCropConfirm = (croppedFile: File) => {
     if (!activeCropItem) return;
-    addProcessedFileToTarget(activeCropItem.target, croppedFile);
+    addProcessedFile(croppedFile);
     setCropQueue(prev => prev.slice(1));
   };
 
   const handleCropUseOriginal = () => {
     if (!activeCropItem) return;
-    addProcessedFileToTarget(activeCropItem.target, activeCropItem.file);
+    addProcessedFile(activeCropItem.file);
     setCropQueue(prev => prev.slice(1));
   };
 
   const handleCropCancel = () => {
     setCropQueue(prev => prev.slice(1));
-  };
-
-  const removePrintRowFile = (rowId: string, index: number) => {
-    setAdditionalPrints(prev => prev.map(r => (
-      r.id === rowId ? { ...r, selectedFiles: r.selectedFiles.filter((_, i) => i !== index) } : r
-    )));
   };
 
   // Uploads files to Firebase Storage, falling back to a Base64 data URL
@@ -1989,7 +1824,7 @@ export const AdminPage: React.FC = () => {
     e.preventDefault();
     
     if (!editingProduct && !isPatternLocked) {
-      showToast('Pick a Barcode SKU / Pattern before saving — see the field at the top of this form.');
+      showToast('Make a variant live from the Pattern Browser first.');
       return;
     }
     if (!formName.trim()) {
@@ -2011,10 +1846,12 @@ export const AdminPage: React.FC = () => {
       return;
     }
 
-    // Extra variants (Fabric Color + Print) of the same Style Number can
-    // only be added while creating a brand-new product — once saved, each
-    // variant is its own separate document, edited on its own.
-    const extraRows = editingProduct ? [] : additionalPrints;
+    // Every variant is now made live one at a time from the Pattern
+    // Browser (see applyPickedVariant), so there's never more than the
+    // primary print to save here — kept as a typed empty array so the
+    // rest of this function (written for a batch) needs no special
+    // casing for the single-entry case.
+    const extraRows: Array<{ fabricColor: string; printName: string; noPrints: boolean; images: string[]; selectedFiles: File[] }> = [];
     for (const row of extraRows) {
       if (!row.noPrints && !row.printName.trim()) {
         showToast('Give each additional variant a Print Name, or tick "No print" for a solid.');
@@ -2339,8 +2176,6 @@ export const AdminPage: React.FC = () => {
         savedCount++;
       }
 
-      setAdditionalPrints([]);
-
       if (syncOutcomes.some(r => r.status === 'error')) {
         // At least one variant's ERP stock-tracking sync failed — surface
         // it plainly instead of a toast that's easy to miss, and hold off
@@ -2425,7 +2260,43 @@ export const AdminPage: React.FC = () => {
     }
   };
 
+  // Unlist (status -> 'archived') hides a live product from the storefront
+  // without deleting its Firestore doc or touching the ERP — see every
+  // storefront query's own status check (ShopContext, HomePage,
+  // CollectionPage, ProductDetailPage, CartDrawer, catalogTaxonomy's
+  // isProductLive). Relist (status -> 'published') reverses it. Used from
+  // both the Products table and the Pattern Browser's variant list.
+  const handleSetProductLiveStatus = async (product: Product, newStatus: 'published' | 'archived') => {
+    const action = newStatus === 'archived' ? 'Unlist' : 'Relist';
+    const confirmMsg = newStatus === 'archived'
+      ? `Unlist "${product.name}" (${product.noPrints ? 'Solid' : (product.color || 'Untitled print')})? It will be hidden from the storefront but kept in the catalog — this does not delete it or change anything in the ERP.`
+      : `Relist "${product.name}" (${product.noPrints ? 'Solid' : (product.color || 'Untitled print')})? It will become visible on the storefront again.`;
+    if (!window.confirm(confirmMsg)) return;
 
+    const isPreview = isPreviewEnvironment();
+    const bypassActive = isPreview && localStorage.getItem('kora_admin_bypass_logged_in') === 'true';
+    const useLocalFallback = isPreview && (bypassActive || !auth.currentUser);
+
+    try {
+      if (useLocalFallback) {
+        const localCustom = localStorage.getItem('kora_custom_products');
+        let customProducts: Product[] = localCustom ? JSON.parse(localCustom) : [];
+        if (customProducts.some(p => p.id === product.id)) {
+          customProducts = customProducts.map(p => (p.id === product.id ? { ...p, status: newStatus } : p));
+        } else {
+          customProducts.push({ ...product, status: newStatus });
+        }
+        localStorage.setItem('kora_custom_products', JSON.stringify(customProducts));
+      } else {
+        await setDoc(doc(db, 'products', product.id), { status: newStatus }, { merge: true });
+      }
+      showToast(`"${product.name}" ${newStatus === 'archived' ? 'unlisted' : 'relisted'}.`);
+      await refreshProducts();
+    } catch (err: any) {
+      console.error(`Failed to ${action.toLowerCase()} product:`, err);
+      showToast(`Could not ${action.toLowerCase()} "${product.name}": ${err?.message || 'Unknown error'}`);
+    }
+  };
 
   // Metrics Calculations
   const totalRevenue = orders.reduce((sum, o) => {
@@ -3059,11 +2930,13 @@ export const AdminPage: React.FC = () => {
                             </td>
                             <td className="p-4 whitespace-nowrap">
                               <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
-                                product.status === 'draft' 
-                                  ? 'bg-stone-100 text-stone-600' 
-                                  : 'bg-green-100 text-green-800'
+                                product.status === 'archived'
+                                  ? 'bg-stone-100 text-stone-500'
+                                  : product.status === 'draft'
+                                    ? 'bg-amber-100 text-amber-700'
+                                    : 'bg-green-100 text-green-800'
                               }`}>
-                                {product.status || 'published'}
+                                {product.status === 'archived' ? 'Unlisted' : (product.status || 'published')}
                               </span>
                             </td>
                             <td className="p-4 text-center whitespace-nowrap">
@@ -3075,10 +2948,27 @@ export const AdminPage: React.FC = () => {
                                 >
                                   <Edit className="w-3.5 h-3.5" />
                                 </button>
+                                {product.status === 'archived' ? (
+                                  <button
+                                    onClick={() => handleSetProductLiveStatus(product, 'published')}
+                                    className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded transition-colors cursor-pointer"
+                                    title="Relist — make this live on the storefront again"
+                                  >
+                                    <Eye className="w-3.5 h-3.5" />
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => handleSetProductLiveStatus(product, 'archived')}
+                                    className="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded transition-colors cursor-pointer"
+                                    title="Unlist — hide from the storefront without deleting it or touching the ERP"
+                                  >
+                                    <EyeOff className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
                                 <button
                                   onClick={() => handleDeleteProduct(product.id, product.name)}
                                   className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded transition-colors cursor-pointer"
-                                  title="Delete Product"
+                                  title="Delete Product permanently"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
@@ -3129,99 +3019,197 @@ export const AdminPage: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Form Main Body Content */}
+                {/* Form Main Body Content, OR the Pattern Browser when
+                    creating a new product and no variant is picked yet —
+                    new print variants only ever come from the ERP's own
+                    Create Barcode SKU page now, so there's nothing to
+                    build here beyond browsing/picking one. */}
+                {(!editingProduct && !isPatternLocked) ? (
+                  <div className="p-6 space-y-4">
+                    {patternBrowserLoading && (
+                      <p className="text-xs text-stone-400">Loading patterns from the ERP…</p>
+                    )}
+                    {patternBrowserError && (
+                      <p className="text-xs text-red-500">{patternBrowserError}</p>
+                    )}
+                    {!patternBrowserLoading && !patternBrowserError && patternBrowserList && (
+                      selectedBrowsePattern ? (
+                        <div className="space-y-4">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedBrowsePattern(null)}
+                            className="text-[10px] font-bold uppercase tracking-wider text-stone-400 hover:text-[#B08D57] flex items-center gap-1"
+                          >
+                            <ChevronLeft className="w-3 h-3" /> All Patterns
+                          </button>
+                          <div>
+                            <h4 className="font-serif text-base font-bold text-[#2A211C]">
+                              {selectedBrowsePattern.styleNumber} — {selectedBrowsePattern.productName}
+                            </h4>
+                            <p className="text-[10px] text-stone-400 mt-0.5">
+                              Every Fabric Color / Print variant the ERP knows for this pattern. Make a not-live one
+                              live, or unlist/relist/edit one that already is — new variants only ever come from the
+                              ERP's own Create Barcode SKU page.
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {selectedBrowsePattern.variants.map((variant, vIdx) => {
+                              const match = liveProductByVariantKey.get(
+                                productVariantKey(selectedBrowsePattern.styleNumber, variant.fabricColor || '', variant.noPrints ? '' : (variant.printName || ''), variant.noPrints)
+                              );
+                              const label = `${variant.fabricColor ? `${variant.fabricColor} — ` : ''}${variant.noPrints ? 'Solid' : (variant.printName || 'Untitled print')}`;
+                              const isLive = !!match && match.status !== 'archived' && match.status !== 'draft';
+                              const isArchived = !!match && match.status === 'archived';
+                              const isDraft = !!match && match.status === 'draft';
+                              return (
+                                <div key={vIdx} className="flex items-center justify-between gap-3 border border-stone-200 rounded-lg px-3 py-2.5 bg-white">
+                                  <div className="min-w-0">
+                                    <p className="text-xs font-bold text-stone-800 truncate">{label}</p>
+                                    <p className="text-[10px] text-stone-400">
+                                      {variant.sizes.map(s => s.size).join(', ')} · <span className="font-mono">{variant.baseSku}</span>
+                                    </p>
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                                      isLive ? 'bg-green-100 text-green-800' : isDraft ? 'bg-amber-100 text-amber-700' : 'bg-stone-100 text-stone-500'
+                                    }`}>
+                                      {isLive ? 'Live' : isDraft ? 'Draft' : isArchived ? 'Unlisted' : 'Not Live'}
+                                    </span>
+                                    {!match && (
+                                      <button
+                                        type="button"
+                                        onClick={() => applyPickedVariant(selectedBrowsePattern, variant)}
+                                        className="px-2.5 py-1 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors"
+                                      >
+                                        Make Live
+                                      </button>
+                                    )}
+                                    {match && (
+                                      <button
+                                        type="button"
+                                        onClick={() => navigate(`/admin/products/${match.id}/edit`)}
+                                        className="px-2.5 py-1 rounded bg-stone-100 text-stone-700 text-[10px] font-bold uppercase tracking-wide hover:bg-stone-200 transition-colors"
+                                      >
+                                        Edit
+                                      </button>
+                                    )}
+                                    {isLive && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleSetProductLiveStatus(match!, 'archived')}
+                                        className="px-2.5 py-1 rounded bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wide hover:bg-amber-100 transition-colors"
+                                      >
+                                        Unlist
+                                      </button>
+                                    )}
+                                    {isArchived && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleSetProductLiveStatus(match!, 'published')}
+                                        className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide hover:bg-emerald-100 transition-colors"
+                                      >
+                                        Relist
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="relative md:w-1/2">
+                            <Search className="absolute left-3 top-2.5 w-4 h-4 text-stone-400" />
+                            <input
+                              type="text"
+                              value={patternBrowserFilter}
+                              onChange={(e) => setPatternBrowserFilter(e.target.value)}
+                              placeholder="Filter by Pattern/Style Number or name…"
+                              className="w-full pl-9 pr-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white font-medium text-stone-800"
+                            />
+                          </div>
+                          {patternBrowserList.length === 0 ? (
+                            <p className="text-xs text-stone-400">
+                              No patterns found in the ERP for this brand yet — create one from the ERP's Inventory →
+                              Create Barcode SKU page first.
+                            </p>
+                          ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                              {patternBrowserList
+                                .filter(p => {
+                                  const term = patternBrowserFilter.trim().toLowerCase();
+                                  if (!term) return true;
+                                  return p.styleNumber.toLowerCase().includes(term)
+                                    || p.productName.toLowerCase().includes(term)
+                                    || p.displayName.toLowerCase().includes(term);
+                                })
+                                .map(pattern => {
+                                  const liveCount = pattern.variants.filter(v => {
+                                    const m = liveProductByVariantKey.get(
+                                      productVariantKey(pattern.styleNumber, v.fabricColor || '', v.noPrints ? '' : (v.printName || ''), v.noPrints)
+                                    );
+                                    return !!m && m.status !== 'archived' && m.status !== 'draft';
+                                  }).length;
+                                  return (
+                                    <button
+                                      key={pattern.styleNumber}
+                                      type="button"
+                                      onClick={() => setSelectedBrowsePattern(pattern)}
+                                      className="text-left border border-stone-200 rounded-lg p-3 bg-white hover:border-[#B08D57] hover:shadow-sm transition-all space-y-1"
+                                    >
+                                      <p className="text-[10px] font-mono font-bold text-stone-400">{pattern.styleNumber}</p>
+                                      <p className="text-xs font-bold text-stone-800 truncate">{pattern.displayName || pattern.productName}</p>
+                                      <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                                        liveCount === 0 ? 'bg-stone-100 text-stone-500' : liveCount === pattern.variants.length ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-700'
+                                      }`}>
+                                        {liveCount}/{pattern.variants.length} live
+                                      </span>
+                                    </button>
+                                  );
+                                })}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    )}
+                  </div>
+                ) : (
                 <form onSubmit={uploadAndSaveProduct} className="p-6 space-y-6 flex-1 text-xs text-stone-700">
                   {!editingProduct && (
                     <div className="border border-[#B08D57]/30 bg-[#B08D57]/5 rounded-xl p-4 space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
                         Barcode SKU / Pattern <span className="text-red-500">*</span>
                       </label>
-                      {isPatternLocked ? (
-                        <div className="flex items-center justify-between gap-3">
-                          <p className="text-[11px] font-mono font-semibold text-[#2A211C]">{patternSearch}</p>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsPatternLocked(false);
-                              setPickedErpSkuBySize({});
-                              setPickedPattern(null);
-                              setPatternSearch('');
-                              setFormStyleNumber('');
-                              setFormFabricColor('');
-                              setFormColor('');
-                              setFormNoPrints(false);
-                              setFormSizes([]);
-                              setFormStock({});
-                              setFormSku('');
-                              setFormPrice('');
-                              setFormCompareAtPrice('');
-                            }}
-                            className="text-[10px] font-bold uppercase tracking-wider text-[#B08D57] hover:underline shrink-0"
-                          >
-                            Change
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <input
-                            type="text"
-                            value={patternSearch}
-                            onChange={(e) => setPatternSearch(e.target.value)}
-                            placeholder="Search by Pattern/Style Number — e.g. 0090"
-                            className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white font-mono font-medium text-stone-800"
-                          />
-                          {patternSearchLoading && <p className="text-[10px] text-stone-400 mt-1">Searching…</p>}
-                          {patternSearchError && <p className="text-[10px] text-red-500 mt-1">{patternSearchError}</p>}
-                          {patternResults.length > 0 && (
-                            <div className="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white border border-stone-200 rounded-lg shadow-lg">
-                              {patternResults.map(pattern => (
-                                <div key={pattern.styleNumber} className="border-b border-stone-100 last:border-0">
-                                  <div className="px-3 py-1.5 bg-stone-50 text-[10px] font-bold text-stone-500">
-                                    {pattern.styleNumber} — {pattern.productName}
-                                  </div>
-                                  {pattern.variants.map((variant, vIdx) => (
-                                    <button
-                                      key={vIdx}
-                                      type="button"
-                                      onClick={() => applyPickedVariant(pattern, variant)}
-                                      className="w-full text-left px-3 py-2 hover:bg-[#B08D57]/10 flex items-center justify-between gap-2"
-                                    >
-                                      <span className="text-[11px] text-stone-700">
-                                        {variant.fabricColor ? `${variant.fabricColor} — ` : ''}
-                                        {variant.noPrints ? 'Solid' : (variant.printName || 'Untitled print')}
-                                        <span className="text-stone-400"> · {variant.sizes.map(s => s.size).join(', ')}</span>
-                                      </span>
-                                      <span className="text-[9px] font-mono text-stone-400 shrink-0">{variant.baseSku}</span>
-                                    </button>
-                                  ))}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          {!patternSearchLoading && !patternSearchError && patternSearch.trim() && patternResults.length === 0 && (
-                            <div className="mt-2 rounded-lg border border-dashed border-[#B08D57]/40 bg-[#B08D57]/5 p-3 space-y-2">
-                              <p className="text-[11px] text-stone-600">
-                                No existing pattern matches "{patternSearch.trim()}" for this brand. If this is a
-                                brand-new style, fill in Style Number, Fabric Color/Print Name (or "No print"), Sizes,
-                                and Price below, then register it as a new pattern in the ERP.
-                              </p>
-                              <button
-                                type="button"
-                                onClick={handleRegisterNewPattern}
-                                disabled={registeringPattern}
-                                className="px-3 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors disabled:opacity-50"
-                              >
-                                {registeringPattern ? 'Registering…' : '+ Register New Pattern in ERP'}
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-[11px] font-mono font-semibold text-[#2A211C]">
+                          {pickedPattern ? `${pickedPattern.styleNumber} — ${pickedPattern.productName}` : formStyleNumber}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPatternLocked(false);
+                            setPickedErpSkuBySize({});
+                            setSelectedBrowsePattern(pickedPattern);
+                            setPickedPattern(null);
+                            setFormStyleNumber('');
+                            setFormFabricColor('');
+                            setFormColor('');
+                            setFormNoPrints(false);
+                            setFormSizes([]);
+                            setFormStock({});
+                            setFormSku('');
+                            setFormPrice('');
+                            setFormCompareAtPrice('');
+                          }}
+                          className="text-[10px] font-bold uppercase tracking-wider text-[#B08D57] hover:underline shrink-0"
+                        >
+                          Change
+                        </button>
+                      </div>
                       <p className="text-[10px] text-stone-400">
-                        Every product now starts from a barcode SKU already created in the ERP (Inventory → Create
-                        Barcode SKU) — Product Name, Style Number, Fabric Color, Print Name, and Sizes are pulled from
-                        there and locked. Editing those after this point happens in the ERP, not here. No match above?
-                        Fill in the fields below and register a new pattern right from this form instead.
+                        Product Name, Style Number, Fabric Color, Print Name, and Sizes are pulled from the ERP's
+                        Barcode SKU and locked. Editing those after this point happens in the ERP, not here.
                       </p>
                     </div>
                   )}
@@ -3264,11 +3252,11 @@ export const AdminPage: React.FC = () => {
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Code</label>
                           <div className={`w-full px-3 py-2 border rounded bg-stone-100 font-mono font-medium ${
-                            isSkuDuplicate(printBatchSkus.primaryKey) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                            isSkuDuplicate((formSku || '').trim().toUpperCase()) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
                           }`}>
                             {formSku || '—'}
                           </div>
-                          {isSkuDuplicate(printBatchSkus.primaryKey) ? (
+                          {isSkuDuplicate((formSku || '').trim().toUpperCase()) ? (
                             <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — adjust Style Number, Fabric Color, or Print Name.</p>
                           ) : (
                             <p className="text-[10px] text-stone-400">Auto-generated from Category + Color — never typed, never changes once created.</p>
@@ -3543,39 +3531,23 @@ export const AdminPage: React.FC = () => {
                         />
                       </div>
 
-                      {/* VARIANTS — Fabric Color & Print, combined on one
-                          page. Each variant becomes its own Firestore
-                          product with its own SKU/images; every variant
-                          sharing this Style Number groups onto one
-                          storefront page where the customer picks a print
-                          — never a color (see productGrouping.ts). */}
+                      {/* FABRIC COLOR & PRINT — this one variant's own
+                          SKU/images. Every other variant of this same
+                          Style Number lives as its own separate Firestore
+                          product, made live one at a time from the
+                          Pattern Browser instead of added here (see
+                          productGrouping.ts for how they group onto one
+                          storefront page). */}
                       <div className="space-y-3 border border-stone-100 p-4 rounded-xl">
-                        <div className="flex items-center justify-between flex-wrap gap-2">
-                          <div>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Variants — Fabric Color & Print *</label>
-                            <p className="text-[10px] text-stone-400 mt-0.5">
-                              Add every Fabric Color / Print combination this Style Number comes in. Each becomes its
-                              own product with its own SKU and photos — together they'll show as one page with a
-                              print selector on the storefront.
-                            </p>
-                          </div>
-                          {!editingProduct && (
-                            <button
-                              type="button"
-                              onClick={addPrintRow}
-                              className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#2A211C] text-white text-[10px] font-bold uppercase tracking-wide hover:bg-[#B08D57] transition-colors shrink-0"
-                            >
-                              <Plus className="w-3 h-3" /> Add Another Variant
-                            </button>
-                          )}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color & Print *</label>
+                          <p className="text-[10px] text-stone-400 mt-0.5">
+                            This variant's own Fabric Color / Print combination. To add another print of this same
+                            Style Number, make it live separately from the Pattern Browser.
+                          </p>
                         </div>
 
-                        {/* Variant 1 — the primary variant, backing this product's own fields */}
                         <div className="border border-stone-200 rounded-lg p-3 bg-white space-y-3">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                            Variant 1{!editingProduct ? ' (Primary)' : ''}
-                          </span>
-
                           <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-1">
                               <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
@@ -3614,11 +3586,11 @@ export const AdminPage: React.FC = () => {
                           {isPatternLocked && <p className="text-[10px] text-stone-400">Locked — from the picked Barcode SKU.</p>}
 
                           <div className={`px-3 py-2 border rounded bg-stone-100 font-mono font-medium text-[11px] ${
-                            isSkuDuplicate(printBatchSkus.primaryKey) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
+                            isSkuDuplicate((formSku || '').trim().toUpperCase()) ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
                           }`}>
                             {formSku || '—'}
                           </div>
-                          {isSkuDuplicate(printBatchSkus.primaryKey) ? (
+                          {isSkuDuplicate((formSku || '').trim().toUpperCase()) ? (
                             <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — adjust Style Number, Fabric Color, or Print Name.</p>
                           ) : (
                             <p className="text-[10px] text-stone-400">
@@ -3704,150 +3676,6 @@ export const AdminPage: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Variant 2+ — additional variants (new products only) */}
-                        {!editingProduct && additionalPrints.map((row, rowIdx) => (
-                          <div key={row.id} className="border border-stone-200 rounded-lg p-3 bg-white space-y-3">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Variant {rowIdx + 2}</span>
-                              <button
-                                type="button"
-                                onClick={() => removePrintRow(row.id)}
-                                className="text-red-500 hover:text-red-700"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-
-                            {(() => {
-                              const usedKeys = new Set([
-                                variantIdentityKey(formFabricColor, formColor, formNoPrints),
-                                ...additionalPrints.filter(r => r.id !== row.id).map(r => variantIdentityKey(r.fabricColor, r.printName, r.noPrints))
-                              ]);
-                              const availableErpVariants = (pickedPattern?.variants || []).filter(
-                                v => !usedKeys.has(variantIdentityKey(v.fabricColor || '', v.printName || '', v.noPrints))
-                              );
-                              if (availableErpVariants.length === 0) return null;
-                              return (
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
-                                    Pick from this pattern's known variants
-                                  </label>
-                                  <select
-                                    value=""
-                                    onChange={(e) => {
-                                      const idx = Number(e.target.value);
-                                      const variant = availableErpVariants[idx];
-                                      if (variant) applyErpVariantToRow(row.id, variant);
-                                    }}
-                                    className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-white font-medium text-[#2A211C]"
-                                  >
-                                    <option value="">— Pick a known variant, or type one below —</option>
-                                    {availableErpVariants.map((v, i) => (
-                                      <option key={i} value={i}>
-                                        {v.fabricColor ? `${v.fabricColor} — ` : ''}{v.noPrints ? 'Solid' : (v.printName || 'Untitled print')}
-                                      </option>
-                                    ))}
-                                  </select>
-                                  <p className="text-[10px] text-stone-400">
-                                    Fills Fabric Color/Print Name exactly as named in the ERP, so this variant's stock
-                                    tracking matches cleanly instead of risking a typo. You can still edit the fields
-                                    below afterward.
-                                  </p>
-                                </div>
-                              );
-                            })()}
-
-                            <div className="grid grid-cols-2 gap-3">
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Fabric Color</label>
-                                <input
-                                  type="text"
-                                  value={row.fabricColor}
-                                  onChange={(e) => updatePrintRowFabricColor(row.id, e.target.value)}
-                                  placeholder="e.g. White, Black"
-                                  className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C]"
-                                />
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">Print Name</label>
-                                <input
-                                  type="text"
-                                  value={row.printName}
-                                  onChange={(e) => updatePrintRowName(row.id, e.target.value)}
-                                  disabled={row.noPrints}
-                                  placeholder="e.g. Pink Checks, Blush Floral"
-                                  className="w-full px-3 py-2 border border-stone-200 rounded focus:outline-none focus:border-[#B08D57] bg-stone-50 font-medium text-[#2A211C] disabled:bg-stone-100 disabled:text-stone-400"
-                                />
-                              </div>
-                            </div>
-
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={row.noPrints}
-                                onChange={(e) => updatePrintRowNoPrints(row.id, e.target.checked)}
-                                className="rounded border-stone-300 text-[#B08D57] focus:ring-[#B08D57] w-3.5 h-3.5 cursor-pointer"
-                              />
-                              <span className="text-[10px] text-stone-500">No print — this is a solid fabric</span>
-                            </label>
-
-                            {(() => {
-                              const rowSkuInfo = printBatchSkus.rows.find(r => r.id === row.id);
-                              const duplicate = rowSkuInfo ? isSkuDuplicate(rowSkuInfo.key) : false;
-                              return (
-                                <>
-                                  <div className={`px-3 py-2 border rounded bg-stone-100 font-mono text-[11px] ${
-                                    duplicate ? 'border-red-400 text-red-600' : 'border-stone-200 text-stone-600'
-                                  }`}>
-                                    {rowSkuInfo?.sku || '— enter a Fabric Color / Print Name to preview its SKU —'}
-                                  </div>
-                                  {duplicate && (
-                                    <p className="text-[10px] text-red-500 font-semibold">This SKU already exists — use a different Fabric Color or Print Name.</p>
-                                  )}
-                                </>
-                              );
-                            })()}
-
-                            <div className="flex flex-wrap gap-2 items-center">
-                              {row.images.map((imgUrl, idx) => (
-                                <div key={`row-img-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden">
-                                  <img src={imgUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                </div>
-                              ))}
-                              {row.selectedFiles.map((file, idx) => {
-                                const localUrl = URL.createObjectURL(file);
-                                return (
-                                  <div key={`row-file-${idx}`} className="relative w-14 h-16 bg-stone-100 border border-stone-200 rounded overflow-hidden group">
-                                    <img src={localUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                    <button
-                                      type="button"
-                                      onClick={() => removePrintRowFile(row.id, idx)}
-                                      className="absolute top-0.5 right-0.5 p-0.5 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                                    >
-                                      <X className="w-2 h-2" />
-                                    </button>
-                                  </div>
-                                );
-                              })}
-                              <label className="w-14 h-16 border-2 border-dashed border-stone-200 rounded flex items-center justify-center cursor-pointer hover:border-[#B08D57] transition-colors">
-                                <Upload className="w-4 h-4 text-stone-400" />
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  multiple
-                                  className="hidden"
-                                  onChange={(e) => {
-                                    if (e.target.files && e.target.files.length > 0) {
-                                      enqueueFilesForCrop(Array.from(e.target.files), row.id);
-                                    }
-                                    e.target.value = '';
-                                  }}
-                                />
-                              </label>
-                            </div>
-                            <p className="text-[10px] text-stone-400">1–6 images for this variant.</p>
-                          </div>
-                        ))}
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
@@ -3957,51 +3785,28 @@ export const AdminPage: React.FC = () => {
                       </div>
 
                       {/* SKU PREVIEW BY SIZE — live, site-side reference
-                          only (Size appended to the SKU Code above for
-                          each print in this batch). Not the same as the
-                          ERP's own barcode below — that's the one POS
-                          actually scans, and only exists once you've
-                          saved and synced. */}
-                      {formSizes.length > 0 && (formSku || additionalPrints.some(r => r.noPrints || r.printName.trim())) && (
+                          only (Size appended to the SKU Code above). Not
+                          the same as the ERP's own barcode below — that's
+                          the one POS actually scans, and only exists once
+                          you've saved and synced. */}
+                      {formSizes.length > 0 && formSku && (
                         <div className="space-y-2 border border-stone-100 p-4 rounded-xl bg-stone-50/50">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">SKU Preview by Size</label>
                           <p className="text-[10px] text-stone-400">
-                            Size is appended to each variant's SKU Code above. This is a reference code for this site —
-                            the ERP's own barcode (once you save) is what Factory Outlet POS actually scans.
+                            Size is appended to the SKU Code above. This is a reference code for this site — the
+                            ERP's own barcode (once you save) is what Factory Outlet POS actually scans.
                           </p>
-                          <div className="space-y-2">
-                            {formSku && (
-                              <div className="space-y-1">
-                                <span className="text-[10px] font-bold text-stone-500 uppercase">
-                                  {formFabricColor ? `${formFabricColor} — ` : ''}{formNoPrints ? 'Solid' : (formColor || 'Natural')}
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-bold text-stone-500 uppercase">
+                              {formFabricColor ? `${formFabricColor} — ` : ''}{formNoPrints ? 'Solid' : (formColor || 'Natural')}
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {formSizes.map(size => (
+                                <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
+                                  {formSku}-{size}
                                 </span>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {formSizes.map(size => (
-                                    <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
-                                      {formSku}-{size}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {additionalPrints.filter(r => r.noPrints || r.printName.trim()).map(row => {
-                              const info = printBatchSkus.rows.find(r => r.id === row.id);
-                              if (!info?.sku) return null;
-                              return (
-                                <div key={row.id} className="space-y-1">
-                                  <span className="text-[10px] font-bold text-stone-500 uppercase">
-                                    {row.fabricColor ? `${row.fabricColor} — ` : ''}{row.noPrints ? 'Solid' : row.printName.trim()}
-                                  </span>
-                                  <div className="flex flex-wrap gap-1.5">
-                                    {formSizes.map(size => (
-                                      <span key={size} className="px-2 py-1 rounded bg-white border border-stone-200 font-mono text-[10px] text-stone-700">
-                                        {info.sku}-{size}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -4092,6 +3897,7 @@ export const AdminPage: React.FC = () => {
                     </button>
                   </div>
                 </form>
+                )}
             </div>
           )}
 
