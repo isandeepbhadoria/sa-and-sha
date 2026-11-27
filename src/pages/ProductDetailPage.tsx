@@ -249,7 +249,7 @@ export const ProductDetailPage: React.FC = () => {
       </nav>
 
       {/* 2. Main Product Info Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         
         {/* Left: Image Gallery (5 cols) */}
         <div className="lg:col-span-7 flex flex-col md:flex-row-reverse gap-4">
