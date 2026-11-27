@@ -1673,6 +1673,20 @@ export const AdminPage: React.FC = () => {
       return;
     }
 
+    // Catches the case where this pattern's Fabric Color/Print Name happen
+    // to abbreviate (see skuGenerator.ts's encodePrintName) to the same
+    // site SKU as some other, unrelated existing product (e.g. "Green Palm
+    // Checks" and "Granite Palm Checks" both shorten to "GRPACH") — checked
+    // BEFORE calling the ERP so a collision doesn't leave a real, orphaned
+    // barcode SKU registered for a pattern the save step below would then
+    // reject anyway.
+    const generatedSku = generateSkuCode(formProductType, styleNumber, formFabricColor, formColor, formNoPrints);
+    const generatedSkuKey = generatedSku.trim().toUpperCase();
+    if (generatedSkuKey && usedSkuSet.has(generatedSkuKey)) {
+      showToast(`SKU "${generatedSku}" already exists on another product. Adjust the Pattern/Style Number, Fabric Color, or Print Name to generate a different one.`);
+      return;
+    }
+
     setRegisteringPattern(true);
     try {
       const idToken = await auth.currentUser?.getIdToken();
