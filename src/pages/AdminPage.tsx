@@ -1588,8 +1588,24 @@ export const AdminPage: React.FC = () => {
     setPatternBrowserError('');
     (async () => {
       try {
-        const idToken = await auth.currentUser?.getIdToken();
-        if (!idToken) { if (!cancelled) setPatternBrowserLoading(false); return; }
+        // auth.currentUser can still be null for a moment right after a
+        // page load/refresh — Firebase restores the signed-in session
+        // asynchronously, and this effect (unlike the old per-keystroke
+        // search it replaced) only ever runs once, so a synchronous read
+        // here that loses that race leaves the browser blank forever.
+        // Wait for a real onAuthStateChanged callback instead of trusting
+        // a snapshot taken before Firebase has had the chance to restore it.
+        const user = auth.currentUser || await new Promise<typeof auth.currentUser>((resolve) => {
+          const timer = setTimeout(() => { unsubscribe(); resolve(auth.currentUser); }, 8000);
+          const unsubscribe = onAuthStateChanged(auth, (u) => {
+            if (u) { clearTimeout(timer); unsubscribe(); resolve(u); }
+          });
+        });
+        const idToken = await user?.getIdToken();
+        if (!idToken) {
+          if (!cancelled) { setPatternBrowserLoading(false); setPatternBrowserError('Could not confirm your admin session — please refresh and try again.'); }
+          return;
+        }
         const res = await fetch('/api/admin/erp/patterns', {
           headers: { Authorization: `Bearer ${idToken}` }
         });
